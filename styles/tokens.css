@@ -12,10 +12,10 @@
 	--accent-hover: color-mix(in srgb, var(--accent) 85%, white);
 
 	/* Typography */
-	--font-display: 'Rubik', sans-serif;
-	--font-body: 'Space Grotesk', sans-serif;
-	--font-mono: 'JetBrains Mono', monospace;
-	--font-logo: 'Rubik', sans-serif;
+	--font-display: "Rubik", sans-serif;
+	--font-body: "Space Grotesk", sans-serif;
+	--font-mono: "JetBrains Mono", monospace;
+	--font-logo: "Rubik", sans-serif;
 
 	/* Spacing */
 	--space-xs: 0.25rem;
@@ -31,7 +31,7 @@
 }
 
 /* Dark theme (default) */
-[data-theme='dark'] {
+[data-theme="dark"] {
 	--bg-primary: #0a0a0a;
 	--bg-secondary: #141414;
 	--bg-card: #1a1a1a;
@@ -43,7 +43,7 @@
 }
 
 /* Light theme */
-[data-theme='light'] {
+[data-theme="light"] {
 	--bg-primary: #fafafa;
 	--bg-secondary: #f0f0f0;
 	--bg-card: #ffffff;
@@ -55,13 +55,13 @@
 }
 
 /* Framework accent overrides */
-[data-framework='react'] {
+[data-framework="react"] {
 	--accent: var(--accent-react);
 }
-[data-framework='vue'] {
+[data-framework="vue"] {
 	--accent: var(--accent-vue);
 }
-[data-framework='angular'] {
+[data-framework="angular"] {
 	--accent: var(--accent-angular);
 }
 
