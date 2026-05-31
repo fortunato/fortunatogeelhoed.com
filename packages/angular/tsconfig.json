@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "ES2022",
+		"moduleResolution": "bundler",
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": false,
+		"useDefineForClassFields": false,
+		"declaration": false,
+		"sourceMap": true,
+		"baseUrl": ".",
+		"paths": {
+			"@fg/shared": ["../../packages/shared/src"],
+			"@fg/content": ["../../packages/content/src"]
+		}
+	},
+	"include": ["src/**/*.ts"],
+	"exclude": ["node_modules", "dist"]
+}
