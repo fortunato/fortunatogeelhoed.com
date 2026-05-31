@@ -7,10 +7,12 @@
 		"dev:vue": "nx run-many -t dev -p vue api",
 		"dev:angular": "nx run-many -t dev -p angular api",
 		"dev:all": "nx run-many -t dev -p react vue angular api",
-		"build": "nx run-many -t build -p react vue angular api",
+		"build:css": "bun run scripts/build-css.ts",
+		"build": "bun run build:css && nx run-many -t build -p react vue angular api",
 		"build:react": "nx run react:build",
 		"build:vue": "nx run vue:build",
 		"build:angular": "nx run angular:build",
+		"start": "NODE_ENV=production bun run packages/api/src/index.ts",
 		"lint": "biome check .",
 		"lint:fix": "biome check --write ."
 	},

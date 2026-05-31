@@ -3,7 +3,18 @@ import angular from '@analogjs/vite-plugin-angular'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-	plugins: [angular()],
+	plugins: [
+		angular({
+			nitro: {
+				prerender: {
+					routes: ['/', '/about', '/services', '/work', '/blog', '/contact'],
+				},
+				output: {
+					dir: resolve(__dirname, '../../dist/angular'),
+				},
+			},
+		}),
+	],
 	root: resolve(__dirname),
 	resolve: {
 		alias: {

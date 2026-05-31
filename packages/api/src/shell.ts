@@ -5,12 +5,17 @@ interface ShellOptions {
 	title?: string
 	description?: string
 	bodyHtml?: string
+	stylesheetPath?: string
 }
 
-export function renderShell({ framework, title, description, bodyHtml = '' }: ShellOptions): string {
-	const noindex = framework !== 'react'
-		? '<meta name="robots" content="noindex">'
-		: ''
+export function renderShell({
+	framework,
+	title,
+	description,
+	bodyHtml = '',
+	stylesheetPath = '/assets/styles.css',
+}: ShellOptions): string {
+	const noindex = framework !== 'react' ? '<meta name="robots" content="noindex">' : ''
 
 	return `<!DOCTYPE html>
 <html lang="en" data-theme="dark" data-framework="${framework}">
@@ -23,7 +28,7 @@ export function renderShell({ framework, title, description, bodyHtml = '' }: Sh
 	<link rel="preload" href="/assets/fonts/rubik-variable.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="/assets/fonts/space-grotesk-variable.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="/assets/fonts/jetbrains-mono-variable.woff2" as="font" type="font/woff2" crossorigin>
-	<link rel="stylesheet" href="/assets/styles.css">
+	<link rel="stylesheet" href="${stylesheetPath}">
 </head>
 <body>
 	<div id="fw-switcher" class="framework-switcher">
