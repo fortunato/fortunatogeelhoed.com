@@ -1,4 +1,5 @@
-import { Component } from '@angular/core'
+import { Component, inject } from '@angular/core'
+import { ContentService } from '../content.service'
 
 @Component({
 	selector: 'app-blog',
@@ -7,10 +8,13 @@ import { Component } from '@angular/core'
 		<section>
 			<div class="container">
 				<span class="section-label">Writing</span>
-				<h2 class="section-title">Blog</h2>
-				<p style="color: var(--text-secondary)">Blog posts will be loaded from the content pipeline.</p>
+				<h2 class="section-title">{{ content?.title ?? 'Blog' }}</h2>
+				<p style="color: var(--text-secondary)">{{ content?.body ?? 'Blog posts will be loaded from the content pipeline.' }}</p>
 			</div>
 		</section>
 	`,
 })
-export class BlogComponent {}
+export class BlogComponent {
+	private contentService = inject(ContentService)
+	content = this.contentService.getContent('blog')
+}
