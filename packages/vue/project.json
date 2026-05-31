@@ -1,0 +1,15 @@
+{
+	"name": "vue",
+	"sourceRoot": "packages/vue/src",
+	"targets": {
+		"dev": {
+			"command": "vite --config packages/vue/vite.config.ts --port 5174"
+		},
+		"build": {
+			"command": "vite-ssg build --config packages/vue/vite.config.ts"
+		},
+		"lint": {
+			"command": "biome check packages/vue/"
+		}
+	}
+}

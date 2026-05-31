@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.nx/cache/
+.nx/workspace-data/
+*.log
+.env*
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.idea/
+.vscode/

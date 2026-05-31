@@ -1,0 +1,15 @@
+{
+	"name": "api",
+	"sourceRoot": "packages/api/src",
+	"targets": {
+		"dev": {
+			"command": "bun run packages/api/src/index.ts"
+		},
+		"build": {
+			"command": "bun build packages/api/src/index.ts --outdir dist/api --target bun"
+		},
+		"lint": {
+			"command": "biome check packages/api/"
+		}
+	}
+}

@@ -1,0 +1,9 @@
+{
+	"name": "shared",
+	"sourceRoot": "packages/shared/src",
+	"targets": {
+		"lint": {
+			"command": "biome check packages/shared/"
+		}
+	}
+}

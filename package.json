@@ -1,0 +1,45 @@
+{
+	"name": "fortunatogeelhoed.com",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev:react": "nx run api:dev --framework=react",
+		"dev:vue": "nx run api:dev --framework=vue",
+		"dev:angular": "nx run api:dev --framework=angular",
+		"dev:all": "nx run-many -t dev -p react vue angular api",
+		"build": "nx run-many -t build -p react vue angular api",
+		"build:react": "nx run react:build",
+		"build:vue": "nx run vue:build",
+		"build:angular": "nx run angular:build",
+		"lint": "biome check .",
+		"lint:fix": "biome check --write ."
+	},
+	"dependencies": {
+		"@angular/common": "^21.0.0",
+		"@angular/compiler": "^21.0.0",
+		"@angular/core": "^21.0.0",
+		"@angular/platform-browser": "^21.0.0",
+		"@angular/platform-server": "^21.0.0",
+		"@angular/router": "^21.0.0",
+		"gray-matter": "^4.0.3",
+		"hono": "^4.7.0",
+		"react": "^19.0.0",
+		"react-dom": "^19.0.0",
+		"react-router": "^7.0.0",
+		"vue": "^3.5.0",
+		"vue-router": "^4.5.0"
+	},
+	"devDependencies": {
+		"@analogjs/platform": "^1.14.0",
+		"@analogjs/vite-plugin-angular": "^1.14.0",
+		"@biomejs/biome": "^1.9.0",
+		"@nx/js": "^20.0.0",
+		"@nx/vite": "^20.0.0",
+		"@vitejs/plugin-react": "^4.3.0",
+		"@vitejs/plugin-vue": "^5.2.0",
+		"nx": "^20.0.0",
+		"typescript": "^5.7.0",
+		"vite": "^6.0.0",
+		"vite-ssg": "^0.24.0"
+	}
+}

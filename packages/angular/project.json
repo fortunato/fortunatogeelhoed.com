@@ -1,0 +1,15 @@
+{
+	"name": "angular",
+	"sourceRoot": "packages/angular/src",
+	"targets": {
+		"dev": {
+			"command": "vite --config packages/angular/vite.config.ts --port 5175"
+		},
+		"build": {
+			"command": "vite build --config packages/angular/vite.config.ts"
+		},
+		"lint": {
+			"command": "biome check packages/angular/"
+		}
+	}
+}

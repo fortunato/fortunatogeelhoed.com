@@ -1,0 +1,15 @@
+{
+	"name": "react",
+	"sourceRoot": "packages/react/src",
+	"targets": {
+		"dev": {
+			"command": "vite --config packages/react/vite.config.ts --port 5173"
+		},
+		"build": {
+			"command": "vite build --config packages/react/vite.config.ts && bun run packages/react/prerender.ts"
+		},
+		"lint": {
+			"command": "biome check packages/react/"
+		}
+	}
+}

@@ -1,0 +1,25 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"paths": {
+			"@fg/shared": ["./packages/shared/src/index.ts"],
+			"@fg/shared/*": ["./packages/shared/src/*"],
+			"@fg/content": ["./packages/content/src/index.ts"],
+			"@fg/content/*": ["./packages/content/src/*"]
+		},
+		"baseUrl": "."
+	},
+	"exclude": ["node_modules", "dist"]
+}

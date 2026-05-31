@@ -1,0 +1,9 @@
+{
+	"name": "content",
+	"sourceRoot": "packages/content/src",
+	"targets": {
+		"lint": {
+			"command": "biome check packages/content/"
+		}
+	}
+}
