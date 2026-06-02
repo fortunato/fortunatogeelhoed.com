@@ -1,0 +1,158 @@
+.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: var(--nav-height);
+	background: color-mix(in srgb, var(--bg-primary) 85%, transparent);
+	backdrop-filter: blur(20px);
+	border-bottom: 1px solid var(--border);
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 0 var(--space-lg);
+}
+
+.logo,
+.logo:hover {
+	font-family: var(--font-logo);
+	font-size: 1rem;
+	font-weight: 800;
+	letter-spacing: 0;
+	color: var(--text-primary);
+	text-decoration: none;
+	user-select: none;
+	text-transform: uppercase;
+}
+
+.dot {
+	color: var(--accent);
+	transition: color 0.3s;
+}
+
+.header-right {
+	display: flex;
+	align-items: center;
+	gap: 0;
+}
+
+.sep {
+	width: 1px;
+	height: 20px;
+	background: var(--border);
+	margin: 0 var(--space-lg);
+}
+
+.nav {
+	display: flex;
+	align-items: center;
+	gap: var(--space-lg);
+}
+
+.nav a {
+	font-size: 0.7rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.18em;
+	color: var(--text-secondary);
+	text-decoration: none;
+	transition: color 0.2s;
+	position: relative;
+}
+
+.nav a::after {
+	content: "";
+	position: absolute;
+	bottom: -4px;
+	left: 0;
+	width: 0;
+	height: 1.5px;
+	background: var(--accent);
+	transition: width 0.3s ease;
+}
+
+.nav a:hover {
+	color: var(--text-primary);
+}
+
+.nav a:hover::after {
+	width: 100%;
+}
+
+.switcher {
+	display: flex;
+	align-items: center;
+	gap: var(--space-sm);
+}
+
+.switcher-label {
+	font-family: var(--font-mono);
+	font-size: 0.65rem;
+	color: var(--text-secondary);
+	white-space: nowrap;
+	line-height: 1;
+}
+
+.switcher-buttons {
+	display: flex;
+	gap: 2px;
+	background: var(--bg-secondary);
+	border-radius: 8px;
+	padding: 3px;
+}
+
+.switcher-btn {
+	padding: 4px 12px;
+	border: none;
+	background: transparent;
+	color: var(--text-secondary);
+	font-family: var(--font-mono);
+	font-size: 0.7rem;
+	font-weight: 500;
+	letter-spacing: 0.03em;
+	cursor: pointer;
+	border-radius: 6px;
+	transition: all 0.2s;
+	text-transform: lowercase;
+}
+
+.switcher-btn:hover {
+	color: var(--text-primary);
+}
+
+.active {
+	background: var(--accent);
+	color: #fff;
+}
+
+.active:hover {
+	color: #fff;
+}
+
+@media (max-width: 768px) {
+	.nav {
+		display: none;
+	}
+
+	.header {
+		padding: 0 var(--space-md);
+	}
+
+	.sep {
+		display: none;
+	}
+
+	.switcher-label {
+		display: none;
+	}
+
+	.switcher-buttons {
+		gap: 1px;
+	}
+
+	.switcher-btn {
+		padding: 4px 8px;
+		font-size: 0.6rem;
+	}
+}

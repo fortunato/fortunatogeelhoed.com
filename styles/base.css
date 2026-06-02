@@ -5,6 +5,7 @@ body {
 	font-family: var(--font-body);
 	background: var(--bg-primary);
 	color: var(--text-primary);
+	padding-top: var(--nav-height);
 	transition: background-color 0.4s ease, color 0.4s ease;
 }
 
