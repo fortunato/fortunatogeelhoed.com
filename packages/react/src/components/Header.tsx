@@ -2,16 +2,6 @@ import { toggleTheme } from '@fg/shared';
 import styles from '@styles/components/header.module.css';
 import { Link } from 'react-router';
 
-function switchFramework(fw: string) {
-	document.cookie = `framework=${fw};path=/;max-age=31536000`;
-	const port = window.location.port;
-	if (port === '5173' || port === '5174' || port === '5175') {
-		window.location.href = `http://localhost:3000${window.location.pathname}`;
-	} else {
-		window.location.reload();
-	}
-}
-
 export function Header() {
 	return (
 		<header className={styles.header}>
@@ -29,27 +19,18 @@ export function Header() {
 				<div className={styles.switcher}>
 					<span className={styles['switcher-label']}>Built with</span>
 					<div className={styles['switcher-buttons']}>
-						<button
-							type="button"
+						<a
 							className={`${styles['switcher-btn']} ${styles.active}`}
-							onClick={() => switchFramework('react')}
+							href="/__switch?to=react"
 						>
 							react
-						</button>
-						<button
-							type="button"
-							className={styles['switcher-btn']}
-							onClick={() => switchFramework('vue')}
-						>
+						</a>
+						<a className={styles['switcher-btn']} href="/__switch?to=vue">
 							vue
-						</button>
-						<button
-							type="button"
-							className={styles['switcher-btn']}
-							onClick={() => switchFramework('angular')}
-						>
+						</a>
+						<a className={styles['switcher-btn']} href="/__switch?to=angular">
 							angular
-						</button>
+						</a>
 					</div>
 				</div>
 				<button

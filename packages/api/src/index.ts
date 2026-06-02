@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { getCookie } from 'hono/cookie';
+import { getCookie, setCookie } from 'hono/cookie';
 import { frameworkMiddleware } from './middleware/framework';
 import { renderShell } from './shell';
 
@@ -43,8 +43,9 @@ if (isDev) {
 		const reset = await Bun.file('./styles/reset.css').text();
 		const tokens = await Bun.file('./styles/tokens.css').text();
 		const base = await Bun.file('./styles/base.css').text();
+		const motion = await Bun.file('./styles/motion.css').text();
 		c.header('Content-Type', 'text/css');
-		return c.body(`${layers}\n${reset}\n${tokens}\n${base}`);
+		return c.body(`${layers}\n${reset}\n${tokens}\n${base}\n${motion}`);
 	});
 }
 
@@ -71,6 +72,27 @@ app.get('/assets/*', async (c, next) => {
 	// would be cached as immutable (see middleware above) and poison the
 	// browser cache for a year. In dev, let the Vite proxy try; in prod, 404.
 	return isDev ? next() : c.body('Not found', 404);
+});
+
+// Framework switch as a real, user-initiated navigation: a scripted reload can
+// never trigger a cross-document view transition, but a link click can. Sets the
+// framework cookie and redirects back to the page the visitor came from.
+app.get('/__switch', (c) => {
+	const to = c.req.query('to');
+	if (to === 'react' || to === 'vue' || to === 'angular') {
+		setCookie(c, 'framework', to, { path: '/', maxAge: 60 * 60 * 24 * 365 });
+	}
+	let next = '/';
+	const ref = c.req.header('referer');
+	if (ref) {
+		try {
+			const u = new URL(ref);
+			if (u.origin === new URL(c.req.url).origin) next = u.pathname + u.search;
+		} catch {
+			// malformed referer — fall back to "/"
+		}
+	}
+	return c.redirect(next, 302);
 });
 
 if (isDev) {

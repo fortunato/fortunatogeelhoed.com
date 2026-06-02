@@ -1,0 +1,63 @@
+/* Motion: the framework-switch page transition and scroll-driven content reveals.
+   Everything here is opt-in and gated — browsers without support, and visitors who
+   prefer reduced motion or reduced data, get a correct static experience.
+
+   The headline framework-switch "disintegration" is JS-driven (an SVG
+   displacement-map shred — see packages/shared/src/disintegrate.ts). This file
+   provides the no-JS / Safari / reduced-motion baseline: a gentle cross-fade on the
+   cross-document navigation. */
+
+/* Opt into cross-document view transitions for the framework switch when it falls
+   back to a plain link navigation. Unsupported browsers switch instantly. */
+@view-transition {
+	/* biome-ignore lint/correctness/noUnknownProperty: valid @view-transition descriptor */
+	navigation: auto;
+}
+
+@layer base {
+	@media (prefers-reduced-motion: no-preference) {
+		@supports (view-transition-name: none) {
+			::view-transition-old(root) {
+				animation: jb-switch-out var(--jb-dur-slow) var(--jb-ease-standard) both;
+			}
+
+			::view-transition-new(root) {
+				animation: jb-switch-in var(--jb-dur-slow) var(--jb-ease-standard) both;
+			}
+		}
+	}
+
+	@keyframes jb-switch-out {
+		to {
+			opacity: 0;
+			transform: scale(0.96);
+		}
+	}
+
+	@keyframes jb-switch-in {
+		from {
+			opacity: 0;
+			transform: scale(1.02);
+		}
+	}
+
+	/* Reveal elements marked [data-reveal] as they scroll into view. Falls back to
+	   the final (visible) state when scroll-driven animation is unsupported, or when
+	   reduced motion / reduced data is requested — content is never trapped hidden. */
+	@media (prefers-reduced-motion: no-preference) and (prefers-reduced-data: no-preference) {
+		@supports (animation-timeline: view()) {
+			[data-reveal] {
+				animation: jb-reveal linear both;
+				animation-timeline: view();
+				animation-range: entry 0% cover 30%;
+			}
+		}
+	}
+
+	@keyframes jb-reveal {
+		from {
+			opacity: 0;
+			transform: translateY(1.5rem);
+		}
+	}
+}

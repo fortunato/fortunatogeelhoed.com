@@ -12,8 +12,9 @@ const layers = await Bun.file(resolve(root, 'styles/layers.css')).text();
 const reset = await Bun.file(resolve(root, 'styles/reset.css')).text();
 const tokens = await Bun.file(resolve(root, 'styles/tokens.css')).text();
 const base = await Bun.file(resolve(root, 'styles/base.css')).text();
+const motion = await Bun.file(resolve(root, 'styles/motion.css')).text();
 
-const combined = `${layers}\n${reset}\n${tokens}\n${base}`;
+const combined = `${layers}\n${reset}\n${tokens}\n${base}\n${motion}`;
 
 // Prefix + downlevel to the Baseline floor and minify.
 const { code } = transform({

@@ -136,6 +136,15 @@
 		min-height: 100dvh;
 	}
 
+	/* Keep structure legible when the OS forces its own high-contrast palette
+	   (custom colors are overridden; borders fall back to system colors). */
+	@media (forced-colors: active) {
+		.btn,
+		.card {
+			border: 1px solid;
+		}
+	}
+
 	/* Suppress non-essential motion on request.
 	   `!important` wins across layers; essential state changes remain perceivable. */
 	@media (prefers-reduced-motion: reduce) {

@@ -1,3 +1,4 @@
+import { initSwitchTransition } from '@fg/shared';
 import { ViteSSG } from 'vite-ssg';
 import contentData from '../../content/data.json';
 import App from './App.vue';
@@ -6,4 +7,5 @@ import { routes } from './router';
 
 export const createApp = ViteSSG(App, { routes }, () => {
 	setContent(contentData);
+	initSwitchTransition();
 });

@@ -22,8 +22,9 @@ export function serveCssDev(): Plugin {
 				const reset = readFileSync(resolve(stylesDir, 'reset.css'), 'utf-8');
 				const tokens = readFileSync(resolve(stylesDir, 'tokens.css'), 'utf-8');
 				const base = readFileSync(resolve(stylesDir, 'base.css'), 'utf-8');
+				const motion = readFileSync(resolve(stylesDir, 'motion.css'), 'utf-8');
 				res.setHeader('Content-Type', 'text/css');
-				res.end(`${layers}\n${reset}\n${tokens}\n${base}`);
+				res.end(`${layers}\n${reset}\n${tokens}\n${base}\n${motion}`);
 			});
 
 			server.middlewares.use('/assets/', (req, res, next) => {

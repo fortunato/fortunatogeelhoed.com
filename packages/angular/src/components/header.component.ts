@@ -23,9 +23,9 @@ import { toggleTheme as applyToggleTheme } from '@fg/shared';
 				<div class="switcher">
 					<span class="switcher-label">Built with</span>
 					<div class="switcher-buttons">
-						<button class="switcher-btn" (click)="switchFramework('react')">react</button>
-						<button class="switcher-btn" (click)="switchFramework('vue')">vue</button>
-						<button class="switcher-btn active" (click)="switchFramework('angular')">angular</button>
+						<a class="switcher-btn" href="/__switch?to=react">react</a>
+						<a class="switcher-btn" href="/__switch?to=vue">vue</a>
+						<a class="switcher-btn active" href="/__switch?to=angular">angular</a>
 					</div>
 				</div>
 				<button
@@ -67,15 +67,5 @@ import { toggleTheme as applyToggleTheme } from '@fg/shared';
 export class HeaderComponent {
 	toggleTheme() {
 		applyToggleTheme();
-	}
-
-	switchFramework(fw: string) {
-		document.cookie = `framework=${fw};path=/;max-age=31536000`;
-		const port = window.location.port;
-		if (port === '5173' || port === '5174' || port === '5175') {
-			window.location.href = `http://localhost:3000${window.location.pathname}`;
-		} else {
-			window.location.reload();
-		}
 	}
 }

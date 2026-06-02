@@ -13,7 +13,7 @@ interface ShellOptions {
 
 // Resolve theme before first paint (no FOUC): stored choice → system → dark.
 const THEME_SCRIPT =
-	"(() => { try { const m = document.cookie.match(/(?:^|;\\s*)theme=(dark|light)/); let t = m ? m[1] : localStorage.getItem('theme'); if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();";
+	"(() => { try { const m = document.cookie.match(/(?:^|;\\s*)theme=(dark|light)/); let t = m ? m[1] : localStorage.getItem('theme'); if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', t); } catch (e) {} try { if (sessionStorage.getItem('jb-reassemble')) { const r = document.documentElement; r.style.opacity = '0'; setTimeout(() => { r.style.opacity = ''; }, 3000); } } catch (e) {} })();";
 
 export function renderShell({
 	framework,

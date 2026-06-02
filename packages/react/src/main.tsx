@@ -1,3 +1,4 @@
+import { initSwitchTransition } from '@fg/shared';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { App } from './App';
 
@@ -8,3 +9,5 @@ if (container.hasChildNodes()) {
 } else {
 	createRoot(container).render(<App />);
 }
+
+initSwitchTransition();

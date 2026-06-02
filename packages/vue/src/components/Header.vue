@@ -14,9 +14,9 @@
 			<div :class="styles.switcher">
 				<span :class="styles['switcher-label']">Built with</span>
 				<div :class="styles['switcher-buttons']">
-					<button :class="styles['switcher-btn']" @click="switchFramework('react')">react</button>
-					<button :class="[styles['switcher-btn'], styles.active]" @click="switchFramework('vue')">vue</button>
-					<button :class="styles['switcher-btn']" @click="switchFramework('angular')">angular</button>
+					<a :class="styles['switcher-btn']" href="/__switch?to=react">react</a>
+					<a :class="[styles['switcher-btn'], styles.active]" href="/__switch?to=vue">vue</a>
+					<a :class="styles['switcher-btn']" href="/__switch?to=angular">angular</a>
 				</div>
 			</div>
 			<button
@@ -59,14 +59,4 @@
 import { toggleTheme } from '@fg/shared';
 import styles from '@styles/components/header.module.css';
 import { RouterLink } from 'vue-router';
-
-function switchFramework(fw: string) {
-	document.cookie = `framework=${fw};path=/;max-age=31536000`;
-	const port = window.location.port;
-	if (port === '5173' || port === '5174' || port === '5175') {
-		window.location.href = `http://localhost:3000${window.location.pathname}`;
-	} else {
-		window.location.reload();
-	}
-}
 </script>
