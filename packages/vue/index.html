@@ -3,6 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script>
+		// Resolve theme before first paint (no FOUC): stored choice → system → dark.
+		(() => { try { const m = document.cookie.match(/(?:^|;\s*)theme=(dark|light)/); let t = m ? m[1] : localStorage.getItem('theme'); if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();
+	</script>
 	<title>FORTUNATO.GEELHOED</title>
 	<link rel="stylesheet" href="/assets/styles.css">
 </head>

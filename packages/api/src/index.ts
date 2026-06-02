@@ -1,8 +1,15 @@
 import { Hono } from 'hono';
+import { getCookie } from 'hono/cookie';
 import { frameworkMiddleware } from './middleware/framework';
 import { renderShell } from './shell';
 
 const isDev = process.env.NODE_ENV !== 'production';
+
+// Server-side theme: rewrite the prerendered <html data-theme> from the `theme`
+// cookie so the correct theme paints with no flash, even with JS disabled.
+function applyTheme(html: string, theme: 'dark' | 'light'): string {
+	return html.replace(/data-theme="(?:dark|light)"/, `data-theme="${theme}"`);
+}
 
 // Load CSS manifest for production hashed filenames
 let stylesheetPath = '/assets/styles.css';
@@ -31,11 +38,13 @@ app.use('/assets/*', async (c, next) => {
 if (isDev) {
 	// Dev: serve combined CSS on the fly
 	app.get('/assets/styles.css', async (c) => {
+		// layers.css declares the @layer order and MUST load first.
+		const layers = await Bun.file('./styles/layers.css').text();
 		const reset = await Bun.file('./styles/reset.css').text();
 		const tokens = await Bun.file('./styles/tokens.css').text();
 		const base = await Bun.file('./styles/base.css').text();
 		c.header('Content-Type', 'text/css');
-		return c.body(`${reset}\n${tokens}\n${base}`);
+		return c.body(`${layers}\n${reset}\n${tokens}\n${base}`);
 	});
 }
 
@@ -87,10 +96,11 @@ if (isDev) {
 			return c.html(
 				renderShell({
 					framework,
-					bodyHtml: `<div style="padding:4rem;text-align:center;color:var(--text-secondary)">
-					<h1 style="font-family:var(--font-display);margin-bottom:1rem">${framework}</h1>
+					theme: getCookie(c, 'theme') === 'light' ? 'light' : 'dark',
+					bodyHtml: `<div style="padding:4rem;text-align:center;color:var(--jb-text-secondary)">
+					<h1 style="font-family:var(--jb-font-display);margin-bottom:1rem">${framework}</h1>
 					<p>Dev server not running on port ${port}.</p>
-					<p style="margin-top:0.5rem;font-family:var(--font-mono);font-size:0.8rem">bun dev:${framework}</p>
+					<p style="margin-top:0.5rem;font-family:var(--jb-font-mono);font-size:0.8rem">bun dev:${framework}</p>
 				</div>`,
 				}),
 			);
@@ -100,6 +110,7 @@ if (isDev) {
 	// Production: serve pre-rendered static HTML from dist/
 	app.get('*', async (c) => {
 		const framework = c.get('framework');
+		const theme = getCookie(c, 'theme') === 'light' ? 'light' : 'dark';
 		const path = c.req.path === '/' ? '/index.html' : `${c.req.path}/index.html`;
 		const filePath = `./dist/${framework}${path}`;
 
@@ -107,18 +118,18 @@ if (isDev) {
 		if (await file.exists()) {
 			const html = await file.text();
 			c.header('Cache-Control', 'no-cache');
-			return c.html(html);
+			return c.html(applyTheme(html, theme));
 		}
 
 		// Fallback to root index
 		const fallback = Bun.file(`./dist/${framework}/index.html`);
 		if (await fallback.exists()) {
 			c.header('Cache-Control', 'no-cache');
-			return c.html(await fallback.text());
+			return c.html(applyTheme(await fallback.text(), theme));
 		}
 
 		return c.html(
-			renderShell({ framework, stylesheetPath, bodyHtml: '<p>Page not found</p>' }),
+			renderShell({ framework, theme, stylesheetPath, bodyHtml: '<p>Page not found</p>' }),
 			404,
 		);
 	});
