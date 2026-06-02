@@ -4,19 +4,54 @@ A portfolio site built three times — in React, Vue, and Angular — served fro
 
 ## Architecture
 
+In production, a single Hono server reads the `framework` cookie and serves the matching pre-rendered HTML. The client hydrates the framework it was sent.
+
+```mermaid
+flowchart LR
+    Browser -->|"GET /route<br/>(cookie: framework)"| Hono["Hono server :3000"]
+    Hono --> MW{"framework<br/>middleware<br/>(default: react)"}
+    MW -->|react| R["dist/react/**/index.html"]
+    MW -->|vue| V["dist/vue/**/index.html"]
+    MW -->|angular| A["dist/angular/**/index.html"]
+    R --> Hydrate["pre-rendered HTML → client hydrates"]
+    V --> Hydrate
+    A --> Hydrate
+    Hydrate --> Browser
+    Hono -.->|"/assets/* (immutable)"| Static["hashed CSS + fonts"]
 ```
-┌─────────────────────────────────────────────────┐
-│                  Hono Server                      │
-│  ┌─────────────────────────────────────────────┐ │
-│  │  Framework Middleware (cookie → react/vue/…) │ │
-│  └─────────────────────────────────────────────┘ │
-│          │              │              │          │
-│    dist/react/    dist/vue/    dist/angular/      │
-│   (pre-rendered)  (pre-rendered)  (pre-rendered)  │
-└─────────────────────────────────────────────────┘
-         ↕                ↕              ↕
-    Client hydrates the framework matching the cookie
+
+### Dev vs. production
+
+The same `:3000` entry point behaves very differently in the two modes. In dev, Hono is a **reverse proxy** in front of three live Vite servers; in production it serves static pre-rendered HTML. HMR WebSockets connect **directly** to each Vite server, bypassing the proxy (which forwards HTTP only).
+
+```mermaid
+flowchart TB
+    subgraph Dev["Dev — bun dev:all (4 processes via Nx)"]
+        direction LR
+        DBrowser(["Browser"])
+        DHono["Hono :3000<br/>reverse proxy"]
+        DR["Vite react :5173"]
+        DV["Vite vue :5174"]
+        DA["Vite angular :5175"]
+        DBrowser -->|"HTTP (by cookie)"| DHono
+        DHono --> DR
+        DHono --> DV
+        DHono --> DA
+        DBrowser -.->|"HMR WS (direct)"| DR
+        DBrowser -.->|"HMR WS (direct)"| DV
+        DBrowser -.->|"HMR WS (direct)"| DA
+    end
+    subgraph Prod["Production — bun start (1 process)"]
+        direction LR
+        PBrowser(["Browser"])
+        PHono["Hono :3000"]
+        PDist["dist/&lt;framework&gt;/**/index.html<br/>pre-rendered, static"]
+        PBrowser -->|HTTP| PHono
+        PHono -->|"serve static HTML"| PDist
+    end
 ```
+
+For the request lifecycle, the dev topology, and the rationale behind the Vite/Nx dev configuration, see [`docs/architecture.md`](docs/architecture.md). For why this stack was chosen and what alternatives were rejected, see [`docs/decisions.md`](docs/decisions.md).
 
 **Key decisions:**
 
@@ -42,9 +77,14 @@ A portfolio site built three times — in React, Vue, and Angular — served fro
 
 ## Getting Started
 
+> **Prerequisites:** Bun 1.3+ and **Node.js ≥ 22** (the repo pins 24.16.0 via `.nvmrc`). Bun runs the servers and scripts, but the Angular build relies on `@angular/build`, which requires `require()` of ES modules — unsupported before Node 22. Building on Node 20 fails with `ERR_REQUIRE_ESM`.
+
 ```bash
 # Install Bun (if needed)
 curl -fsSL https://bun.sh/install | bash
+
+# Use the pinned Node version
+nvm use   # reads .nvmrc (24.16.0)
 
 # Install dependencies
 bun install

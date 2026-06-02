@@ -1,0 +1,140 @@
+# Design decisions
+
+Why this site is built the way it is — the libraries chosen, the rendering
+strategy, and the alternatives that were rejected along the way. For the runtime
+topology and request flow, see [`architecture.md`](architecture.md).
+
+## Why three frameworks, one backend
+
+The site is built three times — React, Vue, and Angular — behind a single
+Bun/Hono backend, with a switcher that flips between the live implementations.
+Building the same site three ways behind one backend lets each framework's implementation be read and compared directly, from one content pipeline, one design system, and one server; only the framework layer changes.
+
+This constraint drives everything below: each framework must pre-render the same
+routes from the same content, and the server must serve whichever one the
+visitor selected.
+
+## Rendering strategy: build-time SSG + hydration
+
+Every route is **pre-rendered to a static HTML file at build time**, and the
+client framework **hydrates** that markup. There is no runtime server-side
+rendering and no database — Git is the CMS, and content changes trigger a
+rebuild.
+
+**Why SSG over runtime SSR:**
+
+- Per-route static HTML can be served directly with no SPA fallback — optimal
+  for SEO (the canonical React build) and trivially cacheable / CDN-friendly.
+- No runtime rendering means no per-request compute, no server framework
+  runtime to keep warm, and a tiny production server (just file serving).
+- The content set is small and author-controlled; nothing needs to render
+  per-request.
+
+**Output layout** — each framework writes per-route HTML to its own dist dir,
+and Hono serves the one matching the `framework` cookie:
+
+```
+dist/<framework>/
+├── index.html
+├── about/index.html
+├── work/index.html
+└── assets/  (content-hashed JS + CSS)
+```
+
+## Library decisions
+
+Each framework needed a Bun-compatible way to pre-render. The constraint was
+**Bun-only, no Node.js runtime** — which ruled out several mainstream options.
+
+### React — custom prerender script (Vite SSR API + `renderToString`)
+
+A small `prerender.ts` iterates the defined routes, imports the content library,
+calls React's `renderToString`, and writes per-route HTML. Full control, no
+heavy meta-framework. Bun's high Node.js compatibility means Vite's SSR API
+works out of the box.
+
+- **Vike (vite-plugin-ssr)** — a full meta-framework; overkill for a static
+  portfolio.
+- **react-snap** — uses Puppeteer/Chrome; heavy and not Bun-friendly.
+- **Next.js** — tied to Node.js and far too much framework for a static site.
+
+### Vue — `vite-ssg` (@antfu)
+
+Declaratively list routes; `vite-ssg` pre-renders them all to static HTML.
+Mature, well-maintained, and works under Bun because it's just a Vite plugin —
+minimal configuration.
+
+- **Nuxt** — full meta-framework, too heavy for this use case.
+- **VitePress** — documentation-focused, not suited to a custom portfolio
+  design.
+- **Custom script** — viable, but `vite-ssg` already solves it cleanly.
+
+### Angular — AnalogJS (Vite-based, SSG)
+
+Angular was the hardest of the three to fit the Bun-only + SSG constraint, so
+its options deserve the most detail.
+
+**Why AnalogJS:**
+
+- **Vite-based — consistent with the other two.** React (Vite SSR API) and Vue
+  (vite-ssg) already run on Vite 6. AnalogJS makes Angular the third Vite
+  toolchain rather than a bespoke one: the same dev-server model, the same
+  config shape, and the shared `serveCssDev` plugin work across all three. That
+  consistency is worth as much as Bun support — it keeps the monorepo one
+  mental model instead of three.
+- **Built on Angular's own SSR primitives.** It uses `@angular/ssr` under the
+  hood (a direct dependency), so prerendering and hydration follow Angular's
+  supported path rather than a reimplementation.
+- **Bun-only, no Node.js runtime.** It's the most mature path that doesn't drag
+  in Node as a runtime.
+- **Declarative SSG.** File-based routing, declarative prerender config, and
+  static-only builds (`--static`), which Angular 21's zoneless change detection
+  makes work smoothly.
+
+**Alternatives considered:**
+
+- **Angular CLI / `@angular/build` application builder (official
+  prerendering).** Angular ships first-party SSG (prerender) via `@angular/ssr`
+  and the application builder. Rejected as the *driver* because the CLI still
+  uses Node.js as its runtime and isn't Vite-based — it would make Angular the
+  odd one out in an otherwise Vite/Bun monorepo. (AnalogJS still builds on the
+  underlying `@angular/ssr` primitives, so this isn't thrown away — just driven
+  by Vite instead of the Node CLI.)
+- **Scully** — the long-standing Angular static-site generator. Rejected: it is
+  effectively unmaintained and superseded by Angular's own prerendering, and it
+  assumes a Node/Angular-CLI pipeline.
+- **Bung** (kream0/bung) — proof-of-concept (1 commit); shows Bun feasibility
+  but not production-ready.
+- **Custom esbuild scripts** — maximum control, but would mean reinventing
+  routing, SSG, and hydration by hand.
+
+## Tooling decisions
+
+### Monorepo — Nx with Bun as package manager
+
+Nx orchestrates task running and caching across the four packages and parses
+`bun.lock`. Bun is the package manager and script runtime; Nx orchestrates the
+targets (Vite, AnalogJS, Biome) rather than running them through a Node runtime.
+
+- **Turborepo** — comparable, but less mature TypeScript path-alias management.
+- **Bun workspaces alone** — no task caching, no affected commands, manual build
+  ordering.
+- **@nx-bun plugin** — experimental, not production-ready.
+
+Gotchas worth knowing: use the text-based `bun.lock` (not binary `bun.lockb`),
+disable `@nx/dependency-checks` (false positives under Bun), and note that CI
+needs a custom Bun setup (default Nx Cloud agents assume npm/pnpm/yarn).
+
+### Content — TypeScript module, gray-matter, Git as CMS
+
+Content is Markdown with frontmatter under `packages/content/`. A plain
+TypeScript module parses it with gray-matter and exposes lookup functions
+consumed **at build time** by each framework's prerender step. No runtime API,
+no database — Git is the CMS, and a content change is just a rebuild.
+
+---
+
+These decisions are distilled from the project's internal research notes and
+verified against the scaffold. The animation/creative layer described in early
+planning (GSAP, Lenis, View Transitions) is not yet part of the build and is
+intentionally omitted here until it ships.
