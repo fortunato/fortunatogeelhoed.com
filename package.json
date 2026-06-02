@@ -2,14 +2,18 @@
 	"name": "fortunatogeelhoed.com",
 	"private": true,
 	"type": "module",
+	"engines": {
+		"node": ">=22",
+		"bun": ">=1.3"
+	},
 	"scripts": {
 		"dev:react": "nx run-many -t dev -p react api",
 		"dev:vue": "nx run-many -t dev -p vue api",
 		"dev:angular": "nx run-many -t dev -p angular api",
-		"dev:all": "nx run-many -t dev -p react vue angular api",
+		"dev:all": "nx run-many -t dev -p react vue angular api --parallel=4",
 		"build:css": "bun run scripts/build-css.ts",
 		"build:content": "bun run scripts/build-content.ts",
-		"build": "bun run build:css && bun run build:content && nx run-many -t build -p react vue angular api",
+		"build": "bun run build:css && bun run build:content && nx run-many -t build -p react vue angular api && bun run scripts/rewrite-asset-urls.ts",
 		"build:react": "nx run react:build",
 		"build:vue": "nx run vue:build",
 		"build:angular": "nx run angular:build",
