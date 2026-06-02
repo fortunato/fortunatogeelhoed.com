@@ -17,11 +17,13 @@ export function serveCssDev(): Plugin {
 		name: 'serve-css-dev',
 		configureServer(server) {
 			server.middlewares.use('/assets/styles.css', (_req, res) => {
+				// layers.css declares the @layer order and MUST load first.
+				const layers = readFileSync(resolve(stylesDir, 'layers.css'), 'utf-8');
 				const reset = readFileSync(resolve(stylesDir, 'reset.css'), 'utf-8');
 				const tokens = readFileSync(resolve(stylesDir, 'tokens.css'), 'utf-8');
 				const base = readFileSync(resolve(stylesDir, 'base.css'), 'utf-8');
 				res.setHeader('Content-Type', 'text/css');
-				res.end(`${reset}\n${tokens}\n${base}`);
+				res.end(`${layers}\n${reset}\n${tokens}\n${base}`);
 			});
 
 			server.middlewares.use('/assets/', (req, res, next) => {

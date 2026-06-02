@@ -1,34 +1,49 @@
+/* Header component styles. Shared by all three variants: React/Vue consume it as
+   a hashed CSS Module; Angular via styleUrl under emulated ViewEncapsulation.
+   References semantic `--jb-` tokens only.
+
+   Class names are kebab-case (conventional CSS). React/Vue read multi-word classes
+   via bracket access (styles['switcher-btn']) and their Vite configs do NOT set
+   localsConvention — under lightningcss the camelCase conversion drops multi-word
+   locals from the JS export map. Single-word classes use dot access (styles.header).
+
+   Not wrapped in `@layer components`: hand-wrapping this shared file breaks
+   Angular's emulated encapsulation (Angular compiles styleUrl through its own
+   pipeline, not Vite/lightningcss). Component-layer placement is a
+   follow-up; until then these scoped styles are unlayered, which is correct for
+   component-scoped rules (they win over @layer base). */
+
 .header {
 	position: fixed;
 	top: 0;
 	left: 0;
 	right: 0;
-	height: var(--nav-height);
-	background: color-mix(in srgb, var(--bg-primary) 85%, transparent);
+	height: var(--jb-size-nav-height);
+	background: color-mix(in srgb, var(--jb-bg-primary) 85%, transparent);
 	backdrop-filter: blur(20px);
-	border-bottom: 1px solid var(--border);
-	z-index: 100;
+	border-bottom: 1px solid var(--jb-color-border);
+	z-index: var(--jb-z-header);
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0 var(--space-lg);
+	padding: 0 var(--jb-space-lg);
 }
 
 .logo,
 .logo:hover {
-	font-family: var(--font-logo);
+	font-family: var(--jb-font-logo);
 	font-size: 1rem;
 	font-weight: 800;
 	letter-spacing: 0;
-	color: var(--text-primary);
+	color: var(--jb-text-primary);
 	text-decoration: none;
 	user-select: none;
 	text-transform: uppercase;
 }
 
 .dot {
-	color: var(--accent);
-	transition: color 0.3s;
+	color: var(--jb-accent);
+	transition: color var(--jb-dur-base) var(--jb-ease-standard);
 }
 
 .header-right {
@@ -40,14 +55,14 @@
 .sep {
 	width: 1px;
 	height: 20px;
-	background: var(--border);
-	margin: 0 var(--space-lg);
+	background: var(--jb-color-border);
+	margin: 0 var(--jb-space-lg);
 }
 
 .nav {
 	display: flex;
 	align-items: center;
-	gap: var(--space-lg);
+	gap: var(--jb-space-lg);
 }
 
 .nav a {
@@ -55,9 +70,9 @@
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.18em;
-	color: var(--text-secondary);
+	color: var(--jb-text-secondary);
 	text-decoration: none;
-	transition: color 0.2s;
+	transition: color var(--jb-dur-fast) var(--jb-ease-standard);
 	position: relative;
 }
 
@@ -68,12 +83,12 @@
 	left: 0;
 	width: 0;
 	height: 1.5px;
-	background: var(--accent);
-	transition: width 0.3s ease;
+	background: var(--jb-accent);
+	transition: width var(--jb-dur-base) var(--jb-ease-standard);
 }
 
 .nav a:hover {
-	color: var(--text-primary);
+	color: var(--jb-text-primary);
 }
 
 .nav a:hover::after {
@@ -83,13 +98,13 @@
 .switcher {
 	display: flex;
 	align-items: center;
-	gap: var(--space-sm);
+	gap: var(--jb-space-sm);
 }
 
 .switcher-label {
-	font-family: var(--font-mono);
+	font-family: var(--jb-font-mono);
 	font-size: 0.65rem;
-	color: var(--text-secondary);
+	color: var(--jb-text-secondary);
 	white-space: nowrap;
 	line-height: 1;
 }
@@ -97,8 +112,8 @@
 .switcher-buttons {
 	display: flex;
 	gap: 2px;
-	background: var(--bg-secondary);
-	border-radius: 8px;
+	background: var(--jb-bg-secondary);
+	border-radius: var(--jb-radius-md);
 	padding: 3px;
 }
 
@@ -106,28 +121,72 @@
 	padding: 4px 12px;
 	border: none;
 	background: transparent;
-	color: var(--text-secondary);
-	font-family: var(--font-mono);
+	color: var(--jb-text-secondary);
+	font-family: var(--jb-font-mono);
 	font-size: 0.7rem;
 	font-weight: 500;
 	letter-spacing: 0.03em;
 	cursor: pointer;
-	border-radius: 6px;
-	transition: all 0.2s;
+	border-radius: var(--jb-radius-sm);
+	transition: color var(--jb-dur-fast) var(--jb-ease-standard), background-color
+		var(--jb-dur-fast) var(--jb-ease-standard);
 	text-transform: lowercase;
 }
 
 .switcher-btn:hover {
-	color: var(--text-primary);
+	color: var(--jb-text-primary);
 }
 
 .active {
-	background: var(--accent);
-	color: #fff;
+	background: var(--jb-accent);
+	color: var(--jb-text-on-accent);
 }
 
 .active:hover {
-	color: #fff;
+	color: var(--jb-text-on-accent);
+}
+
+/* Theme toggle (moon/sun). Icon swap is driven by the global [data-theme] on
+   <html>, so it reflects the current theme with zero JS state (no hydration
+   mismatch) and is correct before hydration. Attribute selectors are not hashed
+   by CSS Modules, so the descendant class still scopes correctly per framework. */
+.theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	margin-left: var(--jb-space-sm);
+	color: var(--jb-text-secondary);
+	border-radius: var(--jb-radius-sm);
+	transition: color var(--jb-dur-fast) var(--jb-ease-standard), background-color
+		var(--jb-dur-fast) var(--jb-ease-standard);
+}
+
+.theme-toggle:hover {
+	color: var(--jb-text-primary);
+	background: var(--jb-bg-secondary);
+}
+
+.theme-toggle svg {
+	width: 16px;
+	height: 16px;
+}
+
+.sun {
+	display: none;
+}
+
+.moon {
+	display: inline-flex;
+}
+
+[data-theme="light"] .sun {
+	display: inline-flex;
+}
+
+[data-theme="light"] .moon {
+	display: none;
 }
 
 @media (max-width: 768px) {
@@ -136,7 +195,7 @@
 	}
 
 	.header {
-		padding: 0 var(--space-md);
+		padding: 0 var(--jb-space-md);
 	}
 
 	.sep {

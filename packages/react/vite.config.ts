@@ -1,6 +1,7 @@
 import { resolve } from 'node:path';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
+import { cssTargets } from '../../scripts/css-targets';
 import { serveCssDev } from '../../scripts/vite-css-dev';
 
 export default defineConfig({
@@ -15,9 +16,10 @@ export default defineConfig({
 		},
 	},
 	css: {
-		modules: {
-			localsConvention: 'camelCase',
-		},
+		transformer: 'lightningcss',
+		lightningcss: { targets: cssTargets },
+		// No localsConvention: under lightningcss it drops multi-word CSS-module
+		// locals. Kebab classes are read via bracket access (styles['switcher-btn']).
 	},
 	build: {
 		outDir: resolve(__dirname, '../../dist/react'),

@@ -1,6 +1,7 @@
 import { resolve } from 'node:path';
 import angular from '@analogjs/vite-plugin-angular';
 import { defineConfig } from 'vite';
+import { cssTargets } from '../../scripts/css-targets';
 import { serveCssDev } from '../../scripts/vite-css-dev';
 
 export default defineConfig({
@@ -20,8 +21,13 @@ export default defineConfig({
 		},
 	},
 	css: {
-		// Disable CSS module hashing — Angular uses ViewEncapsulation for scoping
-		modules: false,
+		// lightningcss with CSS Modules explicitly OFF: it prefixes/downlevels
+		// component CSS to the shared targets WITHOUT hashing class names, so
+		// Angular's emulated ViewEncapsulation remains responsible for scoping.
+		// (`css.modules` is ignored under lightningcss — `css.lightningcss.cssModules`
+		// is the effective switch.)
+		transformer: 'lightningcss',
+		lightningcss: { targets: cssTargets, cssModules: false },
 	},
 	build: {
 		outDir: resolve(__dirname, '../../dist/angular'),

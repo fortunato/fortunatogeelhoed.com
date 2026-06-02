@@ -1,0 +1,6 @@
+/* Cascade layer order — the single source of truth for conflict resolution.
+   MUST be loaded before any other rule. Later layers win; within a layer,
+   normal specificity/source order applies. See
+   docs/css-architecture.md. */
+
+@layer reset, tokens, base, components, utilities;

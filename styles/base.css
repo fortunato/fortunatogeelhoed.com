@@ -1,103 +1,155 @@
-/* Base Component Styles — derived from prototype.html */
+/* Base element + global utility styles. @layer base.
+   References semantic `--jb-` tokens only — never literals. */
 
-/* Body defaults */
-body {
-	font-family: var(--font-body);
-	background: var(--bg-primary);
-	color: var(--text-primary);
-	padding-top: var(--nav-height);
-	transition: background-color 0.4s ease, color 0.4s ease;
-}
+@layer base {
+	/* Body defaults */
+	body {
+		font-family: var(--jb-font-body);
+		background: var(--jb-bg-primary);
+		color: var(--jb-text-primary);
+		padding-top: var(--jb-size-nav-height);
+		transition: background-color var(--jb-dur-slow) var(--jb-ease-standard), color
+			var(--jb-dur-slow) var(--jb-ease-standard);
+	}
 
-/* Links */
-a {
-	color: var(--accent);
-	transition: color 0.2s;
-}
+	/* Links */
+	a {
+		color: var(--jb-accent);
+		transition: color var(--jb-dur-fast) var(--jb-ease-standard);
+	}
 
-a:hover {
-	color: var(--accent-hover);
-}
+	a:hover {
+		color: var(--jb-accent-hover);
+	}
 
-/* Typography scale */
-.section-label {
-	font-size: 0.65rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.1em;
-	color: var(--accent);
-	margin-bottom: var(--space-xs);
-}
+	/* Balanced / optimized line wrapping where supported */
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		text-wrap: balance;
+	}
 
-.section-title {
-	font-family: var(--font-body);
-	font-size: clamp(1.8rem, 4vw, 2.8rem);
-	font-weight: 700;
-	letter-spacing: -0.01em;
-	margin-bottom: var(--space-xl);
-}
+	p {
+		text-wrap: pretty;
+	}
 
-/* Buttons */
-.btn {
-	display: inline-block;
-	padding: 14px 40px;
-	background: var(--accent);
-	color: #fff;
-	font-family: var(--font-body);
-	font-size: 0.85rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.12em;
-	border-radius: 8px;
-	line-height: 1;
-	transition: all 0.3s ease;
-}
+	/* Typography scale */
+	.section-label {
+		font-size: 0.65rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.1em;
+		color: var(--jb-accent);
+		margin-bottom: var(--jb-space-xs);
+	}
 
-.btn:hover {
-	color: #fff;
-	transform: translateY(-2px);
-	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
+	.section-title {
+		font-family: var(--jb-font-body);
+		font-size: clamp(1.8rem, 4vw, 2.8rem);
+		font-weight: 700;
+		letter-spacing: -0.01em;
+		margin-bottom: var(--jb-space-xl);
+	}
 
-/* Cards */
-.card {
-	background: var(--bg-card);
-	border: 1px solid var(--border);
-	border-radius: 12px;
-	padding: var(--space-lg);
-	transition: all 0.3s ease;
-}
+	/* Buttons */
+	.btn {
+		display: inline-block;
+		padding: 14px 40px;
+		background: var(--jb-accent);
+		color: var(--jb-text-on-accent);
+		font-family: var(--jb-font-body);
+		font-size: 0.85rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+		border-radius: var(--jb-radius-md);
+		line-height: 1;
+		transition: transform var(--jb-dur-base) var(--jb-ease-standard), box-shadow
+			var(--jb-dur-base) var(--jb-ease-standard), background-color var(--jb-dur-base)
+			var(--jb-ease-standard);
+	}
 
-.card:hover {
-	border-color: var(--accent);
-	transform: translateY(-4px);
-	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-}
+	.btn:hover {
+		color: var(--jb-text-on-accent);
+		transform: translateY(-2px);
+		box-shadow: var(--jb-shadow-md);
+	}
 
-/* Tech tags */
-.tech-tag {
-	font-family: var(--font-mono);
-	font-size: 0.65rem;
-	padding: 3px 8px;
-	background: var(--accent-soft);
-	color: var(--accent);
-	border-radius: 4px;
-	font-weight: 500;
-}
+	/* Cards */
+	.card {
+		background: var(--jb-bg-card);
+		border: 1px solid var(--jb-color-border);
+		border-radius: var(--jb-radius-lg);
+		padding: var(--jb-space-lg);
+		transition: transform var(--jb-dur-base) var(--jb-ease-standard), box-shadow
+			var(--jb-dur-base) var(--jb-ease-standard), border-color var(--jb-dur-base)
+			var(--jb-ease-standard);
+	}
 
-/* Container */
-.container {
-	width: var(--container);
-	margin: 0 auto;
-}
+	.card:hover {
+		border-color: var(--jb-accent);
+		transform: translateY(-4px);
+		box-shadow: var(--jb-shadow-lg);
+	}
 
-/* Section spacing */
-section {
-	padding: var(--space-2xl) var(--space-lg);
-}
+	/* Tech tags */
+	.tech-tag {
+		font-family: var(--jb-font-mono);
+		font-size: 0.65rem;
+		padding: 3px 8px;
+		background: var(--jb-accent-soft);
+		color: var(--jb-accent);
+		border-radius: var(--jb-radius-sm);
+		font-weight: 500;
+	}
 
-/* Code / mono */
-code {
-	font-family: var(--font-mono);
-	font-size: 0.875em;
+	/* Container */
+	.container {
+		width: var(--jb-size-container);
+		margin: 0 auto;
+	}
+
+	/* Section spacing */
+	section {
+		padding: var(--jb-space-2xl) var(--jb-space-lg);
+	}
+
+	/* Code / mono */
+	code {
+		font-family: var(--jb-font-mono);
+		font-size: 0.875em;
+	}
+
+	/* Visible keyboard focus for every interactive element */
+	:focus-visible {
+		outline: 2px solid var(--jb-accent);
+		outline-offset: 2px;
+		border-radius: var(--jb-radius-sm);
+	}
+
+	/* Full-height utility honoring dynamic mobile chrome */
+	.full-height {
+		min-height: 100vh;
+		min-height: 100dvh;
+	}
+
+	/* Suppress non-essential motion on request.
+	   `!important` wins across layers; essential state changes remain perceivable. */
+	@media (prefers-reduced-motion: reduce) {
+		html {
+			scroll-behavior: auto;
+		}
+
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+			scroll-behavior: auto !important;
+		}
+	}
 }

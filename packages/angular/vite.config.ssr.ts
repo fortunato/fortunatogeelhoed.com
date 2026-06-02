@@ -2,6 +2,7 @@ import { resolve } from 'node:path';
 import angular from '@analogjs/vite-plugin-angular';
 import type { Plugin } from 'vite';
 import { defineConfig } from 'vite';
+import { cssTargets } from '../../scripts/css-targets';
 
 // Get the Angular plugins and remove the routerPlugin that fails in SSR mode
 const angularPlugins = angular({
@@ -21,8 +22,10 @@ export default defineConfig({
 		},
 	},
 	css: {
-		// Disable CSS module hashing — Angular's ViewEncapsulation handles scoping
-		modules: false,
+		// lightningcss with CSS Modules off (see vite.config.ts): transform without
+		// hashing so Angular's ViewEncapsulation handles scoping.
+		transformer: 'lightningcss',
+		lightningcss: { targets: cssTargets, cssModules: false },
 	},
 	build: {
 		outDir: resolve(__dirname, '../../dist/angular-ssr'),

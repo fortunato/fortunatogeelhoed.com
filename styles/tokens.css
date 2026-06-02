@@ -1,73 +1,145 @@
-/* Design Tokens — derived from prototype.html */
+/* Design Tokens — `--jb-` namespace (JiggyBit), two-tier (primitive → semantic).
+   Custom properties share one global cascade namespace and are NOT scoped by
+   CSS Modules / Angular emulation, so the `--jb-` prefix is what keeps them
+   collision-safe across the three framework variants and third-party CSS.
+   See docs/css-architecture.md. */
 
-:root {
-	/* Framework-aware accent colors */
-	--accent-react: #e86a1a;
-	--accent-vue: #d4890e;
-	--accent-angular: #e04a1a;
-
-	/* Active accent (set by framework selection) */
-	--accent: var(--accent-react);
-	--accent-soft: color-mix(in srgb, var(--accent) 15%, transparent);
-	--accent-hover: color-mix(in srgb, var(--accent) 85%, white);
-
-	/* Typography */
-	--font-display: "Rubik", sans-serif;
-	--font-body: "Space Grotesk", sans-serif;
-	--font-mono: "JetBrains Mono", monospace;
-	--font-logo: "Rubik", sans-serif;
-
-	/* Spacing */
-	--space-xs: 0.25rem;
-	--space-sm: 0.5rem;
-	--space-md: 1rem;
-	--space-lg: 2rem;
-	--space-xl: 4rem;
-	--space-2xl: 8rem;
-
-	/* Layout */
-	--container: min(1320px, 90vw);
-	--nav-height: 3.5rem;
-}
-
-/* Dark theme (default) */
-[data-theme="dark"] {
-	--bg-primary: #0a0a0a;
-	--bg-secondary: #141414;
-	--bg-card: #1a1a1a;
-	--bg-card-hover: #222;
-	--text-primary: #f0f0f0;
-	--text-secondary: #888;
-	--text-tertiary: #555;
-	--border: #2a2a2a;
-}
-
-/* Light theme */
-[data-theme="light"] {
-	--bg-primary: #fafafa;
-	--bg-secondary: #f0f0f0;
-	--bg-card: #ffffff;
-	--bg-card-hover: #f5f5f5;
-	--text-primary: #111;
-	--text-secondary: #666;
-	--text-tertiary: #aaa;
-	--border: #e0e0e0;
-}
-
-/* Framework accent overrides */
-[data-framework="react"] {
-	--accent: var(--accent-react);
-}
-[data-framework="vue"] {
-	--accent: var(--accent-vue);
-}
-[data-framework="angular"] {
-	--accent: var(--accent-angular);
-}
-
-/* Mobile overrides */
-@media (max-width: 768px) {
+@layer tokens {
+	/* ========================================================================
+	   Tier 1 — Primitives: raw values, no usage meaning.
+	   Re-tune freely; only the semantic tokens below are the component-facing
+	   contract. Neutral ramp: higher number = darker.
+	   ======================================================================== */
 	:root {
-		--nav-height: 3rem;
+		--jb-color-neutral-0: #ffffff;
+		--jb-color-neutral-50: #fafafa;
+		--jb-color-neutral-100: #f5f5f5;
+		--jb-color-neutral-150: #f0f0f0;
+		--jb-color-neutral-200: #e0e0e0;
+		--jb-color-neutral-400: #aaaaaa;
+		--jb-color-neutral-500: #888888;
+		--jb-color-neutral-550: #808080;
+		--jb-color-neutral-600: #6f6f6f;
+		--jb-color-neutral-650: #666666;
+		--jb-color-neutral-800: #2a2a2a;
+		--jb-color-neutral-840: #222222;
+		--jb-color-neutral-860: #1a1a1a;
+		--jb-color-neutral-880: #141414;
+		--jb-color-neutral-900: #111111;
+		--jb-color-neutral-950: #0a0a0a;
+
+		/* Brand accent sources (one per framework variant) */
+		--jb-color-accent-react: #e86a1a;
+		--jb-color-accent-vue: #d4890e;
+		--jb-color-accent-angular: #e04a1a;
+	}
+
+	/* ========================================================================
+	   Tier 2 — Semantics: role-named, reference a primitive via var().
+	   Components and themes consume ONLY these.
+	   ======================================================================== */
+	:root {
+		color-scheme: light dark;
+
+		/* Accent — `--jb-accent` is @property-registered below (animatable);
+		   reassigned per framework by [data-framework]. */
+		--jb-accent: var(--jb-color-accent-react);
+		--jb-accent-soft: color-mix(in srgb, var(--jb-accent) 15%, transparent);
+		--jb-accent-hover: color-mix(in srgb, var(--jb-accent) 85%, white);
+		--jb-text-on-accent: var(--jb-color-neutral-0);
+
+		/* Typography */
+		--jb-font-display: "Rubik", sans-serif;
+		--jb-font-body: "Space Grotesk", sans-serif;
+		--jb-font-mono: "JetBrains Mono", monospace;
+		--jb-font-logo: var(--jb-font-display);
+
+		/* Spacing (t-shirt scale) */
+		--jb-space-xs: 0.25rem;
+		--jb-space-sm: 0.5rem;
+		--jb-space-md: 1rem;
+		--jb-space-lg: 2rem;
+		--jb-space-xl: 4rem;
+		--jb-space-2xl: 8rem;
+
+		/* Layout / size */
+		--jb-size-container: min(1320px, 90vw);
+		--jb-size-nav-height: 3.5rem;
+
+		/* Elevation */
+		--jb-shadow-sm: 0 2px 8px rgb(0 0 0 / 0.12);
+		--jb-shadow-md: 0 8px 24px rgb(0 0 0 / 0.2);
+		--jb-shadow-lg: 0 12px 40px rgb(0 0 0 / 0.15);
+
+		/* Radius */
+		--jb-radius-sm: 4px;
+		--jb-radius-md: 8px;
+		--jb-radius-lg: 12px;
+
+		/* Stacking */
+		--jb-z-base: 1;
+		--jb-z-header: 100;
+		--jb-z-overlay: 1000;
+
+		/* Motion */
+		--jb-dur-fast: 0.2s;
+		--jb-dur-base: 0.3s;
+		--jb-dur-slow: 0.4s;
+		--jb-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+		--jb-ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
+	}
+
+	/* Register the accent so it can interpolate during the framework switch
+	   (plain custom properties are not animatable). */
+	@property --jb-accent {
+		syntax: "<color>";
+		inherits: true;
+		initial-value: #e86a1a;
+	}
+
+	/* Theme: dark (default) */
+	[data-theme="dark"] {
+		color-scheme: dark;
+		--jb-bg-primary: var(--jb-color-neutral-950);
+		--jb-bg-secondary: var(--jb-color-neutral-880);
+		--jb-bg-card: var(--jb-color-neutral-860);
+		--jb-bg-card-hover: var(--jb-color-neutral-840);
+		--jb-text-primary: var(--jb-color-neutral-150);
+		--jb-text-secondary: var(--jb-color-neutral-500);
+		/* tertiary lifted from #555 (≈2.6:1, failed AA) to #808080 for normal-size text. */
+		--jb-text-tertiary: var(--jb-color-neutral-550);
+		--jb-color-border: var(--jb-color-neutral-800);
+	}
+
+	/* Theme: light */
+	[data-theme="light"] {
+		color-scheme: light;
+		--jb-bg-primary: var(--jb-color-neutral-50);
+		--jb-bg-secondary: var(--jb-color-neutral-150);
+		--jb-bg-card: var(--jb-color-neutral-0);
+		--jb-bg-card-hover: var(--jb-color-neutral-100);
+		--jb-text-primary: var(--jb-color-neutral-900);
+		--jb-text-secondary: var(--jb-color-neutral-650);
+		/* tertiary darkened from #aaa (≈2.2:1, failed AA) to #6f6f6f for normal-size text. */
+		--jb-text-tertiary: var(--jb-color-neutral-600);
+		--jb-color-border: var(--jb-color-neutral-200);
+	}
+
+	/* Framework accent overrides — reassign the semantic accent to a primitive. */
+	[data-framework="react"] {
+		--jb-accent: var(--jb-color-accent-react);
+	}
+	[data-framework="vue"] {
+		--jb-accent: var(--jb-color-accent-vue);
+	}
+	[data-framework="angular"] {
+		--jb-accent: var(--jb-color-accent-angular);
+	}
+
+	/* Mobile overrides */
+	@media (max-width: 768px) {
+		:root {
+			--jb-size-nav-height: 3rem;
+		}
 	}
 }

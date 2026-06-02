@@ -1,0 +1,9 @@
+# Single source of browser targets — Baseline "Widely available" floor.
+# Read by BOTH lightningcss (scripts/css-targets.ts → browserslistToTargets(browserslist()))
+# and Angular's compiler (@angular/build), so the two CSS pipelines prefix/downlevel
+# to the same floor and cannot diverge as component CSS grows.
+chrome >= 111
+edge >= 111
+firefox >= 111
+safari >= 16.4
+ios_saf >= 16.4
