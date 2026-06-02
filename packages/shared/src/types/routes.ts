@@ -1,8 +1,8 @@
 export interface RouteDefinition {
-	path: string
-	name: string
-	contentSlug?: string
-	contentType?: string
+	path: string;
+	name: string;
+	contentSlug?: string;
+	contentType?: string;
 }
 
 export const routes: RouteDefinition[] = [
@@ -12,4 +12,4 @@ export const routes: RouteDefinition[] = [
 	{ path: '/work', name: 'Work', contentSlug: 'work', contentType: 'page' },
 	{ path: '/blog', name: 'Blog', contentSlug: 'blog', contentType: 'page' },
 	{ path: '/contact', name: 'Contact', contentSlug: 'contact', contentType: 'page' },
-]
+];

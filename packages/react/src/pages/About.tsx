@@ -1,7 +1,7 @@
-import { useContent } from '../content'
+import { useContent } from '../content';
 
 export function About() {
-	const content = useContent('about')
+	const content = useContent('about');
 
 	return (
 		<section>
@@ -14,5 +14,5 @@ export function About() {
 				</p>
 			</div>
 		</section>
-	)
+	);
 }

@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { useContent } from '../composables/useContent'
+import { useContent } from '../composables/useContent';
 
-const { content } = useContent('contact')
+const { content } = useContent('contact');
 </script>

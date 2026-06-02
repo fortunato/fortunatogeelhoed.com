@@ -1,7 +1,7 @@
-import { useContent } from '../content'
+import { useContent } from '../content';
 
 export function Blog() {
-	const content = useContent('blog')
+	const content = useContent('blog');
 
 	return (
 		<section>
@@ -13,5 +13,5 @@ export function Blog() {
 				</p>
 			</div>
 		</section>
-	)
+	);
 }

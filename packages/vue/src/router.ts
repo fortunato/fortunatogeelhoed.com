@@ -5,4 +5,4 @@ export const routes = [
 	{ path: '/work', name: 'Work', component: () => import('./pages/Work.vue') },
 	{ path: '/blog', name: 'Blog', component: () => import('./pages/Blog.vue') },
 	{ path: '/contact', name: 'Contact', component: () => import('./pages/Contact.vue') },
-]
+];

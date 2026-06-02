@@ -6,7 +6,7 @@
 			"command": "vite --config packages/react/vite.config.ts --port 5173"
 		},
 		"build": {
-			"command": "vite build --config packages/react/vite.config.ts && bun run packages/react/prerender.ts"
+			"command": "vite build --config packages/react/vite.config.ts && vite build --config packages/react/vite.config.ts --ssr src/entry-server.tsx --outDir ../../dist/react-ssr && bun run packages/react/prerender.ts"
 		},
 		"lint": {
 			"command": "biome check packages/react/"

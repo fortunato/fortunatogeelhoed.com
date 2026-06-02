@@ -1,8 +1,8 @@
-import type { ContentItem } from '@fg/shared'
-import matter from 'gray-matter'
+import type { ContentItem } from '@fg/shared';
+import matter from 'gray-matter';
 
 export function parseContent(raw: string): ContentItem {
-	const { data, content } = matter(raw)
+	const { data, content } = matter(raw);
 	return {
 		title: data.title ?? '',
 		slug: data.slug ?? '',
@@ -11,5 +11,5 @@ export function parseContent(raw: string): ContentItem {
 		description: data.description,
 		draft: data.draft,
 		body: content.trim(),
-	}
+	};
 }

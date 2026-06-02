@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core'
-import { ContentService } from '../content.service'
+import { Component, inject } from '@angular/core';
+import { ContentService } from '../content.service';
 
 @Component({
 	selector: 'app-work',
@@ -15,6 +15,6 @@ import { ContentService } from '../content.service'
 	`,
 })
 export class WorkComponent {
-	private contentService = inject(ContentService)
-	content = this.contentService.getContent('work')
+	private contentService = inject(ContentService);
+	content = this.contentService.getContent('work');
 }

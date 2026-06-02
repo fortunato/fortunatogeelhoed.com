@@ -1,11 +1,11 @@
-import type { Framework } from './middleware/framework'
+import type { Framework } from './middleware/framework';
 
 interface ShellOptions {
-	framework: Framework
-	title?: string
-	description?: string
-	bodyHtml?: string
-	stylesheetPath?: string
+	framework: Framework;
+	title?: string;
+	description?: string;
+	bodyHtml?: string;
+	stylesheetPath?: string;
 }
 
 export function renderShell({
@@ -15,7 +15,7 @@ export function renderShell({
 	bodyHtml = '',
 	stylesheetPath = '/assets/styles.css',
 }: ShellOptions): string {
-	const noindex = framework !== 'react' ? '<meta name="robots" content="noindex">' : ''
+	const noindex = framework !== 'react' ? '<meta name="robots" content="noindex">' : '';
 
 	return `<!DOCTYPE html>
 <html lang="en" data-theme="dark" data-framework="${framework}">
@@ -31,23 +31,7 @@ export function renderShell({
 	<link rel="stylesheet" href="${stylesheetPath}">
 </head>
 <body>
-	<div id="fw-switcher" class="framework-switcher">
-		<span class="fw-label">Built with</span>
-		<div class="fw-buttons">
-			<button class="fw-btn${framework === 'react' ? ' active' : ''}" data-fw="react">react</button>
-			<button class="fw-btn${framework === 'vue' ? ' active' : ''}" data-fw="vue">vue</button>
-			<button class="fw-btn${framework === 'angular' ? ' active' : ''}" data-fw="angular">angular</button>
-		</div>
-	</div>
 	<div id="app">${bodyHtml}</div>
-	<script>
-		document.querySelectorAll('.fw-btn').forEach(btn => {
-			btn.addEventListener('click', () => {
-				document.cookie = 'framework=' + btn.dataset.fw + ';path=/;max-age=31536000'
-				window.location.reload()
-			})
-		})
-	</script>
 </body>
-</html>`
+</html>`;
 }
