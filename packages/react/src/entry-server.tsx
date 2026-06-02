@@ -2,7 +2,7 @@ import type { ContentItem } from '@fg/shared'
 import { renderToString } from 'react-dom/server'
 import { StaticRouterProvider, createStaticHandler, createStaticRouter } from 'react-router'
 import { ContentProvider } from './content'
-import { routes } from './router'
+import { routes } from './routes'
 
 type ContentMap = Record<string, ContentItem>
 
