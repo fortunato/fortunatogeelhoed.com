@@ -1,6 +1,7 @@
 import 'zone.js/node'
 import '@angular/platform-server/init'
 import '@angular/compiler'
+import { readFileSync } from 'node:fs'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 import { bootstrapApplication } from '@angular/platform-browser'
@@ -12,6 +13,9 @@ import { config } from './src/app.config.server'
 const distDir = resolve(import.meta.dirname, '../../dist/angular')
 const engine = new CommonEngine({ allowedHosts: ['localhost'] })
 
+// Use the Vite-built index.html as the document template (has script tags)
+const document = readFileSync(resolve(distDir, 'index.html'), 'utf-8')
+
 const bootstrap = (context: unknown) => bootstrapApplication(AppComponent, config, context)
 
 async function prerender() {
@@ -19,7 +23,7 @@ async function prerender() {
 		const html = await engine.render({
 			bootstrap,
 			url: `http://localhost${route.path}`,
-			document: '<html><body><app-root></app-root></body></html>',
+			document,
 		})
 
 		const filePath =
