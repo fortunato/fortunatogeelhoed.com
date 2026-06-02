@@ -2,6 +2,8 @@
 	"name": "fortunatogeelhoed.com",
 	"private": true,
 	"type": "module",
+	"license": "MIT",
+	"author": "Fortunato Geelhoed",
 	"engines": {
 		"node": ">=22",
 		"bun": ">=1.3"

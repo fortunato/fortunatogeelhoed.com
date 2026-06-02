@@ -143,3 +143,9 @@ Body content here (rendered as text in page components).
 ```
 
 The content library exports `getPage(slug)` and `listByType(type)` — consumed at build time by each framework's SSG process.
+
+## License
+
+The **source code** of this repository is released under the [MIT License](LICENSE) — read it, learn from it, and reuse it freely.
+
+The **personal content** under `packages/content/` (bio, project descriptions, copy) and the "Fortunato Geelhoed" / "JiggyBit" names and brand assets are © 2026 Fortunato Geelhoed / JiggyBit S.L., all rights reserved. Please build your own portfolio rather than cloning this one wholesale.
