@@ -1,25 +1,15 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
-import { getPage } from '@fg/content'
 import { routes } from '@fg/shared'
-import type { ContentItem } from '@fg/shared'
+import contentData from '../content/data.json'
 
 const distDir = resolve(import.meta.dirname, '../../dist/react')
 
 async function prerender() {
-	// Load all content
-	const contentMap: Record<string, ContentItem> = {}
-	for (const route of routes) {
-		if (route.contentSlug) {
-			const item = await getPage(route.contentSlug)
-			if (item) contentMap[route.contentSlug] = item
-		}
-	}
-
 	const { render } = await import('./src/entry-server.tsx')
 
 	for (const route of routes) {
-		const html = await render(route.path, contentMap)
+		const html = await render(route.path, contentData)
 		const filePath =
 			route.path === '/'
 				? resolve(distDir, 'index.html')

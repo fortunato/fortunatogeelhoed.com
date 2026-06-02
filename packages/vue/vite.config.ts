@@ -21,5 +21,6 @@ export default defineConfig({
 	},
 	ssgOptions: {
 		script: 'async',
+		dirStyle: 'nested',
 	},
 })

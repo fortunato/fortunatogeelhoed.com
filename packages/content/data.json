@@ -1,0 +1,44 @@
+{
+	"home": {
+		"title": "Fortunato Geelhoed",
+		"slug": "home",
+		"type": "page",
+		"description": "Senior Full-Stack Engineer crafting digital experiences with React, Vue, and Angular.",
+		"body": "Full-stack developer specialising in modern web applications.\nBuilding performant, accessible experiences across the JavaScript ecosystem."
+	},
+	"about": {
+		"title": "About",
+		"slug": "about",
+		"type": "page",
+		"description": "Senior TypeScript engineer based in Spain, building for the web since 2015.",
+		"body": "I'm Fortunato Geelhoed — a senior full-stack engineer based in Spain, working through JiggyBit S.L.\n\nI specialise in TypeScript, React, Vue, and Angular with deep experience in performance optimisation, design systems, and server-side rendering."
+	},
+	"services": {
+		"title": "Services",
+		"slug": "services",
+		"type": "page",
+		"description": "Frontend architecture, design systems, performance consulting, and full-stack development.",
+		"body": "I offer consulting and development services across the modern web stack:\n\n- Frontend architecture and design systems\n- Performance auditing and optimisation\n- Full-stack TypeScript development\n- Framework migration and modernisation"
+	},
+	"work": {
+		"title": "Case Studies",
+		"slug": "work",
+		"type": "page",
+		"description": "Selected projects demonstrating expertise in modern web development.",
+		"body": "A curated collection of projects showcasing frontend architecture, performance engineering, and full-stack development."
+	},
+	"blog": {
+		"title": "Blog",
+		"slug": "blog",
+		"type": "page",
+		"description": "Writing about TypeScript, frontend architecture, and web performance.",
+		"body": "Thoughts on frontend engineering, TypeScript patterns, and building for the modern web."
+	},
+	"contact": {
+		"title": "Let's work together",
+		"slug": "contact",
+		"type": "page",
+		"description": "Get in touch for consulting, freelance projects, or collaboration.",
+		"body": "I'm currently available for new projects. Reach out to discuss how I can help."
+	}
+}

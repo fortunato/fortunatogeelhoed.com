@@ -6,7 +6,7 @@
 			"command": "vite --config packages/angular/vite.config.ts --port 5175"
 		},
 		"build": {
-			"command": "vite build --config packages/angular/vite.config.ts"
+			"command": "vite build --config packages/angular/vite.config.ts && bun run packages/angular/prerender.ts"
 		},
 		"lint": {
 			"command": "biome check packages/angular/"

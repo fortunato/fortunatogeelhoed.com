@@ -5,14 +5,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
 	plugins: [
 		angular({
-			nitro: {
-				prerender: {
-					routes: ['/', '/about', '/services', '/work', '/blog', '/contact'],
-				},
-				output: {
-					dir: resolve(__dirname, '../../dist/angular'),
-				},
-			},
+			tsconfig: resolve(__dirname, 'tsconfig.json'),
 		}),
 	],
 	root: resolve(__dirname),
