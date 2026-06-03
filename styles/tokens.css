@@ -28,10 +28,12 @@
 		--jb-color-neutral-900: #111111;
 		--jb-color-neutral-950: #0a0a0a;
 
-		/* Brand accent sources (one per framework variant) */
-		--jb-color-accent-react: #e86a1a;
-		--jb-color-accent-vue: #d4890e;
-		--jb-color-accent-angular: #e04a1a;
+		/* Brand accent sources (one per framework variant). Darkened so white text on an
+		   accent background (e.g. .btn) and accent-colored text on white both clear WCAG AA
+		   contrast (≥ 4.5:1). */
+		--jb-color-accent-react: #bb5615;
+		--jb-color-accent-vue: #a0670b;
+		--jb-color-accent-angular: #ce4418;
 
 		/* Status */
 		--jb-color-danger-500: #e5484d;
