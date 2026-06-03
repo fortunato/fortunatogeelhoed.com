@@ -48,6 +48,17 @@ The form is the better demonstration than a bare element: it shows real interop 
 values, native events, and each framework's form story (React state, Vue `:value`/`@input`,
 Angular Reactive Forms via a control-value-accessor).
 
+The site header (with the primary nav) is also showcased as a framework-authored composite —
+in React and Vue. It is intentionally excluded from the visual-parity gate because the active
+framework-switcher button differs per section by design. The Angular header is currently not
+shown: its component `styleUrl` points at the shared `header.module.css`, and Angular's
+webpack-based Storybook builder runs component styles through css-loader, whose default
+`modules.auto` treats any `.module.css` file as a CSS Module requiring named ES exports — which
+collides with Angular's string-export component styles. That loader runs inside Angular's own
+child compilation, so it cannot be reconfigured from `webpackFinal`, and the `.module.css`
+filename can't be renamed because the React and Vue variants import it as a real CSS Module.
+Angular is represented by the Contact Form (which uses global classes, no component `styleUrl`).
+
 The elements deliberately show both encapsulation modes, and the showcase preserves that:
 `jb-input` / `jb-textarea` / `jb-theme-toggle` use light DOM (styled by the global stylesheet and
 inherited `--jb-` tokens, and form-associated for native validation), while `jb-tech-tag` uses
