@@ -1,5 +1,7 @@
+import { contactSchema } from '@fg/shared/validation/contact';
 import { Hono } from 'hono';
 import { getCookie, setCookie } from 'hono/cookie';
+import { z } from 'zod';
 import { cssSourceFiles } from '../../../scripts/css-sources';
 import { type AppEnv, frameworkMiddleware } from './middleware/framework';
 import { renderShell } from './shell';
@@ -96,6 +98,18 @@ app.get('/__switch', (c) => {
 		}
 	}
 	return c.redirect(next, 302);
+});
+
+// Contact form submission. Validates with the same Zod schema the browser forms use, so the
+// client and server can never disagree on what counts as valid. Validation-only for now: a
+// well-formed payload is acknowledged but not yet delivered or stored.
+app.post('/api/contact', async (c) => {
+	const payload = await c.req.json().catch(() => null);
+	const result = contactSchema.safeParse(payload);
+	if (!result.success) {
+		return c.json({ errors: z.flattenError(result.error).fieldErrors }, 422);
+	}
+	return c.json({ ok: true });
 });
 
 if (isDev) {

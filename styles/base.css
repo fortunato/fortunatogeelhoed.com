@@ -125,6 +125,17 @@
 		}
 	}
 
+	/* Each field groups its control with its validation message (per-framework markup). */
+	.contact-field {
+		display: grid;
+		gap: var(--jb-space-xs);
+	}
+
+	.field-error {
+		color: var(--jb-color-danger);
+		font-size: 0.85rem;
+	}
+
 	.contact-success {
 		margin-top: var(--jb-space-lg);
 		color: var(--jb-accent);
