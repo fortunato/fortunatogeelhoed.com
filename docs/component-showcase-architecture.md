@@ -44,9 +44,24 @@ build target in `angular.json`. This is the reason the build order and tooling d
 The `jb-*` elements (built with Lit) are the real primitives; the frameworks **consume** them
 rather than reimplementing them. So the catalogue shows each element once natively in the Web
 Components section, and again consumed inside a framework-authored composite (the Contact Form).
-The form is the better demonstration than a bare element: it shows real interop — controlled
-values, native events, and each framework's form story (React state, Vue `:value`/`@input`,
-Angular Reactive Forms via a control-value-accessor).
+The form is the better demonstration than a bare element: each framework consumes the same
+`jb-*` controls through its own **modern forms stack** — `react-hook-form` in React, TanStack
+Form in Vue, and Angular's **Signal Forms** (`@angular/forms/signals`) — binding to each element
+via its `value` property and bubbling native `input`/`blur` events. That shows real interop in
+context (controlled values, native events, validation, a `disabled` state, per-field errors)
+rather than a bare mount, and exercises each framework's current forms idiom.
+
+### One validation schema, every framework and the server
+
+All three forms — and the API that receives the submission — validate against a **single Zod
+schema**, `packages/shared/src/validation/contact.ts`. Each framework feeds that one schema into
+its forms stack through a standard interface: React via `zodResolver`, Vue and Angular via the
+[Standard Schema](https://standardschema.dev) interface (`validators` / `validateStandardSchema`).
+On submit, each form POSTs to the Hono `/api/contact` endpoint, which re-validates with the same
+`contactSchema.safeParse` and is authoritative; any server-side field errors are mapped back onto
+the form. The validation rules therefore live in exactly one place and the clients and server can
+never drift apart — and the same contract is expressed through three different idiomatic forms
+stacks, which is itself a cross-framework mastery signal.
 
 The site header (with the primary nav) is also showcased as a framework-authored composite in
 all three frameworks. It is intentionally excluded from the visual-parity gate because the active
