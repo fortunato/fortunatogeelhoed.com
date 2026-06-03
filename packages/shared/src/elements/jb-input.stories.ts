@@ -39,4 +39,3 @@ export const Filled: Story = { args: { value: 'fortunato@example.com' } };
 export const Required: Story = { args: { required: true } };
 
 export const Disabled: Story = { args: { value: 'fortunato@example.com', disabled: true } };
-

@@ -17,7 +17,9 @@ const sections = [
 
 for (const section of sections) {
 	test(`Contact Form parity — ${section.framework}`, async ({ page }) => {
-		await page.goto(`${section.base}/iframe.html?id=${section.id}&viewMode=story&globals=theme:dark`);
+		await page.goto(
+			`${section.base}/iframe.html?id=${section.id}&viewMode=story&globals=theme:dark`,
+		);
 		const form = page.locator('.contact-form');
 		await form.waitFor({ state: 'visible' });
 		await page.addStyleTag({ content: neutralAccent });

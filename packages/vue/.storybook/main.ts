@@ -1,6 +1,6 @@
 import { resolve } from 'node:path';
-import vue from '@vitejs/plugin-vue';
 import type { StorybookConfig } from '@storybook/vue3-vite';
+import vue from '@vitejs/plugin-vue';
 
 // Vue section. Aliases mirror the package vite.config so stories can import real app components.
 // Storybook's bundled Vue plugin does not set isCustomElement, so SFC composites (Header,
@@ -18,7 +18,9 @@ const config: StorybookConfig = {
 			(p) => !(p && typeof p === 'object' && 'name' in p && p.name === 'vite:vue'),
 		);
 		cfg.plugins.unshift(
-			vue({ template: { compilerOptions: { isCustomElement: (tag) => tag.startsWith('jb-') } } }),
+			vue({
+				template: { compilerOptions: { isCustomElement: (tag) => tag.startsWith('jb-') } },
+			}),
 		);
 		cfg.resolve ??= {};
 		cfg.resolve.alias = {

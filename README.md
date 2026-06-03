@@ -127,6 +127,23 @@ repo/
 
 Visit the site and use the switcher buttons at the top. The switcher is vanilla JS injected by the Hono shell — it sets a cookie and reloads the page. Each framework renders the same routes with the same content from the same CSS.
 
+## Component showcase
+
+The design system is also published as an interactive component catalogue at
+**[components.fortunatogeelhoed.com](https://components.fortunatogeelhoed.com)** — the same
+components rendered in React, Vue, Angular, and as the shared native web components, federated
+into one site. Cross-framework parity is enforced by an automated visual-regression check.
+
+```bash
+bun run storybook         # composition portal on :6006
+bun run build-storybook   # assemble the static catalogue into dist/storybook
+bun run test:visual       # cross-framework visual-regression parity gate
+```
+
+See [`docs/component-showcase.md`](docs/component-showcase.md) for usage and
+[`docs/component-showcase-architecture.md`](docs/component-showcase-architecture.md) for the
+design rationale.
+
 ## Content
 
 Pages are Markdown files with frontmatter in `packages/content/src/pages/`:

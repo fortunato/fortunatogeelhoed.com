@@ -37,4 +37,3 @@ export const Filled: Story = {
 export const Required: Story = { args: { required: true } };
 
 export const Disabled: Story = { args: { value: 'Sent already.', disabled: true } };
-

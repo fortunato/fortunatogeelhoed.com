@@ -20,11 +20,25 @@ const steps: Step[] = [
 	{ name: 'portal', cmd: ['storybook', 'build', '-c', '.storybook', '-o', 'dist/storybook'] },
 	{
 		name: 'web-components',
-		cmd: ['storybook', 'build', '-c', 'packages/shared/.storybook', '-o', 'dist/storybook/web-components'],
+		cmd: [
+			'storybook',
+			'build',
+			'-c',
+			'packages/shared/.storybook',
+			'-o',
+			'dist/storybook/web-components',
+		],
 	},
 	{
 		name: 'react',
-		cmd: ['storybook', 'build', '-c', 'packages/react/.storybook', '-o', 'dist/storybook/react'],
+		cmd: [
+			'storybook',
+			'build',
+			'-c',
+			'packages/react/.storybook',
+			'-o',
+			'dist/storybook/react',
+		],
 	},
 	{
 		name: 'vue',
@@ -36,10 +50,16 @@ const steps: Step[] = [
 
 async function run(step: Step): Promise<void> {
 	console.log(`\n▸ building ${step.name}…`);
-	const proc = Bun.spawn(['bunx', ...step.cmd], { cwd: root, stdout: 'inherit', stderr: 'inherit' });
+	const proc = Bun.spawn(['bunx', ...step.cmd], {
+		cwd: root,
+		stdout: 'inherit',
+		stderr: 'inherit',
+	});
 	const code = await proc.exited;
 	if (code !== 0) {
-		console.error(`\n✗ ${step.name} build failed (exit ${code}) — not publishing a partial catalogue.`);
+		console.error(
+			`\n✗ ${step.name} build failed (exit ${code}) — not publishing a partial catalogue.`,
+		);
 		process.exit(code || 1);
 	}
 }
