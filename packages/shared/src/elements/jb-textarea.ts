@@ -2,6 +2,11 @@ import { LitElement, html } from 'lit';
 
 // Form-associated multi-line input — a thin sibling of jb-input for the contact
 // message field. Same single-channel ElementInternals pattern and light-DOM styling.
+/**
+ * @customElement jb-textarea
+ * @fires input - Native input event, bubbling, as the value changes.
+ * @fires blur - Bubbling blur event when the control loses focus.
+ */
 export class JbTextarea extends LitElement {
 	static formAssociated = true;
 

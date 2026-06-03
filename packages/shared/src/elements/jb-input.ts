@@ -12,6 +12,13 @@ import { LitElement, html } from 'lit';
 //
 // Authored without decorators (`static properties` + `declare` + constructor assignment)
 // to stay compatible with every toolchain in the monorepo, including Angular's compiler.
+/**
+ * Form-associated, light-DOM text input shared by every framework variant.
+ *
+ * @customElement jb-input
+ * @fires input - Native input event, bubbling, as the value changes.
+ * @fires blur - Bubbling blur event when the control loses focus.
+ */
 export class JbInput extends LitElement {
 	static formAssociated = true;
 

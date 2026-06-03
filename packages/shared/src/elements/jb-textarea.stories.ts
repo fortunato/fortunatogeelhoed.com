@@ -29,3 +29,12 @@ export default meta;
 type Story = StoryObj;
 
 export const Default: Story = {};
+
+export const Filled: Story = {
+	args: { value: 'I have a React + Vue + Angular migration I would love your help with.' },
+};
+
+export const Required: Story = { args: { required: true } };
+
+export const Disabled: Story = { args: { value: 'Sent already.', disabled: true } };
+

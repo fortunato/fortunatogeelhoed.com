@@ -15,3 +15,9 @@ export default meta;
 type Story = StoryObj;
 
 export const Default: Story = {};
+
+export const React: Story = { args: { label: 'React' } };
+
+export const Vue: Story = { args: { label: 'Vue' } };
+
+export const Angular: Story = { args: { label: 'Angular' } };

@@ -6,6 +6,9 @@ import { toggleTheme } from '../theme';
 // which depend on the ancestor attribute on <html> — keep working; a shadow boundary
 // would hide that ancestor from the icons. Click delegates to the shared toggleTheme(),
 // which flips <html data-theme>, the cookie, and localStorage.
+/**
+ * @customElement jb-theme-toggle
+ */
 export class JbThemeToggle extends LitElement {
 	createRenderRoot() {
 		return this;

@@ -5,6 +5,12 @@ import { LitElement, css, html } from 'lit';
 // contrast showing the other encapsulation mode. The `--jb-` design tokens are
 // inherited custom properties, so they pierce the shadow boundary and keep the badge
 // on-palette without any global CSS.
+/**
+ * Shadow-DOM technology badge with a slotted label, kept on-palette via inherited tokens.
+ *
+ * @customElement jb-tech-tag
+ * @slot - The badge label text.
+ */
 export class JbTechTag extends LitElement {
 	static styles = css`
 		:host {
