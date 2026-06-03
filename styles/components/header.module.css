@@ -146,48 +146,8 @@
 	color: var(--jb-text-on-accent);
 }
 
-/* Theme toggle (moon/sun). Icon swap is driven by the global [data-theme] on
-   <html>, so it reflects the current theme with zero JS state (no hydration
-   mismatch) and is correct before hydration. Attribute selectors are not hashed
-   by CSS Modules, so the descendant class still scopes correctly per framework. */
-.theme-toggle {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 32px;
-	height: 32px;
-	margin-left: var(--jb-space-sm);
-	color: var(--jb-text-secondary);
-	border-radius: var(--jb-radius-sm);
-	transition: color var(--jb-dur-fast) var(--jb-ease-standard), background-color
-		var(--jb-dur-fast) var(--jb-ease-standard);
-}
-
-.theme-toggle:hover {
-	color: var(--jb-text-primary);
-	background: var(--jb-bg-secondary);
-}
-
-.theme-toggle svg {
-	width: 16px;
-	height: 16px;
-}
-
-.sun {
-	display: none;
-}
-
-.moon {
-	display: inline-flex;
-}
-
-[data-theme="light"] .sun {
-	display: inline-flex;
-}
-
-[data-theme="light"] .moon {
-	display: none;
-}
+/* The theme toggle now lives in the shared <jb-theme-toggle> web component; its
+   styles moved to the global styles/components/controls.css. */
 
 @media (max-width: 768px) {
 	.nav {

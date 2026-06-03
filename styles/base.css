@@ -112,6 +112,32 @@
 		margin: 0 auto;
 	}
 
+	/* Contact form layout (the form markup is per-framework; this is the shared look). */
+	.contact-form {
+		display: grid;
+		gap: var(--jb-space-md);
+		max-width: 32rem;
+		margin-top: var(--jb-space-lg);
+
+		.btn {
+			justify-self: start;
+			margin-top: var(--jb-space-sm);
+		}
+	}
+
+	.contact-success {
+		margin-top: var(--jb-space-lg);
+		color: var(--jb-accent);
+		font-weight: 600;
+	}
+
+	.contact-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--jb-space-sm);
+		margin-top: var(--jb-space-lg);
+	}
+
 	/* Section spacing */
 	section {
 		padding: var(--jb-space-2xl) var(--jb-space-lg);

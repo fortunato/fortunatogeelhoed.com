@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { getCookie, setCookie } from 'hono/cookie';
+import { cssSourceFiles } from '../../../scripts/css-sources';
 import { frameworkMiddleware } from './middleware/framework';
 import { renderShell } from './shell';
 
@@ -31,21 +32,23 @@ app.use('*', frameworkMiddleware);
 app.use('/assets/*', async (c, next) => {
 	await next();
 	if (c.res.status === 200) {
-		c.res.headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+		// Hashed prod assets are immutable; dev assets are unhashed and regenerated on
+		// the fly, so they must revalidate or stale CSS sticks for a year.
+		c.res.headers.set(
+			'Cache-Control',
+			isDev ? 'no-cache' : 'public, max-age=31536000, immutable',
+		);
 	}
 });
 
 if (isDev) {
-	// Dev: serve combined CSS on the fly
+	// Dev: serve combined CSS on the fly (see scripts/css-sources.ts for ordering).
 	app.get('/assets/styles.css', async (c) => {
-		// layers.css declares the @layer order and MUST load first.
-		const layers = await Bun.file('./styles/layers.css').text();
-		const reset = await Bun.file('./styles/reset.css').text();
-		const tokens = await Bun.file('./styles/tokens.css').text();
-		const base = await Bun.file('./styles/base.css').text();
-		const motion = await Bun.file('./styles/motion.css').text();
+		const css = (await Promise.all(cssSourceFiles().map((file) => Bun.file(file).text()))).join(
+			'\n',
+		);
 		c.header('Content-Type', 'text/css');
-		return c.body(`${layers}\n${reset}\n${tokens}\n${base}\n${motion}`);
+		return c.body(css);
 	});
 }
 

@@ -1,9 +1,9 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { extname, resolve } from 'node:path';
 import type { Plugin } from 'vite';
+import { cssSourceFiles } from './css-sources';
 
 const root = resolve(import.meta.dirname, '..');
-const stylesDir = resolve(root, 'styles');
 const staticDir = resolve(root, 'static');
 
 const mimeTypes: Record<string, string> = {
@@ -17,14 +17,12 @@ export function serveCssDev(): Plugin {
 		name: 'serve-css-dev',
 		configureServer(server) {
 			server.middlewares.use('/assets/styles.css', (_req, res) => {
-				// layers.css declares the @layer order and MUST load first.
-				const layers = readFileSync(resolve(stylesDir, 'layers.css'), 'utf-8');
-				const reset = readFileSync(resolve(stylesDir, 'reset.css'), 'utf-8');
-				const tokens = readFileSync(resolve(stylesDir, 'tokens.css'), 'utf-8');
-				const base = readFileSync(resolve(stylesDir, 'base.css'), 'utf-8');
-				const motion = readFileSync(resolve(stylesDir, 'motion.css'), 'utf-8');
+				// Ordered global stylesheet sources (see css-sources.ts).
+				const css = cssSourceFiles()
+					.map((file) => readFileSync(file, 'utf-8'))
+					.join('\n');
 				res.setHeader('Content-Type', 'text/css');
-				res.end(`${layers}\n${reset}\n${tokens}\n${base}\n${motion}`);
+				res.end(css);
 			});
 
 			server.middlewares.use('/assets/', (req, res, next) => {

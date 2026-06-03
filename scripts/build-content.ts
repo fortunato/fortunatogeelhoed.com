@@ -15,5 +15,5 @@ for (const route of routes) {
 	}
 }
 
-await writeFile(outFile, JSON.stringify(contentMap, null, '\t'));
+await writeFile(outFile, `${JSON.stringify(contentMap, null, '\t')}\n`);
 console.log(`✓ Built content data (${Object.keys(contentMap).length} pages)`);

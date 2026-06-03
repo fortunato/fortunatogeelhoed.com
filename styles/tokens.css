@@ -32,6 +32,9 @@
 		--jb-color-accent-react: #e86a1a;
 		--jb-color-accent-vue: #d4890e;
 		--jb-color-accent-angular: #e04a1a;
+
+		/* Status */
+		--jb-color-danger-500: #e5484d;
 	}
 
 	/* ========================================================================
@@ -47,6 +50,9 @@
 		--jb-accent-soft: color-mix(in srgb, var(--jb-accent) 15%, transparent);
 		--jb-accent-hover: color-mix(in srgb, var(--jb-accent) 85%, white);
 		--jb-text-on-accent: var(--jb-color-neutral-0);
+
+		/* Status (theme-independent) */
+		--jb-color-danger: var(--jb-color-danger-500);
 
 		/* Typography */
 		--jb-font-display: "Rubik", sans-serif;

@@ -5,7 +5,13 @@ import { cssTargets } from '../../scripts/css-targets';
 import { serveCssDev } from '../../scripts/vite-css-dev';
 
 export default defineConfig({
-	plugins: [vue(), serveCssDev()],
+	plugins: [
+		// Treat <jb-*> tags as native custom elements so Vue passes props as DOM
+		// properties and v-model uses the value/input convention instead of trying to
+		// resolve them as Vue components.
+		vue({ template: { compilerOptions: { isCustomElement: (tag) => tag.startsWith('jb-') } } }),
+		serveCssDev(),
+	],
 	root: resolve(__dirname),
 	cacheDir: resolve(__dirname, '../../node_modules/.vite-vue'),
 	resolve: {

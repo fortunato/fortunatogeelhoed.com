@@ -1,0 +1,51 @@
+/* Styles for the <jb-input> web component. Light DOM, so these global rules style its
+   inner <input>. References semantic `--jb-` tokens only. Native CSS nesting (lightningcss
+   downlevels it to the Baseline floor). */
+
+@layer components {
+	jb-input {
+		display: block;
+
+		.jb-field-label {
+			display: block;
+			margin-bottom: var(--jb-space-xs);
+			font-size: 0.7rem;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 0.08em;
+			color: var(--jb-text-secondary);
+		}
+
+		.jb-field-control {
+			width: 100%;
+			padding: 0.7rem 0.9rem;
+			font-family: var(--jb-font-body);
+			font-size: 0.9rem;
+			color: var(--jb-text-primary);
+			background: var(--jb-bg-card);
+			border: 1px solid var(--jb-color-border);
+			border-radius: var(--jb-radius-md);
+			transition: border-color var(--jb-dur-fast) var(--jb-ease-standard), box-shadow
+				var(--jb-dur-fast) var(--jb-ease-standard);
+
+			&::placeholder {
+				color: var(--jb-text-tertiary);
+			}
+
+			&:hover {
+				border-color: var(--jb-text-tertiary);
+			}
+
+			&:focus-visible {
+				outline: none;
+				border-color: var(--jb-accent);
+				box-shadow: 0 0 0 3px var(--jb-accent-soft);
+			}
+
+			/* Flag the field only once the user has interacted with it (not on first paint). */
+			&:user-invalid {
+				border-color: var(--jb-color-danger);
+			}
+		}
+	}
+}

@@ -1,0 +1,49 @@
+/* Styles for the <jb-theme-toggle> web component. It renders in light DOM, so these
+   global rules apply to its markup and the ancestor [data-theme] icon-swap works.
+   References semantic `--jb-` tokens only. Native CSS nesting (lightningcss downlevels). */
+
+@layer components {
+	.theme-toggle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 32px;
+		height: 32px;
+		margin-left: var(--jb-space-sm);
+		color: var(--jb-text-secondary);
+		background: transparent;
+		border: none;
+		cursor: pointer;
+		border-radius: var(--jb-radius-sm);
+		transition: color var(--jb-dur-fast) var(--jb-ease-standard), background-color
+			var(--jb-dur-fast) var(--jb-ease-standard);
+
+		&:hover {
+			color: var(--jb-text-primary);
+			background: var(--jb-bg-secondary);
+		}
+
+		svg {
+			width: 16px;
+			height: 16px;
+		}
+	}
+
+	.sun {
+		display: none;
+	}
+
+	.moon {
+		display: inline-flex;
+	}
+
+	[data-theme="light"] {
+		.sun {
+			display: inline-flex;
+		}
+
+		.moon {
+			display: none;
+		}
+	}
+}

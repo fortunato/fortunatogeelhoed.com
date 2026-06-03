@@ -15,7 +15,9 @@
 		"baseUrl": ".",
 		"paths": {
 			"@fg/shared": ["../../packages/shared/src"],
-			"@fg/content": ["../../packages/content/src"]
+			"@fg/shared/*": ["../../packages/shared/src/*"],
+			"@fg/content": ["../../packages/content/src"],
+			"@fg/content/*": ["../../packages/content/src/*"]
 		}
 	},
 	"include": ["src/**/*.ts"],
