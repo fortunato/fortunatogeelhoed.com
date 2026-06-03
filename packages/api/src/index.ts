@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { getCookie, setCookie } from 'hono/cookie';
 import { cssSourceFiles } from '../../../scripts/css-sources';
-import { frameworkMiddleware } from './middleware/framework';
+import { type AppEnv, frameworkMiddleware } from './middleware/framework';
 import { renderShell } from './shell';
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -23,7 +23,7 @@ if (!isDev) {
 	}
 }
 
-const app = new Hono();
+const app = new Hono<AppEnv>();
 
 // Framework detection middleware
 app.use('*', frameworkMiddleware);

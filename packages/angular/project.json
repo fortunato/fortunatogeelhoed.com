@@ -10,6 +10,9 @@
 		},
 		"lint": {
 			"command": "biome check packages/angular/"
+		},
+		"typecheck": {
+			"command": "ngc --noEmit -p packages/angular/tsconfig.json"
 		}
 	}
 }

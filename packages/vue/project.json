@@ -10,6 +10,9 @@
 		},
 		"lint": {
 			"command": "biome check packages/vue/"
+		},
+		"typecheck": {
+			"command": "vue-tsc --noEmit -p packages/vue/tsconfig.json"
 		}
 	}
 }

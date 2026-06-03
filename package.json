@@ -34,13 +34,14 @@
 		"test:storybook": "test-storybook",
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
-		"typecheck": "nx run-many -t typecheck",
+		"typecheck": "nx run-many -t typecheck && bun run typecheck:tooling",
 		"typecheck:react": "nx run react:typecheck",
 		"typecheck:vue": "nx run vue:typecheck",
 		"typecheck:angular": "nx run angular:typecheck",
 		"typecheck:shared": "nx run shared:typecheck",
 		"typecheck:api": "nx run api:typecheck",
-		"typecheck:content": "nx run content:typecheck"
+		"typecheck:content": "nx run content:typecheck",
+		"typecheck:tooling": "tsc --noEmit -p tsconfig.json"
 	},
 	"dependencies": {
 		"@angular/common": "^21.0.0",
@@ -94,5 +95,8 @@
 		"vite-ssg": "^0.24.0",
 		"vue-tsc": "^3.3.3"
 	},
-	"customElements": "packages/shared/custom-elements.json"
+	"customElements": "packages/shared/custom-elements.json",
+	"overrides": {
+		"css-loader": "^6.11.0"
+	}
 }

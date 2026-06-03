@@ -4,6 +4,9 @@
 	"targets": {
 		"lint": {
 			"command": "biome check packages/shared/"
+		},
+		"typecheck": {
+			"command": "tsc --noEmit -p packages/shared/tsconfig.json"
 		}
 	}
 }

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, inject } from '@angular/core';
+import { Directive, ElementRef, forwardRef, inject } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 // Bridges the shared <jb-input>/<jb-textarea> web components into Angular's forms.
@@ -8,9 +8,15 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Directive({
 	selector: 'jb-input, jb-textarea',
 	standalone: true,
-	providers: [{ provide: NG_VALUE_ACCESSOR, useExisting: JbControlValueAccessor, multi: true }],
+	providers: [
+		{
+			provide: NG_VALUE_ACCESSOR,
+			useExisting: forwardRef(() => JbControlValueAccessor),
+			multi: true,
+		},
+	],
 	host: {
-		'(input)': 'onChange($event.target.value)',
+		'(input)': 'handleInput($event)',
 		'(blur)': 'onTouched()',
 	},
 })
@@ -19,6 +25,10 @@ export class JbControlValueAccessor implements ControlValueAccessor {
 
 	onChange: (value: string) => void = () => {};
 	onTouched: () => void = () => {};
+
+	handleInput(event: Event): void {
+		this.onChange((event.target as HTMLElement & { value: string }).value);
+	}
 
 	writeValue(value: string): void {
 		this.el.nativeElement.value = value ?? '';

@@ -10,6 +10,9 @@
 		},
 		"lint": {
 			"command": "biome check packages/react/"
+		},
+		"typecheck": {
+			"command": "tsc --noEmit -p packages/react/tsconfig.json"
 		}
 	}
 }

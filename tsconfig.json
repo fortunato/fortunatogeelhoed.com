@@ -1,4 +1,27 @@
 {
 	"extends": "./tsconfig.base.json",
-	"include": ["packages/**/*.ts", "packages/**/*.tsx", "scripts/**/*.ts"]
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"types": ["node", "bun", "vite/client"],
+		"noEmit": true,
+		"baseUrl": ".",
+		"paths": {
+			"@fg/shared": ["./packages/shared/src/index.ts"],
+			"@fg/shared/*": ["./packages/shared/src/*"],
+			"@fg/content": ["./packages/content/src/index.ts"],
+			"@fg/content/*": ["./packages/content/src/*"],
+			"@styles/*": ["./styles/*"]
+		}
+	},
+	"include": [
+		"scripts/**/*.ts",
+		"tests/**/*.ts",
+		".storybook/**/*.ts",
+		".storybook/**/*.tsx",
+		"packages/*/vite.config.ts",
+		"packages/*/vite.config.ssr.ts",
+		"packages/*/prerender.ts",
+		"packages/*/.storybook/**/*.ts",
+		"packages/*/.storybook/**/*.tsx"
+	]
 }

@@ -10,6 +10,9 @@
 		},
 		"lint": {
 			"command": "biome check packages/api/"
+		},
+		"typecheck": {
+			"command": "tsc --noEmit -p packages/api/tsconfig.json"
 		}
 	}
 }

@@ -20,6 +20,10 @@
 			"@fg/content/*": ["../../packages/content/src/*"]
 		}
 	},
+	"angularCompilerOptions": {
+		"strictTemplates": true,
+		"strictInjectionParameters": true
+	},
 	"include": ["src/**/*.ts"],
 	"exclude": ["node_modules", "dist"]
 }

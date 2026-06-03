@@ -17,6 +17,10 @@
 		"lint": {
 			"inputs": ["default"],
 			"cache": true
+		},
+		"typecheck": {
+			"inputs": ["default", "^default"],
+			"cache": true
 		}
 	}
 }

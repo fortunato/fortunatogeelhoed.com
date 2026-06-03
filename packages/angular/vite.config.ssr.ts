@@ -33,10 +33,13 @@ export default defineConfig({
 		ssr: true,
 		rollupOptions: {
 			input: resolve(__dirname, 'src/entry-server.ts'),
+			// Rollup's `external` accepts a RegExp to match the whole @angular/* scope;
+			// Vite's `ssr.external` only takes exact ids, so the pattern lives here.
+			external: [/^@angular\//],
 		},
 	},
 	ssr: {
-		external: [/^@angular\//, 'zone.js', 'zone.js/node', 'rxjs'],
+		external: ['zone.js', 'zone.js/node', 'rxjs'],
 		noExternal: ['@fg/shared', '@fg/content'],
 	},
 });
