@@ -78,7 +78,7 @@ const form = useForm({
 		onChange: contactSchema,
 		// The submission itself. The server re-validates with the same schema (authoritative);
 		// returning field errors here surfaces them on the matching fields through TanStack's own
-		// error state, so there is no parallel server-error store. They refresh on the next submit.
+		// error state, so there is no parallel server-error store (cleared on edit by the listener below).
 		onSubmitAsync: async ({ value }) => {
 			const res = await fetch('/api/contact', {
 				method: 'POST',
@@ -100,5 +100,16 @@ const form = useForm({
 	onSubmit: () => {
 		sent.value = true;
 	},
+	listeners: {
+		// A server error is only meaningful until the visitor edits the form again. TanStack keeps
+		// submit-source errors until the next submit, so clear them on any change — this matches the
+		// React (reValidateMode) and Angular (re-validate-on-edit) variants and keeps behavior uniform.
+		onChange: ({ formApi }) => {
+			formApi.setErrorMap({
+				onSubmit: { fields: { name: undefined, email: undefined, message: undefined } },
+			});
+		},
+	},
 });
 </script>
+
