@@ -1,0 +1,12 @@
+diff --git a/src/tools/webpack/configs/styles.js b/src/tools/webpack/configs/styles.js
+index b21c2d572eff699bcfcbd5d0878c547e34245b9e..1e1a984a239e19bd2905f50e741db163b6a7e60b 100755
+--- a/src/tools/webpack/configs/styles.js
++++ b/src/tools/webpack/configs/styles.js
+@@ -184,6 +184,7 @@ async function getStylesConfig(wco) {
+                 importLoaders: 1,
+                 exportType: 'string',
+                 esModule: false,
++                modules: false,
+             },
+         },
+         {

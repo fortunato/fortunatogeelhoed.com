@@ -48,16 +48,10 @@ The form is the better demonstration than a bare element: it shows real interop 
 values, native events, and each framework's form story (React state, Vue `:value`/`@input`,
 Angular Reactive Forms via a control-value-accessor).
 
-The site header (with the primary nav) is also showcased as a framework-authored composite —
-in React and Vue. It is intentionally excluded from the visual-parity gate because the active
-framework-switcher button differs per section by design. The Angular header is currently not
-shown: its component `styleUrl` points at the shared `header.module.css`, and Angular's
-webpack-based Storybook builder runs component styles through css-loader, whose default
-`modules.auto` treats any `.module.css` file as a CSS Module requiring named ES exports — which
-collides with Angular's string-export component styles. That loader runs inside Angular's own
-child compilation, so it cannot be reconfigured from `webpackFinal`, and the `.module.css`
-filename can't be renamed because the React and Vue variants import it as a real CSS Module.
-Angular is represented by the Contact Form (which uses global classes, no component `styleUrl`).
+The site header (with the primary nav) is also showcased as a framework-authored composite in
+all three frameworks. It is intentionally excluded from the visual-parity gate because the active
+framework-switcher button differs per section by design. The Angular header required working
+around an upstream bug — see "Patched dependencies" below.
 
 The elements deliberately show both encapsulation modes, and the showcase preserves that:
 `jb-input` / `jb-textarea` / `jb-theme-toggle` use light DOM (styled by the global stylesheet and
@@ -96,6 +90,33 @@ only after every build succeeds; any failure exits non-zero and the deploy step 
 a partial catalogue that misrepresents coverage can never ship. The tree is published to GitHub
 Pages on a sub-domain served from root (a `CNAME`), which removes any base-path handling, with a
 `.nojekyll` marker so Storybook's underscore-prefixed asset folders are served untouched.
+
+## Patched dependencies
+
+One dependency is patched: `@angular-devkit/build-angular` (via bun's `patchedDependencies`, with
+the diff committed under `patches/`). The patch adds a single option — `modules: false` — to the
+css-loader used for Angular **component** styles.
+
+Why it's needed: `@storybook/angular` is webpack-based, and Angular compiles a component's
+`styleUrl` inside its own child compilation, where the css-loader is configured with
+`exportType: 'string'` and `esModule: false` but no `modules` setting. css-loader then falls back
+to its default `modules.auto`, which treats any `*.module.css` file as a CSS Module requiring
+named ES exports — incompatible with the string export, so the build throws. The site header's
+`styleUrl` points at the shared `header.module.css` (named with the React/Vue CSS-Module
+convention), so the Angular header tripped this. The loader lives in Angular's child compilation,
+so it can't be reached from Storybook's `webpackFinal`, and the file can't be renamed without
+breaking the React/Vue variants that import it as a real CSS Module.
+
+Why `modules: false` is correct, not a hack: Angular scopes component styles via
+ViewEncapsulation, never via CSS Modules, so component styles should never be module-processed —
+the option Angular omits is one it should arguably set. The patch only affects the webpack build
+path that `@storybook/angular` uses; the live site builds through AnalogJS/Vite and is unaffected.
+
+Maintenance: the patch is pinned to the exact version (`@angular-devkit/build-angular@21.2.13`).
+On a version bump, bun re-applies the diff and fails loudly if it no longer applies cleanly — at
+which point regenerate it with `bun patch @angular-devkit/build-angular`, re-add `modules: false`,
+and `bun patch --commit`. A future `@storybook/angular` esbuild/Vite builder would remove the need
+for the patch entirely.
 
 ## Boundaries
 

@@ -96,7 +96,7 @@
 		"vue-tsc": "^3.3.3"
 	},
 	"customElements": "packages/shared/custom-elements.json",
-	"overrides": {
-		"css-loader": "^6.11.0"
+	"patchedDependencies": {
+		"@angular-devkit/build-angular@21.2.13": "patches/@angular-devkit%2Fbuild-angular@21.2.13.patch"
 	}
 }
