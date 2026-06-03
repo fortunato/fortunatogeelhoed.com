@@ -1,0 +1,37 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Introduction" />
+
+# One design system, four ways
+
+This is a live component showcase for **fortunatogeelhoed.com**. The same design system is
+presented four times, federated into this single catalogue:
+
+- **Web Components** — the shared, framework-agnostic `jb-*` custom elements (built with Lit).
+  These are the real primitives; everything else consumes them.
+- **React**, **Vue**, **Angular** — each framework's own components, built in that framework's
+  idiom, consuming the very same web components.
+
+Pick a section in the sidebar. Open the **Contact Form** under React, Vue, and Angular and
+compare them: the markup is authored three different ways, but the result is identical because
+they share the same design tokens and the same underlying elements. That parity is enforced
+automatically — a visual-regression check fails the build if the renderings drift apart.
+
+## How it fits together
+
+Each section is its own independently built Storybook. This page is a thin composition root
+that links them together, so the whole catalogue loads from one place. Every section shares the
+site's real stylesheet, design tokens, and light/dark theme — toggle the theme from the toolbar
+in any section and it behaves exactly as the live site does.
+
+## The web components
+
+The `jb-*` elements deliberately show two encapsulation styles side by side:
+
+- `jb-input` / `jb-textarea` / `jb-theme-toggle` use **light DOM**, so the global stylesheet and
+  inherited `--jb-` design tokens style them directly — and they are form-associated, so native
+  validation and framework form bindings work as if they were ordinary inputs.
+- `jb-tech-tag` uses **shadow DOM** with self-contained styles, kept on-palette purely through
+  inherited custom properties.
+
+Browse the **Web Components** section to see each element, its states, and its generated API.

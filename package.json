@@ -59,6 +59,7 @@
     "@analogjs/vite-plugin-angular": "^1.14.0",
     "@angular/animations": "^21.2.15",
     "@angular/build": "^21.2.13",
+    "@angular/cli": "21.2.13",
     "@angular/compiler-cli": "^21.2.15",
     "@biomejs/biome": "^1.9.0",
     "@custom-elements-manifest/analyzer": "^0.11.0",

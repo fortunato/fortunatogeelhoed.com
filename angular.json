@@ -1,0 +1,50 @@
+{
+	"$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+	"version": 1,
+	"newProjectRoot": "packages",
+	"projects": {
+		"angular": {
+			"projectType": "application",
+			"root": "packages/angular",
+			"sourceRoot": "packages/angular/src",
+			"architect": {
+				"build": {
+					"builder": "@angular/build:application",
+					"options": {
+						"browser": "packages/angular/src/main.ts",
+						"tsConfig": "packages/angular/.storybook/tsconfig.json",
+						"polyfills": ["zone.js"],
+						"styles": [
+							"styles/layers.css",
+							"styles/reset.css",
+							"styles/tokens.css",
+							"styles/base.css",
+							"packages/shared/src/elements/jb-input.css",
+							"packages/shared/src/elements/jb-textarea.css",
+							"packages/shared/src/elements/jb-theme-toggle.css",
+							"styles/motion.css"
+						]
+					}
+				},
+				"storybook": {
+					"builder": "@storybook/angular:start-storybook",
+					"options": {
+						"configDir": "packages/angular/.storybook",
+						"browserTarget": "angular:build",
+						"compodoc": false,
+						"port": 6010
+					}
+				},
+				"build-storybook": {
+					"builder": "@storybook/angular:build-storybook",
+					"options": {
+						"configDir": "packages/angular/.storybook",
+						"browserTarget": "angular:build",
+						"compodoc": false,
+						"outputDir": "dist/storybook/angular"
+					}
+				}
+			}
+		}
+	}
+}

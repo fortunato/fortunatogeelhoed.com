@@ -11,6 +11,7 @@ Thumbs.db
 .idea/
 .vscode/
 storybook-static/
+.angular/
 test-results/
 playwright-report/
 blob-report/
