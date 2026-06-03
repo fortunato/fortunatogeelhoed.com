@@ -9,14 +9,11 @@
 						label="Name"
 						:value="field.state.value"
 						:disabled="disabled"
-						@input="field.handleChange(($event.target as HTMLInputElement).value); clearServerError('name')"
+						@input="field.handleChange(($event.target as HTMLInputElement).value)"
 						@blur="field.handleBlur"
 					/>
-					<p
-						v-if="(field.state.meta.isTouched && field.state.meta.errors.length) || serverErrors.name"
-						class="field-error"
-					>
-						{{ (field.state.meta.isTouched && field.state.meta.errors[0]?.message) || serverErrors.name }}
+					<p v-if="field.state.meta.isTouched && field.state.meta.errors.length" class="field-error">
+						{{ field.state.meta.errors[0]?.message }}
 					</p>
 				</div>
 			</template>
@@ -31,14 +28,11 @@
 						autocomplete="email"
 						:value="field.state.value"
 						:disabled="disabled"
-						@input="field.handleChange(($event.target as HTMLInputElement).value); clearServerError('email')"
+						@input="field.handleChange(($event.target as HTMLInputElement).value)"
 						@blur="field.handleBlur"
 					/>
-					<p
-						v-if="(field.state.meta.isTouched && field.state.meta.errors.length) || serverErrors.email"
-						class="field-error"
-					>
-						{{ (field.state.meta.isTouched && field.state.meta.errors[0]?.message) || serverErrors.email }}
+					<p v-if="field.state.meta.isTouched && field.state.meta.errors.length" class="field-error">
+						{{ field.state.meta.errors[0]?.message }}
 					</p>
 				</div>
 			</template>
@@ -51,14 +45,11 @@
 						label="Message"
 						:value="field.state.value"
 						:disabled="disabled"
-						@input="field.handleChange(($event.target as HTMLTextAreaElement).value); clearServerError('message')"
+						@input="field.handleChange(($event.target as HTMLTextAreaElement).value)"
 						@blur="field.handleBlur"
 					/>
-					<p
-						v-if="(field.state.meta.isTouched && field.state.meta.errors.length) || serverErrors.message"
-						class="field-error"
-					>
-						{{ (field.state.meta.isTouched && field.state.meta.errors[0]?.message) || serverErrors.message }}
+					<p v-if="field.state.meta.isTouched && field.state.meta.errors.length" class="field-error">
+						{{ field.state.meta.errors[0]?.message }}
 					</p>
 				</div>
 			</template>
@@ -80,39 +71,34 @@ import { ref } from 'vue';
 withDefaults(defineProps<{ disabled?: boolean }>(), { disabled: false });
 
 const sent = ref(false);
-const serverErrors = ref<Partial<Record<keyof ContactFormData, string>>>({});
 
 const form = useForm({
 	defaultValues: { name: '', email: '', message: '' } as ContactFormData,
-	validators: { onChange: contactSchema },
-	// The server re-validates with the same schema and is authoritative, so map any 4xx field
-	// errors back onto the form.
-	onSubmit: async ({ value }) => {
-		const res = await fetch('/api/contact', {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify(value),
-		});
-		if (res.ok) {
-			sent.value = true;
-			return;
-		}
-		const body = (await res.json().catch(() => null)) as {
-			errors?: Partial<Record<keyof ContactFormData, string[]>>;
-		} | null;
-		serverErrors.value = {
-			name: body?.errors?.name?.[0],
-			email: body?.errors?.email?.[0],
-			message: body?.errors?.message?.[0],
-		};
+	validators: {
+		onChange: contactSchema,
+		// The submission itself. The server re-validates with the same schema (authoritative);
+		// returning field errors here surfaces them on the matching fields through TanStack's own
+		// error state, so there is no parallel server-error store. They refresh on the next submit.
+		onSubmitAsync: async ({ value }) => {
+			const res = await fetch('/api/contact', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify(value),
+			});
+			if (res.ok) return undefined;
+			const body = (await res.json().catch(() => null)) as {
+				errors?: Partial<Record<keyof ContactFormData, string[]>>;
+			} | null;
+			const fields: Partial<Record<keyof ContactFormData, { message: string }>> = {};
+			for (const field of ['name', 'email', 'message'] as const) {
+				const message = body?.errors?.[field]?.[0];
+				if (message) fields[field] = { message };
+			}
+			return { fields };
+		},
+	},
+	onSubmit: () => {
+		sent.value = true;
 	},
 });
-
-function clearServerError(field: keyof ContactFormData) {
-	if (serverErrors.value[field]) {
-		const next = { ...serverErrors.value };
-		delete next[field];
-		serverErrors.value = next;
-	}
-}
 </script>

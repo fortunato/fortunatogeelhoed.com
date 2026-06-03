@@ -8,19 +8,19 @@ interface ContactFormProps {
 	disabled?: boolean;
 }
 
+const FIELDS = ['name', 'email', 'message'] as const;
+
 // Contact form composite built with react-hook-form. A single Zod schema — shared with the
 // Vue and Angular forms and with the server that receives the submission — drives validation
 // through zodResolver, so the rules live in one place. <Controller> bridges each <jb-*> web
 // component (controlled via its `value` property and bubbling native `input` event) to a field.
 export function ContactForm({ disabled = false }: ContactFormProps) {
 	const [sent, setSent] = useState(false);
-	const [serverErrors, setServerErrors] = useState<
-		Partial<Record<keyof ContactFormData, string>>
-	>({});
 
 	const {
 		control,
 		handleSubmit,
+		setError,
 		formState: { errors },
 	} = useForm<ContactFormData>({
 		resolver: zodResolver(contactSchema),
@@ -28,11 +28,9 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 		mode: 'onTouched',
 	});
 
-	const clearServerError = (field: keyof ContactFormData) =>
-		setServerErrors((prev) => (prev[field] ? { ...prev, [field]: undefined } : prev));
-
-	// The server re-validates with the same schema and is authoritative, so map any 4xx field
-	// errors back onto the form.
+	// The server re-validates with the same schema and is authoritative. Map any 4xx field errors
+	// back onto react-hook-form's own error state via setError; they clear automatically when the
+	// field re-validates on the next edit (reValidateMode defaults to 'onChange').
 	const onSubmit = handleSubmit(async (data) => {
 		const res = await fetch('/api/contact', {
 			method: 'POST',
@@ -46,11 +44,10 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 		const body = (await res.json().catch(() => null)) as {
 			errors?: Partial<Record<keyof ContactFormData, string[]>>;
 		} | null;
-		setServerErrors({
-			name: body?.errors?.name?.[0],
-			email: body?.errors?.email?.[0],
-			message: body?.errors?.message?.[0],
-		});
+		for (const field of FIELDS) {
+			const message = body?.errors?.[field]?.[0];
+			if (message) setError(field, { type: 'server', message });
+		}
 	});
 
 	if (sent) {
@@ -69,16 +66,11 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 							label="Name"
 							value={field.value}
 							disabled={disabled}
-							onInput={(e) => {
-								field.onChange((e.target as HTMLInputElement).value);
-								clearServerError('name');
-							}}
+							onInput={(e) => field.onChange((e.target as HTMLInputElement).value)}
 							onBlur={field.onBlur}
 						/>
-						{(errors.name?.message ?? serverErrors.name) && (
-							<p className="field-error">
-								{errors.name?.message ?? serverErrors.name}
-							</p>
+						{errors.name?.message && (
+							<p className="field-error">{errors.name.message}</p>
 						)}
 					</div>
 				)}
@@ -95,16 +87,11 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 							autocomplete="email"
 							value={field.value}
 							disabled={disabled}
-							onInput={(e) => {
-								field.onChange((e.target as HTMLInputElement).value);
-								clearServerError('email');
-							}}
+							onInput={(e) => field.onChange((e.target as HTMLInputElement).value)}
 							onBlur={field.onBlur}
 						/>
-						{(errors.email?.message ?? serverErrors.email) && (
-							<p className="field-error">
-								{errors.email?.message ?? serverErrors.email}
-							</p>
+						{errors.email?.message && (
+							<p className="field-error">{errors.email.message}</p>
 						)}
 					</div>
 				)}
@@ -119,16 +106,11 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 							label="Message"
 							value={field.value}
 							disabled={disabled}
-							onInput={(e) => {
-								field.onChange((e.target as HTMLTextAreaElement).value);
-								clearServerError('message');
-							}}
+							onInput={(e) => field.onChange((e.target as HTMLTextAreaElement).value)}
 							onBlur={field.onBlur}
 						/>
-						{(errors.message?.message ?? serverErrors.message) && (
-							<p className="field-error">
-								{errors.message?.message ?? serverErrors.message}
-							</p>
+						{errors.message?.message && (
+							<p className="field-error">{errors.message.message}</p>
 						)}
 					</div>
 				)}

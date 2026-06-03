@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, effect, input, signal } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, input, signal } from '@angular/core';
 import {
 	type FieldState,
 	FormField,
@@ -28,7 +28,7 @@ import { JbControlValueAccessor } from '../directives/jb-input.value-accessor';
 			<form class="contact-form" novalidate (submit)="onSubmit($event)">
 				<div class="contact-field">
 					<jb-input name="name" label="Name" [formField]="form.name"></jb-input>
-					@if (fieldError(form.name(), serverErrors().name); as msg) {
+					@if (fieldError(form.name()); as msg) {
 						<p class="field-error">{{ msg }}</p>
 					}
 				</div>
@@ -40,13 +40,13 @@ import { JbControlValueAccessor } from '../directives/jb-input.value-accessor';
 						autocomplete="email"
 						[formField]="form.email"
 					></jb-input>
-					@if (fieldError(form.email(), serverErrors().email); as msg) {
+					@if (fieldError(form.email()); as msg) {
 						<p class="field-error">{{ msg }}</p>
 					}
 				</div>
 				<div class="contact-field">
 					<jb-textarea name="message" label="Message" [formField]="form.message"></jb-textarea>
-					@if (fieldError(form.message(), serverErrors().message); as msg) {
+					@if (fieldError(form.message()); as msg) {
 						<p class="field-error">{{ msg }}</p>
 					}
 				</div>
@@ -60,7 +60,6 @@ export class ContactFormComponent {
 	readonly disabled = input(false);
 
 	protected readonly sent = signal(false);
-	protected readonly serverErrors = signal<Partial<Record<keyof ContactFormData, string>>>({});
 
 	protected readonly model = signal<ContactFormData>({ name: '', email: '', message: '' });
 	protected readonly form = form(this.model, (path) => {
@@ -68,18 +67,12 @@ export class ContactFormComponent {
 		disabled(path, () => this.disabled());
 	});
 
-	constructor() {
-		// A server error is only meaningful until the visitor edits the form again.
-		effect(() => {
-			this.model();
-			this.serverErrors.set({});
-		});
-	}
-
-	// Show the client (Zod) message once a field is touched; otherwise surface a server message.
-	protected fieldError(state: FieldState<string>, serverMessage?: string): string | undefined {
+	// Errors read straight off the field: client (Zod) errors once it is touched, plus any server
+	// errors that submit() applied. Signal Forms re-validates on edit, so a server error clears as
+	// soon as its field changes — no parallel server-error store to keep in sync.
+	protected fieldError(state: FieldState<string>): string | undefined {
 		if (state.touched() && state.errors().length > 0) return state.errors()[0].message;
-		return serverMessage;
+		return undefined;
 	}
 
 	protected async onSubmit(event: Event): Promise<void> {
@@ -90,7 +83,8 @@ export class ContactFormComponent {
 		this.form.message().markAsTouched();
 
 		// submit() runs the action only when the schema passes; the server re-validates with the
-		// same schema (authoritative) so we map any 4xx field errors back onto the form.
+		// same schema (authoritative). Field-bound errors returned from the action are applied to
+		// the matching fields as native ValidationErrors.
 		await submit(this.form, {
 			action: async () => {
 				const res = await fetch('/api/contact', {
@@ -105,12 +99,21 @@ export class ContactFormComponent {
 				const body = (await res.json().catch(() => null)) as {
 					errors?: Partial<Record<keyof ContactFormData, string[]>>;
 				} | null;
-				this.serverErrors.set({
-					name: body?.errors?.name?.[0],
-					email: body?.errors?.email?.[0],
-					message: body?.errors?.message?.[0],
-				});
-				return undefined;
+				const fields = {
+					name: this.form.name,
+					email: this.form.email,
+					message: this.form.message,
+				};
+				return (Object.keys(fields) as (keyof ContactFormData)[])
+					.map((field) => ({ field, message: body?.errors?.[field]?.[0] }))
+					.filter(
+						(e): e is { field: keyof ContactFormData; message: string } => !!e.message,
+					)
+					.map((e) => ({
+						fieldTree: fields[e.field],
+						kind: 'server',
+						message: e.message,
+					}));
 			},
 		});
 	}
