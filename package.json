@@ -29,7 +29,7 @@
     "storybook:angular": "storybook dev -p 6010 -c packages/angular/.storybook --no-open",
     "prebuild-storybook": "bun run build:css && bun run cem",
     "build-storybook": "bun run scripts/build-storybook.ts",
-    "serve-storybook": "bunx serve dist/storybook -l 6006",
+    "serve-storybook": "PORT=6006 bun run scripts/serve-storybook-static.ts",
     "test:visual": "playwright test --config tests/visual/playwright.config.ts",
     "test:storybook": "test-storybook",
     "lint": "biome check .",

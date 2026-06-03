@@ -1,0 +1,21 @@
+/* Snapshot-only accent normalization for the cross-framework parity check.
+   Each framework section renders with its own accent (react/vue/angular), which is a
+   legitimate per-framework difference — not a parity failure. Forcing a single accent here
+   lets the visual diff compare everything EXCEPT the accent, so the comparison proves the
+   shared design system renders identically across frameworks. Injected by parity.spec.ts;
+   never shipped. */
+:root,
+[data-framework] {
+	--jb-accent: #7c7c8a !important;
+	--jb-accent-soft: rgba(124, 124, 138, 0.15) !important;
+	--jb-accent-hover: #8a8a99 !important;
+}
+
+/* Stabilize screenshots: no motion, no blinking caret. */
+*,
+*::before,
+*::after {
+	transition: none !important;
+	animation: none !important;
+	caret-color: transparent !important;
+}

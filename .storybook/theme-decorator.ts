@@ -30,12 +30,19 @@ export function applyTheme(theme: string | undefined): void {
 	setTheme(theme === 'light' ? 'light' : 'dark');
 }
 
-/** Select which framework accent the section renders, via the same `data-framework` hook the site uses. */
+/**
+ * Select which framework accent the section renders, via the same `data-framework` hook the
+ * site uses. `neutral` is for the framework-agnostic Web Components section: it applies a
+ * brand-neutral accent rather than letting the elements inherit the global default (which is
+ * React's), so the shared primitives don't appear tied to any one framework.
+ */
 export function applyFramework(name: FrameworkAccent): void {
 	const root = document.documentElement;
 	if (name === 'neutral') {
 		root.removeAttribute('data-framework');
+		root.style.setProperty('--jb-accent', 'var(--jb-color-neutral-500)');
 	} else {
+		root.style.removeProperty('--jb-accent');
 		root.setAttribute('data-framework', name);
 	}
 }
