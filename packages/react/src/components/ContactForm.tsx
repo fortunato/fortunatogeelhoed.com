@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from 'react';
+import { type SubmitEvent, useState } from 'react';
 
 // Self-contained contact form composite — the same form the Contact page uses, built in React.
 // Controlled jb-input/jb-textarea: each reflects React state via its `value` property and
@@ -10,7 +10,7 @@ export function ContactForm() {
 	const [message, setMessage] = useState('');
 	const [sent, setSent] = useState(false);
 
-	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+	const onSubmit = (e: SubmitEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (!e.currentTarget.checkValidity()) {
 			e.currentTarget.reportValidity();
