@@ -10,3 +10,9 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
+storybook-static/
+test-results/
+playwright-report/
+blob-report/
+packages/shared/custom-elements.json
+.npmrc

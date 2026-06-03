@@ -27,6 +27,15 @@
 		}
 	},
 	"files": {
-		"ignore": ["node_modules", "dist", ".nx"]
+		"ignore": [
+			"node_modules",
+			"dist",
+			".nx",
+			"storybook-static",
+			"**/custom-elements.json",
+			"tests/visual/__snapshots__",
+			"test-results",
+			"playwright-report"
+		]
 	}
 }
