@@ -26,14 +26,21 @@
 		"storybook:web-components": "storybook dev -p 6007 -c packages/shared/.storybook --no-open",
 		"storybook:react": "storybook dev -p 6008 -c packages/react/.storybook --no-open",
 		"storybook:vue": "storybook dev -p 6009 -c packages/vue/.storybook --no-open",
-		"storybook:angular": "storybook dev -p 6010 -c packages/angular/.storybook --no-open",
+		"storybook:angular": "ng run angular:storybook",
 		"prebuild-storybook": "bun run build:css && bun run cem",
 		"build-storybook": "bun run scripts/build-storybook.ts",
 		"serve-storybook": "PORT=6006 bun run scripts/serve-storybook-static.ts",
 		"test:visual": "playwright test --config tests/visual/playwright.config.ts",
 		"test:storybook": "test-storybook",
 		"lint": "biome check .",
-		"lint:fix": "biome check --write ."
+		"lint:fix": "biome check --write .",
+		"typecheck": "nx run-many -t typecheck",
+		"typecheck:react": "nx run react:typecheck",
+		"typecheck:vue": "nx run vue:typecheck",
+		"typecheck:angular": "nx run angular:typecheck",
+		"typecheck:shared": "nx run shared:typecheck",
+		"typecheck:api": "nx run api:typecheck",
+		"typecheck:content": "nx run content:typecheck"
 	},
 	"dependencies": {
 		"@angular/common": "^21.0.0",
@@ -74,6 +81,8 @@
 		"@storybook/vue3-vite": "^10",
 		"@storybook/web-components-vite": "^10",
 		"@types/bun": "^1.3.14",
+		"@types/react": "^19.2.16",
+		"@types/react-dom": "^19.2.3",
 		"@vitejs/plugin-react": "^4.3.0",
 		"@vitejs/plugin-vue": "^5.2.0",
 		"axe-playwright": "^2.2.2",
@@ -82,7 +91,8 @@
 		"storybook": "^10",
 		"typescript": "^5.7.0",
 		"vite": "^6.0.0",
-		"vite-ssg": "^0.24.0"
+		"vite-ssg": "^0.24.0",
+		"vue-tsc": "^3.3.3"
 	},
 	"customElements": "packages/shared/custom-elements.json"
 }
