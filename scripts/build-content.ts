@@ -1,10 +1,10 @@
-import { mkdir, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { getPage } from '@fg/content';
+import { getHomeContent, getPage, getTimeline } from '@fg/content';
 import { routes } from '@fg/shared';
 import type { ContentItem } from '@fg/shared';
 
-const outFile = resolve(import.meta.dirname, '../packages/content/data.json');
+const contentDir = resolve(import.meta.dirname, '../packages/content');
 
 const contentMap: Record<string, ContentItem> = {};
 
@@ -15,5 +15,13 @@ for (const route of routes) {
 	}
 }
 
-await writeFile(outFile, `${JSON.stringify(contentMap, null, '\t')}\n`);
-console.log(`✓ Built content data (${Object.keys(contentMap).length} pages)`);
+await writeFile(resolve(contentDir, 'data.json'), `${JSON.stringify(contentMap, null, '\t')}\n`);
+await writeFile(
+	resolve(contentDir, 'home.json'),
+	`${JSON.stringify(getHomeContent(), null, '\t')}\n`,
+);
+await writeFile(
+	resolve(contentDir, 'timeline.json'),
+	`${JSON.stringify(getTimeline(), null, '\t')}\n`,
+);
+console.log(`✓ Built content data (${Object.keys(contentMap).length} pages, home, timeline)`);

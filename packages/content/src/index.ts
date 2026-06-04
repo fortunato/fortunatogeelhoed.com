@@ -35,4 +35,6 @@ export async function listPosts(): Promise<ContentItem[]> {
 	return listByType('post');
 }
 
+export { getHomeContent } from './home';
+export { getTimeline } from './timeline';
 export { parseContent } from './parser';
