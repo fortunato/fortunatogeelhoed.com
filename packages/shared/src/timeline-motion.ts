@@ -1,8 +1,8 @@
 // Timeline scroll choreography, called from each variant's timeline page lifecycle.
 //   1. Reveal — an IntersectionObserver marks [data-reveal] elements as they enter view
 //      (works everywhere; under reduced motion everything is shown at once).
-//   2. Velocity — on desktop, Lenis drives smooth scrolling and a --vel custom property the
-//      CSS uses to splay the lanes as you scroll. Off under reduced motion / touch / narrow.
+//   2. Smooth scroll — on desktop, Lenis smooths scrolling so the assemble/disassemble reads
+//      fluidly. Off under reduced motion / touch / narrow.
 // Lenis is dynamically imported, so this module is safe to import during server prerender.
 
 interface LenisLike {
@@ -19,6 +19,9 @@ export async function initTimelineMotion(root: HTMLElement): Promise<void> {
 	if (typeof window === 'undefined') return;
 	const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+	// Reveal: rows ASSEMBLE on entering view and DISASSEMBLE on leaving (the observer toggles
+	// [data-in] both ways, so the choreography replays as you scroll back and forth). Under
+	// reduced motion everything is simply shown.
 	const targets = root.querySelectorAll<HTMLElement>('[data-reveal]');
 	if (reduce || !('IntersectionObserver' in window)) {
 		for (const el of targets) el.setAttribute('data-in', '');
@@ -26,17 +29,16 @@ export async function initTimelineMotion(root: HTMLElement): Promise<void> {
 		observer = new IntersectionObserver(
 			(entries) => {
 				for (const e of entries) {
-					if (e.isIntersecting) {
-						e.target.setAttribute('data-in', '');
-						observer?.unobserve(e.target);
-					}
+					if (e.isIntersecting) e.target.setAttribute('data-in', '');
+					else e.target.removeAttribute('data-in');
 				}
 			},
-			{ rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+			{ rootMargin: '-12% 0px -12% 0px' },
 		);
 		for (const el of targets) observer.observe(el);
 	}
 
+	// Desktop: Lenis smooths the scroll so the assemble/disassemble feels fluid.
 	const desktop =
 		window.matchMedia('(min-width: 981px)').matches &&
 		window.matchMedia('(pointer: fine)').matches;
@@ -44,10 +46,6 @@ export async function initTimelineMotion(root: HTMLElement): Promise<void> {
 
 	const { default: Lenis } = await import('lenis');
 	lenis = new Lenis() as unknown as LenisLike;
-	lenis.on('scroll', ({ velocity }) => {
-		const v = Math.max(-1, Math.min(1, velocity * 0.05));
-		root.style.setProperty('--vel', v.toFixed(3));
-	});
 	const loop = (time: number) => {
 		lenis?.raf(time);
 		frame = requestAnimationFrame(loop);

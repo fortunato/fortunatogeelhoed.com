@@ -1,7 +1,7 @@
 /* Career timeline — a role spine on the left, then technology lanes (Frontend, Backend/DB,
    CI·CD/Infra, AI·LLM) flowing right, grouped into era time-blocks. Shared across the three
    variants; semantic --jb-* tokens only (pills carry per-tech --brand colors inline).
-   Reveal + scroll-velocity motion is driven from @fg/shared/timeline-motion. */
+   Reveal (assemble/disassemble) motion is driven from @fg/shared/timeline-motion. */
 
 .page {
 	padding-top: var(--jb-space-xl);
@@ -197,7 +197,8 @@
 	display: grid;
 	grid-template-columns: var(--cols);
 	gap: 0;
-	padding: var(--jb-space-md) 0;
+	padding: var(--jb-space-lg) 0;
+	min-height: 6rem;
 	position: relative;
 	align-items: start;
 	border-bottom: 1px solid color-mix(in srgb, var(--jb-color-border) 55%, transparent);
@@ -347,22 +348,17 @@
 .spine {
 	grid-column: 1;
 }
-/* scroll-velocity splay: outer lanes drift more (driven by --vel from timeline-motion) */
 .lane-fe {
 	grid-column: 2;
-	transform: translateX(calc(var(--vel, 0) * -9px));
 }
 .lane-be {
 	grid-column: 3;
-	transform: translateX(calc(var(--vel, 0) * -3px));
 }
 .lane-ci {
 	grid-column: 4;
-	transform: translateX(calc(var(--vel, 0) * 3px));
 }
 .lane-ai {
 	grid-column: 5;
-	transform: translateX(calc(var(--vel, 0) * 9px));
 }
 
 .pill {
@@ -387,19 +383,84 @@
 	color: var(--brand, currentColor);
 }
 
-/* ============================ Reveal + reduced motion ============================ */
+/* ============================ Reveal: assemble / disassemble ============================ */
 
-/* Reveal is opt-in via JS (timeline-motion adds [data-in]); when JS or motion is absent,
-   content is shown by the no-[data-reveal]-baseline below. */
+/* timeline-motion toggles [data-in] as rows enter and leave the viewport. Without JS or
+   under reduced motion no [data-reveal] is ever hidden, so content is always present. */
 @media (prefers-reduced-motion: no-preference) {
+	/* Baseline (era dividers, and entries on narrow screens): fade + rise. */
 	[data-reveal] {
 		opacity: 0;
-		transform: translateY(14px);
-		transition: opacity 0.7s var(--jb-ease-emphasized), transform 0.7s var(--jb-ease-emphasized);
+		transform: translateY(18px);
+		transition: opacity 0.6s var(--jb-ease-emphasized), transform 0.6s var(--jb-ease-emphasized);
 	}
 	[data-reveal][data-in] {
 		opacity: 1;
 		transform: none;
+	}
+
+	/* Desktop: each row ASSEMBLES — the spine slides in, the lanes converge from their
+	   sides, the node pops, and the pills scale up; all of it reverses on the way out. */
+	@media (min-width: 981px) {
+		.entry[data-reveal] {
+			opacity: 1;
+			transform: none;
+		}
+
+		.entry[data-reveal] .spine,
+		.entry[data-reveal] .lane {
+			opacity: 0;
+			transition: opacity 0.55s var(--jb-ease-emphasized), transform 0.55s
+				var(--jb-ease-emphasized);
+		}
+		.entry[data-reveal] .spine {
+			transform: translateX(-28px);
+		}
+		.entry[data-reveal] .lane-fe {
+			transform: translateX(-80px);
+		}
+		.entry[data-reveal] .lane-be {
+			transform: translateX(-40px);
+			transition-delay: 0.04s;
+		}
+		.entry[data-reveal] .lane-ci {
+			transform: translateX(40px);
+			transition-delay: 0.04s;
+		}
+		.entry[data-reveal] .lane-ai {
+			transform: translateX(80px);
+			transition-delay: 0.08s;
+		}
+
+		.entry[data-reveal] .pill {
+			opacity: 0;
+			transform: translateY(8px) scale(0.9);
+			transition: opacity 0.4s ease, transform 0.4s var(--jb-ease-emphasized);
+		}
+		.entry[data-reveal] .pill:nth-child(2) {
+			transition-delay: 0.06s;
+		}
+		.entry[data-reveal] .pill:nth-child(3) {
+			transition-delay: 0.12s;
+		}
+		.entry[data-reveal] .pill:nth-child(n + 4) {
+			transition-delay: 0.18s;
+		}
+
+		.entry[data-reveal]::before {
+			transform: scale(0);
+			transition: transform 0.45s var(--jb-ease-emphasized);
+		}
+
+		.entry[data-reveal][data-in] .spine,
+		.entry[data-reveal][data-in] .lane,
+		.entry[data-reveal][data-in] .pill {
+			opacity: 1;
+			transform: none;
+		}
+		.entry[data-reveal][data-in]::before {
+			transform: scale(1);
+		}
 	}
 }
 
