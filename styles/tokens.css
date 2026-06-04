@@ -125,6 +125,9 @@
 		/* tertiary lifted from #555 (≈2.6:1, failed AA) to #808080 for normal-size text. */
 		--jb-text-tertiary: var(--jb-color-neutral-550);
 		--jb-color-border: var(--jb-color-neutral-800);
+		/* The brand accent is dark enough that, as small text, it lands just under 4.5:1 on
+		   the dark surfaces — lighten it for text use so links/labels clear AA. */
+		--jb-accent-text: color-mix(in srgb, var(--jb-accent) 80%, white);
 	}
 
 	/* Theme: light */

@@ -189,7 +189,7 @@
 	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
-	color: var(--jb-accent);
+	color: var(--jb-accent-text);
 }
 
 /* ---- CTA ---- */

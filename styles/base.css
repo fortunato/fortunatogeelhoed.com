@@ -145,7 +145,7 @@
 
 	.contact-success {
 		margin-top: var(--jb-space-lg);
-		color: var(--jb-accent);
+		color: var(--jb-accent-text);
 		font-weight: 600;
 	}
 

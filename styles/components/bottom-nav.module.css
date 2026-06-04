@@ -36,7 +36,7 @@
 }
 
 .bottom-nav-item[aria-current="page"] {
-	color: var(--jb-accent);
+	color: var(--jb-accent-text);
 }
 
 .bottom-nav-item jb-icon svg {
