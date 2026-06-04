@@ -22,6 +22,10 @@ export const routes: Routes = [
 		loadComponent: () => import('./pages/blog.component').then((m) => m.BlogComponent),
 	},
 	{
+		path: 'timeline',
+		loadComponent: () => import('./pages/timeline.component').then((m) => m.TimelineComponent),
+	},
+	{
 		path: 'contact',
 		loadComponent: () => import('./pages/contact.component').then((m) => m.ContactComponent),
 	},

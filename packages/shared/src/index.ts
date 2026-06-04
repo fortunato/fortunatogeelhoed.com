@@ -11,6 +11,8 @@ export type {
 	TimelineData,
 } from './types/timeline';
 export { LANES } from './types/timeline';
+export type { RibbonSegment, RibbonRow, AxisTick } from './timeline-layout';
+export { timelineBounds, ribbonRows, axisTicks, LANE_LABELS } from './timeline-layout';
 export type { NavItem } from './nav';
 export { NAV_ITEMS } from './nav';
 export type { HomeContent, ServiceOffering, ProofPoint, WritingTeaserItem } from './types/home';

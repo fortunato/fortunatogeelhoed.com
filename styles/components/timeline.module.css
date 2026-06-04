@@ -1,0 +1,351 @@
+/* Career timeline — centre-radial multi-lane layout (wide) collapsing to single-column
+   cards (narrow). Shared across the three variants; semantic --jb-* tokens only. The
+   positioning maths for the framework ribbon lives in @fg/shared (timeline-layout.ts).
+   Scroll reveals come from the global [data-reveal] mechanism in styles/motion.css. */
+
+.page {
+	padding-top: var(--jb-space-xl);
+}
+
+.intro {
+	max-width: 46rem;
+	color: var(--jb-text-secondary);
+	line-height: 1.6;
+}
+
+/* ============================ Framework exposure ribbon ============================ */
+
+.ribbon {
+	margin: var(--jb-space-xl) auto;
+}
+
+.ribbon-title {
+	font-family: var(--jb-font-display);
+	font-weight: 700;
+	margin-bottom: var(--jb-space-md);
+}
+
+.ribbon-row {
+	display: grid;
+	grid-template-columns: 6rem 1fr;
+	align-items: center;
+	gap: var(--jb-space-md);
+	margin-bottom: var(--jb-space-sm);
+}
+
+.ribbon-label {
+	font-family: var(--jb-font-mono);
+	font-size: 0.8rem;
+	text-align: right;
+	color: var(--jb-text-secondary);
+}
+
+.ribbon-track {
+	position: relative;
+	height: 0.85rem;
+	background: var(--jb-bg-secondary);
+	border-radius: var(--jb-radius-sm);
+}
+
+.ribbon-seg {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	border-radius: var(--jb-radius-sm);
+	background: var(--jb-accent);
+}
+
+/* occasional → striped (lower presence) */
+.ribbon-seg[data-intensity="occasional"] {
+	background: repeating-linear-gradient(
+		45deg,
+		var(--jb-accent),
+		var(--jb-accent) 3px,
+		transparent 3px,
+		transparent 6px
+	);
+}
+
+/* brief → a single dot; width from the style attribute is intentionally not set */
+.ribbon-seg[data-intensity="brief"] {
+	top: 50%;
+	bottom: auto;
+	width: 0.7rem;
+	height: 0.7rem;
+	transform: translate(-50%, -50%);
+	border-radius: 50%;
+}
+
+.ribbon-axis {
+	position: relative;
+	height: 1.2rem;
+	margin-top: var(--jb-space-xs);
+	margin-left: calc(6rem + var(--jb-space-md));
+}
+
+.ribbon-tick {
+	position: absolute;
+	transform: translateX(-50%);
+	font-family: var(--jb-font-mono);
+	font-size: 0.65rem;
+	color: var(--jb-text-tertiary);
+}
+
+.ribbon-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--jb-space-lg);
+	margin-top: var(--jb-space-md);
+	margin-left: calc(6rem + var(--jb-space-md));
+	font-size: 0.75rem;
+	color: var(--jb-text-secondary);
+}
+
+.legend-item {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--jb-space-xs);
+}
+
+.legend-swatch {
+	width: 1.5rem;
+	height: 0.7rem;
+	border-radius: var(--jb-radius-sm);
+	background: var(--jb-accent);
+}
+
+.legend-swatch[data-intensity="occasional"] {
+	background: repeating-linear-gradient(
+		45deg,
+		var(--jb-accent),
+		var(--jb-accent) 3px,
+		transparent 3px,
+		transparent 6px
+	);
+}
+
+.legend-swatch[data-intensity="brief"] {
+	width: 0.7rem;
+	border-radius: 50%;
+}
+
+/* ============================ The multi-lane timeline ============================ */
+
+.timeline {
+	width: min(1500px, 96vw);
+	margin: var(--jb-space-2xl) auto 0;
+	--timeline-cols: 0.85fr 0.85fr 0.85fr 0.95fr minmax(3.25rem, auto) 1.5fr 1.4fr;
+}
+
+.lane-labels {
+	display: grid;
+	grid-template-columns: var(--timeline-cols);
+	gap: var(--jb-space-md);
+	position: sticky;
+	top: var(--jb-size-nav-height);
+	z-index: var(--jb-z-base);
+	padding: var(--jb-space-sm) 0;
+	background: color-mix(in srgb, var(--jb-bg-primary) 88%, transparent);
+	backdrop-filter: blur(6px);
+	border-bottom: 1px solid var(--jb-color-border);
+}
+
+.lane-head {
+	font-family: var(--jb-font-mono);
+	font-size: 0.62rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--jb-text-tertiary);
+}
+
+.lane-head[data-side="left"] {
+	text-align: right;
+}
+
+.entry {
+	display: grid;
+	grid-template-columns: var(--timeline-cols);
+	gap: var(--jb-space-md);
+	align-items: center;
+	padding: var(--jb-space-lg) 0;
+}
+
+.lane {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--jb-space-xs);
+}
+
+/* lanes left of the spine align toward it */
+.lane-ai,
+.lane-cicd,
+.lane-db,
+.lane-be {
+	justify-content: flex-end;
+}
+
+.lane-ai {
+	grid-column: 1;
+}
+.lane-cicd {
+	grid-column: 2;
+}
+.lane-db {
+	grid-column: 3;
+}
+.lane-be {
+	grid-column: 4;
+}
+.spine {
+	grid-column: 5;
+}
+.role {
+	grid-column: 6;
+}
+.lane-fe {
+	grid-column: 7;
+}
+
+/* the central time spine */
+.spine {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-self: stretch;
+	align-items: center;
+}
+
+.spine::before {
+	content: "";
+	position: absolute;
+	top: -1.5rem;
+	bottom: -1.5rem;
+	left: 50%;
+	width: 2px;
+	transform: translateX(-50%);
+	background: var(--jb-color-border);
+}
+
+.year-node {
+	position: relative;
+	z-index: var(--jb-z-base);
+	font-family: var(--jb-font-mono);
+	font-size: 0.8rem;
+	font-weight: 600;
+	padding: 0.3rem 0.6rem;
+	border-radius: var(--jb-radius-md);
+	border: 1.5px solid var(--jb-color-border);
+	background: var(--jb-bg-card);
+	white-space: nowrap;
+}
+
+/* employment-type tints */
+.year-node[data-emp="contractor"] {
+	border-color: var(--jb-accent);
+	color: var(--jb-accent);
+}
+.year-node[data-emp="freelance"] {
+	border-style: dashed;
+	border-color: var(--jb-accent);
+	color: var(--jb-accent);
+}
+.year-node[data-emp="self-employed"] {
+	background: var(--jb-accent);
+	border-color: var(--jb-accent);
+	color: var(--jb-text-on-accent);
+}
+
+.role-period {
+	font-family: var(--jb-font-mono);
+	font-size: 0.7rem;
+	color: var(--jb-text-tertiary);
+}
+
+.role-title {
+	font-family: var(--jb-font-display);
+	font-weight: 700;
+	font-size: 1.05rem;
+}
+
+.role-org {
+	color: var(--jb-text-secondary);
+}
+
+.role-summary {
+	margin-top: var(--jb-space-xs);
+	font-size: 0.85rem;
+	color: var(--jb-text-tertiary);
+	max-width: 28ch;
+}
+
+.role-badge {
+	display: inline-block;
+	margin-top: var(--jb-space-xs);
+	font-family: var(--jb-font-mono);
+	font-size: 0.6rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	padding: 2px 6px;
+	border: 1px dashed var(--jb-accent);
+	border-radius: var(--jb-radius-sm);
+	color: var(--jb-accent);
+}
+
+/* side-project rows read as a parallel track */
+.entry[data-side="true"] {
+	border-left: 2px dashed var(--jb-accent);
+	background: var(--jb-accent-soft);
+	border-radius: var(--jb-radius-md);
+}
+
+/* ============================ Narrow / mobile ============================ */
+
+@media (max-width: 980px) {
+	.timeline {
+		width: 100%;
+	}
+
+	.lane-labels {
+		display: none;
+	}
+
+	.entry {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--jb-space-sm);
+		padding: var(--jb-space-lg);
+		margin-bottom: var(--jb-space-lg);
+		border: 1px solid var(--jb-color-border);
+		border-radius: var(--jb-radius-lg);
+		background: var(--jb-bg-card);
+	}
+
+	.spine {
+		order: -2;
+		align-self: flex-start;
+	}
+
+	.spine::before {
+		display: none;
+	}
+
+	.role {
+		order: -1;
+	}
+
+	.lane {
+		justify-content: flex-start;
+	}
+
+	/* surface the lane name as a label on each tag group */
+	.lane::before {
+		content: attr(data-lane-label);
+		flex-basis: 100%;
+		font-family: var(--jb-font-mono);
+		font-size: 0.6rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--jb-text-tertiary);
+	}
+}
