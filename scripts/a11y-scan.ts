@@ -5,12 +5,13 @@ import { routes } from '../packages/shared/src/types/routes';
 
 // Live-site accessibility gate. Boots the production server over the built output and, for
 // each framework variant, drives the real cookie-routing path to every route and runs axe
-// at WCAG 2.1 AA. Any violation fails the build. This covers the actual pages a visitor
-// receives — complementary to the per-story accessibility checks in the showcase.
+// at WCAG 2.1 AA plus axe's best-practice rules (so structural wins like a single <main>
+// landmark and a per-page <h1> stay enforced). Any violation fails the build. This covers
+// the actual pages a visitor receives — complementary to the per-story showcase checks.
 
 const FRAMEWORKS = ['react', 'vue', 'angular'] as const;
 const ORIGIN = 'http://localhost:3000';
-const WCAG_2_1_AA = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
+const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'];
 
 async function waitForServer(timeoutMs = 30_000): Promise<void> {
 	const deadline = Date.now() + timeoutMs;
@@ -46,7 +47,7 @@ async function main() {
 				await page.goto(`${ORIGIN}${route.path}`, { waitUntil: 'networkidle' });
 				await injectAxe(page);
 				const violations = await getViolations(page, undefined, {
-					runOnly: { type: 'tag', values: WCAG_2_1_AA },
+					runOnly: { type: 'tag', values: AXE_TAGS },
 				});
 				if (violations.length > 0) {
 					failures += violations.length;
@@ -70,11 +71,13 @@ async function main() {
 	}
 
 	if (failures > 0) {
-		console.error(`\n${failures} WCAG 2.1 AA violation(s) found.`);
+		console.error(
+			`\n${failures} accessibility violation(s) found (WCAG 2.1 AA + best practice).`,
+		);
 		process.exit(1);
 	}
 	console.log(
-		`\nNo WCAG 2.1 AA violations across ${routes.length} routes × ${FRAMEWORKS.length} variants.`,
+		`\nNo WCAG 2.1 AA / best-practice violations across ${routes.length} routes × ${FRAMEWORKS.length} variants.`,
 	);
 }
 

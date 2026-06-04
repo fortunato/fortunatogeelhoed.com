@@ -45,6 +45,13 @@ bun run test:storybook  # per-story accessibility + smoke (needs a prior `bun ru
 section (React, Vue, Angular, web-components), since the catalogue is a composition and each
 section hosts its own stories.
 
+It deliberately uses `@storybook/test-runner` (Playwright) rather than the newer
+`@storybook/addon-vitest`. The addon is a Vite plugin, and the Angular section is built with
+`@storybook/angular` (the Angular builder, not Vite), so the addon cannot run it. Migrating
+only the three Vite sections would leave two story-testing mechanisms to maintain, so the
+single test-runner that covers all four sections — Angular included — is the simpler choice.
+Revisit only if the Angular section ever moves to a Vite-based Storybook.
+
 Scope to one tier while iterating:
 
 ```bash
@@ -57,6 +64,6 @@ bunx vitest run packages/shared/src/validation/contact.test.ts
 
 - **Co-locate** unit and component tests with the code they cover. Cross-cutting suites that need the whole running app (`a11y`, `e2e`, `visual`) live under `tests/`.
 - Name component tests `*.browser.test.*` so the non-browser projects never pick them up.
-- The accessibility gate is **zero-tolerance at WCAG 2.1 AA** — any violation fails the build.
+- The accessibility gate is **zero-tolerance at WCAG 2.1 AA plus axe's best-practice rules** — any violation fails the build. Best practice is included so structural wins (one `<main>` landmark, a per-page `<h1>`, all content in landmarks) stay enforced even though they aren't strict AA criteria.
 - Visual snapshots are platform-specific; generate and check them on Linux so they match CI.
 - The `a11y` and `e2e` tiers run against the production build (`bun run build` first); the `visual` and `storybook` tiers run against the built showcase (`bun run build-storybook` first). CI builds before running them.
