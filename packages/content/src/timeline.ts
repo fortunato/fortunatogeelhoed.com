@@ -198,6 +198,8 @@ const timeline: TimelineData = {
 			client: 'Limelight Digital',
 			role: 'Senior Full-Stack Developer',
 			type: 'employee',
+			highlight:
+				'They didn’t want to lose me — kept on remotely through a Brisbane → Melbourne move',
 			tech: {
 				frontend: ['jQuery', 'Backbone', 'Marionette', 'HTML5', 'CSS'],
 				backend: ['PHP', 'MySQL', 'Kohana', 'Node.js'],
