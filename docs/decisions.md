@@ -135,6 +135,8 @@ no database — Git is the CMS, and a content change is just a rebuild.
 ---
 
 These decisions are distilled from the project's internal research notes and
-verified against the scaffold. The animation/creative layer described in early
-planning (GSAP, Lenis, View Transitions) is not yet part of the build and is
-intentionally omitted here until it ships.
+verified against the scaffold. The creative motion layer — scroll reveals, the
+hero entrance, same-document View Transitions, and a scoped Lenis smooth scroll
+on the desktop timeline — now ships; how it is built, and why the broader GSAP
+layer stays deferred, is covered in
+[`motion-and-navigation.md`](motion-and-navigation.md).

@@ -50,4 +50,18 @@ test.describe('primary navigation', () => {
 		await page.goto('/timeline');
 		await expect(page.locator('a[href="/__switch?to=vue"]')).toBeVisible();
 	});
+
+	test('homepage calls-to-action resolve without dead ends', async ({ page }) => {
+		await page.goto('/');
+		// The closing CTA must reach the contact page.
+		const cta = page.getByRole('link', { name: 'Get in touch' });
+		await expect(cta).toHaveAttribute('href', '/contact');
+		expect((await page.goto('/contact'))?.ok()).toBe(true);
+
+		// The writing teasers point at the blog placeholder — present, not a 404.
+		await page.goto('/');
+		const teaser = page.locator('a[href="/blog"]').first();
+		await expect(teaser).toBeVisible();
+		expect((await page.goto('/blog'))?.ok()).toBe(true);
+	});
 });
