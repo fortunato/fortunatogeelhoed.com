@@ -2,6 +2,9 @@
 	"name": "content",
 	"sourceRoot": "packages/content/src",
 	"targets": {
+		"test": {
+			"command": "vitest run --project node"
+		},
 		"lint": {
 			"command": "biome check packages/content/"
 		},

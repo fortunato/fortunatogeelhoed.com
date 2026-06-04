@@ -8,6 +8,9 @@
 		"build": {
 			"command": "vite-ssg build --config packages/vue/vite.config.ts"
 		},
+		"test": {
+			"command": "vitest run --project browser-vue"
+		},
 		"lint": {
 			"command": "biome check packages/vue/"
 		},

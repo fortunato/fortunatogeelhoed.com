@@ -8,6 +8,9 @@
 		"build": {
 			"command": "vite build --config packages/react/vite.config.ts && vite build --config packages/react/vite.config.ts --ssr src/entry-server.tsx --outDir ../../dist/react-ssr && bun run packages/react/prerender.ts"
 		},
+		"test": {
+			"command": "vitest run --project browser-react"
+		},
 		"lint": {
 			"command": "biome check packages/react/"
 		},

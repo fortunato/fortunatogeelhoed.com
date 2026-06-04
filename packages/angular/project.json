@@ -8,6 +8,9 @@
 		"build": {
 			"command": "vite build --config packages/angular/vite.config.ts && vite build --config packages/angular/vite.config.ssr.ts && bun run packages/angular/prerender.ts"
 		},
+		"test": {
+			"command": "vitest run --project browser-angular"
+		},
 		"lint": {
 			"command": "biome check packages/angular/"
 		},

@@ -8,6 +8,9 @@
 		"build": {
 			"command": "bun build packages/api/src/index.ts --outdir dist/api --target bun"
 		},
+		"test": {
+			"command": "vitest run --project node"
+		},
 		"lint": {
 			"command": "biome check packages/api/"
 		},
