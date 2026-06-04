@@ -5,11 +5,21 @@ import homeData from '../../../content/home.json';
 
 const home = homeData as HomeContent;
 
+const WALLPAPER_LINE = 'FORTUNATO.GEELHOED  '.repeat(6);
+const WALLPAPER_LINES = Array.from({ length: 14 }, (_, i) => i);
+
 export function Home() {
 	return (
 		<>
 			<section className={styles.hero}>
-				<div className="container">
+				<div className={styles['hero-wallpaper']} aria-hidden="true">
+					{WALLPAPER_LINES.map((i) => (
+						<div key={i} className={styles['hero-wallpaper-line']}>
+							{WALLPAPER_LINE}
+						</div>
+					))}
+				</div>
+				<div className={`${styles['hero-content']} container`}>
 					<p className="section-label">{home.hero.tagline}</p>
 					<h1 className={styles['hero-name']} data-reveal>
 						{home.hero.name}

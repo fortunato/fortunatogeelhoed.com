@@ -1,6 +1,11 @@
 <template>
 	<section :class="styles.hero">
-		<div class="container">
+		<div :class="styles['hero-wallpaper']" aria-hidden="true">
+			<div v-for="i in wallpaperLines" :key="i" :class="styles['hero-wallpaper-line']">
+				{{ wallpaperLine }}
+			</div>
+		</div>
+		<div :class="[styles['hero-content'], 'container']">
 			<p class="section-label">{{ home.hero.tagline }}</p>
 			<h1 :class="styles['hero-name']" data-reveal>{{ home.hero.name }}</h1>
 			<p :class="styles['hero-statement']" data-reveal>{{ home.hero.statement }}</p>
@@ -67,4 +72,6 @@ import { RouterLink } from 'vue-router';
 import homeData from '../../../content/home.json';
 
 const home = homeData as HomeContent;
+const wallpaperLine = 'FORTUNATO.GEELHOED  '.repeat(6);
+const wallpaperLines = Array.from({ length: 14 }, (_, i) => i);
 </script>

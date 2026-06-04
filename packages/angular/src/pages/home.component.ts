@@ -12,7 +12,12 @@ const home = homeData as HomeContent;
 	styleUrl: '../../../../styles/components/home.module.css',
 	template: `
 		<section class="hero">
-			<div class="container">
+			<div class="hero-wallpaper" aria-hidden="true">
+				@for (i of wallpaperLines; track i) {
+					<div class="hero-wallpaper-line">{{ wallpaperLine }}</div>
+				}
+			</div>
+			<div class="hero-content container">
 				<p class="section-label">{{ home.hero.tagline }}</p>
 				<h1 class="hero-name" data-reveal>{{ home.hero.name }}</h1>
 				<p class="hero-statement" data-reveal>{{ home.hero.statement }}</p>
@@ -74,4 +79,6 @@ const home = homeData as HomeContent;
 })
 export class HomeComponent {
 	protected readonly home = home;
+	protected readonly wallpaperLine = 'FORTUNATO.GEELHOED  '.repeat(6);
+	protected readonly wallpaperLines = Array.from({ length: 14 }, (_, i) => i);
 }

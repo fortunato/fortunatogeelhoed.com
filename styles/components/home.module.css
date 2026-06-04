@@ -4,6 +4,8 @@
 
 /* ---- Hero ---- */
 .hero {
+	position: relative;
+	overflow: hidden;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -11,13 +13,79 @@
 	min-height: calc(100dvh - var(--jb-size-nav-height));
 }
 
+/* Diagonal repeating-name wallpaper behind the hero (decorative). Theme-adaptive via
+   a faint tint of the text color, so it needs no dedicated token. It drifts slowly;
+   the global reduced-motion rule freezes it. */
+.hero-wallpaper {
+	position: absolute;
+	inset: -100% -50%;
+	width: 300%;
+	height: 300%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	transform: rotate(-22deg);
+	transform-origin: center;
+	user-select: none;
+	pointer-events: none;
+	animation: jb-wallpaper-drift 90s linear infinite;
+}
+
+.hero-wallpaper-line {
+	font-family: var(--jb-font-display);
+	font-weight: 800;
+	font-size: 4.5vw;
+	line-height: 1.15;
+	white-space: nowrap;
+	text-transform: uppercase;
+	color: color-mix(in srgb, var(--jb-text-primary) 6%, transparent);
+}
+
+.hero-wallpaper-line:nth-child(even) {
+	font-size: 3.5vw;
+	color: color-mix(in srgb, var(--jb-text-primary) 4%, transparent);
+}
+
+.hero-wallpaper-line:nth-child(3n) {
+	font-size: 5.5vw;
+	color: color-mix(in srgb, var(--jb-text-primary) 3%, transparent);
+}
+
+@keyframes jb-wallpaper-drift {
+	from {
+		transform: rotate(-22deg) translate(0, 0);
+	}
+	to {
+		transform: rotate(-22deg) translate(-200px, -100px);
+	}
+}
+
+.hero-content {
+	position: relative;
+	z-index: 1;
+}
+
 .hero-name {
 	font-family: var(--jb-font-display);
-	font-size: clamp(3rem, 12vw, 9rem);
+	font-size: clamp(4rem, 13vw, 12rem);
 	font-weight: 800;
-	line-height: 0.95;
+	line-height: 0.9;
 	letter-spacing: -0.03em;
+	text-transform: uppercase;
 	margin-bottom: var(--jb-space-md);
+	background: linear-gradient(135deg, var(--jb-text-primary) 30%, var(--jb-accent));
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+/* Keep the name visible when the OS forces its own palette (gradient text would vanish). */
+@media (forced-colors: active) {
+	.hero-name {
+		background: none;
+		color: CanvasText;
+		-webkit-text-fill-color: CanvasText;
+	}
 }
 
 .hero-tagline {
