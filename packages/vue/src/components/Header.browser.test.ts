@@ -26,8 +26,13 @@ function renderHeader() {
 describe('Header (Vue)', () => {
 	it('renders the primary navigation links', () => {
 		renderHeader();
-		for (const label of ['Services', 'Work', 'Blog', 'Contact']) {
-			expect(screen.getByText(label).getAttribute('href')).toBe(`/${label.toLowerCase()}`);
+		const destinations: [string, string][] = [
+			['Home', '/'],
+			['Timeline', '/timeline'],
+			['Contact', '/contact'],
+		];
+		for (const [label, path] of destinations) {
+			expect(screen.getByText(label).getAttribute('href')).toBe(path);
 		}
 	});
 

@@ -16,8 +16,13 @@ async function renderHeader() {
 describe('HeaderComponent (Angular)', () => {
 	it('renders the primary navigation links', async () => {
 		await renderHeader();
-		for (const label of ['Services', 'Work', 'Blog', 'Contact']) {
-			expect(screen.getByText(label).getAttribute('href')).toBe(`/${label.toLowerCase()}`);
+		const destinations: [string, string][] = [
+			['Home', '/'],
+			['Timeline', '/timeline'],
+			['Contact', '/contact'],
+		];
+		for (const [label, path] of destinations) {
+			expect(screen.getByText(label).getAttribute('href')).toBe(path);
 		}
 	});
 
