@@ -214,7 +214,7 @@
 	content: "";
 	position: absolute;
 	left: 0.4rem;
-	top: 1.4rem;
+	top: 1.15rem;
 	width: 12px;
 	height: 12px;
 	border-radius: 50%;
@@ -227,7 +227,7 @@
 .entry::after {
 	content: "";
 	position: absolute;
-	left: calc(0.4rem + 5px);
+	left: calc(0.4rem + 5.5px);
 	top: 0;
 	bottom: 0;
 	width: 1px;
@@ -259,6 +259,7 @@
 .entry[data-type="side-project"]::before {
 	width: 15px;
 	height: 15px;
+	top: 1.05rem;
 	left: calc(0.4rem - 1.5px);
 	background: var(--jb-bg-primary);
 	border: 2px dashed #facc15;

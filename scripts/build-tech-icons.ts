@@ -41,6 +41,8 @@ const SLUGS: Record<string, string | null> = {
 	'XML/XSLT': null,
 	'HTML / CSS': 'html5',
 	'XHTML / CSS': 'html5',
+	HTML5: 'html5',
+	CSS: 'css',
 	AJAX: null,
 	// Backend / DB
 	Bun: 'bun',
@@ -63,6 +65,14 @@ const SLUGS: Record<string, string | null> = {
 	WebSockets: 'socketdotio',
 	PHP: 'php',
 	'Classic ASP': null,
+	Joomla: 'joomla',
+	'Joomla 1': 'joomla',
+	'Joomla 2': 'joomla',
+	Magento: 'magento',
+	Kohana: null,
+	'Custom CMS': null,
+	PEAR: null,
+	Seagull: null,
 	Python: 'python',
 	PyPI: 'pypi',
 	// CI/CD & infra
@@ -77,6 +87,9 @@ const SLUGS: Record<string, string | null> = {
 	Mercurial: 'mercurial',
 	'Amazon EC2': 'amazonec2',
 	SVN: 'subversion',
+	Capistrano: null,
+	rsync: null,
+	SFTP: null,
 	'Visual SourceSafe': null,
 	FTP: null,
 	Pulumi: 'pulumi',
@@ -119,6 +132,14 @@ const BRAND_FALLBACK: Record<string, string> = {
 	OpenClaw: '#888888',
 	ChatGPT: '#74aa9c',
 	'ChatGPT API': '#74aa9c',
+	Magento: '#ee672f',
+	Kohana: '#dd2a1b',
+	'Custom CMS': '#6b7280',
+	PEAR: '#67452e',
+	Seagull: '#5b8a3a',
+	Capistrano: '#d24b32',
+	rsync: '#3a6ea5',
+	SFTP: '#3a6ea5',
 };
 
 interface SimpleIcon {

@@ -188,9 +188,10 @@ const timeline: TimelineData = {
 			client: 'Limelight Digital',
 			role: 'Full-Stack Developer',
 			type: 'employee',
+			highlight: 'Early responsive design — introduced the concept to the team',
 			tech: {
-				frontend: ['jQuery', 'Backbone', 'Marionette'],
-				backend: ['PHP', 'MySQL'],
+				frontend: ['jQuery', 'Backbone', 'Marionette', 'HTML 5', 'CSS'],
+				backend: ['PHP', 'MySQL', 'Kohana', 'Node.js'],
 			},
 		},
 		{
@@ -205,7 +206,7 @@ const timeline: TimelineData = {
 			highlight: 'Early cloud — running on Amazon EC2',
 			tech: {
 				frontend: ['jQuery'],
-				backend: ['PHP', 'MySQL'],
+				backend: ['PHP', 'MySQL', 'Custom CMS', 'Magento'],
 				cicd: ['Mercurial', 'Amazon EC2'],
 			},
 		},
@@ -220,9 +221,9 @@ const timeline: TimelineData = {
 			type: 'employee',
 			highlight: 'Lived through the Prototype.js → MooTools → jQuery era',
 			tech: {
-				frontend: ['Prototype.js', 'MooTools', 'jQuery'],
-				backend: ['PHP', 'MySQL'],
-				cicd: ['SVN'],
+				frontend: ['Prototype.js', 'MooTools', 'jQuery', 'HTML5', 'CSS'],
+				backend: ['PHP', 'MySQL', 'Joomla', 'Joomla 2', 'Magento', 'Seagull', 'PEAR'],
+				cicd: ['SVN', 'rsync', 'Capistrano'],
 			},
 		},
 		{
@@ -237,6 +238,7 @@ const timeline: TimelineData = {
 			highlight: 'Rebuilt a CMS from scratch on the Seagull PHP framework',
 			tech: {
 				backend: ['PHP', 'MySQL'],
+				cicd: ['Capistrano'],
 			},
 		},
 		{
@@ -251,6 +253,7 @@ const timeline: TimelineData = {
 			tech: {
 				frontend: ['JavaScript', 'AJAX'],
 				backend: ['PHP', 'MySQL'],
+				cicd: ['SFTP'],
 			},
 		},
 		{
@@ -265,6 +268,7 @@ const timeline: TimelineData = {
 			highlight: 'First CMS, hand-built',
 			tech: {
 				backend: ['PHP', 'MySQL'],
+				cicd: ['SFTP'],
 			},
 		},
 		{
@@ -279,6 +283,7 @@ const timeline: TimelineData = {
 			tech: {
 				frontend: ['JavaScript', 'XHTML / CSS'],
 				backend: ['PHP'],
+				cicd: ['SFTP'],
 			},
 		},
 		{
@@ -293,6 +298,7 @@ const timeline: TimelineData = {
 			tech: {
 				frontend: ['JavaScript', 'XML/XSLT'],
 				backend: ['Classic ASP', 'PHP', 'SQL Server'],
+				cicd: ['SFTP'],
 			},
 		},
 		{
