@@ -16,6 +16,11 @@ const TYPE_LABEL: Record<Entry['type'], string> = {
 	'side-project': 'Side project',
 };
 
+function highlights(entry: Entry): string[] {
+	if (!entry.highlight) return [];
+	return Array.isArray(entry.highlight) ? entry.highlight : [entry.highlight];
+}
+
 function Pill({ name }: { name: string }) {
 	const { brand, icon } = techVisual(name);
 	return (
@@ -45,9 +50,11 @@ export function TimelineEntry({ entry }: { entry: Entry }) {
 					) : null}
 					{TYPE_LABEL[entry.type]}
 				</span>
-				{entry.highlight ? (
-					<div className={styles['spine-highlight']}>{entry.highlight}</div>
-				) : null}
+				{highlights(entry).map((h) => (
+					<div key={h} className={styles['spine-highlight']}>
+						{h}
+					</div>
+				))}
 			</div>
 
 			{LANES.map(({ key, cls }) =>

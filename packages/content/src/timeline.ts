@@ -188,9 +188,8 @@ const timeline: TimelineData = {
 			client: 'Limelight Digital',
 			role: 'Full-Stack Developer',
 			type: 'employee',
-			highlight: 'Early responsive design — introduced the concept to the team',
 			tech: {
-				frontend: ['jQuery', 'Backbone', 'Marionette', 'HTML 5', 'CSS'],
+				frontend: ['jQuery', 'Backbone', 'Marionette', 'HTML5', 'CSS'],
 				backend: ['PHP', 'MySQL', 'Kohana', 'Node.js'],
 			},
 		},
@@ -203,10 +202,13 @@ const timeline: TimelineData = {
 			client: 'Cru Digital',
 			role: 'Full-Stack Developer',
 			type: 'employee',
-			highlight: 'Early cloud — running on Amazon EC2',
+			highlight: [
+				'First single-page apps — hand-rolled in jQuery, a plugin per view — as responsive design took hold',
+				'Early cloud — building CentOS AMI images from scratch on EC2',
+			],
 			tech: {
 				frontend: ['jQuery'],
-				backend: ['PHP', 'MySQL', 'Custom CMS', 'Magento'],
+				backend: ['PHP', 'MySQL', 'SnappCMS', 'Magento'],
 				cicd: ['Mercurial', 'Amazon EC2'],
 			},
 		},
@@ -235,7 +237,7 @@ const timeline: TimelineData = {
 			client: 'Custom CMS v2',
 			role: 'Seagull Framework',
 			type: 'side-project',
-			highlight: 'Rebuilt a CMS from scratch on the Seagull PHP framework',
+			highlight: 'Built another CMS from scratch —  this time on the Seagull PHP framework',
 			tech: {
 				backend: ['PHP', 'MySQL'],
 				cicd: ['Capistrano'],

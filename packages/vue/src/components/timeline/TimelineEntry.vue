@@ -10,7 +10,7 @@
 				</svg>
 				{{ typeLabel[entry.type] }}
 			</span>
-			<div v-if="entry.highlight" :class="styles['spine-highlight']">{{ entry.highlight }}</div>
+			<div v-for="h in highlights" :key="h" :class="styles['spine-highlight']">{{ h }}</div>
 		</div>
 
 		<template v-for="lane in lanes" :key="lane.key">
@@ -37,8 +37,14 @@
 import type { EmploymentType, Lane, TimelineEntry } from '@fg/shared';
 import { LANE_LABELS, techVisual } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
+import { computed } from 'vue';
 
-defineProps<{ entry: TimelineEntry }>();
+const props = defineProps<{ entry: TimelineEntry }>();
+
+const highlights = computed<string[]>(() => {
+	const h = props.entry.highlight;
+	return h ? (Array.isArray(h) ? h : [h]) : [];
+});
 
 const laneLabels = LANE_LABELS;
 const v = techVisual;

@@ -25,8 +25,8 @@ export interface TimelineEntry {
 	/** Real role title (e.g. "Lead Full-Stack Engineer"). */
 	role: string;
 	type: EmploymentType;
-	/** Optional one-line highlight. */
-	highlight?: string;
+	/** Optional highlight(s) — one line, or several. */
+	highlight?: string | string[];
 	/** Technologies grouped by lane; any lane may be absent. Names key into TECH_REGISTRY. */
 	tech: Partial<Record<Lane, string[]>>;
 }

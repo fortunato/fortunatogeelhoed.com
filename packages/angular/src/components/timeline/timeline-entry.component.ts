@@ -20,9 +20,9 @@ import { LANE_LABELS, techVisual } from '@fg/shared';
 					}
 					{{ typeLabel[entry().type] }}
 				</span>
-				@if (entry().highlight) {
-					<div class="spine-highlight">{{ entry().highlight }}</div>
-				}
+				@for (h of highlights(); track h) {
+						<div class="spine-highlight">{{ h }}</div>
+					}
 			</div>
 
 			@for (lane of lanes; track lane.key) {
@@ -57,4 +57,9 @@ export class TimelineEntryComponent {
 		independent: 'Independent',
 		'side-project': 'Side project',
 	};
+
+	protected highlights(): string[] {
+		const h = this.entry().highlight;
+		return h ? (Array.isArray(h) ? h : [h]) : [];
+	}
 }
