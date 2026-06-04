@@ -56,6 +56,10 @@
 		   On the dark theme's dark soft tint the plain accent already clears AA; on the
 		   light theme's pale soft tint it only reaches ~3.7:1, so darken it there. */
 		--jb-accent-on-soft: var(--jb-accent);
+		/* Accent used as plain text on the page (links, section labels). On dark the accent
+		   already clears AA; on light it lands just under 4.5:1 on the secondary surface, so
+		   the light theme darkens it below. */
+		--jb-accent-text: var(--jb-accent);
 
 		/* Status (theme-independent) */
 		--jb-color-danger: var(--jb-color-danger-500);
@@ -132,11 +136,14 @@
 		--jb-bg-card-hover: var(--jb-color-neutral-100);
 		--jb-text-primary: var(--jb-color-neutral-900);
 		--jb-text-secondary: var(--jb-color-neutral-650);
-		/* tertiary darkened from #aaa (≈2.2:1, failed AA) to #6f6f6f for normal-size text. */
-		--jb-text-tertiary: var(--jb-color-neutral-600);
+		/* tertiary darkened to neutral-650 so it clears AA even on the slightly darker
+		   secondary surface (#f0f0f0), where #6f6f6f only reached ~4.4:1. */
+		--jb-text-tertiary: var(--jb-color-neutral-650);
 		--jb-color-border: var(--jb-color-neutral-200);
 		/* Darken accent-on-soft so small tech-tag text clears AA on the pale soft tint. */
 		--jb-accent-on-soft: color-mix(in srgb, var(--jb-accent) 80%, black);
+		/* Darken accent text so links/labels clear AA on the secondary surface. */
+		--jb-accent-text: color-mix(in srgb, var(--jb-accent) 82%, black);
 	}
 
 	/* Framework accent overrides — reassign the semantic accent to a primitive. */

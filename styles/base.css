@@ -21,7 +21,7 @@
 
 	/* Links */
 	a {
-		color: var(--jb-accent);
+		color: var(--jb-accent-text);
 		transition: color var(--jb-dur-fast) var(--jb-ease-standard);
 	}
 
@@ -49,7 +49,7 @@
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.1em;
-		color: var(--jb-accent);
+		color: var(--jb-accent-text);
 		margin-bottom: var(--jb-space-xs);
 	}
 
