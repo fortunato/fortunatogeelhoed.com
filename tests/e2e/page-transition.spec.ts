@@ -39,7 +39,7 @@ test.describe('home ↔ timeline transition', () => {
 		// The timeline route resolves and is fully pre-rendered without JS.
 		await page.goto('/timeline');
 		await expect(page.getByRole('heading', { name: /Twenty-five years/ })).toBeVisible();
-		await expect(page.getByText('Municipality of Amsterdam')).toBeVisible();
+		await expect(page.getByText('Gemeente Amsterdam')).toBeVisible();
 		await context.close();
 	});
 });

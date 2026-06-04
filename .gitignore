@@ -15,5 +15,7 @@ storybook-static/
 test-results/
 playwright-report/
 blob-report/
+# Vitest browser-mode failure screenshots (debug artifacts, not committed baselines)
+packages/**/__screenshots__/
 packages/shared/custom-elements.json
 .npmrc
