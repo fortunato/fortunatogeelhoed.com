@@ -114,7 +114,10 @@ const timeline: TimelineData = {
 			client: 'Tele2',
 			role: 'Lead Full-Stack Engineer',
 			type: 'employee',
-			highlight: 'E-commerce SSR rebuild — 3× Lighthouse improvement',
+			highlight: [
+				'E-commerce SSR rebuild — 3× Lighthouse improvement',
+				'Beat both the previously-optimized Magento 2 site and the AMP build Google’s own consultants delivered',
+			],
 			tech: {
 				frontend: ['React', 'Redux', 'TypeScript/Flow', 'SSR', 'Webpack'],
 				backend: ['Node.js', 'Express', 'PHP', 'Salesforce', 'MySQL'],
@@ -240,7 +243,7 @@ const timeline: TimelineData = {
 			client: 'Custom CMS v2',
 			role: 'Seagull Framework',
 			type: 'side-project',
-			highlight: 'Built another CMS from scratch —  this time on the Seagull PHP framework',
+			highlight: 'Built another CMS from scratch — this time on the Seagull PHP framework',
 			tech: {
 				backend: ['PHP', 'MySQL'],
 				cicd: ['Capistrano'],
