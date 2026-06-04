@@ -1,5 +1,4 @@
-import { Component, inject } from '@angular/core';
-import { ContentService } from '../content.service';
+import { Component } from '@angular/core';
 
 @Component({
 	selector: 'app-blog',
@@ -8,13 +7,13 @@ import { ContentService } from '../content.service';
 		<section>
 			<div class="container">
 				<span class="section-label">Writing</span>
-				<h1 class="section-title">{{ content?.title ?? 'Blog' }}</h1>
-				<p style="color: var(--jb-text-secondary)">{{ content?.body ?? 'Blog posts will be loaded from the content pipeline.' }}</p>
+				<h1 class="section-title">Blog</h1>
+				<p style="color: var(--jb-text-secondary); max-width: 40rem">
+					Posts are on their way. The first pieces — on specialization, cognitive debt and
+					building this site in three frameworks — are being prepared for publication here.
+				</p>
 			</div>
 		</section>
 	`,
 })
-export class BlogComponent {
-	private contentService = inject(ContentService);
-	content = this.contentService.getContent('blog');
-}
+export class BlogComponent {}

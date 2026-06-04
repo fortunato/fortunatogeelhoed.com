@@ -1,0 +1,37 @@
+/* Site footer — shared across the three variants. Semantic --jb-* tokens only. */
+
+.footer {
+	border-top: 1px solid var(--jb-color-border);
+	background: var(--jb-bg-secondary);
+	padding: var(--jb-space-xl) var(--jb-space-lg);
+}
+
+.footer-inner {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	gap: var(--jb-space-lg);
+}
+
+.footer-brand {
+	font-family: var(--jb-font-display);
+	font-weight: 700;
+	letter-spacing: -0.01em;
+}
+
+.footer-dot {
+	color: var(--jb-accent);
+}
+
+.footer-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--jb-space-lg);
+}
+
+.footer-legal {
+	width: 100%;
+	color: var(--jb-text-tertiary);
+	font-size: 0.8rem;
+}
