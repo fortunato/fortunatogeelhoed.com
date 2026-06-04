@@ -12,6 +12,13 @@
 			var(--jb-dur-slow) var(--jb-ease-standard);
 	}
 
+	/* Clear the fixed mobile bottom tab bar so content isn't hidden behind it. */
+	@media (max-width: 768px) {
+		body {
+			padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0));
+		}
+	}
+
 	/* Links */
 	a {
 		color: var(--jb-accent);

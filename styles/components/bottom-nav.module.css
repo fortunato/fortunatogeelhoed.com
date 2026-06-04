@@ -1,0 +1,53 @@
+/* Mobile-first primary navigation: a fixed bottom tab bar on narrow viewports
+   (the header's top-bar nav takes over on wide ones). Shared across the three
+   variants; semantic --jb-* tokens only. Body gets matching bottom padding in
+   base.css so content clears the bar. */
+
+.bottom-nav {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: var(--jb-z-header);
+	display: flex;
+	justify-content: space-around;
+	align-items: stretch;
+	background: color-mix(in srgb, var(--jb-bg-primary) 90%, transparent);
+	backdrop-filter: blur(20px);
+	border-top: 1px solid var(--jb-color-border);
+	padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.bottom-nav-item {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 3px;
+	padding: 0.5rem 0.25rem;
+	font-size: 0.62rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	text-decoration: none;
+	color: var(--jb-text-secondary);
+	transition: color var(--jb-dur-fast) var(--jb-ease-standard);
+}
+
+.bottom-nav-item[aria-current="page"] {
+	color: var(--jb-accent);
+}
+
+.bottom-nav-item jb-icon svg {
+	display: block;
+	width: 1.4rem;
+	height: 1.4rem;
+}
+
+/* Wide viewports: the top-bar nav in the header is the primary nav instead. */
+@media (min-width: 769px) {
+	.bottom-nav {
+		display: none;
+	}
+}

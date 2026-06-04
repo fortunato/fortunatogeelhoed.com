@@ -1,5 +1,6 @@
+import { NAV_ITEMS } from '@fg/shared';
 import styles from '@styles/components/header.module.css';
-import { Link } from 'react-router';
+import { Link, NavLink } from 'react-router';
 
 export function Header() {
 	return (
@@ -9,10 +10,11 @@ export function Header() {
 			</Link>
 			<div className={styles['header-right']}>
 				<nav className={styles.nav}>
-					<Link to="/services">Services</Link>
-					<Link to="/work">Work</Link>
-					<Link to="/blog">Blog</Link>
-					<Link to="/contact">Contact</Link>
+					{NAV_ITEMS.map((item) => (
+						<NavLink key={item.path} to={item.path} end={item.path === '/'}>
+							{item.label}
+						</NavLink>
+					))}
 				</nav>
 				<div className={styles.sep} />
 				<div className={styles.switcher}>

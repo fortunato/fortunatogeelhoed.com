@@ -1,10 +1,11 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { NAV_ITEMS } from '@fg/shared';
 
 @Component({
 	selector: 'app-header',
 	standalone: true,
-	imports: [RouterLink],
+	imports: [RouterLink, RouterLinkActive],
 	// Allow the <jb-*> custom elements in this template.
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	styleUrl: '../../../../styles/components/header.module.css',
@@ -15,10 +16,14 @@ import { RouterLink } from '@angular/router';
 			</a>
 			<div class="header-right">
 				<nav class="nav">
-					<a routerLink="/services">Services</a>
-					<a routerLink="/work">Work</a>
-					<a routerLink="/blog">Blog</a>
-					<a routerLink="/contact">Contact</a>
+					@for (item of navItems; track item.path) {
+						<a
+							[routerLink]="item.path"
+							routerLinkActive
+							[routerLinkActiveOptions]="{ exact: item.path === '/' }"
+							ariaCurrentWhenActive="page"
+						>{{ item.label }}</a>
+					}
 				</nav>
 				<div class="sep"></div>
 				<div class="switcher">
@@ -34,4 +39,6 @@ import { RouterLink } from '@angular/router';
 		</header>
 	`,
 })
-export class HeaderComponent {}
+export class HeaderComponent {
+	protected readonly navItems = NAV_ITEMS;
+}

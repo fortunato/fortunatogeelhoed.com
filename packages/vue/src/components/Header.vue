@@ -5,10 +5,9 @@
 		</RouterLink>
 		<div :class="styles['header-right']">
 			<nav :class="styles.nav">
-				<RouterLink to="/services">Services</RouterLink>
-				<RouterLink to="/work">Work</RouterLink>
-				<RouterLink to="/blog">Blog</RouterLink>
-				<RouterLink to="/contact">Contact</RouterLink>
+				<RouterLink v-for="item in navItems" :key="item.path" :to="item.path">
+					{{ item.label }}
+				</RouterLink>
 			</nav>
 			<div :class="styles.sep" />
 			<div :class="styles.switcher">
@@ -25,6 +24,9 @@
 </template>
 
 <script setup lang="ts">
+import { NAV_ITEMS } from '@fg/shared';
 import styles from '@styles/components/header.module.css';
 import { RouterLink } from 'vue-router';
+
+const navItems = NAV_ITEMS;
 </script>
