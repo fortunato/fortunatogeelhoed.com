@@ -6,6 +6,7 @@
 // Angular's instance cannot import CSS/JS this way (its builder differs), so it reproduces
 // the equivalent wiring in its own preview — the one deliberate divergence (see research §2).
 import '../styles/layers.css';
+import '../styles/fonts.css';
 import '../styles/reset.css';
 import '../styles/tokens.css';
 import '../styles/base.css';

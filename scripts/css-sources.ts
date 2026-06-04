@@ -22,6 +22,7 @@ export function cssSourceFiles(): string[] {
 
 	return [
 		resolve(STYLES_DIR, 'layers.css'),
+		resolve(STYLES_DIR, 'fonts.css'),
 		resolve(STYLES_DIR, 'reset.css'),
 		resolve(STYLES_DIR, 'tokens.css'),
 		resolve(STYLES_DIR, 'base.css'),

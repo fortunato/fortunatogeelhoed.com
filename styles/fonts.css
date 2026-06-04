@@ -1,0 +1,29 @@
+/* Self-hosted variable fonts. The .woff2 files ship in static/fonts and are
+   preloaded by the shell (packages/api/src/shell.ts); these @font-face rules are
+   what actually bind them to the family names referenced by the --jb-font-* tokens.
+   @font-face is collected globally and is not subject to @layer, so this loads early.
+   font-display: swap keeps text visible during load (protects LCP). */
+
+@font-face {
+	font-family: "Rubik";
+	src: url("/assets/fonts/rubik-variable.woff2") format("woff2");
+	font-weight: 300 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "Space Grotesk";
+	src: url("/assets/fonts/space-grotesk-variable.woff2") format("woff2");
+	font-weight: 300 700;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: "JetBrains Mono";
+	src: url("/assets/fonts/jetbrains-mono-variable.woff2") format("woff2");
+	font-weight: 100 800;
+	font-style: normal;
+	font-display: swap;
+}
