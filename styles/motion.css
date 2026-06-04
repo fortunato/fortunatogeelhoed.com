@@ -127,7 +127,9 @@
 			body::before {
 				content: "";
 				position: fixed;
-				inset: 0 0 auto 0;
+				top: calc(var(--jb-size-nav-height) - 3px);
+				left: 0;
+				right: 0;
 				height: 3px;
 				z-index: var(--jb-z-overlay);
 				background: var(--jb-accent);
