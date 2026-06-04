@@ -118,3 +118,30 @@
 		}
 	}
 }
+
+/* Reading-progress bar — a zero-markup, no-JS scroll-driven indicator pinned to the top of
+   every page. Gated by @supports (older browsers just show no bar) and reduced motion. */
+@layer base {
+	@media (prefers-reduced-motion: no-preference) {
+		@supports (animation-timeline: scroll()) {
+			body::before {
+				content: "";
+				position: fixed;
+				inset: 0 0 auto 0;
+				height: 3px;
+				z-index: var(--jb-z-overlay);
+				background: var(--jb-accent);
+				transform: scaleX(0);
+				transform-origin: 0 50%;
+				animation: jb-reading-progress linear;
+				animation-timeline: scroll(root block);
+			}
+
+			@keyframes jb-reading-progress {
+				to {
+					transform: scaleX(1);
+				}
+			}
+		}
+	}
+}
