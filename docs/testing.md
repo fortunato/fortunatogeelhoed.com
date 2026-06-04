@@ -37,9 +37,13 @@ bun run test:unit       # node + dom — fast, no browser
 bun run test:component   # the four real-browser component projects
 bun run test:a11y       # WCAG 2.1 AA scan over every route × framework (needs a prior `bun run build`)
 bun run test:e2e        # end-to-end against the production server (needs a prior `bun run build`)
-bun run test:visual     # cross-framework visual parity
-bun run test:storybook  # per-story accessibility + smoke
+bun run test:visual     # cross-framework visual parity (needs a prior `bun run build-storybook`)
+bun run test:storybook  # per-story accessibility + smoke (needs a prior `bun run build-storybook`)
 ```
+
+`test:storybook` serves the assembled showcase and runs the runner once per technology
+section (React, Vue, Angular, web-components), since the catalogue is a composition and each
+section hosts its own stories.
 
 Scope to one tier while iterating:
 
@@ -55,4 +59,4 @@ bunx vitest run packages/shared/src/validation/contact.test.ts
 - Name component tests `*.browser.test.*` so the non-browser projects never pick them up.
 - The accessibility gate is **zero-tolerance at WCAG 2.1 AA** — any violation fails the build.
 - Visual snapshots are platform-specific; generate and check them on Linux so they match CI.
-- The `a11y` and `e2e` tiers run against the production build (`bun run build` first); CI builds before running them.
+- The `a11y` and `e2e` tiers run against the production build (`bun run build` first); the `visual` and `storybook` tiers run against the built showcase (`bun run build-storybook` first). CI builds before running them.

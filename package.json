@@ -36,7 +36,7 @@
 		"test:a11y": "bun run scripts/a11y-scan.ts",
 		"test:e2e": "playwright test --config tests/e2e/playwright.config.ts",
 		"test:visual": "playwright test --config tests/visual/playwright.config.ts",
-		"test:storybook": "test-storybook",
+		"test:storybook": "bun run scripts/test-storybook.ts",
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"typecheck": "nx run-many -t typecheck && bun run typecheck:tooling",
