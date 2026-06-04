@@ -17,13 +17,14 @@ const alias = {
 	'@styles': resolve(root, 'styles'),
 };
 
-const browser = (name: string) =>
+// Each browser project needs a uniquely named chromium instance, otherwise Vitest
+// can't tell two single-instance chromium projects apart when they run together.
+const browser = (instance: string) =>
 	({
 		enabled: true,
 		provider: 'playwright' as const,
 		headless: true,
-		instances: [{ browser: 'chromium' }],
-		name,
+		instances: [{ browser: 'chromium', name: instance }],
 	}) as const;
 
 export default defineConfig({
@@ -57,7 +58,7 @@ export default defineConfig({
 				test: {
 					name: 'browser-shared',
 					include: ['packages/shared/src/**/*.browser.test.ts'],
-					browser: browser('browser-shared'),
+					browser: browser('shared'),
 				},
 			},
 			{
@@ -66,7 +67,7 @@ export default defineConfig({
 				test: {
 					name: 'browser-react',
 					include: ['packages/react/src/**/*.browser.test.{ts,tsx}'],
-					browser: browser('browser-react'),
+					browser: browser('react'),
 				},
 			},
 			{
@@ -81,7 +82,7 @@ export default defineConfig({
 				test: {
 					name: 'browser-vue',
 					include: ['packages/vue/src/**/*.browser.test.ts'],
-					browser: browser('browser-vue'),
+					browser: browser('vue'),
 				},
 			},
 			{
@@ -89,9 +90,10 @@ export default defineConfig({
 				resolve: { alias },
 				test: {
 					name: 'browser-angular',
+					globals: true,
 					include: ['packages/angular/src/**/*.browser.test.ts'],
 					setupFiles: ['packages/angular/src/test-setup.ts'],
-					browser: browser('browser-angular'),
+					browser: browser('angular'),
 				},
 			},
 		],

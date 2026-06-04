@@ -77,6 +77,7 @@
 		"@analogjs/vitest-angular": "^2.6.0",
 		"@angular/animations": "^21.2.15",
 		"@angular/build": "^21.2.13",
+		"@angular/cdk": "^21.0.0",
 		"@angular/cli": "21.2.13",
 		"@angular/compiler-cli": "^21.2.15",
 		"@biomejs/biome": "^1.9.0",
