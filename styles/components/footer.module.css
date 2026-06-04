@@ -30,6 +30,20 @@
 	gap: var(--jb-space-lg);
 }
 
+.footer-links a {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--jb-space-sm);
+}
+
+/* The glyph is rendered by <jb-icon> (light DOM), so this reaches its inner <svg>.
+   Tag selectors stay global under CSS Modules; only the class name is scoped. */
+.footer-links a svg {
+	width: 1.1em;
+	height: 1.1em;
+	flex-shrink: 0;
+}
+
 .footer-legal {
 	width: 100%;
 	color: var(--jb-text-tertiary);

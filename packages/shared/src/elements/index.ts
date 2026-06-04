@@ -9,6 +9,7 @@
 // Registration is an explicit `registerElements()` call rather than a top-level side effect:
 // a bare side-effecting import gets tree-shaken out by some bundlers (Angular's build dropped
 // it entirely), whereas an invoked function is always retained.
+import { JbIcon } from './jb-icon';
 import { JbInput } from './jb-input';
 import { JbTechTag } from './jb-tech-tag';
 import { JbTextarea } from './jb-textarea';
@@ -24,6 +25,7 @@ export function registerElements(): void {
 	define('jb-textarea', JbTextarea);
 	define('jb-theme-toggle', JbThemeToggle);
 	define('jb-tech-tag', JbTechTag);
+	define('jb-icon', JbIcon);
 }
 
-export { JbInput, JbTextarea, JbThemeToggle, JbTechTag };
+export { JbInput, JbTextarea, JbThemeToggle, JbTechTag, JbIcon };

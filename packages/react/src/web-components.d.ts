@@ -23,6 +23,7 @@ declare module 'react' {
 		interface IntrinsicElements {
 			'jb-theme-toggle': CustomElement;
 			'jb-tech-tag': CustomElement;
+			'jb-icon': CustomElement<{ name?: string }>;
 			'jb-input': CustomElement<JbFieldProps & { type?: string; autocomplete?: string }>;
 			'jb-textarea': CustomElement<JbFieldProps & { rows?: number }>;
 		}

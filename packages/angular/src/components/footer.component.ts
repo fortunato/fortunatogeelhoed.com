@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 
 @Component({
 	selector: 'app-footer',
 	standalone: true,
+	// Allow the <jb-icon> custom element in this template.
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	styleUrl: '../../../../styles/components/footer.module.css',
 	template: `
 		<footer class="footer">
@@ -11,9 +13,14 @@ import { Component } from '@angular/core';
 					FORTUNATO<span class="footer-dot">.</span>GEELHOED
 				</span>
 				<nav class="footer-links" aria-label="Social and external links">
-					<a href="https://www.linkedin.com/in/fortunatogeelhoed/">LinkedIn</a>
-					<a href="https://github.com/fortunatogeelhoed">GitHub</a>
-					<a href="mailto:info@jiggybit.com">Email</a>
+					<a href="https://www.linkedin.com/in/fortunatogeelhoed/">
+						<jb-icon name="linkedin"></jb-icon>
+						LinkedIn
+					</a>
+					<a href="https://github.com/fortunato">
+						<jb-icon name="github"></jb-icon>
+						GitHub
+					</a>
 				</nav>
 				<p class="footer-legal">
 					© {{ year }} JiggyBit S.L. — built in React, Vue and Angular on one backend.

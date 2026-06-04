@@ -8,9 +8,14 @@ export function Footer() {
 					FORTUNATO<span className={styles['footer-dot']}>.</span>GEELHOED
 				</span>
 				<nav className={styles['footer-links']} aria-label="Social and external links">
-					<a href="https://www.linkedin.com/in/fortunatogeelhoed/">LinkedIn</a>
-					<a href="https://github.com/fortunatogeelhoed">GitHub</a>
-					<a href="mailto:info@jiggybit.com">Email</a>
+					<a href="https://www.linkedin.com/in/fortunatogeelhoed/">
+						<jb-icon name="linkedin" />
+						LinkedIn
+					</a>
+					<a href="https://github.com/fortunato">
+						<jb-icon name="github" />
+						GitHub
+					</a>
 				</nav>
 				<p className={styles['footer-legal']}>
 					© {new Date().getFullYear()} JiggyBit S.L. — built in React, Vue and Angular on
