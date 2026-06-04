@@ -1,0 +1,60 @@
+name: CI
+
+# Runs the full test suite on every push and pull request and blocks on failure.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  # Fast tier: pure logic + real-browser component tests. No site build required.
+  unit-and-component:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Install Playwright browser
+        run: bunx playwright install --with-deps chromium
+      - name: Unit tests
+        run: bun run test:unit
+      - name: Component tests
+        run: bun run test:component
+
+  # Integration tier: accessibility, end-to-end, and visual parity run against the built
+  # site. Pinned to Linux so committed visual baselines match.
+  integration:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: .bun-version
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Install Playwright browser
+        run: bunx playwright install --with-deps chromium
+      - name: Build the site
+        run: bun run build
+      - name: Accessibility scan (WCAG 2.1 AA)
+        run: bun run test:a11y
+      - name: End-to-end tests
+        run: bun run test:e2e
+      - name: Build the showcase
+        run: bun run build-storybook
+      - name: Cross-framework visual parity
+        run: bun run test:visual
+      - name: Per-story accessibility + smoke
+        run: bun run test:storybook
