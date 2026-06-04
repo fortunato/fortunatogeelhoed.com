@@ -162,7 +162,7 @@
 			"client": "Crypto Trading System",
 			"role": "Parallel to employment",
 			"type": "side-project",
-			"highlight": "Runs alongside the day job — initiative, not a break from work",
+			"highlight": "Autonomous execution, exchange APIs, homelab infra",
 			"tech": {
 				"frontend": [
 					"React",
@@ -226,6 +226,7 @@
 			"client": "Deloitte Digital NL",
 			"role": "Senior Frontend Engineer",
 			"type": "employee",
+			"highlight": "Bridged Melbourne & Amsterdam frontend teams",
 			"tech": {
 				"frontend": [
 					"React",
@@ -246,6 +247,7 @@
 			"client": "Deloitte Digital AU",
 			"role": "Frontend Lead (Manager)",
 			"type": "employee",
+			"highlight": "Built CI/CD pipelines adopted across the practice, and a form framework reused across projects",
 			"tech": {
 				"frontend": [
 					"React",
@@ -268,7 +270,7 @@
 			"startYear": 2013,
 			"endYear": 2016,
 			"client": "Deloitte Digital AU",
-			"role": "Senior Frontend Engineer",
+			"role": "Frontend Engineer (Senior Consultant)",
 			"type": "employee",
 			"tech": {
 				"frontend": [
@@ -294,7 +296,7 @@
 			"startYear": 2013,
 			"endYear": 2013,
 			"client": "Visual Jazz Isobar",
-			"role": "Frontend Developer",
+			"role": "Senior Frontend Engineer",
 			"type": "independent",
 			"tech": {
 				"frontend": [
@@ -315,7 +317,7 @@
 			"startYear": 2012,
 			"endYear": 2013,
 			"client": "Limelight Digital",
-			"role": "Full-Stack Developer",
+			"role": "Senior Full-Stack Developer",
 			"type": "employee",
 			"tech": {
 				"frontend": [
@@ -340,7 +342,7 @@
 			"startYear": 2010,
 			"endYear": 2012,
 			"client": "Cru Digital",
-			"role": "Full-Stack Developer",
+			"role": "Senior Full-Stack Developer",
 			"type": "employee",
 			"highlight": [
 				"First single-page apps — hand-rolled in jQuery, a plugin per view — as responsive design took hold",
@@ -369,7 +371,7 @@
 			"startYear": 2007,
 			"endYear": 2010,
 			"client": "iFactory",
-			"role": "Web Developer",
+			"role": "Lead Full-Stack Engineer",
 			"type": "employee",
 			"highlight": "Lived through the Prototype.js → MooTools → jQuery era",
 			"tech": {
@@ -425,6 +427,7 @@
 			"client": "HIDS",
 			"role": "Web Developer",
 			"type": "employee",
+			"highlight": "XMLHttpRequest was the new hotness",
 			"tech": {
 				"frontend": [
 					"JavaScript",
@@ -448,7 +451,7 @@
 			"client": "Custom CMS v1",
 			"role": "Built from scratch",
 			"type": "side-project",
-			"highlight": "First CMS, hand-built",
+			"highlight": "Full CMS built from scratch in PHP",
 			"tech": {
 				"backend": [
 					"PHP",

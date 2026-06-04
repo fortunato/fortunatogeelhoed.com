@@ -97,7 +97,7 @@ const timeline: TimelineData = {
 			client: 'Crypto Trading System',
 			role: 'Parallel to employment',
 			type: 'side-project',
-			highlight: 'Runs alongside the day job — initiative, not a break from work',
+			highlight: 'Autonomous execution, exchange APIs, homelab infra',
 			tech: {
 				frontend: ['React', 'Next.js', 'Anychart'],
 				backend: ['Node.js', 'PostgreSQL'],
@@ -130,6 +130,7 @@ const timeline: TimelineData = {
 			client: 'Deloitte Digital NL',
 			role: 'Senior Frontend Engineer',
 			type: 'employee',
+			highlight: 'Bridged Melbourne & Amsterdam frontend teams',
 			tech: {
 				frontend: ['React', 'Redux', 'ES2016'],
 				backend: ['AEM'],
@@ -144,6 +145,8 @@ const timeline: TimelineData = {
 			client: 'Deloitte Digital AU',
 			role: 'Frontend Lead (Manager)',
 			type: 'employee',
+			highlight:
+				'Built CI/CD pipelines adopted across the practice, and a form framework reused across projects',
 			tech: {
 				frontend: ['React', 'ES2016', 'Webpack'],
 				backend: ['Sitecore', 'SQL Server'],
@@ -157,7 +160,7 @@ const timeline: TimelineData = {
 			startYear: 2013,
 			endYear: 2016,
 			client: 'Deloitte Digital AU',
-			role: 'Senior Frontend Engineer',
+			role: 'Frontend Engineer (Senior Consultant)',
 			type: 'employee',
 			tech: {
 				frontend: ['AngularJS', 'Backbone', 'jQuery', 'Highcharts', 'SCSS'],
@@ -172,7 +175,7 @@ const timeline: TimelineData = {
 			startYear: 2013,
 			endYear: 2013,
 			client: 'Visual Jazz Isobar',
-			role: 'Frontend Developer',
+			role: 'Senior Frontend Engineer',
 			type: 'independent',
 			tech: {
 				frontend: ['AngularJS', 'RequireJS'],
@@ -186,7 +189,7 @@ const timeline: TimelineData = {
 			startYear: 2012,
 			endYear: 2013,
 			client: 'Limelight Digital',
-			role: 'Full-Stack Developer',
+			role: 'Senior Full-Stack Developer',
 			type: 'employee',
 			tech: {
 				frontend: ['jQuery', 'Backbone', 'Marionette', 'HTML5', 'CSS'],
@@ -200,7 +203,7 @@ const timeline: TimelineData = {
 			startYear: 2010,
 			endYear: 2012,
 			client: 'Cru Digital',
-			role: 'Full-Stack Developer',
+			role: 'Senior Full-Stack Developer',
 			type: 'employee',
 			highlight: [
 				'First single-page apps — hand-rolled in jQuery, a plugin per view — as responsive design took hold',
@@ -219,7 +222,7 @@ const timeline: TimelineData = {
 			startYear: 2007,
 			endYear: 2010,
 			client: 'iFactory',
-			role: 'Web Developer',
+			role: 'Lead Full-Stack Engineer',
 			type: 'employee',
 			highlight: 'Lived through the Prototype.js → MooTools → jQuery era',
 			tech: {
@@ -252,6 +255,7 @@ const timeline: TimelineData = {
 			client: 'HIDS',
 			role: 'Web Developer',
 			type: 'employee',
+			highlight: 'XMLHttpRequest was the new hotness',
 			tech: {
 				frontend: ['JavaScript', 'AJAX'],
 				backend: ['PHP', 'MySQL'],
@@ -267,7 +271,7 @@ const timeline: TimelineData = {
 			client: 'Custom CMS v1',
 			role: 'Built from scratch',
 			type: 'side-project',
-			highlight: 'First CMS, hand-built',
+			highlight: 'Full CMS built from scratch in PHP',
 			tech: {
 				backend: ['PHP', 'MySQL'],
 				cicd: ['SFTP'],
