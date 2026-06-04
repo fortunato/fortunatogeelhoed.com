@@ -2,7 +2,7 @@
 	<section>
 		<div class="container">
 			<span class="section-label">About</span>
-			<h2 class="section-title">{{ content?.title ?? 'Fortunato Geelhoed' }}</h2>
+			<h1 class="section-title">{{ content?.title ?? 'Fortunato Geelhoed' }}</h1>
 			<p style="color: var(--jb-text-secondary)">{{ content?.body ?? 'About page content will be loaded from the content pipeline.' }}</p>
 		</div>
 	</section>

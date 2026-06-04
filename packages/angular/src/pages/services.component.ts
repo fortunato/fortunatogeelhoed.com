@@ -8,7 +8,7 @@ import { ContentService } from '../content.service';
 		<section>
 			<div class="container">
 				<span class="section-label">What I Do</span>
-				<h2 class="section-title">{{ content?.title ?? 'Services' }}</h2>
+				<h1 class="section-title">{{ content?.title ?? 'Services' }}</h1>
 				<p style="color: var(--jb-text-secondary)">{{ content?.body ?? 'Services page content will be loaded from the content pipeline.' }}</p>
 			</div>
 		</section>

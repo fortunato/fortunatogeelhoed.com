@@ -101,7 +101,7 @@
 		font-size: 0.65rem;
 		padding: 3px 8px;
 		background: var(--jb-accent-soft);
-		color: var(--jb-accent);
+		color: var(--jb-accent-on-soft);
 		border-radius: var(--jb-radius-sm);
 		font-weight: 500;
 	}

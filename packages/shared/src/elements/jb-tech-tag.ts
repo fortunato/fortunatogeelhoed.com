@@ -21,7 +21,7 @@ export class JbTechTag extends LitElement {
 			padding: 3px 8px;
 			border-radius: var(--jb-radius-sm);
 			background: var(--jb-accent-soft);
-			color: var(--jb-accent);
+			color: var(--jb-accent-on-soft);
 		}
 	`;
 

@@ -8,7 +8,7 @@ export function Contact() {
 		<section>
 			<div className="container">
 				<span className="section-label">Available Now</span>
-				<h2 className="section-title">{content?.title ?? "Let's work together."}</h2>
+				<h1 className="section-title">{content?.title ?? "Let's work together."}</h1>
 				<p style={{ color: 'var(--jb-text-secondary)' }}>
 					{content?.body ??
 						'Get in touch for consulting, freelance projects, or collaboration.'}
