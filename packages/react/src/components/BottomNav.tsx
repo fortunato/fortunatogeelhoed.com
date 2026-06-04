@@ -12,6 +12,7 @@ export function BottomNav() {
 					key={item.path}
 					to={item.path}
 					end={item.path === '/'}
+					viewTransition
 					className={styles['bottom-nav-item']}
 				>
 					<jb-icon name={item.icon} />

@@ -6,9 +6,9 @@
 			</div>
 		</div>
 		<div :class="[styles['hero-content'], 'container']">
-			<p class="section-label">{{ home.hero.tagline }}</p>
-			<h1 :class="styles['hero-name']" data-reveal>{{ home.hero.name }}</h1>
-			<p :class="styles['hero-statement']" data-reveal>{{ home.hero.statement }}</p>
+			<p class="section-label" data-enter="1">{{ home.hero.tagline }}</p>
+			<h1 :class="styles['hero-name']" data-enter="2">{{ home.hero.name }}</h1>
+			<p :class="styles['hero-statement']" data-enter="3">{{ home.hero.statement }}</p>
 		</div>
 	</section>
 

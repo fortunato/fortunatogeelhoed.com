@@ -60,4 +60,61 @@
 			transform: translateY(1.5rem);
 		}
 	}
+
+	/* Signature hero entrance on load (the hero sits above the fold, so a scroll
+	   reveal would never fire). Staggered; suppressed under reduced motion. */
+	@media (prefers-reduced-motion: no-preference) {
+		[data-enter] {
+			animation: jb-enter var(--jb-dur-slow) var(--jb-ease-emphasized) both;
+		}
+		[data-enter="1"] {
+			animation-delay: 0.05s;
+		}
+		[data-enter="2"] {
+			animation-delay: 0.15s;
+		}
+		[data-enter="3"] {
+			animation-delay: 0.25s;
+		}
+	}
+
+	@keyframes jb-enter {
+		from {
+			opacity: 0;
+			transform: translateY(1.25rem);
+		}
+	}
+
+	/* Same-document page transitions (home ↔ timeline): the main content slides as a
+	   spatial move while the shell cross-fades. The router calls startViewTransition;
+	   browsers without it navigate instantly. Reduced motion opts out. */
+	@media (prefers-reduced-motion: no-preference) {
+		@supports (view-transition-name: none) {
+			main {
+				view-transition-name: jb-main;
+			}
+
+			::view-transition-old(jb-main) {
+				animation: jb-page-out var(--jb-dur-base) var(--jb-ease-emphasized) both;
+			}
+
+			::view-transition-new(jb-main) {
+				animation: jb-page-in var(--jb-dur-base) var(--jb-ease-emphasized) both;
+			}
+		}
+	}
+
+	@keyframes jb-page-out {
+		to {
+			opacity: 0;
+			transform: translateX(-2rem);
+		}
+	}
+
+	@keyframes jb-page-in {
+		from {
+			opacity: 0;
+			transform: translateX(2rem);
+		}
+	}
 }

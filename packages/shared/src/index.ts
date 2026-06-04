@@ -19,3 +19,4 @@ export type { HomeContent, ServiceOffering, ProofPoint, WritingTeaserItem } from
 export type { Theme } from './theme';
 export { getCurrentTheme, setTheme, toggleTheme } from './theme';
 export { initSwitchTransition } from './disintegrate';
+export { initSmoothScroll, destroySmoothScroll } from './smooth-scroll';

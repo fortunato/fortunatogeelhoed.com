@@ -1,6 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, type OnDestroy, afterNextRender } from '@angular/core';
 import type { Lane, TimelineData, TimelineEntry } from '@fg/shared';
-import { LANE_LABELS, axisTicks, ribbonRows } from '@fg/shared';
+import {
+	LANE_LABELS,
+	axisTicks,
+	destroySmoothScroll,
+	initSmoothScroll,
+	ribbonRows,
+} from '@fg/shared';
 import timelineData from '../../../content/timeline.json';
 
 const data = timelineData as TimelineData;
@@ -111,7 +117,17 @@ const data = timelineData as TimelineData;
 		</section>
 	`,
 })
-export class TimelineComponent {
+export class TimelineComponent implements OnDestroy {
+	constructor() {
+		afterNextRender(() => {
+			initSmoothScroll();
+		});
+	}
+
+	ngOnDestroy(): void {
+		destroySmoothScroll();
+	}
+
 	protected readonly data = data;
 	protected readonly rows = ribbonRows(data);
 	protected readonly ticks = axisTicks(data);

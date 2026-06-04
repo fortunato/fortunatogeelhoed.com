@@ -11,7 +11,12 @@ export function Header() {
 			<div className={styles['header-right']}>
 				<nav className={styles.nav}>
 					{NAV_ITEMS.map((item) => (
-						<NavLink key={item.path} to={item.path} end={item.path === '/'}>
+						<NavLink
+							key={item.path}
+							to={item.path}
+							end={item.path === '/'}
+							viewTransition
+						>
 							{item.label}
 						</NavLink>
 					))}

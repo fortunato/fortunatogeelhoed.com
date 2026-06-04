@@ -1,6 +1,13 @@
 import type { Lane, TimelineData, TimelineEntry } from '@fg/shared';
-import { LANE_LABELS, axisTicks, ribbonRows } from '@fg/shared';
+import {
+	LANE_LABELS,
+	axisTicks,
+	destroySmoothScroll,
+	initSmoothScroll,
+	ribbonRows,
+} from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
+import { useEffect } from 'react';
 import timelineData from '../../../content/timeline.json';
 
 const data = timelineData as TimelineData;
@@ -40,6 +47,11 @@ function Tags({ items }: { items: string[] }) {
 }
 
 export function Timeline() {
+	useEffect(() => {
+		initSmoothScroll();
+		return () => destroySmoothScroll();
+	}, []);
+
 	return (
 		<section className={styles.page}>
 			<div className="container">

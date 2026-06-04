@@ -20,11 +20,13 @@ export function Home() {
 					))}
 				</div>
 				<div className={`${styles['hero-content']} container`}>
-					<p className="section-label">{home.hero.tagline}</p>
-					<h1 className={styles['hero-name']} data-reveal>
+					<p className="section-label" data-enter="1">
+						{home.hero.tagline}
+					</p>
+					<h1 className={styles['hero-name']} data-enter="2">
 						{home.hero.name}
 					</h1>
-					<p className={styles['hero-statement']} data-reveal>
+					<p className={styles['hero-statement']} data-enter="3">
 						{home.hero.statement}
 					</p>
 				</div>
