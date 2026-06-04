@@ -46,7 +46,7 @@ async function main() {
 				await page.goto(`${ORIGIN}${route.path}`, { waitUntil: 'networkidle' });
 				await injectAxe(page);
 				const violations = await getViolations(page, undefined, {
-					axeOptions: { runOnly: { type: 'tag', values: WCAG_2_1_AA } },
+					runOnly: { type: 'tag', values: WCAG_2_1_AA },
 				});
 				if (violations.length > 0) {
 					failures += violations.length;

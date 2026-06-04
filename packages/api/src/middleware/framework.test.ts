@@ -5,13 +5,15 @@ import { type AppEnv, frameworkMiddleware } from './framework';
 // Resolve the framework the way a request does — the middleware reads the `framework`
 // cookie and falls back to react for anything absent or unrecognised. A tiny app that
 // echoes the resolved value lets us assert that contract through the real request path.
-function resolveFramework(cookie?: string): Promise<string> {
+async function resolveFramework(cookie?: string): Promise<string> {
 	const app = new Hono<AppEnv>();
 	app.use('*', frameworkMiddleware);
 	app.get('/', (c) => c.text(c.get('framework')));
-	return app
-		.request('/', cookie ? { headers: { Cookie: `framework=${cookie}` } } : undefined)
-		.then((res) => res.text());
+	const res = await app.request(
+		'/',
+		cookie ? { headers: { Cookie: `framework=${cookie}` } } : undefined,
+	);
+	return res.text();
 }
 
 describe('frameworkMiddleware', () => {
