@@ -255,18 +255,6 @@
 	margin: 4px 0;
 }
 
-/* Side projects branch off the spine: a dashed amber ring node instead of a solid dot. */
-.entry[data-type="side-project"]::before {
-	width: 15px;
-	height: 15px;
-	top: 1.05rem;
-	left: calc(0.4rem - 1.5px);
-	background: var(--jb-bg-primary);
-	border: 2px dashed #facc15;
-	box-shadow: 0 0 0 3px var(--jb-bg-primary), 0 0 12px
-		color-mix(in srgb, #facc15 35%, transparent);
-}
-
 .type-icon {
 	width: 0.85em;
 	height: 0.85em;

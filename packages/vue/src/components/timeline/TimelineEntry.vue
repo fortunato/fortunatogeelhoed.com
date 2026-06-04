@@ -6,7 +6,7 @@
 			<div :class="styles['spine-role']">{{ entry.role }}</div>
 			<span :class="styles['spine-type']" :data-type="entry.type">
 				<svg v-if="entry.type === 'side-project'" :class="styles['type-icon']">
-					<use href="#i-git" />
+					<use href="#i-branch" />
 				</svg>
 				{{ typeLabel[entry.type] }}
 			</span>

@@ -45,7 +45,7 @@ export function TimelineEntry({ entry }: { entry: Entry }) {
 				<span className={styles['spine-type']} data-type={entry.type}>
 					{entry.type === 'side-project' ? (
 						<svg className={styles['type-icon']}>
-							<use href="#i-git" />
+							<use href="#i-branch" />
 						</svg>
 					) : null}
 					{TYPE_LABEL[entry.type]}

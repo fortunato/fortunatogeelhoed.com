@@ -35,7 +35,7 @@ const timeline: TimelineData = {
 				frontend: ['React', 'SCSS Modules'],
 				backend: ['Java', 'Spring Boot'],
 				cicd: ['Docker'],
-				ai: ['Claude Code'],
+				ai: ['Claude Code', 'Ollama'],
 			},
 		},
 		{
@@ -52,7 +52,7 @@ const timeline: TimelineData = {
 				frontend: ['React', 'Mantine UI', 'Vite', 'Recharts', 'Nx'],
 				backend: ['NestJS', 'TimescaleDB', 'WebSockets'],
 				cicd: ['Gitea Actions', 'Docker'],
-				ai: ['Claude Code', 'OpenClaw', 'MCP'],
+				ai: ['Claude Code', 'MCP'],
 			},
 		},
 		{
@@ -66,6 +66,7 @@ const timeline: TimelineData = {
 			type: 'side-project',
 			highlight: 'Published to PyPI with zero prior Python — built with Claude Code',
 			tech: {
+				frontend: ['Angular', 'RxJS', 'lightweight-charts'],
 				backend: ['Python', 'PyPI'],
 				cicd: ['GitHub Actions'],
 				ai: ['Claude Code', 'MCP'],
@@ -83,7 +84,7 @@ const timeline: TimelineData = {
 			highlight: 'Led frontend across multiple teams; monorepo + feature-sliced architecture',
 			tech: {
 				frontend: ['React', 'Redux', 'TypeScript', 'Nx', 'GraphQL', 'Storybook'],
-				backend: ['NestJS', 'Express', 'Azure', 'PostgreSQL', 'PostGIS'],
+				backend: ['NestJS', 'RxJS', 'Express', 'Azure', 'PostgreSQL', 'PostGIS'],
 				cicd: ['GitLab CI', 'Azure Pipelines', 'GitHub Actions', 'Docker'],
 				ai: ['Copilot', 'ChatGPT', 'ChatGPT API'],
 			},
@@ -99,10 +100,10 @@ const timeline: TimelineData = {
 			type: 'side-project',
 			highlight: 'Autonomous execution, exchange APIs, homelab infra',
 			tech: {
-				frontend: ['React', 'Next.js', 'Anychart'],
+				frontend: ['React', 'Next.js', 'Anychart', 'RxJS'],
 				backend: ['Node.js', 'PostgreSQL'],
 				cicd: ['Bitbucket', 'Jenkins', 'Gitea Actions', 'Pulumi', 'k3s'],
-				ai: ['ChatGPT API', 'Claude Code'],
+				ai: ['ChatGPT API', 'Claude Code', 'MCP', 'OpenClaw'],
 			},
 		},
 		{
@@ -151,7 +152,7 @@ const timeline: TimelineData = {
 			highlight:
 				'Built CI/CD pipelines adopted across the practice, and a form framework reused across projects',
 			tech: {
-				frontend: ['React', 'ES2016', 'Webpack'],
+				frontend: ['React', 'ES2016', 'Webpack', 'SCSS'],
 				backend: ['Sitecore', 'SQL Server'],
 				cicd: ['Bamboo'],
 			},
@@ -165,10 +166,11 @@ const timeline: TimelineData = {
 			client: 'Deloitte Digital AU',
 			role: 'Frontend Engineer (Senior Consultant)',
 			type: 'employee',
+			highlight: 'Brought parallel Gulp builds to the frontend guild',
 			tech: {
 				frontend: ['AngularJS', 'Backbone', 'jQuery', 'Highcharts', 'SCSS'],
 				backend: ['Sitecore', 'SQL Server'],
-				cicd: ['Bamboo'],
+				cicd: ['Bamboo', 'Grunt', 'Gulp', 'Yeoman', 'Middleman'],
 			},
 		},
 		{
@@ -180,9 +182,11 @@ const timeline: TimelineData = {
 			client: 'Visual Jazz Isobar',
 			role: 'Senior Frontend Engineer',
 			type: 'independent',
+			highlight: 'First taste of build automation — Grunt for the front-end pipeline',
 			tech: {
 				frontend: ['AngularJS', 'RequireJS'],
 				backend: ['PHP', 'AEM', 'MySQL'],
+				cicd: ['Grunt'],
 			},
 		},
 		{
@@ -213,7 +217,7 @@ const timeline: TimelineData = {
 				'Early cloud — building CentOS AMI images from scratch on EC2',
 			],
 			tech: {
-				frontend: ['jQuery'],
+				frontend: ['jQuery', 'HTML5', 'CSS'],
 				backend: ['PHP', 'MySQL', 'SnappCMS', 'Magento'],
 				cicd: ['Mercurial', 'Amazon EC2'],
 			},

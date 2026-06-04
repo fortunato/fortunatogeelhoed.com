@@ -52,7 +52,8 @@
 					"Docker"
 				],
 				"ai": [
-					"Claude Code"
+					"Claude Code",
+					"Ollama"
 				]
 			}
 		},
@@ -85,7 +86,6 @@
 				],
 				"ai": [
 					"Claude Code",
-					"OpenClaw",
 					"MCP"
 				]
 			}
@@ -101,6 +101,11 @@
 			"type": "side-project",
 			"highlight": "Published to PyPI with zero prior Python — built with Claude Code",
 			"tech": {
+				"frontend": [
+					"Angular",
+					"RxJS",
+					"lightweight-charts"
+				],
 				"backend": [
 					"Python",
 					"PyPI"
@@ -135,6 +140,7 @@
 				],
 				"backend": [
 					"NestJS",
+					"RxJS",
 					"Express",
 					"Azure",
 					"PostgreSQL",
@@ -167,7 +173,8 @@
 				"frontend": [
 					"React",
 					"Next.js",
-					"Anychart"
+					"Anychart",
+					"RxJS"
 				],
 				"backend": [
 					"Node.js",
@@ -182,7 +189,9 @@
 				],
 				"ai": [
 					"ChatGPT API",
-					"Claude Code"
+					"Claude Code",
+					"MCP",
+					"OpenClaw"
 				]
 			}
 		},
@@ -255,7 +264,8 @@
 				"frontend": [
 					"React",
 					"ES2016",
-					"Webpack"
+					"Webpack",
+					"SCSS"
 				],
 				"backend": [
 					"Sitecore",
@@ -275,6 +285,7 @@
 			"client": "Deloitte Digital AU",
 			"role": "Frontend Engineer (Senior Consultant)",
 			"type": "employee",
+			"highlight": "Brought parallel Gulp builds to the frontend guild",
 			"tech": {
 				"frontend": [
 					"AngularJS",
@@ -288,7 +299,11 @@
 					"SQL Server"
 				],
 				"cicd": [
-					"Bamboo"
+					"Bamboo",
+					"Grunt",
+					"Gulp",
+					"Yeoman",
+					"Middleman"
 				]
 			}
 		},
@@ -301,6 +316,7 @@
 			"client": "Visual Jazz Isobar",
 			"role": "Senior Frontend Engineer",
 			"type": "independent",
+			"highlight": "First taste of build automation — Grunt for the front-end pipeline",
 			"tech": {
 				"frontend": [
 					"AngularJS",
@@ -310,6 +326,9 @@
 					"PHP",
 					"AEM",
 					"MySQL"
+				],
+				"cicd": [
+					"Grunt"
 				]
 			}
 		},
@@ -353,7 +372,9 @@
 			],
 			"tech": {
 				"frontend": [
-					"jQuery"
+					"jQuery",
+					"HTML5",
+					"CSS"
 				],
 				"backend": [
 					"PHP",

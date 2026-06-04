@@ -23,6 +23,8 @@ const SLUGS: Record<string, string | null> = {
 	GraphQL: 'graphql',
 	'Mantine UI': 'mantine',
 	Recharts: null,
+	RxJS: 'reactivex',
+	'lightweight-charts': 'tradingview',
 	Anychart: null,
 	'Next.js': 'nextdotjs',
 	jQuery: 'jquery',
@@ -94,8 +96,13 @@ const SLUGS: Record<string, string | null> = {
 	FTP: null,
 	Pulumi: 'pulumi',
 	k3s: 'k3s',
+	Grunt: 'grunt',
+	Gulp: 'gulp',
+	Yeoman: null,
+	Middleman: null,
 	// AI / LLM
 	'Claude Code': 'claude',
+	Ollama: 'ollama',
 	MCP: null,
 	OpenClaw: null,
 	Copilot: 'githubcopilot',
@@ -140,6 +147,8 @@ const BRAND_FALLBACK: Record<string, string> = {
 	Capistrano: '#d24b32',
 	rsync: '#3a6ea5',
 	SFTP: '#3a6ea5',
+	Yeoman: '#ffbf00',
+	Middleman: '#9c5b8b',
 };
 
 interface SimpleIcon {
@@ -170,6 +179,12 @@ for (const [name, slug] of Object.entries(SLUGS)) {
 		registry[name] = { brand: BRAND_FALLBACK[name] ?? '#888888' };
 	}
 }
+
+// A clean git-branch glyph (not a brand logo) for the side-project branch marker.
+symbols.set(
+	'branch',
+	`<symbol id="i-branch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v12"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></symbol>`,
+);
 
 const sprite = `<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">${[...symbols.values()].join('')}</svg>`;
 

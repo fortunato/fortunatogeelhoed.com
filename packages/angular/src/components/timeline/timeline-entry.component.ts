@@ -16,7 +16,7 @@ import { LANE_LABELS, techVisual } from '@fg/shared';
 				<div class="spine-role">{{ entry().role }}</div>
 				<span class="spine-type" [attr.data-type]="entry().type">
 					@if (entry().type === 'side-project') {
-						<svg class="type-icon"><use href="#i-git" /></svg>
+						<svg class="type-icon"><use href="#i-branch" /></svg>
 					}
 					{{ typeLabel[entry().type] }}
 				</span>
