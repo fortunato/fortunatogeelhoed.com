@@ -2,8 +2,8 @@ import type { EmploymentType, ExposureIntensity, Lane } from '@fg/shared';
 import { describe, expect, it } from 'vitest';
 import { getTimeline } from './timeline';
 
-const LANES: Lane[] = ['frontend', 'backend', 'ci-cd', 'ai-llm', 'database'];
-const EMPLOYMENT: EmploymentType[] = ['employee', 'contractor', 'freelance', 'self-employed'];
+const LANES: Lane[] = ['frontend', 'backend', 'cicd', 'ai'];
+const EMPLOYMENT: EmploymentType[] = ['employee', 'independent', 'side-project'];
 const INTENSITIES: ExposureIntensity[] = ['professional', 'occasional', 'brief'];
 
 describe('career timeline', () => {
@@ -15,11 +15,15 @@ describe('career timeline', () => {
 		expect(entries.some((e) => e.endYear === 'present')).toBe(true);
 	});
 
-	it('has unique ids and valid employment types', () => {
+	it('has unique ids, eras, real roles and valid types', () => {
 		const ids = entries.map((e) => e.id);
 		expect(new Set(ids).size).toBe(ids.length);
 		for (const entry of entries) {
-			expect(EMPLOYMENT).toContain(entry.employmentType);
+			expect(entry.era).toBeTruthy();
+			expect(entry.role).toBeTruthy();
+			expect(entry.client).toBeTruthy();
+			expect(entry.years).toBeTruthy();
+			expect(EMPLOYMENT).toContain(entry.type);
 			expect(entry.endYear === 'present' || entry.endYear >= entry.startYear).toBe(true);
 		}
 	});
@@ -32,12 +36,19 @@ describe('career timeline', () => {
 		}
 	});
 
-	it('includes at least one side project', () => {
-		expect(entries.some((e) => e.isSideProject)).toBe(true);
+	it('places side projects chronologically, not all at the end', () => {
+		const sideProjects = entries.filter((e) => e.type === 'side-project');
+		expect(sideProjects.length).toBeGreaterThanOrEqual(2);
+		// the timeline does not end on a side project
+		expect(entries.at(-1)?.type).not.toBe('side-project');
 	});
 
-	it('densifies the AI/LLM lane toward recent years', () => {
-		const withAi = entries.filter((e) => e.tech['ai-llm']?.length);
+	it('includes the py-market-structure project', () => {
+		expect(entries.some((e) => e.id === 'py-market-structure')).toBe(true);
+	});
+
+	it('densifies the AI lane toward recent years', () => {
+		const withAi = entries.filter((e) => e.tech.ai?.length);
 		expect(withAi.every((e) => e.startYear >= 2018)).toBe(true);
 		expect(withAi.length).toBeGreaterThanOrEqual(3);
 	});

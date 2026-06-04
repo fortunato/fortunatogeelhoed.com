@@ -2,12 +2,14 @@
 	"entries": [
 		{
 			"id": "portfolio",
+			"era": "2026 — Now",
+			"years": "2026",
 			"startYear": 2026,
 			"endYear": "present",
-			"organization": "Self-employed (JiggyBit S.L.)",
-			"role": "Portfolio Platform",
-			"employmentType": "self-employed",
-			"summary": "This site — one backend, three frontends, open-sourced.",
+			"client": "Portfolio Site",
+			"role": "Full-Stack Engineer",
+			"type": "independent",
+			"highlight": "3 frameworks, 1 site — you’re looking at it",
 			"tech": {
 				"frontend": [
 					"React",
@@ -18,11 +20,11 @@
 					"Bun",
 					"Hono"
 				],
-				"ci-cd": [
+				"cicd": [
 					"GitHub Actions",
 					"Docker"
 				],
-				"ai-llm": [
+				"ai": [
 					"Claude Code",
 					"MCP"
 				]
@@ -30,11 +32,13 @@
 		},
 		{
 			"id": "ai-healthcare",
+			"era": "2026 — Now",
+			"years": "2026",
 			"startYear": 2026,
 			"endYear": 2026,
-			"organization": "AI Healthcare",
-			"role": "Contractor",
-			"employmentType": "contractor",
+			"client": "AI Healthcare Startup",
+			"role": "Consulting Engineer",
+			"type": "independent",
 			"tech": {
 				"frontend": [
 					"React",
@@ -44,37 +48,42 @@
 					"Java",
 					"Spring Boot"
 				],
-				"ci-cd": [
+				"cicd": [
 					"Docker"
+				],
+				"ai": [
+					"Claude Code"
 				]
 			}
 		},
 		{
 			"id": "market-breadth",
+			"era": "2026 — Now",
+			"years": "2025–26",
 			"startYear": 2025,
 			"endYear": 2026,
-			"organization": "Market Breadth",
-			"role": "Self-employed",
-			"employmentType": "self-employed",
+			"client": "Market Breadth Dashboard",
+			"role": "Full-Stack Engineer",
+			"type": "independent",
+			"highlight": "Real-time WebSocket market-data ingestion",
 			"tech": {
 				"frontend": [
 					"React",
 					"Mantine UI",
 					"Vite",
-					"Recharts"
+					"Recharts",
+					"Nx"
 				],
 				"backend": [
 					"NestJS",
+					"TimescaleDB",
 					"WebSockets"
 				],
-				"database": [
-					"TimescaleDB"
-				],
-				"ci-cd": [
+				"cicd": [
 					"Gitea Actions",
 					"Docker"
 				],
-				"ai-llm": [
+				"ai": [
 					"Claude Code",
 					"OpenClaw",
 					"MCP"
@@ -82,13 +91,39 @@
 			}
 		},
 		{
+			"id": "py-market-structure",
+			"era": "2026 — Now",
+			"years": "2025–26",
+			"startYear": 2025,
+			"endYear": 2026,
+			"client": "py-market-structure",
+			"role": "Side project — PyPI library",
+			"type": "side-project",
+			"highlight": "Published to PyPI with zero prior Python — built with Claude Code",
+			"tech": {
+				"backend": [
+					"Python",
+					"PyPI"
+				],
+				"cicd": [
+					"GitHub Actions"
+				],
+				"ai": [
+					"Claude Code",
+					"MCP"
+				]
+			}
+		},
+		{
 			"id": "amsterdam",
-			"startYear": 2019,
+			"era": "2020s — Netherlands (remote from Spain)",
+			"years": "2020–25",
+			"startYear": 2020,
 			"endYear": 2025,
-			"organization": "Municipality of Amsterdam",
-			"role": "Contractor",
-			"employmentType": "contractor",
-			"summary": "5.5 years remote: monorepo migration, feature-sliced architecture, micro-frontends.",
+			"client": "Gemeente Amsterdam",
+			"role": "Lead Full-Stack Engineer — 5.5 years",
+			"type": "independent",
+			"highlight": "Led frontend across multiple teams; monorepo + feature-sliced architecture",
 			"tech": {
 				"frontend": [
 					"React",
@@ -101,19 +136,17 @@
 				"backend": [
 					"NestJS",
 					"Express",
-					"Azure"
-				],
-				"database": [
+					"Azure",
 					"PostgreSQL",
 					"PostGIS"
 				],
-				"ci-cd": [
+				"cicd": [
 					"GitLab CI",
 					"Azure Pipelines",
 					"GitHub Actions",
 					"Docker"
 				],
-				"ai-llm": [
+				"ai": [
 					"Copilot",
 					"ChatGPT",
 					"ChatGPT API"
@@ -121,13 +154,48 @@
 			}
 		},
 		{
+			"id": "trading-system",
+			"era": "2020s — Netherlands (remote from Spain)",
+			"years": "2018–now",
+			"startYear": 2018,
+			"endYear": "present",
+			"client": "Crypto Trading System",
+			"role": "Side project — parallel to employment",
+			"type": "side-project",
+			"highlight": "Runs alongside the day job — initiative, not a break from work",
+			"tech": {
+				"frontend": [
+					"React",
+					"Next.js",
+					"Anychart"
+				],
+				"backend": [
+					"Node.js",
+					"PostgreSQL"
+				],
+				"cicd": [
+					"Bitbucket",
+					"Jenkins",
+					"Gitea Actions",
+					"Pulumi",
+					"k3s"
+				],
+				"ai": [
+					"ChatGPT API",
+					"Claude Code"
+				]
+			}
+		},
+		{
 			"id": "tele2",
+			"era": "Late 2010s — Netherlands",
+			"years": "2017–19",
 			"startYear": 2017,
 			"endYear": 2019,
-			"organization": "Tele2",
-			"role": "Contractor",
-			"employmentType": "contractor",
-			"summary": "E-commerce SSR rebuild — 3× Lighthouse improvement.",
+			"client": "Tele2",
+			"role": "Lead Full-Stack Engineer",
+			"type": "employee",
+			"highlight": "E-commerce SSR rebuild — 3× Lighthouse improvement",
 			"tech": {
 				"frontend": [
 					"React",
@@ -139,13 +207,11 @@
 				"backend": [
 					"Node.js",
 					"Express",
-					"PHP 5",
-					"Salesforce"
-				],
-				"database": [
+					"PHP",
+					"Salesforce",
 					"MySQL"
 				],
-				"ci-cd": [
+				"cicd": [
 					"Jenkins",
 					"Docker"
 				]
@@ -153,11 +219,13 @@
 		},
 		{
 			"id": "deloitte-nl",
+			"era": "Late 2010s — Netherlands",
+			"years": "2017",
 			"startYear": 2017,
 			"endYear": 2017,
-			"organization": "Deloitte NL",
-			"role": "Employee",
-			"employmentType": "employee",
+			"client": "Deloitte Digital NL",
+			"role": "Senior Frontend Engineer",
+			"type": "employee",
 			"tech": {
 				"frontend": [
 					"React",
@@ -171,11 +239,13 @@
 		},
 		{
 			"id": "deloitte-au-manager",
+			"era": "2013–2017 — Melbourne, Australia",
+			"years": "2016–17",
 			"startYear": 2016,
 			"endYear": 2017,
-			"organization": "Deloitte AU",
-			"role": "Manager",
-			"employmentType": "employee",
+			"client": "Deloitte Digital AU",
+			"role": "Frontend Lead (Manager)",
+			"type": "employee",
 			"tech": {
 				"frontend": [
 					"React",
@@ -183,23 +253,23 @@
 					"Webpack"
 				],
 				"backend": [
-					"Sitecore"
-				],
-				"database": [
+					"Sitecore",
 					"SQL Server"
 				],
-				"ci-cd": [
+				"cicd": [
 					"Bamboo"
 				]
 			}
 		},
 		{
 			"id": "deloitte-au-consultant",
+			"era": "2013–2017 — Melbourne, Australia",
+			"years": "2013–16",
 			"startYear": 2013,
 			"endYear": 2016,
-			"organization": "Deloitte AU",
-			"role": "Senior Consultant",
-			"employmentType": "employee",
+			"client": "Deloitte Digital AU",
+			"role": "Senior Frontend Engineer",
+			"type": "employee",
 			"tech": {
 				"frontend": [
 					"AngularJS",
@@ -209,23 +279,23 @@
 					"SCSS"
 				],
 				"backend": [
-					"Sitecore"
-				],
-				"database": [
+					"Sitecore",
 					"SQL Server"
 				],
-				"ci-cd": [
+				"cicd": [
 					"Bamboo"
 				]
 			}
 		},
 		{
 			"id": "isobar",
+			"era": "2013–2017 — Melbourne, Australia",
+			"years": "2013",
 			"startYear": 2013,
 			"endYear": 2013,
-			"organization": "Isobar",
-			"role": "Contractor",
-			"employmentType": "contractor",
+			"client": "Visual Jazz Isobar",
+			"role": "Frontend Developer",
+			"type": "independent",
 			"tech": {
 				"frontend": [
 					"AngularJS",
@@ -233,20 +303,20 @@
 				],
 				"backend": [
 					"PHP",
-					"AEM"
-				],
-				"database": [
+					"AEM",
 					"MySQL"
 				]
 			}
 		},
 		{
 			"id": "limelight",
+			"era": "2007–2013 — Brisbane, Australia",
+			"years": "2012–13",
 			"startYear": 2012,
 			"endYear": 2013,
-			"organization": "Limelight",
-			"role": "Employee",
-			"employmentType": "employee",
+			"client": "Limelight Digital",
+			"role": "Full-Stack Developer",
+			"type": "employee",
 			"tech": {
 				"frontend": [
 					"jQuery",
@@ -254,31 +324,30 @@
 					"Marionette"
 				],
 				"backend": [
-					"PHP 5"
-				],
-				"database": [
+					"PHP",
 					"MySQL"
 				]
 			}
 		},
 		{
 			"id": "cru-digital",
+			"era": "2007–2013 — Brisbane, Australia",
+			"years": "2010–12",
 			"startYear": 2010,
 			"endYear": 2012,
-			"organization": "Cru Digital",
-			"role": "Employee",
-			"employmentType": "employee",
+			"client": "Cru Digital",
+			"role": "Full-Stack Developer",
+			"type": "employee",
+			"highlight": "Early cloud — running on Amazon EC2",
 			"tech": {
 				"frontend": [
 					"jQuery"
 				],
 				"backend": [
-					"PHP 5"
-				],
-				"database": [
+					"PHP",
 					"MySQL"
 				],
-				"ci-cd": [
+				"cicd": [
 					"Mercurial",
 					"Amazon EC2"
 				]
@@ -286,11 +355,14 @@
 		},
 		{
 			"id": "ifactory",
+			"era": "2007–2013 — Brisbane, Australia",
+			"years": "2007–10",
 			"startYear": 2007,
 			"endYear": 2010,
-			"organization": "iFactory",
-			"role": "Employee",
-			"employmentType": "employee",
+			"client": "iFactory",
+			"role": "Web Developer",
+			"type": "employee",
+			"highlight": "Lived through the Prototype.js → MooTools → jQuery era",
 			"tech": {
 				"frontend": [
 					"Prototype.js",
@@ -298,61 +370,96 @@
 					"jQuery"
 				],
 				"backend": [
-					"PHP 5"
-				],
-				"database": [
+					"PHP",
 					"MySQL"
 				],
-				"ci-cd": [
+				"cicd": [
 					"SVN"
 				]
 			}
 		},
 		{
+			"id": "cms-v2",
+			"era": "2007–2013 — Brisbane, Australia",
+			"years": "2008",
+			"startYear": 2008,
+			"endYear": 2009,
+			"client": "Custom CMS v2",
+			"role": "Side project — Seagull Framework",
+			"type": "side-project",
+			"highlight": "Rebuilt a CMS from scratch on the Seagull PHP framework",
+			"tech": {
+				"backend": [
+					"PHP",
+					"MySQL"
+				]
+			}
+		},
+		{
 			"id": "hids",
+			"era": "2000–2006 — The Early Web (Netherlands)",
+			"years": "2005–06",
 			"startYear": 2005,
-			"endYear": 2007,
-			"organization": "HIDS",
-			"role": "Employee",
-			"employmentType": "employee",
+			"endYear": 2006,
+			"client": "HIDS",
+			"role": "Web Developer",
+			"type": "employee",
 			"tech": {
 				"frontend": [
 					"JavaScript",
 					"AJAX"
 				],
 				"backend": [
-					"PHP 5"
-				],
-				"database": [
+					"PHP",
+					"MySQL"
+				]
+			}
+		},
+		{
+			"id": "cms-v1",
+			"era": "2000–2006 — The Early Web (Netherlands)",
+			"years": "2005",
+			"startYear": 2005,
+			"endYear": 2005,
+			"client": "Custom CMS v1",
+			"role": "Side project — built from scratch",
+			"type": "side-project",
+			"highlight": "First CMS, hand-built",
+			"tech": {
+				"backend": [
+					"PHP",
 					"MySQL"
 				]
 			}
 		},
 		{
 			"id": "freelance-early",
+			"era": "2000–2006 — The Early Web (Netherlands)",
+			"years": "2003–04",
 			"startYear": 2003,
-			"endYear": 2005,
-			"organization": "Freelance",
-			"role": "Freelance",
-			"employmentType": "freelance",
+			"endYear": 2004,
+			"client": "Freelance",
+			"role": "Web Developer",
+			"type": "independent",
 			"tech": {
 				"frontend": [
 					"JavaScript",
-					"XHTML",
-					"CSS"
+					"XHTML / CSS"
 				],
 				"backend": [
-					"PHP 4"
+					"PHP"
 				]
 			}
 		},
 		{
 			"id": "edf",
+			"era": "2000–2006 — The Early Web (Netherlands)",
+			"years": "2002–03",
 			"startYear": 2002,
 			"endYear": 2003,
-			"organization": "EDF",
-			"role": "Employee",
-			"employmentType": "employee",
+			"client": "EDF",
+			"role": "Web Developer",
+			"type": "employee",
 			"tech": {
 				"frontend": [
 					"JavaScript",
@@ -360,71 +467,33 @@
 				],
 				"backend": [
 					"Classic ASP",
-					"PHP 4"
-				],
-				"database": [
+					"PHP",
 					"SQL Server"
-				],
-				"ci-cd": [
-					"Visual SourceSafe"
 				]
 			}
 		},
 		{
 			"id": "web-inzicht",
+			"era": "2000–2006 — The Early Web (Netherlands)",
+			"years": "2000–02",
 			"startYear": 2000,
 			"endYear": 2002,
-			"organization": "Web InZicht",
-			"role": "Employee",
-			"employmentType": "employee",
+			"client": "Web InZicht",
+			"role": "Web Developer",
+			"type": "employee",
+			"highlight": "Where it all started.",
 			"tech": {
 				"frontend": [
 					"JavaScript",
-					"HTML",
-					"CSS",
+					"HTML / CSS",
 					"Flash"
 				],
 				"backend": [
-					"Classic ASP"
-				],
-				"database": [
+					"Classic ASP",
 					"MS Access"
 				],
-				"ci-cd": [
+				"cicd": [
 					"FTP"
-				]
-			}
-		},
-		{
-			"id": "trading-system",
-			"startYear": 2018,
-			"endYear": "present",
-			"organization": "Trading System",
-			"role": "Side project",
-			"employmentType": "self-employed",
-			"isSideProject": true,
-			"summary": "Runs alongside the day job — evidence of initiative, not a break from work.",
-			"tech": {
-				"frontend": [
-					"React",
-					"Next.js",
-					"Anychart"
-				],
-				"backend": [
-					"Node.js"
-				],
-				"database": [
-					"PostgreSQL"
-				],
-				"ci-cd": [
-					"Jenkins",
-					"Gitea Actions",
-					"Pulumi",
-					"k3s"
-				],
-				"ai-llm": [
-					"ChatGPT API",
-					"Claude Code"
 				]
 			}
 		}

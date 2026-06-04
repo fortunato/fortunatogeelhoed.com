@@ -73,9 +73,8 @@ export function axisTicks(data: TimelineData, step = 5): AxisTick[] {
 
 /** Human label for a tech lane, used by the lane headers and the mobile per-lane labels. */
 export const LANE_LABELS: Record<string, string> = {
-	'ai-llm': 'AI / LLM',
-	'ci-cd': 'CI / CD',
-	database: 'Database',
-	backend: 'Backend',
 	frontend: 'Frontend',
+	backend: 'Backend / DB',
+	cicd: 'CI/CD & Infra',
+	ai: 'AI / LLM',
 };

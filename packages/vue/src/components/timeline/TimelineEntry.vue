@@ -1,62 +1,56 @@
 <template>
-	<article
-		:class="styles.entry"
-		:data-side="entry.isSideProject ? 'true' : null"
-		data-reveal
-	>
-		<template v-for="lane in leftLanes" :key="lane.key">
+	<article :class="styles.entry" :data-type="entry.type" data-reveal>
+		<div :class="styles.spine">
+			<div :class="styles['spine-years']">{{ entry.years }}</div>
+			<div :class="styles['spine-client']">{{ entry.client }}</div>
+			<div :class="styles['spine-role']">{{ entry.role }}</div>
+			<span :class="styles['spine-type']" :data-type="entry.type">
+				<svg v-if="entry.type === 'side-project'" :class="styles['type-icon']">
+					<use href="#i-git" />
+				</svg>
+				{{ typeLabel[entry.type] }}
+			</span>
+			<div v-if="entry.highlight" :class="styles['spine-highlight']">{{ entry.highlight }}</div>
+		</div>
+
+		<template v-for="lane in lanes" :key="lane.key">
 			<div
 				v-if="entry.tech[lane.key]?.length"
 				:class="[styles.lane, styles[lane.cls]]"
 				:data-lane-label="laneLabels[lane.key]"
 			>
-				<span v-for="t in entry.tech[lane.key]" :key="t" class="tech-tag">{{ t }}</span>
+				<span
+					v-for="t in entry.tech[lane.key]"
+					:key="t"
+					:class="styles.pill"
+					:style="{ '--brand': v(t).brand }"
+				>
+					<svg v-if="v(t).icon" :class="styles['pill-icon']"><use :href="`#i-${v(t).icon}`" /></svg>
+					{{ t }}
+				</span>
 			</div>
 		</template>
-
-		<div :class="styles.spine">
-			<span :class="styles['year-node']" :data-emp="entry.employmentType">
-				{{ entry.startYear }}
-			</span>
-		</div>
-
-		<div :class="styles.role">
-			<p :class="styles['role-period']">{{ period(entry) }}</p>
-			<p :class="styles['role-title']">{{ entry.role }}</p>
-			<p :class="styles['role-org']">{{ entry.organization }}</p>
-			<p v-if="entry.summary" :class="styles['role-summary']">{{ entry.summary }}</p>
-			<span v-if="entry.isSideProject" :class="styles['role-badge']">Side project</span>
-		</div>
-
-		<div
-			v-if="entry.tech.frontend?.length"
-			:class="[styles.lane, styles['lane-fe']]"
-			data-lane-label="Frontend"
-		>
-			<span v-for="t in entry.tech.frontend" :key="t" class="tech-tag">{{ t }}</span>
-		</div>
 	</article>
 </template>
 
 <script setup lang="ts">
-import type { Lane, TimelineEntry } from '@fg/shared';
-import { LANE_LABELS } from '@fg/shared';
+import type { EmploymentType, Lane, TimelineEntry } from '@fg/shared';
+import { LANE_LABELS, techVisual } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 
 defineProps<{ entry: TimelineEntry }>();
 
 const laneLabels = LANE_LABELS;
-const leftLanes: { key: Lane; cls: string }[] = [
-	{ key: 'ai-llm', cls: 'lane-ai' },
-	{ key: 'ci-cd', cls: 'lane-cicd' },
-	{ key: 'database', cls: 'lane-db' },
+const v = techVisual;
+const lanes: { key: Lane; cls: string }[] = [
+	{ key: 'frontend', cls: 'lane-fe' },
 	{ key: 'backend', cls: 'lane-be' },
+	{ key: 'cicd', cls: 'lane-ci' },
+	{ key: 'ai', cls: 'lane-ai' },
 ];
-
-function period(entry: TimelineEntry): string {
-	if (entry.endYear === 'present') return `${entry.startYear}–now`;
-	return entry.endYear === entry.startYear
-		? `${entry.startYear}`
-		: `${entry.startYear}–${entry.endYear}`;
-}
+const typeLabel: Record<EmploymentType, string> = {
+	employee: 'Employee',
+	independent: 'Independent',
+	'side-project': 'Side project',
+};
 </script>

@@ -1,7 +1,7 @@
 import type { TimelineData } from '@fg/shared';
-import { destroySmoothScroll, initSmoothScroll } from '@fg/shared';
+import { TECH_SPRITE, destroyTimelineMotion, initTimelineMotion } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
-import { useEffect } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 import timelineData from '../../../content/timeline.json';
 import { FrameworkRibbon } from '../components/timeline/FrameworkRibbon';
 import { TimelineEntry } from '../components/timeline/TimelineEntry';
@@ -9,48 +9,56 @@ import { TimelineEntry } from '../components/timeline/TimelineEntry';
 const data = timelineData as TimelineData;
 
 export function Timeline() {
+	const rootRef = useRef<HTMLElement>(null);
+
 	useEffect(() => {
-		initSmoothScroll();
-		return () => destroySmoothScroll();
+		const root = rootRef.current;
+		if (root) initTimelineMotion(root);
+		return () => destroyTimelineMotion();
 	}, []);
 
+	let lastEra = '';
+
 	return (
-		<section className={styles.page}>
+		<section className={styles.page} ref={rootRef}>
+			{/* biome-ignore lint/security/noDangerouslySetInnerHtml: trusted in-house icon sprite */}
+			<div hidden dangerouslySetInnerHTML={{ __html: TECH_SPRITE }} />
+
 			<div className="container">
 				<p className="section-label">Career</p>
-				<h1 className="section-title">Twenty-five years, five lanes</h1>
+				<h1 className="section-title">Twenty-five years across the stack</h1>
 				<p className={styles.intro}>
 					From classic ASP and Flash to React, NestJS and agentic workflows — a working
 					life across the frontend, backend, infrastructure and, lately, AI. Frameworks
-					deepen, the AI lane fills in, and a trading system runs quietly alongside it
-					all.
+					deepen, the AI lane fills in, and side projects branch off the spine.
 				</p>
 			</div>
 
 			<FrameworkRibbon data={data} />
 
 			<div className={styles.timeline}>
-				<div className={styles['lane-labels']} aria-hidden="true">
-					<span className={styles['lane-head']} data-side="left">
-						AI / LLM
-					</span>
-					<span className={styles['lane-head']} data-side="left">
-						CI / CD
-					</span>
-					<span className={styles['lane-head']} data-side="left">
-						Database
-					</span>
-					<span className={styles['lane-head']} data-side="left">
-						Backend
-					</span>
-					<span className={styles['lane-head']}>Year</span>
-					<span className={styles['lane-head']}>Role</span>
-					<span className={styles['lane-head']}>Frontend</span>
+				<div className={styles['lane-headers']} aria-hidden="true">
+					<div className={styles['lane-header']} />
+					<div className={styles['lane-header']}>Frontend</div>
+					<div className={styles['lane-header']}>Backend / DB</div>
+					<div className={styles['lane-header']}>CI/CD &amp; Infra</div>
+					<div className={styles['lane-header']}>AI / LLM</div>
 				</div>
 
-				{data.entries.map((entry) => (
-					<TimelineEntry key={entry.id} entry={entry} />
-				))}
+				{data.entries.map((entry) => {
+					const showEra = entry.era !== lastEra;
+					lastEra = entry.era;
+					return (
+						<Fragment key={entry.id}>
+							{showEra ? (
+								<div className={styles.era} data-reveal>
+									<span className={styles['era-label']}>{entry.era}</span>
+								</div>
+							) : null}
+							<TimelineEntry entry={entry} />
+						</Fragment>
+					);
+				})}
 			</div>
 		</section>
 	);

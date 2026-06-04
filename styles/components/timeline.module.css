@@ -1,7 +1,7 @@
-/* Career timeline — centre-radial multi-lane layout (wide) collapsing to single-column
-   cards (narrow). Shared across the three variants; semantic --jb-* tokens only. The
-   positioning maths for the framework ribbon lives in @fg/shared (timeline-layout.ts).
-   Scroll reveals come from the global [data-reveal] mechanism in styles/motion.css. */
+/* Career timeline — a role spine on the left, then technology lanes (Frontend, Backend/DB,
+   CI·CD/Infra, AI·LLM) flowing right, grouped into era time-blocks. Shared across the three
+   variants; semantic --jb-* tokens only (pills carry per-tech --brand colors inline).
+   Reveal + scroll-velocity motion is driven from @fg/shared/timeline-motion. */
 
 .page {
 	padding-top: var(--jb-space-xl);
@@ -55,7 +55,6 @@
 	background: var(--jb-accent);
 }
 
-/* occasional → striped (lower presence) */
 .ribbon-seg[data-intensity="occasional"] {
 	background: repeating-linear-gradient(
 		45deg,
@@ -66,7 +65,6 @@
 	);
 }
 
-/* brief → a single dot; width from the style attribute is intentionally not set */
 .ribbon-seg[data-intensity="brief"] {
 	top: 50%;
 	bottom: auto;
@@ -129,216 +127,315 @@
 	border-radius: 50%;
 }
 
-/* ============================ The multi-lane timeline ============================ */
+/* ============================ The timeline ============================ */
 
 .timeline {
-	width: min(1500px, 96vw);
+	--spine-w: 15rem;
+	--cols: var(--spine-w) 2.2fr 1.6fr 1.4fr 1fr;
+	max-width: 1400px;
 	margin: var(--jb-space-2xl) auto 0;
-	--timeline-cols: 0.85fr 0.85fr 0.85fr 0.95fr minmax(3.25rem, auto) 1.5fr 1.4fr;
+	position: relative;
 }
 
-.lane-labels {
-	display: grid;
-	grid-template-columns: var(--timeline-cols);
-	gap: var(--jb-space-md);
+/* Sticky lane headers */
+.lane-headers {
 	position: sticky;
 	top: var(--jb-size-nav-height);
 	z-index: var(--jb-z-base);
-	padding: var(--jb-space-sm) 0;
-	background: color-mix(in srgb, var(--jb-bg-primary) 88%, transparent);
-	backdrop-filter: blur(6px);
+	display: grid;
+	grid-template-columns: var(--cols);
+	background: color-mix(in srgb, var(--jb-bg-primary) 92%, transparent);
+	backdrop-filter: blur(12px);
 	border-bottom: 1px solid var(--jb-color-border);
 }
 
-.lane-head {
-	font-family: var(--jb-font-mono);
-	font-size: 0.62rem;
-	text-transform: uppercase;
-	letter-spacing: 0.08em;
-	color: var(--jb-text-tertiary);
-}
-
-.lane-head[data-side="left"] {
-	text-align: right;
-}
-
-.entry {
-	display: grid;
-	grid-template-columns: var(--timeline-cols);
-	gap: var(--jb-space-md);
-	align-items: center;
-	padding: var(--jb-space-lg) 0;
-}
-
-.lane {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--jb-space-xs);
-}
-
-/* lanes left of the spine align toward it */
-.lane-ai,
-.lane-cicd,
-.lane-db,
-.lane-be {
-	justify-content: flex-end;
-}
-
-.lane-ai {
-	grid-column: 1;
-}
-.lane-cicd {
-	grid-column: 2;
-}
-.lane-db {
-	grid-column: 3;
-}
-.lane-be {
-	grid-column: 4;
-}
-.spine {
-	grid-column: 5;
-}
-.role {
-	grid-column: 6;
-}
-.lane-fe {
-	grid-column: 7;
-}
-
-/* the central time spine */
-.spine {
-	position: relative;
-	display: flex;
-	justify-content: center;
-	align-self: stretch;
-	align-items: center;
-}
-
-.spine::before {
-	content: "";
-	position: absolute;
-	top: -1.5rem;
-	bottom: -1.5rem;
-	left: 50%;
-	width: 2px;
-	transform: translateX(-50%);
-	background: var(--jb-color-border);
-}
-
-.year-node {
-	position: relative;
-	z-index: var(--jb-z-base);
-	font-family: var(--jb-font-mono);
-	font-size: 0.8rem;
-	font-weight: 600;
-	padding: 0.3rem 0.6rem;
-	border-radius: var(--jb-radius-md);
-	border: 1.5px solid var(--jb-color-border);
-	background: var(--jb-bg-card);
-	white-space: nowrap;
-}
-
-/* employment-type tints */
-.year-node[data-emp="contractor"] {
-	border-color: var(--jb-accent);
-	color: var(--jb-accent);
-}
-.year-node[data-emp="freelance"] {
-	border-style: dashed;
-	border-color: var(--jb-accent);
-	color: var(--jb-accent);
-}
-.year-node[data-emp="self-employed"] {
-	background: var(--jb-accent);
-	border-color: var(--jb-accent);
-	color: var(--jb-text-on-accent);
-}
-
-.role-period {
+.lane-header {
 	font-family: var(--jb-font-mono);
 	font-size: 0.7rem;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	font-weight: 600;
 	color: var(--jb-text-tertiary);
+	padding: 0.75rem;
+	border-left: 1px solid var(--jb-color-border);
 }
 
-.role-title {
+.lane-header:first-child {
+	border-left: none;
+	padding-left: 1.75rem;
+}
+
+/* Era / time-block divider */
+.era {
+	padding: var(--jb-space-xl) 0 var(--jb-space-md) 1.75rem;
+}
+
+.era-label {
+	position: relative;
+	display: inline-block;
 	font-family: var(--jb-font-display);
+	font-size: 0.8rem;
 	font-weight: 700;
-	font-size: 1.05rem;
-}
-
-.role-org {
+	text-transform: uppercase;
+	letter-spacing: 0.18em;
 	color: var(--jb-text-secondary);
 }
 
-.role-summary {
-	margin-top: var(--jb-space-xs);
-	font-size: 0.85rem;
-	color: var(--jb-text-tertiary);
-	max-width: 28ch;
+.era-label::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	bottom: -4px;
+	width: 100%;
+	height: 1px;
+	background: linear-gradient(to right, var(--jb-accent), transparent);
+	opacity: 0.4;
 }
 
-.role-badge {
+/* Entry row */
+.entry {
+	display: grid;
+	grid-template-columns: var(--cols);
+	gap: 0;
+	padding: var(--jb-space-md) 0;
+	position: relative;
+	align-items: start;
+	border-bottom: 1px solid color-mix(in srgb, var(--jb-color-border) 55%, transparent);
+	--node-color: var(--jb-accent);
+}
+
+.entry:nth-child(even of .entry) {
+	background: color-mix(in srgb, var(--jb-bg-secondary) 45%, transparent);
+}
+
+/* Node + spine line */
+.entry::before {
+	content: "";
+	position: absolute;
+	left: 0.4rem;
+	top: 1.4rem;
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	background: var(--node-color);
+	box-shadow: 0 0 0 3px var(--jb-bg-primary), 0 0 12px
+		color-mix(in srgb, var(--node-color) 35%, transparent);
+	z-index: 2;
+}
+
+.entry::after {
+	content: "";
+	position: absolute;
+	left: calc(0.4rem + 5px);
+	top: 0;
+	bottom: 0;
+	width: 1px;
+	background: var(--jb-color-border);
+	z-index: 1;
+}
+
+.entry[data-type="employee"] {
+	--node-color: #5ba8ff;
+}
+.entry[data-type="independent"] {
+	--node-color: var(--jb-accent);
+}
+.entry[data-type="side-project"] {
+	--node-color: #facc15;
+	background: repeating-linear-gradient(
+		-45deg,
+		transparent,
+		transparent 12px,
+		color-mix(in srgb, #facc15 4%, transparent) 12px,
+		color-mix(in srgb, #facc15 4%, transparent) 13px
+	);
+	border: 1px dashed color-mix(in srgb, #facc15 22%, transparent);
+	border-radius: var(--jb-radius-md);
+	margin: 4px 0;
+}
+
+/* Side projects branch off the spine: a dashed amber ring node instead of a solid dot. */
+.entry[data-type="side-project"]::before {
+	width: 15px;
+	height: 15px;
+	left: calc(0.4rem - 1.5px);
+	background: var(--jb-bg-primary);
+	border: 2px dashed #facc15;
+	box-shadow: 0 0 0 3px var(--jb-bg-primary), 0 0 12px
+		color-mix(in srgb, #facc15 35%, transparent);
+}
+
+.type-icon {
+	width: 0.85em;
+	height: 0.85em;
+	margin-right: 4px;
+	vertical-align: -1px;
+}
+
+/* Spine cell */
+.spine {
+	padding-left: 1.75rem;
+	padding-right: var(--jb-space-md);
+}
+
+.spine-years {
+	font-family: var(--jb-font-mono);
+	font-size: 0.9rem;
+	font-weight: 700;
+	color: var(--node-color);
+	line-height: 1.2;
+}
+
+.spine-client {
+	font-family: var(--jb-font-display);
+	font-size: 1.05rem;
+	font-weight: 700;
+	margin-top: 3px;
+	line-height: 1.25;
+}
+
+.spine-role {
+	font-size: 0.8rem;
+	color: var(--jb-text-secondary);
+	margin-top: 2px;
+}
+
+.spine-type {
 	display: inline-block;
-	margin-top: var(--jb-space-xs);
 	font-family: var(--jb-font-mono);
 	font-size: 0.6rem;
+	font-weight: 600;
 	text-transform: uppercase;
-	letter-spacing: 0.08em;
-	padding: 2px 6px;
-	border: 1px dashed var(--jb-accent);
-	border-radius: var(--jb-radius-sm);
-	color: var(--jb-accent);
+	letter-spacing: 0.05em;
+	padding: 2px 8px;
+	border-radius: 99px;
+	margin-top: 6px;
 }
 
-/* side-project rows read as a parallel track */
-.entry[data-side="true"] {
-	border-left: 2px dashed var(--jb-accent);
+.spine-type[data-type="employee"] {
+	background: color-mix(in srgb, #5ba8ff 14%, transparent);
+	color: #5ba8ff;
+}
+.spine-type[data-type="independent"] {
 	background: var(--jb-accent-soft);
-	border-radius: var(--jb-radius-md);
+	color: var(--jb-accent-on-soft);
+}
+.spine-type[data-type="side-project"] {
+	background: color-mix(in srgb, #facc15 14%, transparent);
+	color: #b88a06;
+}
+
+.spine-highlight {
+	font-size: 0.78rem;
+	color: var(--jb-text-tertiary);
+	margin-top: 8px;
+	max-width: 26ch;
+	line-height: 1.5;
+}
+
+/* Lanes + pills */
+.lane {
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	gap: 5px;
+	padding: 2px var(--jb-space-sm);
+	transition: transform var(--jb-dur-base) var(--jb-ease-standard);
+}
+
+/* explicit columns so empty lanes can be omitted without shifting the others */
+.spine {
+	grid-column: 1;
+}
+/* scroll-velocity splay: outer lanes drift more (driven by --vel from timeline-motion) */
+.lane-fe {
+	grid-column: 2;
+	transform: translateX(calc(var(--vel, 0) * -9px));
+}
+.lane-be {
+	grid-column: 3;
+	transform: translateX(calc(var(--vel, 0) * -3px));
+}
+.lane-ci {
+	grid-column: 4;
+	transform: translateX(calc(var(--vel, 0) * 3px));
+}
+.lane-ai {
+	grid-column: 5;
+	transform: translateX(calc(var(--vel, 0) * 9px));
+}
+
+.pill {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	font-family: var(--jb-font-mono);
+	font-size: 0.68rem;
+	font-weight: 500;
+	padding: 3px 8px;
+	border-radius: var(--jb-radius-sm);
+	white-space: nowrap;
+	color: var(--jb-text-primary);
+	background: color-mix(in srgb, var(--brand, var(--jb-text-secondary)) 12%, transparent);
+	border: 1px solid color-mix(in srgb, var(--brand, var(--jb-text-secondary)) 30%, transparent);
+}
+
+.pill-icon {
+	width: 0.95em;
+	height: 0.95em;
+	flex-shrink: 0;
+	color: var(--brand, currentColor);
+}
+
+/* ============================ Reveal + reduced motion ============================ */
+
+/* Reveal is opt-in via JS (timeline-motion adds [data-in]); when JS or motion is absent,
+   content is shown by the no-[data-reveal]-baseline below. */
+@media (prefers-reduced-motion: no-preference) {
+	[data-reveal] {
+		opacity: 0;
+		transform: translateY(14px);
+		transition: opacity 0.7s var(--jb-ease-emphasized), transform 0.7s var(--jb-ease-emphasized);
+	}
+	[data-reveal][data-in] {
+		opacity: 1;
+		transform: none;
+	}
 }
 
 /* ============================ Narrow / mobile ============================ */
 
 @media (max-width: 980px) {
 	.timeline {
-		width: 100%;
+		max-width: 100%;
 	}
 
-	.lane-labels {
+	.lane-headers {
 		display: none;
+	}
+
+	.era {
+		padding-left: 0;
 	}
 
 	.entry {
 		display: flex;
 		flex-direction: column;
-		align-items: flex-start;
 		gap: var(--jb-space-sm);
 		padding: var(--jb-space-lg);
-		margin-bottom: var(--jb-space-lg);
-		border: 1px solid var(--jb-color-border);
-		border-radius: var(--jb-radius-lg);
-		background: var(--jb-bg-card);
+		padding-left: 1.75rem;
+		margin-bottom: var(--jb-space-md);
 	}
 
-	.spine {
-		order: -2;
-		align-self: flex-start;
-	}
-
-	.spine::before {
+	.entry::after {
 		display: none;
 	}
 
-	.role {
-		order: -1;
-	}
-
 	.lane {
-		justify-content: flex-start;
+		padding: 0;
+		transform: none;
 	}
 
-	/* surface the lane name as a label on each tag group */
 	.lane::before {
 		content: attr(data-lane-label);
 		flex-basis: 100%;
