@@ -1,8 +1,6 @@
-/* Homepage sections — shared across the three variants (CSS Module for
-   React/Vue, raw + ViewEncapsulation for Angular). Semantic --jb-* tokens only.
-   Entrance/scroll motion lives in styles/motion.css via [data-reveal]. */
+/* Homepage hero — shared across the three variants (CSS Module for React/Vue, raw +
+   ViewEncapsulation for Angular). Semantic --jb-* tokens only. */
 
-/* ---- Hero ---- */
 .hero {
 	position: relative;
 	overflow: hidden;
@@ -105,102 +103,4 @@
 .hero-statement strong {
 	color: var(--jb-text-primary);
 	font-weight: 600;
-}
-
-/* ---- Services ---- */
-.services-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
-	gap: var(--jb-space-lg);
-	margin-top: var(--jb-space-lg);
-}
-
-.service-title {
-	font-family: var(--jb-font-display);
-	font-size: 1.3rem;
-	font-weight: 700;
-	margin-bottom: var(--jb-space-sm);
-}
-
-.service-desc {
-	color: var(--jb-text-secondary);
-	line-height: 1.6;
-}
-
-/* ---- Proof strip ---- */
-.proof {
-	background: var(--jb-bg-secondary);
-}
-
-.proof-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
-	gap: var(--jb-space-lg);
-	margin-top: var(--jb-space-lg);
-}
-
-.proof-metric {
-	font-family: var(--jb-font-display);
-	font-size: clamp(2.4rem, 6vw, 3.5rem);
-	font-weight: 800;
-	color: var(--jb-accent);
-	line-height: 1;
-}
-
-.proof-label {
-	margin-top: var(--jb-space-sm);
-	color: var(--jb-text-secondary);
-	max-width: 22ch;
-}
-
-/* ---- Writing teaser ---- */
-.writing-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr));
-	gap: var(--jb-space-lg);
-	margin-top: var(--jb-space-lg);
-}
-
-.writing-card {
-	display: block;
-	color: inherit;
-}
-
-.writing-card:hover {
-	color: inherit;
-}
-
-.writing-title {
-	font-family: var(--jb-font-display);
-	font-size: 1.25rem;
-	font-weight: 700;
-	margin-bottom: var(--jb-space-sm);
-}
-
-.writing-blurb {
-	color: var(--jb-text-secondary);
-	line-height: 1.6;
-}
-
-.writing-more {
-	display: inline-block;
-	margin-top: var(--jb-space-md);
-	font-size: 0.8rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.1em;
-	color: var(--jb-accent-text);
-}
-
-/* ---- CTA ---- */
-.cta {
-	text-align: center;
-}
-
-.cta-heading {
-	font-family: var(--jb-font-display);
-	font-size: clamp(2rem, 6vw, 3.5rem);
-	font-weight: 800;
-	letter-spacing: -0.02em;
-	margin-bottom: var(--jb-space-lg);
 }

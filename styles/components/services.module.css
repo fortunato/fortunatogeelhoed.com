@@ -1,0 +1,182 @@
+/* Homepage services cards — shared across the three variants. Semantic --jb-* tokens only.
+   The cursor spotlight is driven by @fg/shared/card-spotlight (sets --mx/--my). */
+
+/* Four cards laid out evenly: 2×2 by default (never an orphaned 3+1), one column on phones,
+   and a single row only on wide screens where they fit. */
+.services-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--jb-space-lg);
+	margin-top: var(--jb-space-lg);
+}
+
+@media (max-width: 30rem) {
+	.services-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (min-width: 85rem) {
+	.services-grid {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+}
+
+/* A deliberately non-clickable card (default cursor, no lift). It carries a slow *morphing*
+   accent gradient mesh (::before — faint, always alive, drifting blobs); the cursor reveals a
+   vivid window of it (::after) that trails the pointer with easing (--mx/--my lerped by
+   @fg/shared/card-spotlight). Dark mode warms the mesh across the accent's neighbours via oklch
+   hue-shifts; light mode stays tonal (accent-only — the multi-hue read muddy on white). Text
+   sits above both layers; frozen under reduced motion / no JS. */
+.service-card {
+	--card-gradient: radial-gradient(
+			42% 55% at 25% 30%,
+			color-mix(in srgb, var(--jb-accent) 55%, transparent),
+			transparent 62%
+		),
+		radial-gradient(
+			46% 52% at 78% 32%,
+			color-mix(in srgb, var(--jb-accent) 32%, transparent),
+			transparent 60%
+		),
+		radial-gradient(
+			52% 56% at 50% 82%,
+			color-mix(in srgb, var(--jb-accent) 50%, transparent),
+			transparent 62%
+		);
+	position: relative;
+	overflow: hidden;
+	/* A decorative surface, not a link to click: keep the default arrow over the whole card. */
+	cursor: default;
+	background: var(--jb-bg-card);
+	border: 1px solid var(--jb-color-border);
+	border-radius: var(--jb-radius-lg);
+	padding: var(--jb-space-lg);
+	transition: border-color var(--jb-dur-base) var(--jb-ease-standard);
+}
+
+/* Dark mode: warm multi-hue spread across the accent's neighbours (looks great on the dark
+   surface). Light mode keeps the tonal accent mesh above. */
+@supports (color: oklch(from white l c h)) {
+	[data-theme="dark"] .service-card {
+		--card-gradient: radial-gradient(
+				42% 55% at 25% 30%,
+				color-mix(in srgb, oklch(from var(--jb-accent) l c calc(h - 38)) 68%, transparent),
+				transparent 62%
+			),
+			radial-gradient(
+				46% 52% at 78% 32%,
+				color-mix(in srgb, var(--jb-accent) 46%, transparent),
+				transparent 60%
+			),
+			radial-gradient(
+				52% 56% at 50% 82%,
+				color-mix(in srgb, oklch(from var(--jb-accent) l c calc(h + 48)) 68%, transparent),
+				transparent 62%
+			);
+	}
+
+	/* Light mode: a gentler warm spread (the wide rainbow read muddy on white). */
+	[data-theme="light"] .service-card {
+		--card-gradient: radial-gradient(
+				42% 55% at 25% 30%,
+				color-mix(in srgb, oklch(from var(--jb-accent) l c calc(h - 22)) 62%, transparent),
+				transparent 62%
+			),
+			radial-gradient(
+				46% 52% at 78% 32%,
+				color-mix(in srgb, var(--jb-accent) 42%, transparent),
+				transparent 60%
+			),
+			radial-gradient(
+				52% 56% at 50% 82%,
+				color-mix(in srgb, oklch(from var(--jb-accent) l c calc(h + 26)) 62%, transparent),
+				transparent 62%
+			);
+	}
+}
+
+.service-card::before,
+.service-card::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	border-radius: inherit;
+	background: var(--card-gradient);
+	background-size: 200% 200%;
+	animation: jb-card-morph 16s ease-in-out infinite alternate;
+	pointer-events: none;
+}
+
+/* faint, always-alive resting mesh (a touch stronger on the dark surface) */
+.service-card::before {
+	opacity: 0.16;
+}
+
+[data-theme="dark"] .service-card::before {
+	opacity: 0.2;
+}
+
+/* vivid reveal, shown only through a soft window that trails the cursor */
+.service-card::after {
+	opacity: 0;
+	transition: opacity var(--jb-dur-base) var(--jb-ease-standard);
+	-webkit-mask: radial-gradient(
+		13rem 13rem at var(--mx, 50%) var(--my, 50%),
+		#000 8%,
+		transparent 72%
+	);
+	mask: radial-gradient(13rem 13rem at var(--mx, 50%) var(--my, 50%), #000 8%, transparent 72%);
+}
+
+.service-card:hover {
+	border-color: color-mix(in srgb, var(--jb-accent) 45%, var(--jb-color-border));
+}
+
+.service-card:hover::after {
+	opacity: 0.88;
+}
+
+[data-theme="dark"] .service-card:hover::after {
+	opacity: 1;
+}
+
+/* keep the content above both gradient layers */
+.service-card > * {
+	position: relative;
+	z-index: 1;
+}
+
+@keyframes jb-card-morph {
+	0% {
+		background-position: 0% 0%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 100%;
+	}
+}
+
+.service-index {
+	display: block;
+	font-family: var(--jb-font-mono);
+	font-size: 0.8rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	color: var(--jb-accent-text);
+	margin-bottom: var(--jb-space-sm);
+}
+
+.service-title {
+	font-family: var(--jb-font-display);
+	font-size: 1.3rem;
+	font-weight: 700;
+	margin-bottom: var(--jb-space-sm);
+}
+
+.service-desc {
+	color: var(--jb-text-secondary);
+	line-height: 1.6;
+}

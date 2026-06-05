@@ -58,7 +58,7 @@
 		font-size: clamp(1.8rem, 4vw, 2.8rem);
 		font-weight: 700;
 		letter-spacing: -0.01em;
-		margin-bottom: var(--jb-space-xl);
+		margin-bottom: var(--jb-space-lg);
 	}
 
 	/* Buttons */
@@ -156,9 +156,10 @@
 		margin-top: var(--jb-space-lg);
 	}
 
-	/* Section spacing */
+	/* Section spacing — kept tight on purpose; scales from 2rem on small screens to 4rem on
+	   desktop rather than the airier 8rem. */
 	section {
-		padding: var(--jb-space-2xl) var(--jb-space-lg);
+		padding: clamp(var(--jb-space-lg), 5vw, var(--jb-space-xl)) var(--jb-space-lg);
 	}
 
 	/* Code / mono */

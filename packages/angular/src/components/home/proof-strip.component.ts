@@ -4,7 +4,7 @@ import type { ProofPoint } from '@fg/shared';
 @Component({
 	selector: 'app-proof-strip',
 	standalone: true,
-	styleUrl: '../../../../../styles/components/home.module.css',
+	styleUrl: '../../../../../styles/components/proof.module.css',
 	template: `
 		<section class="proof">
 			<div class="container">

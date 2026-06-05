@@ -24,3 +24,4 @@ export { getCurrentTheme, setTheme, toggleTheme } from './theme';
 export { initSwitchTransition } from './disintegrate';
 export { initSmoothScroll, destroySmoothScroll } from './smooth-scroll';
 export { initTimelineMotion, destroyTimelineMotion } from './timeline-motion';
+export { initCardSpotlight } from './card-spotlight';

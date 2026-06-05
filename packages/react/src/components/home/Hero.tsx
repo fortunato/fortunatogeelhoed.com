@@ -1,5 +1,5 @@
 import type { HomeContent } from '@fg/shared';
-import styles from '@styles/components/home.module.css';
+import styles from '@styles/components/hero.module.css';
 
 const WALLPAPER_LINE = 'FORTUNATO.GEELHOED  '.repeat(6);
 // Enough lines that the rotated band overflows the 300%-tall container and fills the

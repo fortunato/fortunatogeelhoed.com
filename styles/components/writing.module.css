@@ -1,0 +1,81 @@
+/* Homepage "latest writing" teasers — shared across the three variants. Semantic --jb-* tokens
+   only. These cards ARE links (unlike the service cards), so they keep a click affordance
+   (lift + accent edge) — but share the home design language: same surface tokens, a mono topic
+   kicker echoing the services index, and tightened spacing so they aren't mostly empty. */
+
+.writing-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+	gap: var(--jb-space-lg);
+	margin-top: var(--jb-space-lg);
+}
+
+.writing-card {
+	display: flex;
+	flex-direction: column;
+	gap: var(--jb-space-sm);
+	color: inherit;
+	background: var(--jb-bg-card);
+	border: 1px solid var(--jb-color-border);
+	border-radius: var(--jb-radius-lg);
+	padding: var(--jb-space-lg);
+	transition: border-color var(--jb-dur-base) var(--jb-ease-standard), transform
+		var(--jb-dur-base) var(--jb-ease-standard), box-shadow var(--jb-dur-base)
+		var(--jb-ease-standard);
+}
+
+.writing-card:hover {
+	color: inherit;
+	border-color: color-mix(in srgb, var(--jb-accent) 45%, var(--jb-color-border));
+	transform: translateY(-3px);
+	box-shadow: var(--jb-shadow-md);
+}
+
+.writing-tag {
+	font-family: var(--jb-font-mono);
+	font-size: 0.7rem;
+	font-weight: 600;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	color: var(--jb-accent-text);
+}
+
+.writing-title {
+	font-family: var(--jb-font-display);
+	font-size: 1.25rem;
+	font-weight: 700;
+}
+
+.writing-blurb {
+	color: var(--jb-text-secondary);
+	line-height: 1.6;
+}
+
+/* margin-top:auto pins the link to the bottom so cards of unequal title length stay aligned.
+   The arrow is a CSS-drawn chevron (the display font lacks a → glyph, which fell back and
+   misaligned); inline-flex keeps it centred with the label. It nudges right on card hover. */
+.writing-more {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5em;
+	margin-top: auto;
+	font-size: 0.8rem;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
+	color: var(--jb-accent-text);
+}
+
+.writing-more::after {
+	content: "";
+	width: 0.4em;
+	height: 0.4em;
+	border-top: 2px solid currentColor;
+	border-right: 2px solid currentColor;
+	transform: rotate(45deg);
+	transition: transform var(--jb-dur-base) var(--jb-ease-standard);
+}
+
+.writing-card:hover .writing-more::after {
+	transform: rotate(45deg) translate(1px, -1px);
+}

@@ -1,5 +1,5 @@
 <template>
-	<section>
+	<section :class="styles.exposure">
 		<div class="container">
 			<p class="section-label">Frameworks</p>
 			<h2 :class="['section-title', styles.head]">

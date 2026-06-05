@@ -22,7 +22,7 @@ const INTENSITY_LEGEND: { intensity: string; label: string }[] = [
 
 export function FrameworkExposure() {
 	return (
-		<section>
+		<section className={styles.exposure}>
 			<div className="container">
 				<p className="section-label">Frameworks</p>
 				<h2 className={`section-title ${styles.head}`}>

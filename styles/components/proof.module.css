@@ -1,0 +1,81 @@
+/* Homepage proof strip — shared across the three variants. Semantic --jb-* tokens only. */
+
+.proof {
+	background: var(--jb-bg-secondary);
+}
+
+/* Four metrics laid out evenly: 2×2 by default (never an orphaned 3+1 like auto-fit produced),
+   one column on phones, and a single row only on wide screens where they actually fit. */
+.proof-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: var(--jb-space-lg);
+	margin-top: var(--jb-space-lg);
+}
+
+@media (max-width: 30rem) {
+	.proof-grid {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (min-width: 85rem) {
+	.proof-grid {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+}
+
+/* The big accent metrics carry a slow specular sheen that sweeps across the letterforms — a
+   brighter band travelling over an otherwise-accent gradient, clipped to the text. Frozen
+   under reduced motion; solid under forced colors (clipped gradients vanish there). */
+.proof-metric {
+	font-family: var(--jb-font-display);
+	font-size: clamp(2.4rem, 6vw, 3.5rem);
+	font-weight: 800;
+	line-height: 1;
+	background: linear-gradient(
+		100deg,
+		var(--jb-accent) 42%,
+		color-mix(in srgb, var(--jb-accent) 68%, white) 50%,
+		var(--jb-accent) 58%
+	);
+	background-size: 250% 100%;
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+/* Sweep the sheen once as the metrics scroll into view (scroll-driven, no JS) rather than
+   looping. Where unsupported / under reduced motion the gradient just sits as solid accent. */
+@media (prefers-reduced-motion: no-preference) {
+	@supports (animation-timeline: view()) {
+		.proof-metric {
+			animation: jb-proof-sheen linear both;
+			animation-timeline: view();
+			animation-range: entry 10% cover 55%;
+		}
+	}
+}
+
+@media (forced-colors: active) {
+	.proof-metric {
+		background: none;
+		-webkit-text-fill-color: CanvasText;
+		color: CanvasText;
+	}
+}
+
+@keyframes jb-proof-sheen {
+	from {
+		background-position: 0% 50%;
+	}
+	to {
+		background-position: 100% 50%;
+	}
+}
+
+.proof-label {
+	margin-top: var(--jb-space-sm);
+	color: var(--jb-text-secondary);
+	max-width: 22ch;
+}

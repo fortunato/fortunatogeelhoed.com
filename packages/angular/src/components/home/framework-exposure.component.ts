@@ -16,7 +16,7 @@ const bounds = spansBounds(frontendFrameworks, backendFrameworks);
 	imports: [FrameworkRibbonComponent],
 	styleUrls: ['../../../../../styles/components/framework-ribbon.module.css'],
 	template: `
-		<section>
+		<section class="exposure">
 			<div class="container">
 				<p class="section-label">Frameworks</p>
 				<h2 class="section-title head">Frameworks come and go. The craft compounds.</h2>

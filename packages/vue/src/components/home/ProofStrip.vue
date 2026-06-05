@@ -14,7 +14,7 @@
 
 <script setup lang="ts">
 import type { ProofPoint } from '@fg/shared';
-import styles from '@styles/components/home.module.css';
+import styles from '@styles/components/proof.module.css';
 
 defineProps<{ proof: ProofPoint[] }>();
 </script>

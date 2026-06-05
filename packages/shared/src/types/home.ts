@@ -12,6 +12,8 @@ export interface ProofPoint {
 
 /** A homepage recent-writing teaser entry. `href` resolves to a real route. */
 export interface WritingTeaserItem {
+	/** Short topical kicker shown above the title (e.g. "AI", "Career"). */
+	tag: string;
 	title: string;
 	blurb: string;
 	href: string;

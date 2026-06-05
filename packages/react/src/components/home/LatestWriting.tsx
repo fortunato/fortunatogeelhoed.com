@@ -1,5 +1,5 @@
 import type { WritingTeaserItem } from '@fg/shared';
-import styles from '@styles/components/home.module.css';
+import styles from '@styles/components/writing.module.css';
 import { Link } from 'react-router';
 
 export function LatestWriting({ writing }: { writing: WritingTeaserItem[] }) {
@@ -13,12 +13,13 @@ export function LatestWriting({ writing }: { writing: WritingTeaserItem[] }) {
 						<Link
 							key={post.title}
 							to={post.href}
-							className={`card ${styles['writing-card']}`}
+							className={styles['writing-card']}
 							data-reveal
 						>
+							<span className={styles['writing-tag']}>{post.tag}</span>
 							<h3 className={styles['writing-title']}>{post.title}</h3>
 							<p className={styles['writing-blurb']}>{post.blurb}</p>
-							<span className={styles['writing-more']}>Read more →</span>
+							<span className={styles['writing-more']}>Read more</span>
 						</Link>
 					))}
 				</div>

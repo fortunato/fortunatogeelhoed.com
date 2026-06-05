@@ -6,12 +6,14 @@ import type { HomeContent } from '@fg/shared';
 	selector: 'app-call-to-action',
 	standalone: true,
 	imports: [RouterLink],
-	styleUrl: '../../../../../styles/components/home.module.css',
+	styleUrl: '../../../../../styles/components/cta.module.css',
 	template: `
 		<section class="cta">
 			<div class="container">
-				<h2 class="cta-heading" data-reveal>{{ cta().heading }}</h2>
-				<a [routerLink]="cta().href" class="btn">Get in touch</a>
+				<div class="cta-panel">
+					<h2 class="cta-heading" data-reveal>{{ cta().heading }}</h2>
+					<a [routerLink]="cta().href" class="btn cta-btn">Get in touch</a>
+				</div>
 			</div>
 		</section>
 	`,

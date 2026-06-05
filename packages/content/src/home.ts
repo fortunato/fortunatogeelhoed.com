@@ -43,11 +43,13 @@ const home: HomeContent = {
 	],
 	writing: [
 		{
+			tag: 'Career',
 			title: 'Specialization Is Overrated',
 			blurb: "I don't know Python. So I published a library on PyPI.",
 			href: '/blog',
 		},
 		{
+			tag: 'AI',
 			title: 'Cognitive Debt & Agentic Workflows',
 			blurb: "What happens when you ship code you don't fully understand?",
 			href: '/blog',

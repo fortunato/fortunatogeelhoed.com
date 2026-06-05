@@ -1,5 +1,5 @@
 import type { ProofPoint } from '@fg/shared';
-import styles from '@styles/components/home.module.css';
+import styles from '@styles/components/proof.module.css';
 
 export function ProofStrip({ proof }: { proof: ProofPoint[] }) {
 	return (

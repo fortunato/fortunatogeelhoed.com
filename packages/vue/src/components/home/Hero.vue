@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import type { HomeContent } from '@fg/shared';
-import styles from '@styles/components/home.module.css';
+import styles from '@styles/components/hero.module.css';
 
 defineProps<{ hero: HomeContent['hero'] }>();
 

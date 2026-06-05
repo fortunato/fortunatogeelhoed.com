@@ -4,7 +4,7 @@ import type { HomeContent } from '@fg/shared';
 @Component({
 	selector: 'app-hero',
 	standalone: true,
-	styleUrl: '../../../../../styles/components/home.module.css',
+	styleUrl: '../../../../../styles/components/hero.module.css',
 	template: `
 		<section class="hero">
 			<div class="hero-wallpaper" aria-hidden="true">
