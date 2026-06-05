@@ -13,11 +13,15 @@ import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 					FORTUNATO<span class="footer-dot">.</span>GEELHOED
 				</span>
 				<nav class="footer-links" aria-label="Social and external links">
-					<a href="https://www.linkedin.com/in/fortunatogeelhoed/">
+					<a
+						href="https://www.linkedin.com/in/fortunatogeelhoed/"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
 						<jb-icon name="linkedin"></jb-icon>
 						LinkedIn
 					</a>
-					<a href="https://github.com/fortunato">
+					<a href="https://github.com/fortunato" target="_blank" rel="noopener noreferrer">
 						<jb-icon name="github"></jb-icon>
 						GitHub
 					</a>

@@ -8,11 +8,19 @@ export function Footer() {
 					FORTUNATO<span className={styles['footer-dot']}>.</span>GEELHOED
 				</span>
 				<nav className={styles['footer-links']} aria-label="Social and external links">
-					<a href="https://www.linkedin.com/in/fortunatogeelhoed/">
+					<a
+						href="https://www.linkedin.com/in/fortunatogeelhoed/"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
 						<jb-icon name="linkedin" />
 						LinkedIn
 					</a>
-					<a href="https://github.com/fortunato">
+					<a
+						href="https://github.com/fortunato"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
 						<jb-icon name="github" />
 						GitHub
 					</a>
