@@ -144,13 +144,17 @@
 					"Express",
 					"Azure",
 					"PostgreSQL",
-					"PostGIS"
+					"PostGIS",
+					"Blob Storage",
+					"Azure Service Bus"
 				],
 				"cicd": [
 					"GitLab CI",
 					"Azure Pipelines",
 					"GitHub Actions",
-					"Docker"
+					"Docker",
+					"AKS",
+					"App Insights"
 				],
 				"ai": [
 					"Copilot",
@@ -341,7 +345,7 @@
 			"client": "Limelight Digital",
 			"role": "Senior Full-Stack Developer",
 			"type": "employee",
-			"highlight": "They didn’t want to lose me — kept on remotely through a Brisbane → Melbourne move",
+			"highlight": "They didn’t want to lose me — kept on remotely through a Brisbane to Melbourne move",
 			"tech": {
 				"frontend": [
 					"jQuery",
@@ -390,6 +394,31 @@
 			}
 		},
 		{
+			"id": "mmplugins",
+			"era": "2007–2013 — Brisbane, Australia",
+			"years": "2008–12",
+			"startYear": 2008,
+			"endYear": 2012,
+			"client": "mmPlugins",
+			"role": "Joomla extensions",
+			"type": "side-project",
+			"highlight": "Free and commercial Joomla extensions, built full-stack — a three-person venture",
+			"tech": {
+				"frontend": [
+					"jQuery",
+					"JavaScript",
+					"HTML5",
+					"CSS"
+				],
+				"backend": [
+					"PHP",
+					"MySQL",
+					"Joomla",
+					"Joomla 2"
+				]
+			}
+		},
+		{
 			"id": "ifactory",
 			"era": "2007–2013 — Brisbane, Australia",
 			"years": "2007–10",
@@ -434,6 +463,11 @@
 			"type": "side-project",
 			"highlight": "Built another CMS from scratch — this time on the Seagull PHP framework",
 			"tech": {
+				"frontend": [
+					"jQuery",
+					"JavaScript",
+					"CSS"
+				],
 				"backend": [
 					"PHP",
 					"MySQL"
@@ -445,14 +479,17 @@
 		},
 		{
 			"id": "hids",
-			"era": "2000–2006 — The Early Web (Netherlands)",
+			"era": "2000–2006 — The Early Web (Netherlands & New Zealand)",
 			"years": "2005–06",
 			"startYear": 2005,
 			"endYear": 2006,
 			"client": "HIDS",
 			"role": "Web Developer",
 			"type": "employee",
-			"highlight": "XMLHttpRequest was the new hotness",
+			"highlight": [
+				"XMLHttpRequest was the new hotness",
+				"Kept on remotely through a move from the Netherlands to New Zealand"
+			],
 			"tech": {
 				"frontend": [
 					"JavaScript",
@@ -460,7 +497,8 @@
 				],
 				"backend": [
 					"PHP",
-					"MySQL"
+					"MySQL",
+					"In-house CMS"
 				],
 				"cicd": [
 					"SFTP"
@@ -469,7 +507,7 @@
 		},
 		{
 			"id": "cms-v1",
-			"era": "2000–2006 — The Early Web (Netherlands)",
+			"era": "2000–2006 — The Early Web (Netherlands & New Zealand)",
 			"years": "2005",
 			"startYear": 2005,
 			"endYear": 2005,
@@ -478,6 +516,11 @@
 			"type": "side-project",
 			"highlight": "Full CMS built from scratch in PHP",
 			"tech": {
+				"frontend": [
+					"JavaScript",
+					"XHTML",
+					"CSS"
+				],
 				"backend": [
 					"PHP",
 					"MySQL"
@@ -489,7 +532,7 @@
 		},
 		{
 			"id": "freelance-early",
-			"era": "2000–2006 — The Early Web (Netherlands)",
+			"era": "2000–2006 — The Early Web (Netherlands & New Zealand)",
 			"years": "2003–04",
 			"startYear": 2003,
 			"endYear": 2004,
@@ -499,7 +542,8 @@
 			"tech": {
 				"frontend": [
 					"JavaScript",
-					"XHTML / CSS"
+					"XHTML",
+					"CSS"
 				],
 				"backend": [
 					"PHP"
@@ -511,7 +555,7 @@
 		},
 		{
 			"id": "edf",
-			"era": "2000–2006 — The Early Web (Netherlands)",
+			"era": "2000–2006 — The Early Web (Netherlands & New Zealand)",
 			"years": "2002–03",
 			"startYear": 2002,
 			"endYear": 2003,
@@ -521,12 +565,14 @@
 			"tech": {
 				"frontend": [
 					"JavaScript",
-					"XML/XSLT"
+					"XML",
+					"XSLT"
 				],
 				"backend": [
-					"Classic ASP",
+					"ASP.NET",
 					"PHP",
-					"SQL Server"
+					"SQL Server",
+					"In-house CMS"
 				],
 				"cicd": [
 					"SFTP"
@@ -535,7 +581,7 @@
 		},
 		{
 			"id": "web-inzicht",
-			"era": "2000–2006 — The Early Web (Netherlands)",
+			"era": "2000–2006 — The Early Web (Netherlands & New Zealand)",
 			"years": "2000–02",
 			"startYear": 2000,
 			"endYear": 2002,
@@ -546,7 +592,8 @@
 			"tech": {
 				"frontend": [
 					"JavaScript",
-					"HTML / CSS",
+					"HTML",
+					"CSS",
 					"Flash"
 				],
 				"backend": [

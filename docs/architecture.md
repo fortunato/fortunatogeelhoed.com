@@ -141,8 +141,10 @@ server: {
 1. `build:css` — concatenates `styles/` and writes a content-hashed
    `dist/assets/styles-<hash>.css` plus a `manifest.json` the server reads to
    resolve the hashed path.
-2. `build:content` — parses Markdown frontmatter (gray-matter) into the content
-   the frameworks consume.
+2. `build:content` — produces the JSON the frameworks consume: Markdown pages
+   (gray-matter frontmatter + body) plus the structured homepage and career
+   timeline defined as typed modules. See [`packages/content`](../packages/content/README.md)
+   for the prose-vs-structured split.
 3. `nx run-many -t build -p react vue angular api` — each framework
    pre-renders every route to `dist/<framework>/<route>/index.html`; the API is
    bundled for Bun.

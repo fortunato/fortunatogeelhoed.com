@@ -256,10 +256,9 @@
 }
 
 .type-icon {
-	width: 0.85em;
-	height: 0.85em;
-	margin-right: 4px;
-	vertical-align: -1px;
+	width: 0.95em;
+	height: 0.95em;
+	flex-shrink: 0;
 }
 
 /* Spine cell */
@@ -291,7 +290,9 @@
 }
 
 .spine-type {
-	display: inline-block;
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
 	font-family: var(--jb-font-mono);
 	font-size: 0.6rem;
 	font-weight: 600;
@@ -399,26 +400,30 @@
 		.entry[data-reveal] .spine,
 		.entry[data-reveal] .lane {
 			opacity: 0;
-			transition: opacity 0.55s var(--jb-ease-emphasized), transform 0.55s
+			transition: opacity 0.4s var(--jb-ease-emphasized), transform 0.4s
 				var(--jb-ease-emphasized);
 		}
 		.entry[data-reveal] .spine {
-			transform: translateX(-28px);
+			/*transform: translateX(-28px);*/
+			transform: translateX(28px);
 		}
 		.entry[data-reveal] .lane-fe {
-			transform: translateX(-80px);
+			/*transform: translateX(-80px);*/
+			transform: translateX(80px);
+			transition-delay: 0.1s;
 		}
 		.entry[data-reveal] .lane-be {
-			transform: translateX(-40px);
-			transition-delay: 0.04s;
+			/*transform: translateX(-40px);*/
+			transform: translateX(80px);
+			transition-delay: 0.2s;
 		}
 		.entry[data-reveal] .lane-ci {
-			transform: translateX(40px);
-			transition-delay: 0.04s;
+			transform: translateX(80px);
+			transition-delay: 0.3s;
 		}
 		.entry[data-reveal] .lane-ai {
 			transform: translateX(80px);
-			transition-delay: 0.08s;
+			transition-delay: 0.4s;
 		}
 
 		.entry[data-reveal] .pill {
