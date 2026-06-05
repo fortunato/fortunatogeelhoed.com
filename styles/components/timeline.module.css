@@ -130,8 +130,8 @@
 /* ============================ The timeline ============================ */
 
 .timeline {
-	--spine-w: 15rem;
-	--cols: var(--spine-w) 2.2fr 1.6fr 1.4fr 1fr;
+	--spine-w: 17rem;
+	--cols: var(--spine-w) 1.8fr 1.6fr 1.4fr 1fr;
 	max-width: 1400px;
 	margin: var(--jb-space-2xl) auto 0;
 	position: relative;
