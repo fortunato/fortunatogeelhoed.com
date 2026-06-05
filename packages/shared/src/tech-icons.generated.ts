@@ -196,16 +196,20 @@ export const TECH_REGISTRY: Record<string, { brand: string; icon?: string }> = {
 		"icon": "cloud"
 	},
 	"AKS": {
-		"brand": "#326ce5"
+		"brand": "#326ce5",
+		"icon": "cloud"
 	},
 	"App Insights": {
-		"brand": "#0078d4"
+		"brand": "#0078d4",
+		"icon": "cloud"
 	},
 	"Blob Storage": {
-		"brand": "#0078d4"
+		"brand": "#0078d4",
+		"icon": "cloud"
 	},
 	"Azure Service Bus": {
-		"brand": "#0078d4"
+		"brand": "#0078d4",
+		"icon": "cloud"
 	},
 	"Java": {
 		"brand": "#000000",
@@ -308,7 +312,8 @@ export const TECH_REGISTRY: Record<string, { brand: string; icon?: string }> = {
 		"icon": "gitlab"
 	},
 	"Azure Pipelines": {
-		"brand": "#0078d7"
+		"brand": "#0078d7",
+		"icon": "cloud"
 	},
 	"Gitea Actions": {
 		"brand": "#609926",

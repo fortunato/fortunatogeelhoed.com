@@ -212,6 +212,11 @@ const GLYPHS = {
 const CUSTOM_GLYPHS: Record<string, { id: keyof typeof GLYPHS; brand: string }> = {
 	OpenClaw: { id: 'crab', brand: '#d97706' },
 	Azure: { id: 'cloud', brand: '#0078d4' },
+	AKS: { id: 'cloud', brand: '#326ce5' },
+	'App Insights': { id: 'cloud', brand: '#0078d4' },
+	'Blob Storage': { id: 'cloud', brand: '#0078d4' },
+	'Azure Service Bus': { id: 'cloud', brand: '#0078d4' },
+	'Azure Pipelines': { id: 'cloud', brand: '#0078d7' },
 	'SQL Server': { id: 'database', brand: '#cc2927' },
 	AEM: { id: 'layers', brand: '#eb1000' },
 	ChatGPT: { id: 'chat', brand: '#74aa9c' },
