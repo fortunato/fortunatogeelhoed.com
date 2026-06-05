@@ -64,7 +64,7 @@ const timeline: TimelineData = {
 			client: 'py-market-structure',
 			role: 'PyPI library',
 			type: 'side-project',
-			highlight: 'Published to PyPI with zero prior Python — built with Claude Code',
+			highlight: 'Published to PyPI with almost zero prior Python — built with Claude Code',
 			tech: {
 				frontend: ['Angular', 'RxJS', 'lightweight-charts'],
 				backend: ['Python', 'PyPI'],
@@ -118,7 +118,7 @@ const timeline: TimelineData = {
 			tech: {
 				frontend: ['React', 'Next.js', 'Anychart', 'RxJS'],
 				backend: ['Node.js', 'PostgreSQL'],
-				cicd: ['Bitbucket', 'Jenkins', 'Gitea Actions', 'Pulumi', 'k3s'],
+				cicd: ['Bitbucket', 'Jenkins', 'Gitea Actions', 'Docker', 'Pulumi', 'k3s'],
 				ai: ['ChatGPT API', 'Claude Code', 'MCP', 'OpenClaw'],
 			},
 		},
@@ -174,6 +174,21 @@ const timeline: TimelineData = {
 			},
 		},
 		{
+			id: 'dastoon',
+			era: '2013–2017 — Melbourne, Australia',
+			years: '2016',
+			startYear: 2016,
+			endYear: 2016,
+			client: 'Dastoon',
+			role: 'Technical direction & QA',
+			type: 'independent',
+			highlight: 'Technical direction and QA over an outsourced Magento 2 fashion store',
+			tech: {
+				frontend: ['jQuery', 'HTML5', 'CSS3'],
+				backend: ['PHP', 'Magento', 'MySQL'],
+			},
+		},
+		{
 			id: 'deloitte-au-consultant',
 			era: '2013–2017 — Melbourne, Australia',
 			years: '2013–16',
@@ -217,7 +232,7 @@ const timeline: TimelineData = {
 			highlight:
 				'They didn’t want to lose me — kept on remotely through a Brisbane to Melbourne move',
 			tech: {
-				frontend: ['jQuery', 'Backbone', 'Marionette', 'HTML5', 'CSS'],
+				frontend: ['jQuery', 'Backbone', 'Marionette', 'HTML5', 'CSS3'],
 				backend: ['PHP', 'MySQL', 'Kohana', 'Node.js'],
 			},
 		},
@@ -235,7 +250,7 @@ const timeline: TimelineData = {
 				'Early cloud — building CentOS AMI images from scratch on EC2',
 			],
 			tech: {
-				frontend: ['jQuery', 'HTML5', 'CSS'],
+				frontend: ['jQuery', 'HTML5', 'CSS3'],
 				backend: ['PHP', 'MySQL', 'SnappCMS', 'Magento'],
 				cicd: ['Mercurial', 'Amazon EC2'],
 			},
@@ -252,8 +267,9 @@ const timeline: TimelineData = {
 			highlight:
 				'Free and commercial Joomla extensions, built full-stack — a three-person venture',
 			tech: {
-				frontend: ['jQuery', 'JavaScript', 'HTML5', 'CSS'],
+				frontend: ['jQuery', 'JavaScript', 'HTML5', 'CSS3'],
 				backend: ['PHP', 'MySQL', 'Joomla', 'Joomla 2'],
+				cicd: ['Bash', 'SFTP'],
 			},
 		},
 		{
@@ -267,7 +283,7 @@ const timeline: TimelineData = {
 			type: 'employee',
 			highlight: 'Lived through the Prototype.js → MooTools → jQuery era',
 			tech: {
-				frontend: ['Prototype.js', 'MooTools', 'jQuery', 'HTML5', 'CSS'],
+				frontend: ['Prototype.js', 'MooTools', 'jQuery', 'HTML5', 'CSS3'],
 				backend: ['PHP', 'MySQL', 'Joomla', 'Joomla 2', 'Magento', 'Seagull', 'PEAR'],
 				cicd: ['SVN', 'rsync', 'Capistrano'],
 			},
@@ -283,7 +299,7 @@ const timeline: TimelineData = {
 			type: 'side-project',
 			highlight: 'Built another CMS from scratch — this time on the Seagull PHP framework',
 			tech: {
-				frontend: ['jQuery', 'JavaScript', 'CSS'],
+				frontend: ['jQuery', 'JavaScript', 'CSS3'],
 				backend: ['PHP', 'MySQL'],
 				cicd: ['Capistrano'],
 			},
@@ -310,15 +326,15 @@ const timeline: TimelineData = {
 		{
 			id: 'cms-v1',
 			era: '2000–2006 — The Early Web (Netherlands & New Zealand)',
-			years: '2005',
-			startYear: 2005,
+			years: '2003–05',
+			startYear: 2003,
 			endYear: 2005,
 			client: 'Custom CMS v1',
 			role: 'Built from scratch',
 			type: 'side-project',
 			highlight: 'Full CMS built from scratch in PHP',
 			tech: {
-				frontend: ['JavaScript', 'XHTML', 'CSS'],
+				frontend: ['JavaScript', 'XHTML', 'CSS2'],
 				backend: ['PHP', 'MySQL'],
 				cicd: ['SFTP'],
 			},
@@ -333,7 +349,7 @@ const timeline: TimelineData = {
 			role: 'Web Developer',
 			type: 'independent',
 			tech: {
-				frontend: ['JavaScript', 'XHTML', 'CSS'],
+				frontend: ['JavaScript', 'XHTML', 'CSS2'],
 				backend: ['PHP'],
 				cicd: ['SFTP'],
 			},
@@ -364,7 +380,7 @@ const timeline: TimelineData = {
 			type: 'employee',
 			highlight: 'Where it all started.',
 			tech: {
-				frontend: ['JavaScript', 'HTML', 'CSS', 'Flash'],
+				frontend: ['JavaScript', 'HTML', 'CSS2', 'Flash'],
 				backend: ['Classic ASP', 'MS Access'],
 				cicd: ['FTP'],
 			},

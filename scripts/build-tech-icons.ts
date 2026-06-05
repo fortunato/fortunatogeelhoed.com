@@ -46,6 +46,8 @@ const SLUGS: Record<string, string | null> = {
 	HTML5: 'html5',
 	HTML: 'html5',
 	CSS: 'css',
+	CSS2: 'css',
+	CSS3: 'css',
 	XHTML: null,
 	XML: null,
 	XSLT: null,
@@ -65,7 +67,7 @@ const SLUGS: Record<string, string | null> = {
 	'Spring Boot': 'springboot',
 	Salesforce: 'salesforce',
 	AEM: null,
-	Sitecore: null,
+	Sitecore: 'sitecore',
 	PostgreSQL: 'postgresql',
 	PostGIS: 'postgresql',
 	MySQL: 'mysql',
@@ -93,13 +95,14 @@ const SLUGS: Record<string, string | null> = {
 	'Gitea Actions': 'gitea',
 	Docker: 'docker',
 	Jenkins: 'jenkins',
-	Bamboo: null,
+	Bamboo: 'bamboo',
 	Bitbucket: 'bitbucket',
 	Mercurial: 'mercurial',
 	'Amazon EC2': 'amazonec2',
 	SVN: 'subversion',
 	Capistrano: null,
 	rsync: null,
+	Bash: 'gnubash',
 	SFTP: null,
 	'Visual SourceSafe': null,
 	FTP: null,
@@ -167,6 +170,25 @@ const BRAND_FALLBACK: Record<string, string> = {
 	Middleman: '#9c5b8b',
 };
 
+// Original hand-drawn glyphs for tools that have no simple-icons entry (own artwork composed
+// from primitives — not brand logos). Each is emitted into the sprite and wired into the
+// registry exactly like a real icon, overriding any text-pill fallback above.
+const CUSTOM_GLYPHS: Record<string, { id: string; brand: string; symbol: string }> = {
+	OpenClaw: {
+		id: 'crab',
+		brand: '#d97706',
+		symbol:
+			'<symbol id="i-crab" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+			'<ellipse cx="12" cy="14" rx="6" ry="4"/>' +
+			'<path d="M10 10.4V8"/><circle cx="10" cy="6.9" r="1"/>' +
+			'<path d="M14 10.4V8"/><circle cx="14" cy="6.9" r="1"/>' +
+			'<circle cx="4.6" cy="11" r="2"/><path d="M6.4 12.2 7.4 13.4"/>' +
+			'<circle cx="19.4" cy="11" r="2"/><path d="M17.6 12.2 16.6 13.4"/>' +
+			'<path d="M6.6 16.6 4.7 18.6M9 17.6 8.1 20M15 17.6 15.9 20M17.4 16.6 19.3 18.6"/>' +
+			'</symbol>',
+	},
+};
+
 interface SimpleIcon {
 	slug: string;
 	hex: string;
@@ -194,6 +216,12 @@ for (const [name, slug] of Object.entries(SLUGS)) {
 	} else {
 		registry[name] = { brand: BRAND_FALLBACK[name] ?? '#888888' };
 	}
+}
+
+// Wire the custom hand-drawn glyphs into the sprite + registry (overrides text fallbacks).
+for (const [name, glyph] of Object.entries(CUSTOM_GLYPHS)) {
+	registry[name] = { brand: glyph.brand, icon: glyph.id };
+	symbols.set(glyph.id, glyph.symbol);
 }
 
 // A clean git-branch glyph (not a brand logo) for the side-project branch marker.
