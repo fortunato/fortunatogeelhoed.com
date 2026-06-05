@@ -505,14 +505,32 @@
 	.entry {
 		display: flex;
 		flex-direction: column;
-		gap: var(--jb-space-sm);
+		gap: var(--jb-space-md);
 		padding: var(--jb-space-lg);
-		padding-left: 1.75rem;
+		/* A left gutter wide enough to seat the node dot away from the (boxed) edge, with the
+		   content column starting right after it. */
+		padding-left: 2.5rem;
 		margin-bottom: var(--jb-space-md);
 	}
 
+	/* Seat the dot in the gutter — clear of the box edge and close to the content column — and
+	   re-centre it on the date line (the stacked entry has more top padding than the desktop
+	   grid the base offset was tuned for). */
+	.entry::before {
+		top: 2.15rem;
+		left: 0.9rem;
+	}
+
+	/* Keep the spine line running vertically through the dots, as on the desktop grid, now
+	   that the dot sits in its own gutter. */
 	.entry::after {
-		display: none;
+		left: calc(0.9rem + 5.5px);
+	}
+
+	/* Spine and lanes both sit at the entry padding, so the date/role text and every pill row
+	   share one left edge, close to the dot. */
+	.spine {
+		padding-left: 0;
 	}
 
 	.lane {
