@@ -23,5 +23,7 @@ import type { HomeContent } from '@fg/shared';
 export class HeroComponent {
 	readonly hero = input.required<HomeContent['hero']>();
 	protected readonly wallpaperLine = 'FORTUNATO.GEELHOED  '.repeat(6);
-	protected readonly wallpaperLines = Array.from({ length: 14 }, (_, i) => i);
+	// Enough lines that the rotated band overflows the 300%-tall container and fills the
+	// corners (the .hero clips the overflow). Too few leaves the top/bottom corners bare.
+	protected readonly wallpaperLines = Array.from({ length: 40 }, (_, i) => i);
 }

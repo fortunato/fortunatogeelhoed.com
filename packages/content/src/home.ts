@@ -7,7 +7,8 @@ const home: HomeContent = {
 	hero: {
 		name: 'Fortunato Geelhoed',
 		tagline: 'Senior Full-Stack Engineer & Technical Lead',
-		statement: 'I build, fix, and lead TypeScript platforms.',
+		statement:
+			"I build, fix, and lead across React, Vue, and Angular — quick to pick up whatever's next when it makes sense.",
 	},
 	services: [
 		{
@@ -35,6 +36,10 @@ const home: HomeContent = {
 		{ metric: '5.5 years', label: 'Municipality of Amsterdam, fully remote' },
 		{ metric: '3×', label: 'Lighthouse gain on the Tele2 e-commerce rebuild' },
 		{ metric: 'PyPI', label: 'Published library with zero prior Python experience' },
+		{
+			metric: 'Global',
+			label: 'Two decades across the Netherlands, Australia, NZ & Spain',
+		},
 	],
 	writing: [
 		{

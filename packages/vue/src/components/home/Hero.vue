@@ -20,5 +20,7 @@ import styles from '@styles/components/home.module.css';
 defineProps<{ hero: HomeContent['hero'] }>();
 
 const wallpaperLine = 'FORTUNATO.GEELHOED  '.repeat(6);
-const wallpaperLines = Array.from({ length: 14 }, (_, i) => i);
+// Enough lines that the rotated band overflows the 300%-tall container and fills the
+// corners (the .hero clips the overflow). Too few leaves the top/bottom corners bare.
+const wallpaperLines = Array.from({ length: 40 }, (_, i) => i);
 </script>

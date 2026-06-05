@@ -2,7 +2,9 @@ import type { HomeContent } from '@fg/shared';
 import styles from '@styles/components/home.module.css';
 
 const WALLPAPER_LINE = 'FORTUNATO.GEELHOED  '.repeat(6);
-const WALLPAPER_LINES = Array.from({ length: 14 }, (_, i) => i);
+// Enough lines that the rotated band overflows the 300%-tall container and fills the
+// corners (the .hero clips the overflow). Too few leaves the top/bottom corners bare.
+const WALLPAPER_LINES = Array.from({ length: 40 }, (_, i) => i);
 
 export function Hero({ hero }: { hero: HomeContent['hero'] }) {
 	return (

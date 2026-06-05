@@ -67,7 +67,7 @@
 
 .hero-name {
 	font-family: var(--jb-font-display);
-	font-size: clamp(4rem, 13vw, 12rem);
+	font-size: clamp(3.5rem, 11vw, 9rem);
 	font-weight: 800;
 	line-height: 0.9;
 	letter-spacing: -0.03em;
@@ -97,7 +97,7 @@
 .hero-statement {
 	margin-top: var(--jb-space-lg);
 	max-width: 38rem;
-	font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+	font-size: clamp(1.05rem, 2.2vw, 1.4rem);
 	color: var(--jb-text-secondary);
 	line-height: 1.5;
 }
