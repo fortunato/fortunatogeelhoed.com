@@ -128,6 +128,10 @@
 		/* The brand accent is dark enough that, as small text, it lands just under 4.5:1 on
 		   the dark surfaces — lighten it for text use so links/labels clear AA. */
 		--jb-accent-text: color-mix(in srgb, var(--jb-accent) 80%, white);
+		/* Floor for per-tech brand lightness on the dark surface: near-black brands (Angular,
+		   Bun, socket.io…) are lifted to at least this so timeline pills keep a visible edge.
+		   Consumed via relative-colour syntax in the timeline styles; light theme leaves it 0. */
+		--jb-pill-lightness-min: 0.62;
 	}
 
 	/* Theme: light */

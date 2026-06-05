@@ -362,15 +362,32 @@
 	border-radius: var(--jb-radius-sm);
 	white-space: nowrap;
 	color: var(--jb-text-primary);
-	background: color-mix(in srgb, var(--brand, var(--jb-text-secondary)) 12%, transparent);
-	border: 1px solid color-mix(in srgb, var(--brand, var(--jb-text-secondary)) 30%, transparent);
+	/* The brand colour drives the outline, tint, and icon. --pill-ink is normally the raw
+	   brand; the dark theme floors its lightness below so near-black brands stay visible. */
+	--pill-ink: var(--brand, var(--jb-text-secondary));
+	background: color-mix(in srgb, var(--pill-ink) 12%, transparent);
+	border: 1px solid color-mix(in srgb, var(--pill-ink) 30%, transparent);
 }
 
 .pill-icon {
 	width: 0.95em;
 	height: 0.95em;
 	flex-shrink: 0;
-	color: var(--brand, currentColor);
+	color: var(--pill-ink);
+}
+
+/* Some brand colours (Angular, Bun, socket.io, Nx…) are near-black and dissolve into the
+   dark surface, taking the pill outline and icon with them. Floor the brand lightness so those
+   pills keep a visible edge; brands already above the floor (React, Vue…) are untouched. The
+   floor is a theme token (0 on light, lifted on dark) so this rule needs no theme selector —
+   which keeps it portable across the CSS-module and Angular-encapsulated builds. Degrades to
+   the raw brand where relative-colour syntax is unsupported. */
+@supports (color: oklch(from white l c h)) {
+	.pill {
+		--pill-ink: oklch(
+			from var(--brand, var(--jb-text-secondary)) max(l, var(--jb-pill-lightness-min, 0)) c h
+		);
+	}
 }
 
 /* ============================ Reveal: assemble / disassemble ============================ */
