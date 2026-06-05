@@ -243,7 +243,7 @@
 				"Early cloud — building CentOS AMI images from scratch on EC2"
 			],
 			"tech": {
-				"frontend": ["jQuery", "HTML5", "CSS3", "Ext JS"],
+				"frontend": ["jQuery", "HTML5", "CSS3"],
 				"backend": ["PHP", "MySQL", "SnappCMS", "Magento"],
 				"cicd": ["Mercurial", "Amazon EC2"]
 			}
