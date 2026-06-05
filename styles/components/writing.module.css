@@ -22,13 +22,13 @@
 	transition: border-color var(--jb-dur-base) var(--jb-ease-standard), transform
 		var(--jb-dur-base) var(--jb-ease-standard), box-shadow var(--jb-dur-base)
 		var(--jb-ease-standard);
-}
 
-.writing-card:hover {
-	color: inherit;
-	border-color: color-mix(in srgb, var(--jb-accent) 45%, var(--jb-color-border));
-	transform: translateY(-3px);
-	box-shadow: var(--jb-shadow-md);
+	&:hover {
+		color: inherit;
+		border-color: color-mix(in srgb, var(--jb-accent) 45%, var(--jb-color-border));
+		transform: translateY(-3px);
+		box-shadow: var(--jb-shadow-md);
+	}
 }
 
 .writing-tag {
@@ -64,16 +64,16 @@
 	text-transform: uppercase;
 	letter-spacing: 0.1em;
 	color: var(--jb-accent-text);
-}
 
-.writing-more::after {
-	content: "";
-	width: 0.4em;
-	height: 0.4em;
-	border-top: 2px solid currentColor;
-	border-right: 2px solid currentColor;
-	transform: rotate(45deg);
-	transition: transform var(--jb-dur-base) var(--jb-ease-standard);
+	&::after {
+		content: "";
+		width: 0.4em;
+		height: 0.4em;
+		border-top: 2px solid currentColor;
+		border-right: 2px solid currentColor;
+		transform: rotate(45deg);
+		transition: transform var(--jb-dur-base) var(--jb-ease-standard);
+	}
 }
 
 .writing-card:hover .writing-more::after {

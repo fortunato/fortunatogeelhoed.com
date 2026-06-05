@@ -62,19 +62,38 @@
 	bottom: 0;
 	border-radius: var(--jb-radius-sm);
 	background: var(--jb-accent);
-}
 
-/* Solid (professional) bars carry the same specular sheen as the proof metrics — a brighter
-   band that sweeps across once as each bar scrolls into view. Striped/dot variants keep their
-   own fill. */
-.ribbon-seg[data-intensity="professional"] {
-	background: linear-gradient(
-		100deg,
-		var(--jb-accent) 42%,
-		color-mix(in srgb, var(--jb-accent) 68%, white) 50%,
-		var(--jb-accent) 58%
-	);
-	background-size: 250% 100%;
+	/* Solid (professional) bars carry the same specular sheen as the proof metrics — a brighter
+	   band that sweeps across once as each bar scrolls into view. Striped/dot variants keep their
+	   own fill. */
+	&[data-intensity="professional"] {
+		background: linear-gradient(
+			100deg,
+			var(--jb-accent) 42%,
+			color-mix(in srgb, var(--jb-accent) 68%, white) 50%,
+			var(--jb-accent) 58%
+		);
+		background-size: 250% 100%;
+	}
+
+	&[data-intensity="occasional"] {
+		background: repeating-linear-gradient(
+			45deg,
+			var(--jb-accent),
+			var(--jb-accent) 3px,
+			transparent 3px,
+			transparent 6px
+		);
+	}
+
+	&[data-intensity="brief"] {
+		top: 50%;
+		bottom: auto;
+		width: 0.7rem;
+		height: 0.7rem;
+		transform: translate(-50%, -50%);
+		border-radius: 50%;
+	}
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -94,25 +113,6 @@
 	to {
 		background-position: 100% 50%;
 	}
-}
-
-.ribbon-seg[data-intensity="occasional"] {
-	background: repeating-linear-gradient(
-		45deg,
-		var(--jb-accent),
-		var(--jb-accent) 3px,
-		transparent 3px,
-		transparent 6px
-	);
-}
-
-.ribbon-seg[data-intensity="brief"] {
-	top: 50%;
-	bottom: auto;
-	width: 0.7rem;
-	height: 0.7rem;
-	transform: translate(-50%, -50%);
-	border-radius: 50%;
 }
 
 /* Shared axis + legend, rendered once by the section. The left margins reserve the label
@@ -153,21 +153,21 @@
 	height: 0.7rem;
 	border-radius: var(--jb-radius-sm);
 	background: var(--jb-accent);
-}
 
-.legend-swatch[data-intensity="occasional"] {
-	background: repeating-linear-gradient(
-		45deg,
-		var(--jb-accent),
-		var(--jb-accent) 3px,
-		transparent 3px,
-		transparent 6px
-	);
-}
+	&[data-intensity="occasional"] {
+		background: repeating-linear-gradient(
+			45deg,
+			var(--jb-accent),
+			var(--jb-accent) 3px,
+			transparent 3px,
+			transparent 6px
+		);
+	}
 
-.legend-swatch[data-intensity="brief"] {
-	width: 0.7rem;
-	border-radius: 50%;
+	&[data-intensity="brief"] {
+		width: 0.7rem;
+		border-radius: 50%;
+	}
 }
 
 /* Narrow screens: the 6rem label column squeezes the track, so stack the label above its

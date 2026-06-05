@@ -17,18 +17,18 @@
 	);
 	color: var(--jb-text-on-accent);
 	box-shadow: var(--jb-shadow-lg);
-}
 
-.cta-panel::before {
-	content: "";
-	position: absolute;
-	inset: 0;
-	background: radial-gradient(70% 120% at 50% -10%, rgba(255, 255, 255, 0.2), transparent 70%);
-	pointer-events: none;
-}
+	&::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(70% 120% at 50% -10%, rgba(255, 255, 255, 0.2), transparent 70%);
+		pointer-events: none;
+	}
 
-.cta-panel > * {
-	position: relative;
+	& > * {
+		position: relative;
+	}
 }
 
 .cta-heading {
@@ -40,18 +40,18 @@
 }
 
 /* Invert the button so it reads as the primary action against the accent panel. Hover simply
-   morphs the background colour (label flips for contrast) on a quartic ease over 0.4s — no
-   lift, no wipe. */
+   morphs the background colour (label flips for contrast) on a symmetric ease over the slow
+   duration — no lift, no wipe. */
 .cta-btn {
 	background: var(--jb-text-on-accent);
 	color: var(--jb-accent);
-	transition: background-color 0.4s cubic-bezier(0.76, 0, 0.24, 1), color 0.4s
-		cubic-bezier(0.76, 0, 0.24, 1);
-}
+	transition: background-color var(--jb-dur-slow) var(--jb-ease-in-out), color var(--jb-dur-slow)
+		var(--jb-ease-in-out);
 
-.cta-btn:hover {
-	background: color-mix(in srgb, var(--jb-text-on-accent) 70%, var(--jb-accent));
-	color: var(--jb-accent);
-	transform: none;
-	box-shadow: none;
+	&:hover {
+		background: color-mix(in srgb, var(--jb-text-on-accent) 70%, var(--jb-accent));
+		color: var(--jb-accent);
+		transform: none;
+		box-shadow: none;
+	}
 }

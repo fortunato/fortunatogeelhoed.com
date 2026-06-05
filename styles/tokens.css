@@ -103,6 +103,10 @@
 		--jb-dur-slow: 0.4s;
 		--jb-ease-standard: cubic-bezier(0.2, 0, 0, 1);
 		--jb-ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
+		/* Symmetric ease-in-out (quartic) — accelerates and decelerates evenly, unlike the two
+		   decelerate curves above. For deliberate "morph" transitions where the change should
+		   feel weighted at both ends rather than snapping out (the closing CTA button). */
+		--jb-ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
 	}
 
 	/* Register the accent so it can interpolate during the framework switch

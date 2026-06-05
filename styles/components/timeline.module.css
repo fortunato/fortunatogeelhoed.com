@@ -20,6 +20,19 @@
 	/* minmax(0, …) lets the lanes shrink below their pills' intrinsic width so the pills wrap
 	   instead of forcing the grid wider than its container (which overflowed the viewport). */
 	--cols: var(--spine-w) minmax(0, 1.8fr) minmax(0, 1.6fr) minmax(0, 1.4fr) minmax(0, 1fr);
+	/* Left indent shared by the lane headers, era labels and the spine cell so they align. */
+	--spine-pad: 1.75rem;
+	/* The node dot and the spine line derive from these: the line is centred on the dot
+	   (half the dot, less half the 1px line). Reassigned per-breakpoint so the dot and line
+	   stay coupled when the gutter changes. */
+	--node-size: 12px;
+	--node-left: 0.4rem;
+	/* Entry-type identity colours: employee blue and side-project amber (plus a darker amber
+	   ink for tag text that must clear AA on the pale tint). Independent uses the framework
+	   accent. Stated once here; the node, tag and side-project fill all derive from them. */
+	--type-employee: #5ba8ff;
+	--type-side: #facc15;
+	--type-side-ink: #b88a06;
 	max-width: 1400px;
 	margin: var(--jb-space-2xl) auto 0;
 	position: relative;
@@ -51,16 +64,16 @@
 	color: var(--jb-text-tertiary);
 	padding: 0.75rem;
 	border-left: 1px solid var(--jb-color-border);
-}
 
-.lane-header:first-child {
-	border-left: none;
-	padding-left: 1.75rem;
+	&:first-child {
+		border-left: none;
+		padding-left: var(--spine-pad);
+	}
 }
 
 /* Era / time-block divider */
 .era {
-	padding: var(--jb-space-xl) 0 var(--jb-space-md) 1.75rem;
+	padding: var(--jb-space-xl) 0 var(--jb-space-md) var(--spine-pad);
 }
 
 .era-label {
@@ -72,17 +85,17 @@
 	text-transform: uppercase;
 	letter-spacing: 0.18em;
 	color: var(--jb-text-secondary);
-}
 
-.era-label::after {
-	content: "";
-	position: absolute;
-	left: 0;
-	bottom: -4px;
-	width: 100%;
-	height: 1px;
-	background: linear-gradient(to right, var(--jb-accent), transparent);
-	opacity: 0.4;
+	&::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		bottom: -4px;
+		width: 100%;
+		height: 1px;
+		background: linear-gradient(to right, var(--jb-accent), transparent);
+		opacity: 0.4;
+	}
 }
 
 /* Entry row */
@@ -96,56 +109,57 @@
 	align-items: start;
 	border-bottom: 1px solid color-mix(in srgb, var(--jb-color-border) 55%, transparent);
 	--node-color: var(--jb-accent);
-}
 
-.entry:nth-child(even of .entry) {
-	background: color-mix(in srgb, var(--jb-bg-secondary) 45%, transparent);
-}
+	&:nth-child(even of .entry) {
+		background: color-mix(in srgb, var(--jb-bg-secondary) 45%, transparent);
+	}
 
-/* Node + spine line */
-.entry::before {
-	content: "";
-	position: absolute;
-	left: 0.4rem;
-	top: 1.15rem;
-	width: 12px;
-	height: 12px;
-	border-radius: 50%;
-	background: var(--node-color);
-	box-shadow: 0 0 0 3px var(--jb-bg-primary), 0 0 12px
-		color-mix(in srgb, var(--node-color) 35%, transparent);
-	z-index: 2;
-}
+	/* Node + spine line */
+	&::before {
+		content: "";
+		position: absolute;
+		left: var(--node-left);
+		top: 1.15rem;
+		width: var(--node-size);
+		height: var(--node-size);
+		border-radius: 50%;
+		background: var(--node-color);
+		box-shadow: 0 0 0 3px var(--jb-bg-primary), 0 0 12px
+			color-mix(in srgb, var(--node-color) 35%, transparent);
+		z-index: 2;
+	}
 
-.entry::after {
-	content: "";
-	position: absolute;
-	left: calc(0.4rem + 5.5px);
-	top: 0;
-	bottom: 0;
-	width: 1px;
-	background: var(--jb-color-border);
-	z-index: 1;
-}
+	&::after {
+		content: "";
+		position: absolute;
+		/* Centre the 1px line on the dot: dot's left + half the dot, less half the line. */
+		left: calc(var(--node-left) + var(--node-size) / 2 - 0.5px);
+		top: 0;
+		bottom: 0;
+		width: 1px;
+		background: var(--jb-color-border);
+		z-index: 1;
+	}
 
-.entry[data-type="employee"] {
-	--node-color: #5ba8ff;
-}
-.entry[data-type="independent"] {
-	--node-color: var(--jb-accent);
-}
-.entry[data-type="side-project"] {
-	--node-color: #facc15;
-	background: repeating-linear-gradient(
-		-45deg,
-		transparent,
-		transparent 12px,
-		color-mix(in srgb, #facc15 4%, transparent) 12px,
-		color-mix(in srgb, #facc15 4%, transparent) 13px
-	);
-	border: 1px dashed color-mix(in srgb, #facc15 22%, transparent);
-	border-radius: var(--jb-radius-md);
-	margin: 4px 0;
+	&[data-type="employee"] {
+		--node-color: var(--type-employee);
+	}
+	&[data-type="independent"] {
+		--node-color: var(--jb-accent);
+	}
+	&[data-type="side-project"] {
+		--node-color: var(--type-side);
+		background: repeating-linear-gradient(
+			-45deg,
+			transparent,
+			transparent 12px,
+			color-mix(in srgb, var(--type-side) 4%, transparent) 12px,
+			color-mix(in srgb, var(--type-side) 4%, transparent) 13px
+		);
+		border: 1px dashed color-mix(in srgb, var(--type-side) 22%, transparent);
+		border-radius: var(--jb-radius-md);
+		margin: 4px 0;
+	}
 }
 
 .type-icon {
@@ -154,9 +168,11 @@
 	flex-shrink: 0;
 }
 
-/* Spine cell */
+/* Spine cell. grid-column is explicit (like the lanes below) so an empty lane can be omitted
+   without shifting the columns. */
 .spine {
-	padding-left: 1.75rem;
+	grid-column: 1;
+	padding-left: var(--spine-pad);
 	padding-right: var(--jb-space-md);
 }
 
@@ -194,19 +210,19 @@
 	padding: 2px 8px;
 	border-radius: 99px;
 	margin-top: 6px;
-}
 
-.spine-type[data-type="employee"] {
-	background: color-mix(in srgb, #5ba8ff 14%, transparent);
-	color: #5ba8ff;
-}
-.spine-type[data-type="independent"] {
-	background: var(--jb-accent-soft);
-	color: var(--jb-accent-on-soft);
-}
-.spine-type[data-type="side-project"] {
-	background: color-mix(in srgb, #facc15 14%, transparent);
-	color: #b88a06;
+	&[data-type="employee"] {
+		background: color-mix(in srgb, var(--type-employee) 14%, transparent);
+		color: var(--type-employee);
+	}
+	&[data-type="independent"] {
+		background: var(--jb-accent-soft);
+		color: var(--jb-accent-on-soft);
+	}
+	&[data-type="side-project"] {
+		background: color-mix(in srgb, var(--type-side) 14%, transparent);
+		color: var(--type-side-ink);
+	}
 }
 
 .spine-highlight {
@@ -231,9 +247,6 @@
 }
 
 /* explicit columns so empty lanes can be omitted without shifting the others */
-.spine {
-	grid-column: 1;
-}
 .lane-fe {
 	grid-column: 2;
 }
@@ -399,23 +412,17 @@
 		gap: var(--jb-space-md);
 		padding: var(--jb-space-lg);
 		/* A left gutter wide enough to seat the node dot away from the (boxed) edge, with the
-		   content column starting right after it. */
+		   content column starting right after it. Reseat the dot in that gutter; the spine line
+		   stays centred on it automatically (both derive from --node-left). */
 		padding-left: 2.5rem;
 		margin-bottom: var(--jb-space-md);
+		--node-left: 0.9rem;
 	}
 
-	/* Seat the dot in the gutter — clear of the box edge and close to the content column — and
-	   re-centre it on the date line (the stacked entry has more top padding than the desktop
-	   grid the base offset was tuned for). */
+	/* Re-centre the dot on the date line (the stacked entry has more top padding than the
+	   desktop grid the base offset was tuned for). */
 	.entry::before {
 		top: 2.15rem;
-		left: 0.9rem;
-	}
-
-	/* Keep the spine line running vertically through the dots, as on the desktop grid, now
-	   that the dot sits in its own gutter. */
-	.entry::after {
-		left: calc(0.9rem + 5.5px);
 	}
 
 	/* Spine and lanes both sit at the entry padding, so the date/role text and every pill row

@@ -1,17 +1,9 @@
-/* Header component styles. Shared by all three variants: React/Vue consume it as
-   a hashed CSS Module; Angular via styleUrl under emulated ViewEncapsulation.
-   References semantic `--jb-` tokens only.
+/* Header (top bar): logo, primary nav and the framework switcher. Shared across the three
+   variants — React/Vue as a hashed CSS Module, Angular via styleUrl under emulated
+   ViewEncapsulation. Semantic `--jb-` tokens only.
 
-   Class names are kebab-case (conventional CSS). React/Vue read multi-word classes
-   via bracket access (styles['switcher-btn']) and their Vite configs do NOT set
-   localsConvention — under lightningcss the camelCase conversion drops multi-word
-   locals from the JS export map. Single-word classes use dot access (styles.header).
-
-   Not wrapped in `@layer components`: hand-wrapping this shared file breaks
-   Angular's emulated encapsulation (Angular compiles styleUrl through its own
-   pipeline, not Vite/lightningcss). Component-layer placement is a
-   follow-up; until then these scoped styles are unlayered, which is correct for
-   component-scoped rules (they win over @layer base). */
+   The kebab-case class names (read via bracket access in React/Vue) and the reason these
+   scoped modules stay unlayered are repo-wide conventions — see docs/css-architecture.md. */
 
 .header {
 	position: fixed;
@@ -63,38 +55,38 @@
 	display: flex;
 	align-items: center;
 	gap: var(--jb-space-lg);
-}
 
-.nav a {
-	font-size: 0.7rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.18em;
-	color: var(--jb-text-secondary);
-	text-decoration: none;
-	transition: color var(--jb-dur-fast) var(--jb-ease-standard);
-	position: relative;
-}
+	& a {
+		font-size: 0.7rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.18em;
+		color: var(--jb-text-secondary);
+		text-decoration: none;
+		transition: color var(--jb-dur-fast) var(--jb-ease-standard);
+		position: relative;
 
-.nav a::after {
-	content: "";
-	position: absolute;
-	bottom: -4px;
-	left: 0;
-	width: 0;
-	height: 1.5px;
-	background: var(--jb-accent);
-	transition: width var(--jb-dur-base) var(--jb-ease-standard);
-}
+		&::after {
+			content: "";
+			position: absolute;
+			bottom: -4px;
+			left: 0;
+			width: 0;
+			height: 1.5px;
+			background: var(--jb-accent);
+			transition: width var(--jb-dur-base) var(--jb-ease-standard);
+		}
 
-.nav a:hover,
-.nav a[aria-current="page"] {
-	color: var(--jb-text-primary);
-}
+		&:hover,
+		&[aria-current="page"] {
+			color: var(--jb-text-primary);
+		}
 
-.nav a:hover::after,
-.nav a[aria-current="page"]::after {
-	width: 100%;
+		&:hover::after,
+		&[aria-current="page"]::after {
+			width: 100%;
+		}
+	}
 }
 
 .switcher {
@@ -133,19 +125,19 @@
 	transition: color var(--jb-dur-fast) var(--jb-ease-standard), background-color
 		var(--jb-dur-fast) var(--jb-ease-standard);
 	text-transform: lowercase;
-}
 
-.switcher-btn:hover {
-	color: var(--jb-text-primary);
+	&:hover {
+		color: var(--jb-text-primary);
+	}
 }
 
 .active {
 	background: var(--jb-accent);
 	color: var(--jb-text-on-accent);
-}
 
-.active:hover {
-	color: var(--jb-text-on-accent);
+	&:hover {
+		color: var(--jb-text-on-accent);
+	}
 }
 
 /* The theme toggle now lives in the shared <jb-theme-toggle> web component; its

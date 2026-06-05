@@ -53,6 +53,53 @@
 	border-radius: var(--jb-radius-lg);
 	padding: var(--jb-space-lg);
 	transition: border-color var(--jb-dur-base) var(--jb-ease-standard);
+
+	&::before,
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+		background: var(--card-gradient);
+		background-size: 200% 200%;
+		animation: jb-card-morph 16s ease-in-out infinite alternate;
+		pointer-events: none;
+	}
+
+	/* faint, always-alive resting mesh (a touch stronger on the dark surface) */
+	&::before {
+		opacity: 0.16;
+	}
+
+	/* vivid reveal, shown only through a soft window that trails the cursor */
+	&::after {
+		opacity: 0;
+		transition: opacity var(--jb-dur-base) var(--jb-ease-standard);
+		-webkit-mask: radial-gradient(
+			13rem 13rem at var(--mx, 50%) var(--my, 50%),
+			#000 8%,
+			transparent 72%
+		);
+		mask: radial-gradient(
+			13rem 13rem at var(--mx, 50%) var(--my, 50%),
+			#000 8%,
+			transparent 72%
+		);
+	}
+
+	&:hover {
+		border-color: color-mix(in srgb, var(--jb-accent) 45%, var(--jb-color-border));
+	}
+
+	&:hover::after {
+		opacity: 0.88;
+	}
+
+	/* keep the content above both gradient layers */
+	& > * {
+		position: relative;
+		z-index: 1;
+	}
 }
 
 /* Dark mode: warm multi-hue spread across the accent's neighbours (looks great on the dark
@@ -96,55 +143,15 @@
 	}
 }
 
-.service-card::before,
-.service-card::after {
-	content: "";
-	position: absolute;
-	inset: 0;
-	border-radius: inherit;
-	background: var(--card-gradient);
-	background-size: 200% 200%;
-	animation: jb-card-morph 16s ease-in-out infinite alternate;
-	pointer-events: none;
-}
-
-/* faint, always-alive resting mesh (a touch stronger on the dark surface) */
-.service-card::before {
-	opacity: 0.16;
-}
-
+/* A touch stronger resting mesh on the dark surface; vivid reveal reaches full
+   opacity. Theme-context overrides (component is the subject, not the parent) are
+   kept flat so the cascade reads top-to-bottom. */
 [data-theme="dark"] .service-card::before {
 	opacity: 0.2;
 }
 
-/* vivid reveal, shown only through a soft window that trails the cursor */
-.service-card::after {
-	opacity: 0;
-	transition: opacity var(--jb-dur-base) var(--jb-ease-standard);
-	-webkit-mask: radial-gradient(
-		13rem 13rem at var(--mx, 50%) var(--my, 50%),
-		#000 8%,
-		transparent 72%
-	);
-	mask: radial-gradient(13rem 13rem at var(--mx, 50%) var(--my, 50%), #000 8%, transparent 72%);
-}
-
-.service-card:hover {
-	border-color: color-mix(in srgb, var(--jb-accent) 45%, var(--jb-color-border));
-}
-
-.service-card:hover::after {
-	opacity: 0.88;
-}
-
 [data-theme="dark"] .service-card:hover::after {
 	opacity: 1;
-}
-
-/* keep the content above both gradient layers */
-.service-card > * {
-	position: relative;
-	z-index: 1;
 }
 
 @keyframes jb-card-morph {

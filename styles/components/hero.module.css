@@ -37,16 +37,16 @@
 	white-space: nowrap;
 	text-transform: uppercase;
 	color: color-mix(in srgb, var(--jb-text-primary) 6%, transparent);
-}
 
-.hero-wallpaper-line:nth-child(even) {
-	font-size: 3.5vw;
-	color: color-mix(in srgb, var(--jb-text-primary) 4%, transparent);
-}
+	&:nth-child(even) {
+		font-size: 3.5vw;
+		color: color-mix(in srgb, var(--jb-text-primary) 4%, transparent);
+	}
 
-.hero-wallpaper-line:nth-child(3n) {
-	font-size: 5.5vw;
-	color: color-mix(in srgb, var(--jb-text-primary) 3%, transparent);
+	&:nth-child(3n) {
+		font-size: 5.5vw;
+		color: color-mix(in srgb, var(--jb-text-primary) 3%, transparent);
+	}
 }
 
 @keyframes jb-wallpaper-drift {
@@ -98,9 +98,9 @@
 	font-size: clamp(1.05rem, 2.2vw, 1.4rem);
 	color: var(--jb-text-secondary);
 	line-height: 1.5;
-}
 
-.hero-statement strong {
-	color: var(--jb-text-primary);
-	font-weight: 600;
+	& strong {
+		color: var(--jb-text-primary);
+		font-weight: 600;
+	}
 }

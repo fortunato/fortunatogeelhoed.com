@@ -33,16 +33,16 @@
 	text-decoration: none;
 	color: var(--jb-text-secondary);
 	transition: color var(--jb-dur-fast) var(--jb-ease-standard);
-}
 
-.bottom-nav-item[aria-current="page"] {
-	color: var(--jb-accent-text);
-}
+	&[aria-current="page"] {
+		color: var(--jb-accent-text);
+	}
 
-.bottom-nav-item jb-icon svg {
-	display: block;
-	width: 1.4rem;
-	height: 1.4rem;
+	& jb-icon svg {
+		display: block;
+		width: 1.4rem;
+		height: 1.4rem;
+	}
 }
 
 /* Wide viewports: the top-bar nav in the header is the primary nav instead. Kept in step
