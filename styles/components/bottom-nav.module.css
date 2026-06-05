@@ -45,8 +45,9 @@
 	height: 1.4rem;
 }
 
-/* Wide viewports: the top-bar nav in the header is the primary nav instead. */
-@media (min-width: 769px) {
+/* Wide viewports: the top-bar nav in the header is the primary nav instead. Kept in step
+   with the header breakpoint that hides the top nav, so exactly one is shown at any width. */
+@media (min-width: 1025px) {
 	.bottom-nav {
 		display: none;
 	}

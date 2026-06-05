@@ -131,10 +131,17 @@
 
 .timeline {
 	--spine-w: 17rem;
-	--cols: var(--spine-w) 1.8fr 1.6fr 1.4fr 1fr;
+	/* minmax(0, …) lets the lanes shrink below their pills' intrinsic width so the pills wrap
+	   instead of forcing the grid wider than its container (which overflowed the viewport). */
+	--cols: var(--spine-w) minmax(0, 1.8fr) minmax(0, 1.6fr) minmax(0, 1.4fr) minmax(0, 1fr);
 	max-width: 1400px;
 	margin: var(--jb-space-2xl) auto 0;
 	position: relative;
+	/* The assemble-on-scroll reveal parks not-yet-revealed lanes translated to the right;
+	   clip that off-screen transient so it never adds a horizontal scrollbar. `clip` (unlike
+	   `hidden`) is not a scroll container, so sticky lane headers and vertical scroll are
+	   unaffected. */
+	overflow-x: clip;
 }
 
 /* Sticky lane headers */
@@ -331,6 +338,9 @@
 	align-content: flex-start;
 	gap: 5px;
 	padding: 2px var(--jb-space-sm);
+	/* Grid items default to min-width:auto (min-content), which lets a nowrap pill blow the
+	   track past the viewport; 0 lets the lane shrink so pills wrap instead. */
+	min-width: 0;
 	transition: transform var(--jb-dur-base) var(--jb-ease-standard);
 }
 
@@ -477,7 +487,9 @@
 
 /* ============================ Narrow / mobile ============================ */
 
-@media (max-width: 980px) {
+/* The dense 4-lane grid needs real width; below this it overflowed, so stack each entry into
+   a single column with inline lane labels. Covers tablets and small laptops. */
+@media (max-width: 1200px) {
 	.timeline {
 		max-width: 100%;
 	}

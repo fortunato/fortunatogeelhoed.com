@@ -151,7 +151,10 @@
 /* The theme toggle now lives in the shared <jb-theme-toggle> web component; its
    styles moved to the global styles/components/controls.css. */
 
-@media (max-width: 768px) {
+/* Below this the bottom tab bar takes over primary navigation, so the top-bar nav and the
+   "Built with" label collapse — otherwise the logo and nav cluster crowd each other on
+   tablet widths. Kept in step with the bottom-nav reveal breakpoint. */
+@media (max-width: 1024px) {
 	.nav {
 		display: none;
 	}
@@ -175,5 +178,22 @@
 	.switcher-btn {
 		padding: 4px 8px;
 		font-size: 0.6rem;
+	}
+}
+
+/* Small phones: pull the logo + switcher + toggle in so the cluster doesn't clip the edge. */
+@media (max-width: 400px) {
+	.header {
+		padding: 0 var(--jb-space-sm);
+	}
+
+	.logo,
+	.logo:hover {
+		font-size: 0.85rem;
+	}
+
+	.switcher-btn {
+		padding: 4px 6px;
+		font-size: 0.55rem;
 	}
 }
