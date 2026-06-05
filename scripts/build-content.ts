@@ -1,6 +1,12 @@
 import { writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { getHomeContent, getPage, getTimeline } from '@fg/content';
+import {
+	getBackendFrameworks,
+	getFrontendFrameworks,
+	getHomeContent,
+	getPage,
+	getTimeline,
+} from '@fg/content';
 import { routes } from '@fg/shared';
 import type { ContentItem } from '@fg/shared';
 
@@ -24,4 +30,14 @@ await writeFile(
 	resolve(contentDir, 'timeline.json'),
 	`${JSON.stringify(getTimeline(), null, '\t')}\n`,
 );
-console.log(`✓ Built content data (${Object.keys(contentMap).length} pages, home, timeline)`);
+await writeFile(
+	resolve(contentDir, 'frontend-frameworks.json'),
+	`${JSON.stringify(getFrontendFrameworks(), null, '\t')}\n`,
+);
+await writeFile(
+	resolve(contentDir, 'backend-frameworks.json'),
+	`${JSON.stringify(getBackendFrameworks(), null, '\t')}\n`,
+);
+console.log(
+	`✓ Built content data (${Object.keys(contentMap).length} pages, home, timeline, frameworks)`,
+);

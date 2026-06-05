@@ -1,0 +1,152 @@
+/* Framework exposure ribbons — a labelled track per framework with intensity-coded spans,
+   a shared year axis and a shared legend. Used by the homepage "Frameworks" section across
+   the three variants; semantic --jb-* tokens only. */
+
+/* Section heading: tighten the gap under the title so the title + intro read as a pair,
+   then a clear break before the ribbons. (Overrides the global .section-title margin.) */
+.head {
+	margin-bottom: var(--jb-space-md);
+}
+
+.intro {
+	max-width: 46rem;
+	margin-bottom: var(--jb-space-xl);
+	color: var(--jb-text-secondary);
+	line-height: 1.6;
+}
+
+/* One ribbon block (a title + its rows); the section stacks two of these, then a shared
+   legend below. */
+.ribbon {
+	margin-bottom: var(--jb-space-lg);
+}
+
+.ribbon-title {
+	font-family: var(--jb-font-display);
+	font-weight: 700;
+	margin-bottom: var(--jb-space-md);
+}
+
+.ribbon-row {
+	display: grid;
+	grid-template-columns: 6rem 1fr;
+	align-items: center;
+	gap: var(--jb-space-md);
+	margin-bottom: var(--jb-space-sm);
+}
+
+.ribbon-label {
+	font-family: var(--jb-font-mono);
+	font-size: 0.8rem;
+	text-align: right;
+	color: var(--jb-text-secondary);
+}
+
+.ribbon-track {
+	position: relative;
+	height: 0.85rem;
+	background: var(--jb-bg-secondary);
+	border-radius: var(--jb-radius-sm);
+}
+
+.ribbon-seg {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	border-radius: var(--jb-radius-sm);
+	background: var(--jb-accent);
+}
+
+.ribbon-seg[data-intensity="occasional"] {
+	background: repeating-linear-gradient(
+		45deg,
+		var(--jb-accent),
+		var(--jb-accent) 3px,
+		transparent 3px,
+		transparent 6px
+	);
+}
+
+.ribbon-seg[data-intensity="brief"] {
+	top: 50%;
+	bottom: auto;
+	width: 0.7rem;
+	height: 0.7rem;
+	transform: translate(-50%, -50%);
+	border-radius: 50%;
+}
+
+/* Shared axis + legend, rendered once by the section. The left margins reserve the label
+   column so the ticks/legend line up under the tracks. */
+.ribbon-axis {
+	position: relative;
+	height: 1.2rem;
+	margin-bottom: var(--jb-space-sm);
+	margin-left: calc(6rem + var(--jb-space-md));
+}
+
+.ribbon-tick {
+	position: absolute;
+	transform: translateX(-50%);
+	font-family: var(--jb-font-mono);
+	font-size: 0.65rem;
+	color: var(--jb-text-tertiary);
+}
+
+.ribbon-legend {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--jb-space-lg);
+	margin-top: var(--jb-space-md);
+	margin-left: calc(6rem + var(--jb-space-md));
+	font-size: 0.75rem;
+	color: var(--jb-text-secondary);
+}
+
+.legend-item {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--jb-space-xs);
+}
+
+.legend-swatch {
+	width: 1.5rem;
+	height: 0.7rem;
+	border-radius: var(--jb-radius-sm);
+	background: var(--jb-accent);
+}
+
+.legend-swatch[data-intensity="occasional"] {
+	background: repeating-linear-gradient(
+		45deg,
+		var(--jb-accent),
+		var(--jb-accent) 3px,
+		transparent 3px,
+		transparent 6px
+	);
+}
+
+.legend-swatch[data-intensity="brief"] {
+	width: 0.7rem;
+	border-radius: 50%;
+}
+
+/* Narrow screens: the 6rem label column squeezes the track, so stack the label above its
+   track and let the axis/legend run the full width. */
+@media (max-width: 640px) {
+	.ribbon-row {
+		grid-template-columns: 1fr;
+		align-items: start;
+		gap: var(--jb-space-xs);
+		margin-bottom: var(--jb-space-md);
+	}
+
+	.ribbon-label {
+		text-align: left;
+	}
+
+	.ribbon-axis,
+	.ribbon-legend {
+		margin-left: 0;
+	}
+}

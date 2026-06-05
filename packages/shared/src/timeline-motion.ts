@@ -1,7 +1,11 @@
 // Timeline scroll choreography, called from each variant's timeline page lifecycle.
 //   1. Reveal — an IntersectionObserver marks [data-reveal] elements as they enter view
 //      (works everywhere; under reduced motion everything is shown at once).
-//   2. Smooth scroll — on desktop, Lenis smooths scrolling so the assemble/disassemble reads
+//   2. Direction — a scroll listener publishes the current scroll direction to the root as a
+//      single --dir multiplier (1 down, -1 up) plus a data-scroll-dir attribute. The CSS flips
+//      every parked offset's sign off --dir, so rows assemble from the right/below on the way
+//      down and mirror — from the left/above — on the way up; the stagger order mirrors too.
+//   3. Smooth scroll — on desktop, Lenis smooths scrolling so the assemble/disassemble reads
 //      fluidly. Off under reduced motion / touch / narrow.
 // Lenis is dynamically imported, so this module is safe to import during server prerender.
 
@@ -14,6 +18,7 @@ interface LenisLike {
 let lenis: LenisLike | null = null;
 let frame = 0;
 let observer: IntersectionObserver | null = null;
+let onScroll: (() => void) | null = null;
 
 export async function initTimelineMotion(root: HTMLElement): Promise<void> {
 	if (typeof window === 'undefined') return;
@@ -38,6 +43,33 @@ export async function initTimelineMotion(root: HTMLElement): Promise<void> {
 		for (const el of targets) observer.observe(el);
 	}
 
+	// Direction: publish the scroll direction so the reveal mirrors itself. One --dir
+	// multiplier flips the sign of every parked offset; data-scroll-dir flips the stagger
+	// order. Nothing to publish under reduced motion (no offsets animate).
+	if (!reduce) {
+		root.dataset.scrollDir = 'down';
+		root.style.setProperty('--dir', '1');
+		let lastY = window.scrollY;
+		let ticking = false;
+		const update = () => {
+			ticking = false;
+			const y = window.scrollY;
+			const dy = y - lastY;
+			if (Math.abs(dy) < 4) return; // ignore sub-pixel jitter / bounce
+			lastY = y;
+			const dir = dy > 0 ? 'down' : 'up';
+			if (root.dataset.scrollDir === dir) return;
+			root.dataset.scrollDir = dir;
+			root.style.setProperty('--dir', dir === 'up' ? '-1' : '1');
+		};
+		onScroll = () => {
+			if (ticking) return;
+			ticking = true;
+			requestAnimationFrame(update);
+		};
+		window.addEventListener('scroll', onScroll, { passive: true });
+	}
+
 	// Desktop: Lenis smooths the scroll so the assemble/disassemble feels fluid.
 	const desktop =
 		window.matchMedia('(min-width: 981px)').matches &&
@@ -56,6 +88,8 @@ export async function initTimelineMotion(root: HTMLElement): Promise<void> {
 export function destroyTimelineMotion(): void {
 	observer?.disconnect();
 	observer = null;
+	if (onScroll) window.removeEventListener('scroll', onScroll);
+	onScroll = null;
 	if (frame) cancelAnimationFrame(frame);
 	frame = 0;
 	lenis?.destroy();

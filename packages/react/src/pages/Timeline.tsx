@@ -3,7 +3,6 @@ import { TECH_SPRITE, destroyTimelineMotion, initTimelineMotion } from '@fg/shar
 import styles from '@styles/components/timeline.module.css';
 import { Fragment, useEffect, useRef } from 'react';
 import timelineData from '../../../content/timeline.json';
-import { FrameworkRibbon } from '../components/timeline/FrameworkRibbon';
 import { TimelineEntry } from '../components/timeline/TimelineEntry';
 
 const data = timelineData as TimelineData;
@@ -30,11 +29,11 @@ export function Timeline() {
 				<p className={styles.intro}>
 					From classic ASP and Flash to React, NestJS and agentic workflows — a working
 					life across the frontend, backend, infrastructure and, lately, AI. Frameworks
-					deepen, the AI lane fills in, and side projects branch off the spine.
+					deepen, the AI lane fills in, and side projects branch off the spine. Through
+					every title — engineer, lead, manager — at least half my time has stayed in the
+					code.
 				</p>
 			</div>
-
-			<FrameworkRibbon data={data} />
 
 			<div className={styles.timeline}>
 				<div className={styles['lane-headers']} aria-hidden="true">

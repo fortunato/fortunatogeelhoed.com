@@ -39,10 +39,10 @@ export interface FrameworkExposureSpan {
 	intensity: ExposureIntensity;
 }
 
-/** The full timeline dataset consumed by the timeline page. */
+/** The career timeline dataset consumed by the timeline page. The framework-exposure spans
+ *  that feed the homepage ribbons are separate datasets (see @fg/content). */
 export interface TimelineData {
 	entries: TimelineEntry[];
-	frameworks: FrameworkExposureSpan[];
 }
 
 export const LANES: Lane[] = ['frontend', 'backend', 'cicd', 'ai'];

@@ -1,6 +1,7 @@
 <template>
 	<Hero :hero="home.hero" />
 	<Services :services="home.services" />
+	<FrameworkExposure />
 	<ProofStrip :proof="home.proof" />
 	<LatestWriting :writing="home.writing" />
 	<CallToAction :cta="home.cta" />
@@ -10,6 +11,7 @@
 import type { HomeContent } from '@fg/shared';
 import homeData from '../../../content/home.json';
 import CallToAction from '../components/home/CallToAction.vue';
+import FrameworkExposure from '../components/home/FrameworkExposure.vue';
 import Hero from '../components/home/Hero.vue';
 import LatestWriting from '../components/home/LatestWriting.vue';
 import ProofStrip from '../components/home/ProofStrip.vue';

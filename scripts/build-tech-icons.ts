@@ -12,6 +12,8 @@ const SLUGS: Record<string, string | null> = {
 	React: 'react',
 	Angular: 'angular',
 	Vue: 'vuedotjs',
+	Nuxt: 'nuxt',
+	Leaflet: 'leaflet',
 	AngularJS: null,
 	TypeScript: 'typescript',
 	'TypeScript/Flow': 'typescript',
@@ -85,6 +87,9 @@ const SLUGS: Record<string, string | null> = {
 	'Joomla 1': 'joomla',
 	'Joomla 2': 'joomla',
 	Magento: 'magento',
+	'Magento 2': 'magento',
+	Wordpress: 'wordpress',
+	Symfony: 'symfony',
 	Kohana: null,
 	'Custom CMS': null,
 	PEAR: null,
@@ -162,6 +167,7 @@ const BRAND_FALLBACK: Record<string, string> = {
 	ChatGPT: '#74aa9c',
 	'ChatGPT API': '#74aa9c',
 	Magento: '#ee672f',
+	'Magento 2': '#ee672f',
 	Kohana: '#dd2a1b',
 	'Custom CMS': '#6b7280',
 	PEAR: '#67452e',
@@ -231,7 +237,7 @@ interface SimpleIcon {
 const icons = simpleIcons as unknown as Record<string, SimpleIcon | undefined>;
 
 function exportName(slug: string): string {
-	return `si${slug[0].toUpperCase()}${slug.slice(1)}`;
+	return `si${slug.charAt(0).toUpperCase()}${slug.slice(1)}`;
 }
 
 const registry: Record<string, { brand: string; icon?: string }> = {};

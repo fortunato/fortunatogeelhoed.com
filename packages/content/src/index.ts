@@ -37,4 +37,6 @@ export async function listPosts(): Promise<ContentItem[]> {
 
 export { getHomeContent } from './home';
 export { getTimeline } from './timeline';
+export { getFrontendFrameworks } from './frontend-frameworks';
+export { getBackendFrameworks } from './backend-frameworks';
 export { parseContent } from './parser';

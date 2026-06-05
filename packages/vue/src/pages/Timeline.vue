@@ -8,11 +8,10 @@
 			<p :class="styles.intro">
 				From classic ASP and Flash to React, NestJS and agentic workflows — a working life across
 				the frontend, backend, infrastructure and, lately, AI. Frameworks deepen, the AI lane fills
-				in, and side projects branch off the spine.
+				in, and side projects branch off the spine. Through every title — engineer, lead, manager —
+				at least half my time has stayed in the code.
 			</p>
 		</div>
-
-		<FrameworkRibbon :data="data" />
 
 		<div :class="styles.timeline">
 			<div :class="styles['lane-headers']" aria-hidden="true">
@@ -39,7 +38,6 @@ import { TECH_SPRITE, destroyTimelineMotion, initTimelineMotion } from '@fg/shar
 import styles from '@styles/components/timeline.module.css';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import timelineData from '../../../content/timeline.json';
-import FrameworkRibbon from '../components/timeline/FrameworkRibbon.vue';
 import TimelineEntry from '../components/timeline/TimelineEntry.vue';
 
 const data = timelineData as TimelineData;

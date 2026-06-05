@@ -1,15 +1,22 @@
-import { Component, computed, input } from '@angular/core';
-import type { TimelineData } from '@fg/shared';
-import { axisTicks, ribbonRows } from '@fg/shared';
+import { Component, input } from '@angular/core';
+import type { AxisTick, RibbonRow } from '@fg/shared';
 
+/** A single framework ribbon: a title, one labelled track per framework, and its own year
+ *  axis (ticks come from the bounds shared across ribbons, so the axes line up). The legend
+ *  is rendered once by the enclosing section. */
 @Component({
 	selector: 'app-framework-ribbon',
 	standalone: true,
-	styleUrls: ['../../../../../styles/components/timeline.module.css'],
+	styleUrls: ['../../../../../styles/components/framework-ribbon.module.css'],
 	styles: [':host { display: block; }'],
 	template: `
-		<div class="ribbon container">
-			<p class="ribbon-title">Framework exposure</p>
+		<div class="ribbon">
+			<p class="ribbon-title">{{ title() }}</p>
+			<div class="ribbon-axis">
+				@for (tick of ticks(); track tick.year) {
+					<span class="ribbon-tick" [style.left.%]="tick.left">{{ tick.year }}</span>
+				}
+			</div>
 			@for (row of rows(); track row.framework) {
 				<div class="ribbon-row">
 					<span class="ribbon-label">{{ row.framework }}</span>
@@ -25,29 +32,11 @@ import { axisTicks, ribbonRows } from '@fg/shared';
 					</div>
 				</div>
 			}
-			<div class="ribbon-axis">
-				@for (tick of ticks(); track tick.year) {
-					<span class="ribbon-tick" [style.left.%]="tick.left">{{ tick.year }}</span>
-				}
-			</div>
-			<div class="ribbon-legend">
-				@for (item of intensityLegend; track item.intensity) {
-					<span class="legend-item">
-						<span class="legend-swatch" [attr.data-intensity]="item.intensity"></span>
-						{{ item.label }}
-					</span>
-				}
-			</div>
 		</div>
 	`,
 })
 export class FrameworkRibbonComponent {
-	readonly data = input.required<TimelineData>();
-	protected readonly rows = computed(() => ribbonRows(this.data()));
-	protected readonly ticks = computed(() => axisTicks(this.data()));
-	protected readonly intensityLegend = [
-		{ intensity: 'professional', label: 'Professional / daily' },
-		{ intensity: 'occasional', label: 'Side-project' },
-		{ intensity: 'brief', label: 'Brief' },
-	];
+	readonly title = input.required<string>();
+	readonly rows = input.required<RibbonRow[]>();
+	readonly ticks = input.required<AxisTick[]>();
 }

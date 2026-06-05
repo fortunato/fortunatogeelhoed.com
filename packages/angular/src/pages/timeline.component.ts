@@ -10,7 +10,6 @@ import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
 import type { TimelineData, TimelineEntry } from '@fg/shared';
 import { TECH_SPRITE, destroyTimelineMotion, initTimelineMotion } from '@fg/shared';
 import timelineData from '../../../content/timeline.json';
-import { FrameworkRibbonComponent } from '../components/timeline/framework-ribbon.component';
 import { TimelineEntryComponent } from '../components/timeline/timeline-entry.component';
 
 const data = timelineData as TimelineData;
@@ -35,7 +34,7 @@ function buildRows(d: TimelineData): Row[] {
 @Component({
 	selector: 'app-timeline',
 	standalone: true,
-	imports: [FrameworkRibbonComponent, TimelineEntryComponent],
+	imports: [TimelineEntryComponent],
 	styleUrl: '../../../../styles/components/timeline.module.css',
 	template: `
 		<section class="page" #root>
@@ -47,11 +46,10 @@ function buildRows(d: TimelineData): Row[] {
 				<p class="intro">
 					From classic ASP and Flash to React, NestJS and agentic workflows — a working life
 					across the frontend, backend, infrastructure and, lately, AI. Frameworks deepen, the
-					AI lane fills in, and side projects branch off the spine.
+					AI lane fills in, and side projects branch off the spine. Through every title —
+						engineer, lead, manager — at least half my time has stayed in the code.
 				</p>
 			</div>
-
-			<app-framework-ribbon [data]="data" />
 
 			<div class="timeline">
 				<div class="lane-headers" aria-hidden="true">
@@ -77,7 +75,6 @@ export class TimelineComponent implements OnDestroy {
 	private readonly sanitizer = inject(DomSanitizer);
 	private readonly root = viewChild.required<ElementRef<HTMLElement>>('root');
 	protected readonly sprite: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(TECH_SPRITE);
-	protected readonly data = data;
 	protected readonly rows = buildRows(data);
 
 	constructor() {

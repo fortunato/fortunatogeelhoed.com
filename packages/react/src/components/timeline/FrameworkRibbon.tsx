@@ -1,20 +1,32 @@
-import type { TimelineData } from '@fg/shared';
-import { axisTicks, ribbonRows } from '@fg/shared';
-import styles from '@styles/components/timeline.module.css';
+import type { AxisTick, RibbonRow } from '@fg/shared';
+import styles from '@styles/components/framework-ribbon.module.css';
 
-const INTENSITY_LEGEND: { intensity: string; label: string }[] = [
-	{ intensity: 'professional', label: 'Professional / daily' },
-	{ intensity: 'occasional', label: 'Side-project' },
-	{ intensity: 'brief', label: 'Brief' },
-];
-
-export function FrameworkRibbon({ data }: { data: TimelineData }) {
-	const rows = ribbonRows(data);
-	const ticks = axisTicks(data);
-
+/** A single framework ribbon: a title, one labelled track per framework, and its own year
+ *  axis. Ticks are computed from the bounds shared across ribbons, so the axes line up. The
+ *  legend is rendered once by the enclosing section. */
+export function FrameworkRibbon({
+	title,
+	rows,
+	ticks,
+}: {
+	title: string;
+	rows: RibbonRow[];
+	ticks: AxisTick[];
+}) {
 	return (
-		<div className={`${styles.ribbon} container`}>
-			<p className={styles['ribbon-title']}>Framework exposure</p>
+		<div className={styles.ribbon}>
+			<p className={styles['ribbon-title']}>{title}</p>
+			<div className={styles['ribbon-axis']}>
+				{ticks.map((tick) => (
+					<span
+						key={tick.year}
+						className={styles['ribbon-tick']}
+						style={{ left: `${tick.left}%` }}
+					>
+						{tick.year}
+					</span>
+				))}
+			</div>
 			{rows.map((row) => (
 				<div key={row.framework} className={styles['ribbon-row']}>
 					<span className={styles['ribbon-label']}>{row.framework}</span>
@@ -36,25 +48,6 @@ export function FrameworkRibbon({ data }: { data: TimelineData }) {
 					</div>
 				</div>
 			))}
-			<div className={styles['ribbon-axis']}>
-				{ticks.map((tick) => (
-					<span
-						key={tick.year}
-						className={styles['ribbon-tick']}
-						style={{ left: `${tick.left}%` }}
-					>
-						{tick.year}
-					</span>
-				))}
-			</div>
-			<div className={styles['ribbon-legend']}>
-				{INTENSITY_LEGEND.map((item) => (
-					<span key={item.intensity} className={styles['legend-item']}>
-						<span className={styles['legend-swatch']} data-intensity={item.intensity} />
-						{item.label}
-					</span>
-				))}
-			</div>
 		</div>
 	);
 }

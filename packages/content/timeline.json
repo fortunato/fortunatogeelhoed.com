@@ -15,6 +15,7 @@
 					"React",
 					"Angular",
 					"Vue",
+					"Vite",
 					"CSS Modules"
 				],
 				"backend": [
@@ -138,13 +139,17 @@
 					"TypeScript",
 					"GraphQL",
 					"Storybook",
+					"Webpack",
+					"SWC",
 					"Styled Components",
 					"CSS Modules"
 				],
 				"backend": [
-					"NestJS",
-					"RxJS",
+					"Node.js",
 					"Express",
+					"NestJS",
+					"Symfony",
+					"RxJS",
 					"Azure",
 					"PostgreSQL",
 					"PostGIS",
@@ -168,6 +173,25 @@
 			}
 		},
 		{
+			"id": "neurofeedback-ijburg",
+			"era": "2020s — Netherlands (remote from Spain)",
+			"years": "2021",
+			"startYear": 2021,
+			"endYear": 2021,
+			"client": "Neurofeedback IJburg",
+			"role": "Freelance Web Developer",
+			"type": "independent",
+			"highlight": "Multilingual static site for a private practice — Nuxt SSG, i18n, interactive maps",
+			"tech": {
+				"frontend": [
+					"Vue",
+					"Nuxt",
+					"SCSS",
+					"Leaflet"
+				]
+			}
+		},
+		{
 			"id": "trading-system",
 			"era": "2020s — Netherlands (remote from Spain)",
 			"years": "2018–now",
@@ -180,13 +204,18 @@
 			"tech": {
 				"frontend": [
 					"React",
+					"Zustand",
 					"Next.js",
 					"Anychart",
 					"RxJS",
+					"Webpack",
+					"SWC",
 					"SCSS Modules"
 				],
 				"backend": [
 					"Node.js",
+					"Express",
+					"NestJS",
 					"PostgreSQL"
 				],
 				"cicd": [
@@ -256,7 +285,8 @@
 					"React",
 					"Redux",
 					"ES2016",
-					"SCSS"
+					"SCSS",
+					"Webpack"
 				],
 				"backend": [
 					"AEM"
@@ -272,13 +302,18 @@
 			"client": "Deloitte Digital AU",
 			"role": "Frontend Lead (Manager)",
 			"type": "employee",
-			"highlight": "Built CI/CD pipelines adopted across the practice, and a form framework reused across projects",
+			"highlight": [
+				"Built CI/CD pipelines adopted across the practice, and a form framework reused across projects",
+				"A hands-on manager — at least half my time stayed in the code"
+			],
 			"tech": {
 				"frontend": [
 					"React",
 					"ES2016",
 					"Webpack",
-					"SCSS"
+					"SCSS",
+					"Webpack",
+					"JSPM"
 				],
 				"backend": [
 					"Sitecore",
@@ -328,7 +363,8 @@
 					"Backbone",
 					"jQuery",
 					"Highcharts",
-					"SCSS"
+					"SCSS",
+					"Webpack"
 				],
 				"backend": [
 					"Sitecore",
@@ -356,12 +392,14 @@
 			"tech": {
 				"frontend": [
 					"AngularJS",
-					"RequireJS"
+					"RequireJS",
+					"Webpack"
 				],
 				"backend": [
 					"PHP",
 					"AEM",
-					"MySQL"
+					"MySQL",
+					"Wordpress"
 				],
 				"cicd": [
 					"Grunt"
@@ -390,7 +428,8 @@
 					"PHP",
 					"MySQL",
 					"Kohana",
-					"Node.js"
+					"Node.js",
+					"Wordpress"
 				]
 			}
 		},
@@ -641,56 +680,6 @@
 					"FTP"
 				]
 			}
-		}
-	],
-	"frameworks": [
-		{
-			"framework": "jQuery",
-			"startYear": 2007,
-			"endYear": 2013,
-			"intensity": "professional"
-		},
-		{
-			"framework": "Backbone",
-			"startYear": 2012,
-			"endYear": 2016,
-			"intensity": "occasional"
-		},
-		{
-			"framework": "AngularJS",
-			"startYear": 2013,
-			"endYear": 2016,
-			"intensity": "professional"
-		},
-		{
-			"framework": "React",
-			"startYear": 2016,
-			"endYear": "present",
-			"intensity": "professional"
-		},
-		{
-			"framework": "Angular",
-			"startYear": 2019,
-			"endYear": 2022,
-			"intensity": "occasional"
-		},
-		{
-			"framework": "Vue",
-			"startYear": 2019,
-			"endYear": 2019,
-			"intensity": "brief"
-		},
-		{
-			"framework": "Angular",
-			"startYear": 2025,
-			"endYear": "present",
-			"intensity": "professional"
-		},
-		{
-			"framework": "Vue",
-			"startYear": 2026,
-			"endYear": "present",
-			"intensity": "professional"
 		}
 	]
 }

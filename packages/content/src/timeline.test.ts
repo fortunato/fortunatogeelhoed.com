@@ -1,13 +1,12 @@
-import type { EmploymentType, ExposureIntensity, Lane } from '@fg/shared';
+import type { EmploymentType, Lane } from '@fg/shared';
 import { describe, expect, it } from 'vitest';
 import { getTimeline } from './timeline';
 
 const LANES: Lane[] = ['frontend', 'backend', 'cicd', 'ai'];
 const EMPLOYMENT: EmploymentType[] = ['employee', 'independent', 'side-project'];
-const INTENSITIES: ExposureIntensity[] = ['professional', 'occasional', 'brief'];
 
 describe('career timeline', () => {
-	const { entries, frameworks } = getTimeline();
+	const { entries } = getTimeline();
 
 	it('spans at least 25 years from 2000 to the present', () => {
 		const earliest = Math.min(...entries.map((e) => e.startYear));
@@ -47,17 +46,20 @@ describe('career timeline', () => {
 		expect(entries.some((e) => e.id === 'py-market-structure')).toBe(true);
 	});
 
+	it('includes the Neurofeedback IJburg freelance project', () => {
+		const entry = entries.find((e) => e.id === 'neurofeedback-ijburg');
+		expect(entry).toBeDefined();
+		expect(entry?.tech.frontend).toContain('Nuxt');
+	});
+
+	it('records Symfony at Gemeente Amsterdam', () => {
+		const amsterdam = entries.find((e) => e.id === 'amsterdam');
+		expect(amsterdam?.tech.backend).toContain('Symfony');
+	});
+
 	it('densifies the AI lane toward recent years', () => {
 		const withAi = entries.filter((e) => e.tech.ai?.length);
 		expect(withAi.every((e) => e.startYear >= 2018)).toBe(true);
 		expect(withAi.length).toBeGreaterThanOrEqual(3);
-	});
-
-	it('describes framework exposure across at least three intensity levels', () => {
-		const levels = new Set(frameworks.map((f) => f.intensity));
-		expect(levels.size).toBeGreaterThanOrEqual(3);
-		for (const span of frameworks) {
-			expect(INTENSITIES).toContain(span.intensity);
-		}
 	});
 });

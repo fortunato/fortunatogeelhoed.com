@@ -29,7 +29,7 @@ const timeline: TimelineData = {
 			type: 'independent',
 			highlight: '3 frameworks, 1 site — you’re looking at it',
 			tech: {
-				frontend: ['React', 'Angular', 'Vue', 'CSS Modules'],
+				frontend: ['React', 'Angular', 'Vue', 'Vite', 'CSS Modules'],
 				backend: ['Bun', 'Hono'],
 				cicd: ['GitHub Actions', 'Docker'],
 				ai: ['Claude Code'],
@@ -102,13 +102,17 @@ const timeline: TimelineData = {
 					'TypeScript',
 					'GraphQL',
 					'Storybook',
+					'Webpack',
+					'SWC',
 					'Styled Components',
 					'CSS Modules',
 				],
 				backend: [
-					'NestJS',
-					'RxJS',
+					'Node.js',
 					'Express',
+					'NestJS',
+					'Symfony',
+					'RxJS',
 					'Azure',
 					'PostgreSQL',
 					'PostGIS',
@@ -128,6 +132,21 @@ const timeline: TimelineData = {
 			},
 		},
 		{
+			id: 'neurofeedback-ijburg',
+			era: ERAS.netherlands2020s,
+			years: '2021',
+			startYear: 2021,
+			endYear: 2021,
+			client: 'Neurofeedback IJburg',
+			role: 'Freelance Web Developer',
+			type: 'independent',
+			highlight:
+				'Multilingual static site for a private practice — Nuxt SSG, i18n, interactive maps',
+			tech: {
+				frontend: ['Vue', 'Nuxt', 'SCSS', 'Leaflet'],
+			},
+		},
+		{
 			id: 'trading-system',
 			era: ERAS.netherlands2020s,
 			years: '2018–now',
@@ -138,8 +157,17 @@ const timeline: TimelineData = {
 			type: 'side-project',
 			highlight: 'Autonomous execution, exchange APIs, homelab infra',
 			tech: {
-				frontend: ['React', 'Next.js', 'Anychart', 'RxJS', 'SCSS Modules'],
-				backend: ['Node.js', 'PostgreSQL'],
+				frontend: [
+					'React',
+					'Zustand',
+					'Next.js',
+					'Anychart',
+					'RxJS',
+					'Webpack',
+					'SWC',
+					'SCSS Modules',
+				],
+				backend: ['Node.js', 'Express', 'NestJS', 'PostgreSQL'],
 				cicd: ['Nx', 'Bitbucket', 'Jenkins', 'Gitea Actions', 'Docker', 'Pulumi', 'k3s'],
 				ai: ['ChatGPT API', 'Claude Code', 'MCP', 'OpenClaw'],
 			},
@@ -174,7 +202,7 @@ const timeline: TimelineData = {
 			type: 'employee',
 			highlight: 'Bridged Melbourne & Amsterdam frontend teams',
 			tech: {
-				frontend: ['React', 'Redux', 'ES2016', 'SCSS'],
+				frontend: ['React', 'Redux', 'ES2016', 'SCSS', 'Webpack'],
 				backend: ['AEM'],
 			},
 		},
@@ -187,10 +215,12 @@ const timeline: TimelineData = {
 			client: 'Deloitte Digital AU',
 			role: 'Frontend Lead (Manager)',
 			type: 'employee',
-			highlight:
+			highlight: [
 				'Built CI/CD pipelines adopted across the practice, and a form framework reused across projects',
+				'A hands-on manager — at least half my time stayed in the code',
+			],
 			tech: {
-				frontend: ['React', 'ES2016', 'Webpack', 'SCSS'],
+				frontend: ['React', 'ES2016', 'Webpack', 'SCSS', 'Webpack', 'JSPM'],
 				backend: ['Sitecore', 'SQL Server'],
 				cicd: ['Bamboo'],
 			},
@@ -221,7 +251,7 @@ const timeline: TimelineData = {
 			type: 'employee',
 			highlight: 'Brought parallel Gulp builds to the frontend guild',
 			tech: {
-				frontend: ['AngularJS', 'Backbone', 'jQuery', 'Highcharts', 'SCSS'],
+				frontend: ['AngularJS', 'Backbone', 'jQuery', 'Highcharts', 'SCSS', 'Webpack'],
 				backend: ['Sitecore', 'SQL Server'],
 				cicd: ['Bamboo', 'Grunt', 'Gulp', 'Yeoman', 'Middleman'],
 			},
@@ -237,8 +267,8 @@ const timeline: TimelineData = {
 			type: 'independent',
 			highlight: 'First taste of build automation — Grunt for the front-end pipeline',
 			tech: {
-				frontend: ['AngularJS', 'RequireJS'],
-				backend: ['PHP', 'AEM', 'MySQL'],
+				frontend: ['AngularJS', 'RequireJS', 'Webpack'],
+				backend: ['PHP', 'AEM', 'MySQL', 'Wordpress'],
 				cicd: ['Grunt'],
 			},
 		},
@@ -255,7 +285,7 @@ const timeline: TimelineData = {
 				'They didn’t want to lose me — kept on remotely through a Brisbane to Melbourne move',
 			tech: {
 				frontend: ['jQuery', 'Backbone', 'Marionette', 'HTML5', 'CSS3'],
-				backend: ['PHP', 'MySQL', 'Kohana', 'Node.js'],
+				backend: ['PHP', 'MySQL', 'Kohana', 'Node.js', 'Wordpress'],
 			},
 		},
 		{
@@ -407,16 +437,6 @@ const timeline: TimelineData = {
 				cicd: ['FTP'],
 			},
 		},
-	],
-	frameworks: [
-		{ framework: 'jQuery', startYear: 2007, endYear: 2013, intensity: 'professional' },
-		{ framework: 'Backbone', startYear: 2012, endYear: 2016, intensity: 'occasional' },
-		{ framework: 'AngularJS', startYear: 2013, endYear: 2016, intensity: 'professional' },
-		{ framework: 'React', startYear: 2016, endYear: 'present', intensity: 'professional' },
-		{ framework: 'Angular', startYear: 2019, endYear: 2022, intensity: 'occasional' },
-		{ framework: 'Vue', startYear: 2019, endYear: 2019, intensity: 'brief' },
-		{ framework: 'Angular', startYear: 2025, endYear: 'present', intensity: 'professional' },
-		{ framework: 'Vue', startYear: 2026, endYear: 'present', intensity: 'professional' },
 	],
 };
 

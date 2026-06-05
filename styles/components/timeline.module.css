@@ -13,120 +13,6 @@
 	line-height: 1.6;
 }
 
-/* ============================ Framework exposure ribbon ============================ */
-
-.ribbon {
-	margin: var(--jb-space-xl) auto;
-}
-
-.ribbon-title {
-	font-family: var(--jb-font-display);
-	font-weight: 700;
-	margin-bottom: var(--jb-space-md);
-}
-
-.ribbon-row {
-	display: grid;
-	grid-template-columns: 6rem 1fr;
-	align-items: center;
-	gap: var(--jb-space-md);
-	margin-bottom: var(--jb-space-sm);
-}
-
-.ribbon-label {
-	font-family: var(--jb-font-mono);
-	font-size: 0.8rem;
-	text-align: right;
-	color: var(--jb-text-secondary);
-}
-
-.ribbon-track {
-	position: relative;
-	height: 0.85rem;
-	background: var(--jb-bg-secondary);
-	border-radius: var(--jb-radius-sm);
-}
-
-.ribbon-seg {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	border-radius: var(--jb-radius-sm);
-	background: var(--jb-accent);
-}
-
-.ribbon-seg[data-intensity="occasional"] {
-	background: repeating-linear-gradient(
-		45deg,
-		var(--jb-accent),
-		var(--jb-accent) 3px,
-		transparent 3px,
-		transparent 6px
-	);
-}
-
-.ribbon-seg[data-intensity="brief"] {
-	top: 50%;
-	bottom: auto;
-	width: 0.7rem;
-	height: 0.7rem;
-	transform: translate(-50%, -50%);
-	border-radius: 50%;
-}
-
-.ribbon-axis {
-	position: relative;
-	height: 1.2rem;
-	margin-top: var(--jb-space-xs);
-	margin-left: calc(6rem + var(--jb-space-md));
-}
-
-.ribbon-tick {
-	position: absolute;
-	transform: translateX(-50%);
-	font-family: var(--jb-font-mono);
-	font-size: 0.65rem;
-	color: var(--jb-text-tertiary);
-}
-
-.ribbon-legend {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--jb-space-lg);
-	margin-top: var(--jb-space-md);
-	margin-left: calc(6rem + var(--jb-space-md));
-	font-size: 0.75rem;
-	color: var(--jb-text-secondary);
-}
-
-.legend-item {
-	display: inline-flex;
-	align-items: center;
-	gap: var(--jb-space-xs);
-}
-
-.legend-swatch {
-	width: 1.5rem;
-	height: 0.7rem;
-	border-radius: var(--jb-radius-sm);
-	background: var(--jb-accent);
-}
-
-.legend-swatch[data-intensity="occasional"] {
-	background: repeating-linear-gradient(
-		45deg,
-		var(--jb-accent),
-		var(--jb-accent) 3px,
-		transparent 3px,
-		transparent 6px
-	);
-}
-
-.legend-swatch[data-intensity="brief"] {
-	width: 0.7rem;
-	border-radius: 50%;
-}
-
 /* ============================ The timeline ============================ */
 
 .timeline {
@@ -405,13 +291,17 @@
 /* timeline-motion toggles [data-in] as rows enter and leave the viewport. Without JS or
    under reduced motion no [data-reveal] is ever hidden, so content is always present. */
 @media (prefers-reduced-motion: no-preference) {
-	/* Baseline (era dividers, and entries on narrow screens): fade + rise. */
-	[data-reveal] {
+	/* Baseline (era dividers, and entries on narrow screens): fade + rise. --dir (set by
+	   timeline-motion: 1 down, -1 up) flips the sign, so the row rises from below on the way
+	   down and settles down from above on the way up. Falls back to 1 with no JS. */
+	/* Scoped to .page so these bare [data-reveal] rules don't leak out of this CSS module
+	   (attribute selectors aren't hashed) and clobber the homepage's own scroll reveal. */
+	.page [data-reveal] {
 		opacity: 0;
-		transform: translateY(18px);
+		transform: translateY(calc(18px * var(--dir, 1)));
 		transition: opacity 0.6s var(--jb-ease-emphasized), transform 0.6s var(--jb-ease-emphasized);
 	}
-	[data-reveal][data-in] {
+	.page [data-reveal][data-in] {
 		opacity: 1;
 		transform: none;
 	}
@@ -430,26 +320,26 @@
 			transition: opacity 0.4s var(--jb-ease-emphasized), transform 0.4s
 				var(--jb-ease-emphasized);
 		}
+		/* One --dir multiplier flips the slide side for the whole row: the spine and lanes
+		   sweep in from the right on the way down (--dir 1) and mirror — in from the left —
+		   on the way up (--dir -1). The lane stagger stays left-to-right (fe→ai) in both
+		   directions. */
 		.entry[data-reveal] .spine {
-			/*transform: translateX(-28px);*/
-			transform: translateX(28px);
+			transform: translateX(calc(28px * var(--dir, 1)));
+		}
+		.entry[data-reveal] .lane {
+			transform: translateX(calc(80px * var(--dir, 1)));
 		}
 		.entry[data-reveal] .lane-fe {
-			/*transform: translateX(-80px);*/
-			transform: translateX(80px);
 			transition-delay: 0.1s;
 		}
 		.entry[data-reveal] .lane-be {
-			/*transform: translateX(-40px);*/
-			transform: translateX(80px);
 			transition-delay: 0.2s;
 		}
 		.entry[data-reveal] .lane-ci {
-			transform: translateX(80px);
 			transition-delay: 0.3s;
 		}
 		.entry[data-reveal] .lane-ai {
-			transform: translateX(80px);
 			transition-delay: 0.4s;
 		}
 
@@ -458,6 +348,7 @@
 			transform: translateY(8px) scale(0.9);
 			transition: opacity 0.4s ease, transform 0.4s var(--jb-ease-emphasized);
 		}
+		/* Pills always appear in source order, both directions. */
 		.entry[data-reveal] .pill:nth-child(2) {
 			transition-delay: 0.06s;
 		}
