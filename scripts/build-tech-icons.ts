@@ -31,6 +31,7 @@ const SLUGS: Record<string, string | null> = {
 	Backbone: 'backbonedotjs',
 	Marionette: 'backbonedotjs',
 	RequireJS: null,
+	'Ext JS': 'sencha',
 	'Prototype.js': null,
 	MooTools: null,
 	Highcharts: 'highcharts',
@@ -38,6 +39,8 @@ const SLUGS: Record<string, string | null> = {
 	ES2016: 'javascript',
 	SCSS: 'sass',
 	'SCSS Modules': 'sass',
+	'CSS Modules': 'css',
+	'Styled Components': 'styledcomponents',
 	SSR: null,
 	Flash: null,
 	'XML/XSLT': null,
@@ -170,23 +173,49 @@ const BRAND_FALLBACK: Record<string, string> = {
 	Middleman: '#9c5b8b',
 };
 
-// Original hand-drawn glyphs for tools that have no simple-icons entry (own artwork composed
-// from primitives — not brand logos). Each is emitted into the sprite and wired into the
-// registry exactly like a real icon, overriding any text-pill fallback above.
-const CUSTOM_GLYPHS: Record<string, { id: string; brand: string; symbol: string }> = {
-	OpenClaw: {
-		id: 'crab',
-		brand: '#d97706',
-		symbol:
-			'<symbol id="i-crab" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
-			'<ellipse cx="12" cy="14" rx="6" ry="4"/>' +
-			'<path d="M10 10.4V8"/><circle cx="10" cy="6.9" r="1"/>' +
-			'<path d="M14 10.4V8"/><circle cx="14" cy="6.9" r="1"/>' +
-			'<circle cx="4.6" cy="11" r="2"/><path d="M6.4 12.2 7.4 13.4"/>' +
-			'<circle cx="19.4" cy="11" r="2"/><path d="M17.6 12.2 16.6 13.4"/>' +
-			'<path d="M6.6 16.6 4.7 18.6M9 17.6 8.1 20M15 17.6 15.9 20M17.4 16.6 19.3 18.6"/>' +
-			'</symbol>',
-	},
+// Original hand-drawn glyphs composed from primitives — own artwork, NOT brand logos. Used
+// for tools with no simple-icons entry, and as neutral category marks (cloud / database /
+// layers / chat) for brands whose logos were pulled from the icon ecosystem for trademark
+// reasons; we represent the category rather than reproduce the trademarked mark. Each is
+// emitted into the sprite and wired into the registry, overriding any text-pill fallback.
+const STROKE =
+	'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"';
+const GLYPHS = {
+	crab:
+		`<symbol id="i-crab" ${STROKE}>` +
+		'<ellipse cx="12" cy="14" rx="6" ry="4"/>' +
+		'<path d="M10 10.4V8"/><circle cx="10" cy="6.9" r="1"/>' +
+		'<path d="M14 10.4V8"/><circle cx="14" cy="6.9" r="1"/>' +
+		'<circle cx="4.6" cy="11" r="2"/><path d="M6.4 12.2 7.4 13.4"/>' +
+		'<circle cx="19.4" cy="11" r="2"/><path d="M17.6 12.2 16.6 13.4"/>' +
+		'<path d="M6.6 16.6 4.7 18.6M9 17.6 8.1 20M15 17.6 15.9 20M17.4 16.6 19.3 18.6"/>' +
+		'</symbol>',
+	cloud: `<symbol id="i-cloud" ${STROKE}><path d="M7 18a4.2 4.2 0 0 1-.6-8.36 5.5 5.5 0 0 1 10.7-.86A3.75 3.75 0 0 1 17 18Z"/></symbol>`,
+	database:
+		`<symbol id="i-database" ${STROKE}>` +
+		'<ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/>' +
+		'<path d="M4.5 5.5v13c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8v-13"/>' +
+		'<path d="M4.5 12c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8"/>' +
+		'</symbol>',
+	layers:
+		`<symbol id="i-layers" ${STROKE}>` +
+		'<path d="m12 2.5 9 4.75-9 4.75-9-4.75z"/>' +
+		'<path d="m3 12 9 4.75L21 12"/>' +
+		'<path d="m3 16.5 9 4.75 9-4.75"/>' +
+		'</symbol>',
+	chat:
+		`<symbol id="i-chat" ${STROKE}>` +
+		'<path d="M20.5 11.5a8 8 0 0 1-8.5 8 9 9 0 0 1-3.6-.75L3.5 20.5l1.75-4.9A8 8 0 1 1 20.5 11.5Z"/>' +
+		'</symbol>',
+} as const;
+
+const CUSTOM_GLYPHS: Record<string, { id: keyof typeof GLYPHS; brand: string }> = {
+	OpenClaw: { id: 'crab', brand: '#d97706' },
+	Azure: { id: 'cloud', brand: '#0078d4' },
+	'SQL Server': { id: 'database', brand: '#cc2927' },
+	AEM: { id: 'layers', brand: '#eb1000' },
+	ChatGPT: { id: 'chat', brand: '#74aa9c' },
+	'ChatGPT API': { id: 'chat', brand: '#74aa9c' },
 };
 
 interface SimpleIcon {
@@ -221,7 +250,7 @@ for (const [name, slug] of Object.entries(SLUGS)) {
 // Wire the custom hand-drawn glyphs into the sprite + registry (overrides text fallbacks).
 for (const [name, glyph] of Object.entries(CUSTOM_GLYPHS)) {
 	registry[name] = { brand: glyph.brand, icon: glyph.id };
-	symbols.set(glyph.id, glyph.symbol);
+	symbols.set(glyph.id, GLYPHS[glyph.id]);
 }
 
 // A clean git-branch glyph (not a brand logo) for the side-project branch marker.

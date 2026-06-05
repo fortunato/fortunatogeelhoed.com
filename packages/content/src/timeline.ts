@@ -3,11 +3,24 @@ import type { TimelineData } from '@fg/shared';
 /** The career timeline — real roles, employers and technologies from 2000 to today,
  *  grouped into era time-blocks, with side projects placed chronologically. Ported from
  *  the design prototype; tech names key into the shared TECH_REGISTRY for icons/colors. */
+
+/** Era labels, defined once. Entries are grouped by an exact string match on `era`, so a
+ *  single source of truth here prevents a stray character from silently splitting a block.
+ *  The values double as the rendered era headings. */
+const ERAS = {
+	now: '2026 — Now',
+	netherlands2020s: '2020s — Netherlands (remote from Spain)',
+	netherlandsLate2010s: 'Late 2010s — Netherlands',
+	melbourne: '2013–2017 — Melbourne, Australia',
+	brisbane: '2007–2013 — Brisbane, Australia',
+	earlyWeb: '2000–2006 — The Early Web (Netherlands & New Zealand)',
+} as const;
+
 const timeline: TimelineData = {
 	entries: [
 		{
 			id: 'portfolio',
-			era: '2026 — Now',
+			era: ERAS.now,
 			years: '2026',
 			startYear: 2026,
 			endYear: 'present',
@@ -16,15 +29,15 @@ const timeline: TimelineData = {
 			type: 'independent',
 			highlight: '3 frameworks, 1 site — you’re looking at it',
 			tech: {
-				frontend: ['React', 'Angular', 'Vue'],
+				frontend: ['React', 'Angular', 'Vue', 'CSS Modules'],
 				backend: ['Bun', 'Hono'],
 				cicd: ['GitHub Actions', 'Docker'],
-				ai: ['Claude Code', 'MCP'],
+				ai: ['Claude Code'],
 			},
 		},
 		{
 			id: 'ai-healthcare',
-			era: '2026 — Now',
+			era: ERAS.now,
 			years: '2026',
 			startYear: 2026,
 			endYear: 2026,
@@ -40,7 +53,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'market-breadth',
-			era: '2026 — Now',
+			era: ERAS.now,
 			years: '2025–26',
 			startYear: 2025,
 			endYear: 2026,
@@ -49,15 +62,15 @@ const timeline: TimelineData = {
 			type: 'independent',
 			highlight: 'Real-time WebSocket market-data ingestion',
 			tech: {
-				frontend: ['React', 'Mantine UI', 'Vite', 'Recharts', 'Nx'],
+				frontend: ['React', 'Mantine UI', 'Vite', 'Recharts', 'CSS Modules'],
 				backend: ['NestJS', 'TimescaleDB', 'WebSockets'],
-				cicd: ['Gitea Actions', 'Docker'],
+				cicd: ['Gitea Actions', 'Docker', 'Nx'],
 				ai: ['Claude Code', 'MCP'],
 			},
 		},
 		{
 			id: 'py-market-structure',
-			era: '2026 — Now',
+			era: ERAS.now,
 			years: '2025–26',
 			startYear: 2025,
 			endYear: 2026,
@@ -66,7 +79,7 @@ const timeline: TimelineData = {
 			type: 'side-project',
 			highlight: 'Published to PyPI with almost zero prior Python — built with Claude Code',
 			tech: {
-				frontend: ['Angular', 'RxJS', 'lightweight-charts'],
+				frontend: ['Angular', 'RxJS', 'lightweight-charts', 'SCSS Modules'],
 				backend: ['Python', 'PyPI'],
 				cicd: ['GitHub Actions'],
 				ai: ['Claude Code', 'MCP'],
@@ -74,7 +87,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'amsterdam',
-			era: '2020s — Netherlands (remote from Spain)',
+			era: ERAS.netherlands2020s,
 			years: '2020–25',
 			startYear: 2020,
 			endYear: 2025,
@@ -83,7 +96,15 @@ const timeline: TimelineData = {
 			type: 'independent',
 			highlight: 'Led frontend across multiple teams; monorepo + feature-sliced architecture',
 			tech: {
-				frontend: ['React', 'Redux', 'TypeScript', 'Nx', 'GraphQL', 'Storybook'],
+				frontend: [
+					'React',
+					'Redux',
+					'TypeScript',
+					'GraphQL',
+					'Storybook',
+					'Styled Components',
+					'CSS Modules',
+				],
 				backend: [
 					'NestJS',
 					'RxJS',
@@ -95,6 +116,7 @@ const timeline: TimelineData = {
 					'Azure Service Bus',
 				],
 				cicd: [
+					'Nx',
 					'GitLab CI',
 					'Azure Pipelines',
 					'GitHub Actions',
@@ -107,7 +129,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'trading-system',
-			era: '2020s — Netherlands (remote from Spain)',
+			era: ERAS.netherlands2020s,
 			years: '2018–now',
 			startYear: 2018,
 			endYear: 'present',
@@ -116,15 +138,15 @@ const timeline: TimelineData = {
 			type: 'side-project',
 			highlight: 'Autonomous execution, exchange APIs, homelab infra',
 			tech: {
-				frontend: ['React', 'Next.js', 'Anychart', 'RxJS'],
+				frontend: ['React', 'Next.js', 'Anychart', 'RxJS', 'SCSS Modules'],
 				backend: ['Node.js', 'PostgreSQL'],
-				cicd: ['Bitbucket', 'Jenkins', 'Gitea Actions', 'Docker', 'Pulumi', 'k3s'],
+				cicd: ['Nx', 'Bitbucket', 'Jenkins', 'Gitea Actions', 'Docker', 'Pulumi', 'k3s'],
 				ai: ['ChatGPT API', 'Claude Code', 'MCP', 'OpenClaw'],
 			},
 		},
 		{
 			id: 'tele2',
-			era: 'Late 2010s — Netherlands',
+			era: ERAS.netherlandsLate2010s,
 			years: '2017–19',
 			startYear: 2017,
 			endYear: 2019,
@@ -136,14 +158,14 @@ const timeline: TimelineData = {
 				'Beat both the previously-optimized Magento 2 site and the AMP build Google’s own consultants delivered',
 			],
 			tech: {
-				frontend: ['React', 'Redux', 'TypeScript/Flow', 'SSR', 'Webpack'],
+				frontend: ['React', 'Redux', 'TypeScript/Flow', 'SSR', 'Webpack', 'SCSS Modules'],
 				backend: ['Node.js', 'Express', 'PHP', 'Salesforce', 'MySQL'],
 				cicd: ['Jenkins', 'Docker'],
 			},
 		},
 		{
 			id: 'deloitte-nl',
-			era: 'Late 2010s — Netherlands',
+			era: ERAS.netherlandsLate2010s,
 			years: '2017',
 			startYear: 2017,
 			endYear: 2017,
@@ -152,13 +174,13 @@ const timeline: TimelineData = {
 			type: 'employee',
 			highlight: 'Bridged Melbourne & Amsterdam frontend teams',
 			tech: {
-				frontend: ['React', 'Redux', 'ES2016'],
+				frontend: ['React', 'Redux', 'ES2016', 'SCSS'],
 				backend: ['AEM'],
 			},
 		},
 		{
 			id: 'deloitte-au-manager',
-			era: '2013–2017 — Melbourne, Australia',
+			era: ERAS.melbourne,
 			years: '2016–17',
 			startYear: 2016,
 			endYear: 2017,
@@ -175,7 +197,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'dastoon',
-			era: '2013–2017 — Melbourne, Australia',
+			era: ERAS.melbourne,
 			years: '2016',
 			startYear: 2016,
 			endYear: 2016,
@@ -185,12 +207,12 @@ const timeline: TimelineData = {
 			highlight: 'Technical direction and QA over an outsourced Magento 2 fashion store',
 			tech: {
 				frontend: ['jQuery', 'HTML5', 'CSS3'],
-				backend: ['PHP', 'Magento', 'MySQL'],
+				backend: ['PHP', 'Magento 2', 'MySQL'],
 			},
 		},
 		{
 			id: 'deloitte-au-consultant',
-			era: '2013–2017 — Melbourne, Australia',
+			era: ERAS.melbourne,
 			years: '2013–16',
 			startYear: 2013,
 			endYear: 2016,
@@ -206,7 +228,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'isobar',
-			era: '2013–2017 — Melbourne, Australia',
+			era: ERAS.melbourne,
 			years: '2013',
 			startYear: 2013,
 			endYear: 2013,
@@ -222,7 +244,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'limelight',
-			era: '2007–2013 — Brisbane, Australia',
+			era: ERAS.brisbane,
 			years: '2012–13',
 			startYear: 2012,
 			endYear: 2013,
@@ -238,7 +260,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'cru-digital',
-			era: '2007–2013 — Brisbane, Australia',
+			era: ERAS.brisbane,
 			years: '2010–12',
 			startYear: 2010,
 			endYear: 2012,
@@ -250,14 +272,14 @@ const timeline: TimelineData = {
 				'Early cloud — building CentOS AMI images from scratch on EC2',
 			],
 			tech: {
-				frontend: ['jQuery', 'HTML5', 'CSS3'],
+				frontend: ['jQuery', 'Ext JS', 'HTML5', 'CSS3'],
 				backend: ['PHP', 'MySQL', 'SnappCMS', 'Magento'],
 				cicd: ['Mercurial', 'Amazon EC2'],
 			},
 		},
 		{
 			id: 'mmplugins',
-			era: '2007–2013 — Brisbane, Australia',
+			era: ERAS.brisbane,
 			years: '2008–12',
 			startYear: 2008,
 			endYear: 2012,
@@ -274,7 +296,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'ifactory',
-			era: '2007–2013 — Brisbane, Australia',
+			era: ERAS.brisbane,
 			years: '2007–10',
 			startYear: 2007,
 			endYear: 2010,
@@ -290,7 +312,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'cms-v2',
-			era: '2007–2013 — Brisbane, Australia',
+			era: ERAS.brisbane,
 			years: '2008',
 			startYear: 2008,
 			endYear: 2009,
@@ -306,7 +328,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'hids',
-			era: '2000–2006 — The Early Web (Netherlands & New Zealand)',
+			era: ERAS.earlyWeb,
 			years: '2005–06',
 			startYear: 2005,
 			endYear: 2006,
@@ -325,7 +347,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'cms-v1',
-			era: '2000–2006 — The Early Web (Netherlands & New Zealand)',
+			era: ERAS.earlyWeb,
 			years: '2003–05',
 			startYear: 2003,
 			endYear: 2005,
@@ -341,7 +363,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'freelance-early',
-			era: '2000–2006 — The Early Web (Netherlands & New Zealand)',
+			era: ERAS.earlyWeb,
 			years: '2003–04',
 			startYear: 2003,
 			endYear: 2004,
@@ -356,7 +378,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'edf',
-			era: '2000–2006 — The Early Web (Netherlands & New Zealand)',
+			era: ERAS.earlyWeb,
 			years: '2002–03',
 			startYear: 2002,
 			endYear: 2003,
@@ -371,7 +393,7 @@ const timeline: TimelineData = {
 		},
 		{
 			id: 'web-inzicht',
-			era: '2000–2006 — The Early Web (Netherlands & New Zealand)',
+			era: ERAS.earlyWeb,
 			years: '2000–02',
 			startYear: 2000,
 			endYear: 2002,

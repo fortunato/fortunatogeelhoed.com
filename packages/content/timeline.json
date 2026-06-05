@@ -11,10 +11,23 @@
 			"type": "independent",
 			"highlight": "3 frameworks, 1 site — you’re looking at it",
 			"tech": {
-				"frontend": ["React", "Angular", "Vue"],
-				"backend": ["Bun", "Hono"],
-				"cicd": ["GitHub Actions", "Docker"],
-				"ai": ["Claude Code", "MCP"]
+				"frontend": [
+					"React",
+					"Angular",
+					"Vue",
+					"CSS Modules"
+				],
+				"backend": [
+					"Bun",
+					"Hono"
+				],
+				"cicd": [
+					"GitHub Actions",
+					"Docker"
+				],
+				"ai": [
+					"Claude Code"
+				]
 			}
 		},
 		{
@@ -27,10 +40,21 @@
 			"role": "Consulting Engineer",
 			"type": "independent",
 			"tech": {
-				"frontend": ["React", "SCSS Modules"],
-				"backend": ["Java", "Spring Boot"],
-				"cicd": ["Docker"],
-				"ai": ["Claude Code", "Ollama"]
+				"frontend": [
+					"React",
+					"SCSS Modules"
+				],
+				"backend": [
+					"Java",
+					"Spring Boot"
+				],
+				"cicd": [
+					"Docker"
+				],
+				"ai": [
+					"Claude Code",
+					"Ollama"
+				]
 			}
 		},
 		{
@@ -44,10 +68,27 @@
 			"type": "independent",
 			"highlight": "Real-time WebSocket market-data ingestion",
 			"tech": {
-				"frontend": ["React", "Mantine UI", "Vite", "Recharts", "Nx"],
-				"backend": ["NestJS", "TimescaleDB", "WebSockets"],
-				"cicd": ["Gitea Actions", "Docker"],
-				"ai": ["Claude Code", "MCP"]
+				"frontend": [
+					"React",
+					"Mantine UI",
+					"Vite",
+					"Recharts",
+					"CSS Modules"
+				],
+				"backend": [
+					"NestJS",
+					"TimescaleDB",
+					"WebSockets"
+				],
+				"cicd": [
+					"Gitea Actions",
+					"Docker",
+					"Nx"
+				],
+				"ai": [
+					"Claude Code",
+					"MCP"
+				]
 			}
 		},
 		{
@@ -61,10 +102,23 @@
 			"type": "side-project",
 			"highlight": "Published to PyPI with almost zero prior Python — built with Claude Code",
 			"tech": {
-				"frontend": ["Angular", "RxJS", "lightweight-charts"],
-				"backend": ["Python", "PyPI"],
-				"cicd": ["GitHub Actions"],
-				"ai": ["Claude Code", "MCP"]
+				"frontend": [
+					"Angular",
+					"RxJS",
+					"lightweight-charts",
+					"SCSS Modules"
+				],
+				"backend": [
+					"Python",
+					"PyPI"
+				],
+				"cicd": [
+					"GitHub Actions"
+				],
+				"ai": [
+					"Claude Code",
+					"MCP"
+				]
 			}
 		},
 		{
@@ -78,7 +132,15 @@
 			"type": "independent",
 			"highlight": "Led frontend across multiple teams; monorepo + feature-sliced architecture",
 			"tech": {
-				"frontend": ["React", "Redux", "TypeScript", "Nx", "GraphQL", "Storybook"],
+				"frontend": [
+					"React",
+					"Redux",
+					"TypeScript",
+					"GraphQL",
+					"Storybook",
+					"Styled Components",
+					"CSS Modules"
+				],
 				"backend": [
 					"NestJS",
 					"RxJS",
@@ -90,6 +152,7 @@
 					"Azure Service Bus"
 				],
 				"cicd": [
+					"Nx",
 					"GitLab CI",
 					"Azure Pipelines",
 					"GitHub Actions",
@@ -97,7 +160,11 @@
 					"AKS",
 					"App Insights"
 				],
-				"ai": ["Copilot", "ChatGPT", "ChatGPT API"]
+				"ai": [
+					"Copilot",
+					"ChatGPT",
+					"ChatGPT API"
+				]
 			}
 		},
 		{
@@ -111,10 +178,32 @@
 			"type": "side-project",
 			"highlight": "Autonomous execution, exchange APIs, homelab infra",
 			"tech": {
-				"frontend": ["React", "Next.js", "Anychart", "RxJS"],
-				"backend": ["Node.js", "PostgreSQL"],
-				"cicd": ["Bitbucket", "Jenkins", "Gitea Actions", "Docker", "Pulumi", "k3s"],
-				"ai": ["ChatGPT API", "Claude Code", "MCP", "OpenClaw"]
+				"frontend": [
+					"React",
+					"Next.js",
+					"Anychart",
+					"RxJS",
+					"SCSS Modules"
+				],
+				"backend": [
+					"Node.js",
+					"PostgreSQL"
+				],
+				"cicd": [
+					"Nx",
+					"Bitbucket",
+					"Jenkins",
+					"Gitea Actions",
+					"Docker",
+					"Pulumi",
+					"k3s"
+				],
+				"ai": [
+					"ChatGPT API",
+					"Claude Code",
+					"MCP",
+					"OpenClaw"
+				]
 			}
 		},
 		{
@@ -131,9 +220,25 @@
 				"Beat both the previously-optimized Magento 2 site and the AMP build Google’s own consultants delivered"
 			],
 			"tech": {
-				"frontend": ["React", "Redux", "TypeScript/Flow", "SSR", "Webpack"],
-				"backend": ["Node.js", "Express", "PHP", "Salesforce", "MySQL"],
-				"cicd": ["Jenkins", "Docker"]
+				"frontend": [
+					"React",
+					"Redux",
+					"TypeScript/Flow",
+					"SSR",
+					"Webpack",
+					"SCSS Modules"
+				],
+				"backend": [
+					"Node.js",
+					"Express",
+					"PHP",
+					"Salesforce",
+					"MySQL"
+				],
+				"cicd": [
+					"Jenkins",
+					"Docker"
+				]
 			}
 		},
 		{
@@ -147,8 +252,15 @@
 			"type": "employee",
 			"highlight": "Bridged Melbourne & Amsterdam frontend teams",
 			"tech": {
-				"frontend": ["React", "Redux", "ES2016"],
-				"backend": ["AEM"]
+				"frontend": [
+					"React",
+					"Redux",
+					"ES2016",
+					"SCSS"
+				],
+				"backend": [
+					"AEM"
+				]
 			}
 		},
 		{
@@ -162,9 +274,19 @@
 			"type": "employee",
 			"highlight": "Built CI/CD pipelines adopted across the practice, and a form framework reused across projects",
 			"tech": {
-				"frontend": ["React", "ES2016", "Webpack", "SCSS"],
-				"backend": ["Sitecore", "SQL Server"],
-				"cicd": ["Bamboo"]
+				"frontend": [
+					"React",
+					"ES2016",
+					"Webpack",
+					"SCSS"
+				],
+				"backend": [
+					"Sitecore",
+					"SQL Server"
+				],
+				"cicd": [
+					"Bamboo"
+				]
 			}
 		},
 		{
@@ -178,8 +300,16 @@
 			"type": "independent",
 			"highlight": "Technical direction and QA over an outsourced Magento 2 fashion store",
 			"tech": {
-				"frontend": ["jQuery", "HTML5", "CSS3"],
-				"backend": ["PHP", "Magento", "MySQL"]
+				"frontend": [
+					"jQuery",
+					"HTML5",
+					"CSS3"
+				],
+				"backend": [
+					"PHP",
+					"Magento 2",
+					"MySQL"
+				]
 			}
 		},
 		{
@@ -193,9 +323,24 @@
 			"type": "employee",
 			"highlight": "Brought parallel Gulp builds to the frontend guild",
 			"tech": {
-				"frontend": ["AngularJS", "Backbone", "jQuery", "Highcharts", "SCSS"],
-				"backend": ["Sitecore", "SQL Server"],
-				"cicd": ["Bamboo", "Grunt", "Gulp", "Yeoman", "Middleman"]
+				"frontend": [
+					"AngularJS",
+					"Backbone",
+					"jQuery",
+					"Highcharts",
+					"SCSS"
+				],
+				"backend": [
+					"Sitecore",
+					"SQL Server"
+				],
+				"cicd": [
+					"Bamboo",
+					"Grunt",
+					"Gulp",
+					"Yeoman",
+					"Middleman"
+				]
 			}
 		},
 		{
@@ -209,9 +354,18 @@
 			"type": "independent",
 			"highlight": "First taste of build automation — Grunt for the front-end pipeline",
 			"tech": {
-				"frontend": ["AngularJS", "RequireJS"],
-				"backend": ["PHP", "AEM", "MySQL"],
-				"cicd": ["Grunt"]
+				"frontend": [
+					"AngularJS",
+					"RequireJS"
+				],
+				"backend": [
+					"PHP",
+					"AEM",
+					"MySQL"
+				],
+				"cicd": [
+					"Grunt"
+				]
 			}
 		},
 		{
@@ -225,8 +379,19 @@
 			"type": "employee",
 			"highlight": "They didn’t want to lose me — kept on remotely through a Brisbane to Melbourne move",
 			"tech": {
-				"frontend": ["jQuery", "Backbone", "Marionette", "HTML5", "CSS3"],
-				"backend": ["PHP", "MySQL", "Kohana", "Node.js"]
+				"frontend": [
+					"jQuery",
+					"Backbone",
+					"Marionette",
+					"HTML5",
+					"CSS3"
+				],
+				"backend": [
+					"PHP",
+					"MySQL",
+					"Kohana",
+					"Node.js"
+				]
 			}
 		},
 		{
@@ -243,9 +408,22 @@
 				"Early cloud — building CentOS AMI images from scratch on EC2"
 			],
 			"tech": {
-				"frontend": ["jQuery", "HTML5", "CSS3"],
-				"backend": ["PHP", "MySQL", "SnappCMS", "Magento"],
-				"cicd": ["Mercurial", "Amazon EC2"]
+				"frontend": [
+					"jQuery",
+					"Ext JS",
+					"HTML5",
+					"CSS3"
+				],
+				"backend": [
+					"PHP",
+					"MySQL",
+					"SnappCMS",
+					"Magento"
+				],
+				"cicd": [
+					"Mercurial",
+					"Amazon EC2"
+				]
 			}
 		},
 		{
@@ -259,9 +437,22 @@
 			"type": "side-project",
 			"highlight": "Free and commercial Joomla extensions, built full-stack — a three-person venture",
 			"tech": {
-				"frontend": ["jQuery", "JavaScript", "HTML5", "CSS3"],
-				"backend": ["PHP", "MySQL", "Joomla", "Joomla 2"],
-				"cicd": ["Bash", "SFTP"]
+				"frontend": [
+					"jQuery",
+					"JavaScript",
+					"HTML5",
+					"CSS3"
+				],
+				"backend": [
+					"PHP",
+					"MySQL",
+					"Joomla",
+					"Joomla 2"
+				],
+				"cicd": [
+					"Bash",
+					"SFTP"
+				]
 			}
 		},
 		{
@@ -275,9 +466,27 @@
 			"type": "employee",
 			"highlight": "Lived through the Prototype.js → MooTools → jQuery era",
 			"tech": {
-				"frontend": ["Prototype.js", "MooTools", "jQuery", "HTML5", "CSS3"],
-				"backend": ["PHP", "MySQL", "Joomla", "Joomla 2", "Magento", "Seagull", "PEAR"],
-				"cicd": ["SVN", "rsync", "Capistrano"]
+				"frontend": [
+					"Prototype.js",
+					"MooTools",
+					"jQuery",
+					"HTML5",
+					"CSS3"
+				],
+				"backend": [
+					"PHP",
+					"MySQL",
+					"Joomla",
+					"Joomla 2",
+					"Magento",
+					"Seagull",
+					"PEAR"
+				],
+				"cicd": [
+					"SVN",
+					"rsync",
+					"Capistrano"
+				]
 			}
 		},
 		{
@@ -291,9 +500,18 @@
 			"type": "side-project",
 			"highlight": "Built another CMS from scratch — this time on the Seagull PHP framework",
 			"tech": {
-				"frontend": ["jQuery", "JavaScript", "CSS3"],
-				"backend": ["PHP", "MySQL"],
-				"cicd": ["Capistrano"]
+				"frontend": [
+					"jQuery",
+					"JavaScript",
+					"CSS3"
+				],
+				"backend": [
+					"PHP",
+					"MySQL"
+				],
+				"cicd": [
+					"Capistrano"
+				]
 			}
 		},
 		{
@@ -310,9 +528,18 @@
 				"Kept on remotely through a move from the Netherlands to New Zealand"
 			],
 			"tech": {
-				"frontend": ["JavaScript", "AJAX"],
-				"backend": ["PHP", "MySQL", "In-house CMS"],
-				"cicd": ["SFTP"]
+				"frontend": [
+					"JavaScript",
+					"AJAX"
+				],
+				"backend": [
+					"PHP",
+					"MySQL",
+					"In-house CMS"
+				],
+				"cicd": [
+					"SFTP"
+				]
 			}
 		},
 		{
@@ -326,9 +553,18 @@
 			"type": "side-project",
 			"highlight": "Full CMS built from scratch in PHP",
 			"tech": {
-				"frontend": ["JavaScript", "XHTML", "CSS2"],
-				"backend": ["PHP", "MySQL"],
-				"cicd": ["SFTP"]
+				"frontend": [
+					"JavaScript",
+					"XHTML",
+					"CSS2"
+				],
+				"backend": [
+					"PHP",
+					"MySQL"
+				],
+				"cicd": [
+					"SFTP"
+				]
 			}
 		},
 		{
@@ -341,9 +577,17 @@
 			"role": "Web Developer",
 			"type": "independent",
 			"tech": {
-				"frontend": ["JavaScript", "XHTML", "CSS2"],
-				"backend": ["PHP"],
-				"cicd": ["SFTP"]
+				"frontend": [
+					"JavaScript",
+					"XHTML",
+					"CSS2"
+				],
+				"backend": [
+					"PHP"
+				],
+				"cicd": [
+					"SFTP"
+				]
 			}
 		},
 		{
@@ -356,9 +600,20 @@
 			"role": "Web Developer",
 			"type": "employee",
 			"tech": {
-				"frontend": ["JavaScript", "XML", "XSLT"],
-				"backend": ["ASP.NET", "PHP", "SQL Server", "In-house CMS"],
-				"cicd": ["SFTP"]
+				"frontend": [
+					"JavaScript",
+					"XML",
+					"XSLT"
+				],
+				"backend": [
+					"ASP.NET",
+					"PHP",
+					"SQL Server",
+					"In-house CMS"
+				],
+				"cicd": [
+					"SFTP"
+				]
 			}
 		},
 		{
@@ -372,9 +627,19 @@
 			"type": "employee",
 			"highlight": "Where it all started.",
 			"tech": {
-				"frontend": ["JavaScript", "HTML", "CSS2", "Flash"],
-				"backend": ["Classic ASP", "MS Access"],
-				"cicd": ["FTP"]
+				"frontend": [
+					"JavaScript",
+					"HTML",
+					"CSS2",
+					"Flash"
+				],
+				"backend": [
+					"Classic ASP",
+					"MS Access"
+				],
+				"cicd": [
+					"FTP"
+				]
 			}
 		}
 	],
