@@ -19,7 +19,7 @@ describe('Header (React)', () => {
 		);
 		const destinations: [string, string][] = [
 			['Home', '/'],
-			['Timeline', '/timeline'],
+			['Career', '/timeline'],
 			['Contact', '/contact'],
 		];
 		for (const [label, path] of destinations) {

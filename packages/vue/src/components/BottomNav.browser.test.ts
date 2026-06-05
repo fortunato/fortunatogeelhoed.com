@@ -27,7 +27,7 @@ async function renderNav(path = '/') {
 
 const DESTINATIONS: [string, string][] = [
 	['Home', '/'],
-	['Timeline', '/timeline'],
+	['Career', '/timeline'],
 	['Contact', '/contact'],
 ];
 
@@ -41,7 +41,7 @@ describe('BottomNav (Vue)', () => {
 
 	it('marks the current destination as active', async () => {
 		await renderNav('/timeline');
-		expect(screen.getByRole('link', { name: 'Timeline' }).getAttribute('aria-current')).toBe(
+		expect(screen.getByRole('link', { name: 'Career' }).getAttribute('aria-current')).toBe(
 			'page',
 		);
 		expect(screen.getByRole('link', { name: 'Home' }).getAttribute('aria-current')).toBeNull();

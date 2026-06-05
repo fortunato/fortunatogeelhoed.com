@@ -7,7 +7,7 @@ const ORIGIN = 'http://localhost:3000';
 const FRAMEWORKS = ['react', 'vue', 'angular'] as const;
 const NAV = [
 	{ label: 'Home', path: '/' },
-	{ label: 'Timeline', path: '/timeline' },
+	{ label: 'Career', path: '/timeline' },
 	{ label: 'Contact', path: '/contact' },
 ];
 
@@ -42,7 +42,7 @@ test.describe('primary navigation', () => {
 	test('marks the current destination as active', async ({ page }) => {
 		await page.goto('/timeline');
 		await expect(
-			page.locator('a[aria-current="page"]', { hasText: 'Timeline' }).first(),
+			page.locator('a[aria-current="page"]', { hasText: 'Career' }).first(),
 		).toBeAttached();
 	});
 

@@ -20,7 +20,7 @@ const ROUTES = [
 
 const DESTINATIONS: [string, string][] = [
 	['Home', '/'],
-	['Timeline', '/timeline'],
+	['Career', '/timeline'],
 	['Contact', '/contact'],
 ];
 
@@ -37,7 +37,7 @@ describe('BottomNavComponent (Angular)', () => {
 			providers: [provideRouter(ROUTES)],
 		});
 		await navigate('/timeline');
-		expect(screen.getByRole('link', { name: 'Timeline' }).getAttribute('aria-current')).toBe(
+		expect(screen.getByRole('link', { name: 'Career' }).getAttribute('aria-current')).toBe(
 			'page',
 		);
 		expect(screen.getByRole('link', { name: 'Home' }).getAttribute('aria-current')).toBeNull();

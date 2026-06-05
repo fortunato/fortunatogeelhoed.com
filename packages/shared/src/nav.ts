@@ -11,6 +11,6 @@ export interface NavItem {
  *  only built destinations appear here. */
 export const NAV_ITEMS: NavItem[] = [
 	{ label: 'Home', path: '/', icon: 'home' },
-	{ label: 'Timeline', path: '/timeline', icon: 'timeline' },
+	{ label: 'Career', path: '/timeline', icon: 'timeline' },
 	{ label: 'Contact', path: '/contact', icon: 'contact' },
 ];

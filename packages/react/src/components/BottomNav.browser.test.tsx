@@ -11,7 +11,7 @@ afterEach(cleanup);
 
 const DESTINATIONS: [string, string][] = [
 	['Home', '/'],
-	['Timeline', '/timeline'],
+	['Career', '/timeline'],
 	['Contact', '/contact'],
 ];
 
@@ -33,7 +33,7 @@ describe('BottomNav (React)', () => {
 				<BottomNav />
 			</MemoryRouter>,
 		);
-		expect(screen.getByRole('link', { name: 'Timeline' }).getAttribute('aria-current')).toBe(
+		expect(screen.getByRole('link', { name: 'Career' }).getAttribute('aria-current')).toBe(
 			'page',
 		);
 		expect(screen.getByRole('link', { name: 'Home' }).getAttribute('aria-current')).toBeNull();
