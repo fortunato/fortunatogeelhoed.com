@@ -2,7 +2,7 @@
 title: Let's work together
 slug: contact
 type: page
-description: Get in touch for consulting, freelance projects, or collaboration.
+description: Senior frontend and full-stack engineering and technical leadership, for consulting, freelance, or collaboration.
 ---
 
-I'm currently available for new projects. Reach out to discuss how I can help.
+I take on senior frontend and full-stack engineering, and technical leadership: consulting, freelance, or a longer engagement. Tell me what you're building and I'll get back to you.
