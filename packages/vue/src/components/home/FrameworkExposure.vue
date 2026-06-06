@@ -1,6 +1,6 @@
 <template>
 	<section :class="styles.exposure">
-		<div class="container">
+		<div class="container" :class="styles['exposure-body']">
 			<p class="section-label">Frameworks</p>
 			<h2 :class="['section-title', styles.head]">
 				Frameworks come and go. The craft compounds.

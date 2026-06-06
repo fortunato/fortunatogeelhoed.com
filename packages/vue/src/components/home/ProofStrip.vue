@@ -1,6 +1,6 @@
 <template>
 	<section :class="styles.proof">
-		<div class="container">
+		<div class="container" :class="styles['proof-body']">
 			<p class="section-label">Proof</p>
 			<div :class="styles['proof-grid']">
 				<div v-for="point in proof" :key="point.label" data-reveal>

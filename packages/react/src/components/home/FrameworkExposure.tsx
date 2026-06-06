@@ -23,7 +23,7 @@ const INTENSITY_LEGEND: { intensity: string; label: string }[] = [
 export function FrameworkExposure() {
 	return (
 		<section className={styles.exposure}>
-			<div className="container">
+			<div className={`container ${styles['exposure-body']}`}>
 				<p className="section-label">Frameworks</p>
 				<h2 className={`section-title ${styles.head}`}>
 					Frameworks come and go. The craft compounds.

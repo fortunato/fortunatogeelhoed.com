@@ -27,13 +27,17 @@
 	   stay coupled when the gutter changes. */
 	--node-size: 12px;
 	--node-left: 0.4rem;
-	/* Entry-type identity colours: employee blue and side-project amber (plus a darker amber
-	   ink for tag text that must clear AA on the pale tint). Independent uses the framework
-	   accent. Stated once here; the node, tag and side-project fill all derive from them. */
+	/* Entry-type identity colours: employee blue and side-project amber; independent uses the
+	   framework accent. These drive the node dot and the side-project fill/border. The text
+	   inks for the spine date and type badge are theme-aware tokens (--jb-timeline-ink-* in
+	   tokens.css) so they can darken for AA on the light surface without a component theme
+	   selector (which Angular's encapsulation mis-scopes). */
 	--type-employee: #5ba8ff;
 	--type-side: #facc15;
-	--type-side-ink: #b88a06;
-	max-width: 1400px;
+	/* Mobile-first: the stacked single-column layout is the baseline (full width); the dense
+	   multi-lane grid — and the 1400px cap it needs — assemble at the wide tier near the bottom
+	   of this file. The lane custom props above are inert until then. */
+	max-width: 100%;
 	margin: var(--jb-space-2xl) auto 0;
 	position: relative;
 	/* The assemble-on-scroll reveal parks not-yet-revealed lanes translated to the right;
@@ -43,12 +47,13 @@
 	overflow-x: clip;
 }
 
-/* Sticky lane headers */
+/* Sticky lane headers — only meaningful in the multi-lane grid, so hidden in the stacked
+   baseline and shown at the wide tier. */
 .lane-headers {
 	position: sticky;
 	top: var(--jb-size-nav-height);
 	z-index: var(--jb-z-base);
-	display: grid;
+	display: none;
 	grid-template-columns: var(--cols);
 	background: color-mix(in srgb, var(--jb-bg-primary) 92%, transparent);
 	backdrop-filter: blur(12px);
@@ -71,9 +76,9 @@
 	}
 }
 
-/* Era / time-block divider */
+/* Era / time-block divider. Stacked baseline has no spine gutter; the wide tier indents it. */
 .era {
-	padding: var(--jb-space-xl) 0 var(--jb-space-md) var(--spine-pad);
+	padding: var(--jb-space-xl) 0 var(--jb-space-md) 0;
 }
 
 .era-label {
@@ -98,28 +103,38 @@
 	}
 }
 
-/* Entry row */
+/* Entry row. Stacked baseline: a single column with the node in a left gutter and inline lane
+   labels (see .lane::before). The wide tier swaps this for the multi-lane grid. The node dot,
+   spine line, type colours and zebra striping are shared and stay here. */
 .entry {
-	display: grid;
-	grid-template-columns: var(--cols);
-	gap: 0;
-	padding: var(--jb-space-md) 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--jb-space-md);
+	padding: var(--jb-space-lg);
+	/* A left gutter wide enough to seat the node dot away from the (boxed) edge, with the content
+	   column starting right after it. The spine line stays centred on the dot automatically (both
+	   derive from --node-left). */
+	padding-left: 2.5rem;
+	margin-bottom: var(--jb-space-md);
+	--node-left: 0.9rem;
 	min-height: 4.5rem;
 	position: relative;
 	align-items: start;
 	border-bottom: 1px solid color-mix(in srgb, var(--jb-color-border) 55%, transparent);
 	--node-color: var(--jb-accent);
+	--node-ink: var(--jb-timeline-ink-independent);
 
 	&:nth-child(even of .entry) {
 		background: color-mix(in srgb, var(--jb-bg-secondary) 45%, transparent);
 	}
 
 	/* Node + spine line */
+	/* Node dot. top is tuned for the stacked entry's padding; the wide grid reseats it lower. */
 	&::before {
 		content: "";
 		position: absolute;
 		left: var(--node-left);
-		top: 1.15rem;
+		top: 2.15rem;
 		width: var(--node-size);
 		height: var(--node-size);
 		border-radius: 50%;
@@ -143,12 +158,15 @@
 
 	&[data-type="employee"] {
 		--node-color: var(--type-employee);
+		--node-ink: var(--jb-timeline-ink-employee);
 	}
 	&[data-type="independent"] {
 		--node-color: var(--jb-accent);
+		--node-ink: var(--jb-timeline-ink-independent);
 	}
 	&[data-type="side-project"] {
 		--node-color: var(--type-side);
+		--node-ink: var(--jb-timeline-ink-side);
 		background: repeating-linear-gradient(
 			-45deg,
 			transparent,
@@ -172,7 +190,9 @@
    without shifting the columns. */
 .spine {
 	grid-column: 1;
-	padding-left: var(--spine-pad);
+	/* Stacked: the date/role text sits at the entry's content edge; the wide grid indents it
+	   to the spine gutter. */
+	padding-left: 0;
 	padding-right: var(--jb-space-md);
 }
 
@@ -180,7 +200,10 @@
 	font-family: var(--jb-font-mono);
 	font-size: 0.9rem;
 	font-weight: 700;
-	color: var(--node-color);
+	/* Text-safe ink (theme-aware token): the vivid node colour clears AA on the dark surface but
+	   not as small text on the light theme's near-white, so the ink is darkened per theme in
+	   tokens.css. The node dot keeps the vivid --node-color. */
+	color: var(--node-ink);
 	line-height: 1.2;
 }
 
@@ -213,7 +236,7 @@
 
 	&[data-type="employee"] {
 		background: color-mix(in srgb, var(--type-employee) 14%, transparent);
-		color: var(--type-employee);
+		color: var(--jb-timeline-ink-employee);
 	}
 	&[data-type="independent"] {
 		background: var(--jb-accent-soft);
@@ -221,7 +244,7 @@
 	}
 	&[data-type="side-project"] {
 		background: color-mix(in srgb, var(--type-side) 14%, transparent);
-		color: var(--type-side-ink);
+		color: var(--jb-timeline-ink-side-badge);
 	}
 }
 
@@ -233,17 +256,30 @@
 	line-height: 1.5;
 }
 
-/* Lanes + pills */
+/* Lanes + pills. Stacked baseline: each lane is a full-width row prefixed with its label
+   (::before); the wide grid drops the label and pads the lane as a grid cell. */
 .lane {
 	display: flex;
 	flex-wrap: wrap;
 	align-content: flex-start;
 	gap: 5px;
-	padding: 2px var(--jb-space-sm);
+	padding: 0;
 	/* Grid items default to min-width:auto (min-content), which lets a nowrap pill blow the
 	   track past the viewport; 0 lets the lane shrink so pills wrap instead. */
 	min-width: 0;
 	transition: transform var(--jb-dur-base) var(--jb-ease-standard);
+
+	/* Inline lane label, stacked layout only (removed in the grid, where the sticky headers
+	   name the lanes instead). */
+	&::before {
+		content: attr(data-lane-label);
+		flex-basis: 100%;
+		font-family: var(--jb-font-mono);
+		font-size: 0.6rem;
+		text-transform: uppercase;
+		letter-spacing: 0.08em;
+		color: var(--jb-text-tertiary);
+	}
 }
 
 /* explicit columns so empty lanes can be omitted without shifting the others */
@@ -320,8 +356,11 @@
 	}
 
 	/* Desktop: each row ASSEMBLES — the spine slides in, the lanes converge from their
-	   sides, the node pops, and the pills scale up; all of it reverses on the way out. */
-	@media (min-width: 981px) {
+	   sides, the node pops, and the pills scale up; all of it reverses on the way out.
+	   Keyed independently of the grid breakpoint below: in the 981–1200 band the assemble
+	   motion plays over the stacked layout (the higher-specificity reveal selectors win
+	   regardless) — long-standing behaviour, preserved by the mobile-first restructure. */
+	@media (width >= 981px) {
 		.entry[data-reveal] {
 			opacity: 1;
 			transform: none;
@@ -333,15 +372,11 @@
 			transition: opacity 0.4s var(--jb-ease-emphasized), transform 0.4s
 				var(--jb-ease-emphasized);
 		}
-		/* One --dir multiplier flips the slide side for the whole row: the spine and lanes
-		   sweep in from the right on the way down (--dir 1) and mirror — in from the left —
-		   on the way up (--dir -1). The lane stagger stays left-to-right (fe→ai) in both
-		   directions. */
 		.entry[data-reveal] .spine {
-			transform: translateX(calc(28px * var(--dir, 1)));
+			transform: translateX(28px);
 		}
 		.entry[data-reveal] .lane {
-			transform: translateX(calc(80px * var(--dir, 1)));
+			transform: translateX(28px);
 		}
 		.entry[data-reveal] .lane-fe {
 			transition-delay: 0.1s;
@@ -389,60 +424,50 @@
 	}
 }
 
-/* ============================ Narrow / mobile ============================ */
+/* ============================ Wide: the multi-lane grid ============================ */
 
-/* The dense 4-lane grid needs real width; below this it overflowed, so stack each entry into
-   a single column with inline lane labels. Covers tablets and small laptops. */
-@media (max-width: 1200px) {
+/* The dense 4-lane grid needs real width — below this it overflowed, so the stacked baseline
+   above holds for tablets and small laptops. Here it assembles into the spine + four technology
+   lanes, with the sticky lane headers naming the columns. */
+@media (width >= 1201px) {
 	.timeline {
-		max-width: 100%;
+		max-width: 1400px;
 	}
 
 	.lane-headers {
-		display: none;
+		display: grid;
 	}
 
 	.era {
-		padding-left: 0;
+		padding-left: var(--spine-pad);
 	}
 
 	.entry {
-		display: flex;
-		flex-direction: column;
-		gap: var(--jb-space-md);
-		padding: var(--jb-space-lg);
-		/* A left gutter wide enough to seat the node dot away from the (boxed) edge, with the
-		   content column starting right after it. Reseat the dot in that gutter; the spine line
-		   stays centred on it automatically (both derive from --node-left). */
-		padding-left: 2.5rem;
-		margin-bottom: var(--jb-space-md);
-		--node-left: 0.9rem;
+		display: grid;
+		grid-template-columns: var(--cols);
+		gap: 0;
+		/* padding shorthand also clears the stacked entry's left gutter (left/right → 0). */
+		padding: var(--jb-space-md) 0;
+		margin-bottom: 0;
+		--node-left: 0.4rem;
 	}
 
-	/* Re-centre the dot on the date line (the stacked entry has more top padding than the
-	   desktop grid the base offset was tuned for). */
+	/* Re-centre the dot on the date line for the tighter grid row. */
 	.entry::before {
-		top: 2.15rem;
+		top: 1.15rem;
 	}
 
-	/* Spine and lanes both sit at the entry padding, so the date/role text and every pill row
-	   share one left edge, close to the dot. */
+	/* Indent the spine cell into the spine gutter so it aligns under the first lane header. */
 	.spine {
-		padding-left: 0;
+		padding-left: var(--spine-pad);
 	}
 
 	.lane {
-		padding: 0;
-		transform: none;
+		padding: 2px var(--jb-space-sm);
 	}
 
+	/* The sticky headers name the lanes here, so drop the inline per-lane label. */
 	.lane::before {
-		content: attr(data-lane-label);
-		flex-basis: 100%;
-		font-family: var(--jb-font-mono);
-		font-size: 0.6rem;
-		text-transform: uppercase;
-		letter-spacing: 0.08em;
-		color: var(--jb-text-tertiary);
+		content: none;
 	}
 }

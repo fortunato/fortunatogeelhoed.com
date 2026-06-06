@@ -40,7 +40,12 @@ async function main() {
 	try {
 		await waitForServer();
 		for (const framework of FRAMEWORKS) {
-			const context = await browser.newContext();
+			// Pin scroll-revealed content to its final, fully-visible state so axe samples the
+			// resolved rendering rather than a mid-animation frame (decorative reveals fade
+			// opacity in, which would otherwise flag transient, non-real contrast failures and
+			// make the gate non-deterministic). This also widens coverage: every section is
+			// present at once instead of only what has scrolled into view.
+			const context = await browser.newContext({ reducedMotion: 'reduce' });
 			await context.addCookies([{ name: 'framework', value: framework, url: ORIGIN }]);
 			const page = await context.newPage();
 			for (const route of routes) {

@@ -2,20 +2,21 @@
    References semantic `--jb-` tokens only — never literals. */
 
 @layer base {
-	/* Body defaults */
+	/* Body defaults. Mobile-first: reserve space for the fixed bottom tab bar by default so
+	   content isn't hidden behind it; the bar gives way to the top bar on wider viewports below. */
 	body {
 		font-family: var(--jb-font-body);
 		background: var(--jb-bg-primary);
 		color: var(--jb-text-primary);
 		padding-top: var(--jb-size-nav-height);
+		padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0));
 		transition: background-color var(--jb-dur-slow) var(--jb-ease-standard), color
 			var(--jb-dur-slow) var(--jb-ease-standard);
 	}
 
-	/* Clear the fixed mobile bottom tab bar so content isn't hidden behind it. */
-	@media (max-width: 768px) {
+	@media (width >= 769px) {
 		body {
-			padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0));
+			padding-bottom: 0;
 		}
 	}
 
@@ -89,7 +90,7 @@
 	.card {
 		background: var(--jb-bg-card);
 		border: 1px solid var(--jb-color-border);
-		border-radius: var(--jb-radius-lg);
+		border-radius: var(--jb-radius-sm);
 		padding: var(--jb-space-lg);
 		transition: transform var(--jb-dur-base) var(--jb-ease-standard), box-shadow
 			var(--jb-dur-base) var(--jb-ease-standard), border-color var(--jb-dur-base)

@@ -12,7 +12,7 @@ export function Services({ services }: { services: ServiceOffering[] }) {
 
 	return (
 		<section>
-			<div className="container">
+			<div className={`container ${styles['services-body']}`}>
 				<p className="section-label">What I do</p>
 				<h2 className="section-title">Services</h2>
 				<div className={styles['services-grid']} ref={gridRef}>

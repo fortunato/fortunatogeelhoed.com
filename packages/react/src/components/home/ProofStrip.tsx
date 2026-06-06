@@ -4,7 +4,7 @@ import styles from '@styles/components/proof.module.css';
 export function ProofStrip({ proof }: { proof: ProofPoint[] }) {
 	return (
 		<section className={styles.proof}>
-			<div className="container">
+			<div className={`container ${styles['proof-body']}`}>
 				<p className="section-label">Proof</p>
 				<div className={styles['proof-grid']}>
 					{proof.map((point) => (

@@ -1,22 +1,32 @@
 /* Homepage services cards — shared across the three variants. Semantic --jb-* tokens only.
    The cursor spotlight is driven by @fg/shared/card-spotlight (sets --mx/--my). */
 
-/* Four cards laid out evenly: 2×2 by default (never an orphaned 3+1), one column on phones,
-   and a single row only on wide screens where they fit. */
+/* The grid reacts to the width it actually has, not the viewport: the surrounding column is a
+   size container, so the column count follows the room available to the cards (correct even if
+   the grid is ever placed in a narrower slot). The single anonymous container ancestor is the
+   wrapper just below. */
+.services-body {
+	container-type: inline-size;
+}
+
+/* Four cards laid out evenly. Mobile-first: one column, then 2×2 once the column is wide enough
+   for a comfortable pair (never an orphaned 3+1), then a single row only where they truly fit.
+   Thresholds are container widths — narrower than the viewport — tuned to the prior viewport
+   breakpoints; 76rem stays under the page container's ~82.5rem ceiling so four-up can engage. */
 .services-grid {
 	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-columns: 1fr;
 	gap: var(--jb-space-lg);
 	margin-top: var(--jb-space-lg);
 }
 
-@media (max-width: 30rem) {
+@container (width >= 27rem) {
 	.services-grid {
-		grid-template-columns: 1fr;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
 
-@media (min-width: 85rem) {
+@container (width >= 76rem) {
 	.services-grid {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}
@@ -50,7 +60,7 @@
 	cursor: default;
 	background: var(--jb-bg-card);
 	border: 1px solid var(--jb-color-border);
-	border-radius: var(--jb-radius-lg);
+	border-radius: var(--jb-radius-sm);
 	padding: var(--jb-space-lg);
 	transition: border-color var(--jb-dur-base) var(--jb-ease-standard);
 

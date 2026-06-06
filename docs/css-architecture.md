@@ -124,6 +124,86 @@ Two decisions here are deliberate and non-obvious:
 > the shared module file breaks Angular's emulated encapsulation, so components are
 > currently unlayered (correct — scoped styles legitimately win over `@layer base`).
 
+## Responsive design
+
+The site is **mobile-first**: the unprefixed rule is the small-screen baseline, and
+wider layouts are layered on with `min-width`-style queries. Mobile is the intended
+design, not "desktop minus features", so base rules describe the phone and the
+enhancements grow upward. There are no `max-width` layout queries.
+
+- **Range syntax.** Breakpoints use the modern range form — `@media (width >= 1025px)`
+  rather than `@media (min-width: 1025px)`. It reads cleanly and pairs without the
+  classic off-by-one overlap. (It's inside our Baseline floor: Safari 16.4+.)
+- **Most scaling is fluid, so breakpoints stay few.** Typography and spacing scale with
+  `clamp()` and the `--jb-space-*` scale (e.g. `.section-title`, the `section` padding),
+  which absorbs most of the responsive range. Discrete breakpoints are reserved for
+  genuine layout changes, and each is chosen where the content actually breaks — not
+  from a device table.
+
+### Breakpoints in use
+
+Values are deliberately per-surface, not a shared `sm/md/lg` scale: no two surfaces
+share a threshold, so a named scale would force unrelated layouts onto the same number
+and obscure *why* each was chosen. Each lives next to the rule it governs.
+
+| Breakpoint | Surface | What changes |
+|---|---|---|
+| `width >= 401px` | header (`header.module.css`) | smallest-phone cluster relaxes to standard edge padding, full-size logo, roomier switcher |
+| `width >= 769px` | `tokens.css`, `base.css` | nav-height token grows `3rem → 3.5rem`; body drops the bottom tab-bar clearance |
+| `width >= 981px` | timeline (`timeline.module.css`) | desktop "assemble" scroll reveal (motion only — layout is separate, below) |
+| `width >= 1025px` | header ↔ bottom-nav | **nav swap** — top-bar nav appears, fixed bottom tab bar hides |
+| `width >= 1201px` | timeline | stacked single column → multi-lane grid + sticky lane headers |
+| `@container 27rem / 76rem` | services & proof grids | 1 → 2 → 4 columns (container width) |
+| `@container 36rem` | framework ribbon | stacked label-over-track → 6rem label + track row (container width) |
+
+**Paired invariant — the nav swap is a contract across two files.**
+`header.module.css` reveals the top-bar nav at `width >= 1025px`; `bottom-nav.module.css`
+hides the fixed bottom tab bar at the *same* `width >= 1025px`. Exactly one primary nav
+is shown at any width — editing one breakpoint without the other silently produces two
+navs or none. Keep them in lockstep. (The lone `769px` value is unrelated: it only tunes
+the bar's reserved height/clearance for true phones, below the swap.)
+
+### Viewport queries vs container queries
+
+The split is by *what the decision depends on*:
+
+- **Viewport (`@media`)** for device-class / page-chrome decisions: the nav swap, the
+  body padding and nav-height token, and whether the timeline's dense grid fits the page.
+- **Container (`@container`)** for component layout that should react to the space the
+  component actually has, not the window. The homepage **services** and **proof** card
+  grids and the **framework ribbon** rows use container queries, so their column/row
+  layout follows their own width and stays correct if the component is ever placed in a
+  narrower slot.
+
+Two implementation notes for the container queries:
+
+1. **The size container is a wrapper, never the grid or the cards.** `container-type`
+   applies size/layout containment, which can clip or collapse the cards' relative-
+   positioned spotlight/sheen layers. Each grid's surrounding column carries
+   `container-type: inline-size` (`.services-body`, `.proof-body`, `.exposure-body`),
+   and the grid queries it. The ribbon's container wraps both the ribbon rows *and* the
+   shared legend (a sibling of the ribbon blocks), so both align together.
+2. **Queries are anonymous (no `container-name`).** Each grid has exactly one container
+   ancestor, so an unnamed `@container` resolves unambiguously — and it sidesteps any
+   question of whether CSS Modules / Angular encapsulation would scope a container name
+   consistently across the two pipelines.
+
+Container query thresholds are **container** widths, re-derived from the grid's own room
+rather than copied from the old viewport values (the page container is `min(1320px, 90vw)`,
+so it's narrower than the viewport, and its `~82.5rem` ceiling is why the four-up step sits
+at `76rem`, not the old `85rem` which the container could never reach).
+
+### Why breakpoint values are literal, not tokens
+
+Custom properties can't be used in `@media`/`@container` conditions, and there's no
+shared `@custom-media`: the [two CSS pipelines](#two-css-pipelines) compile separately,
+so a custom-media defined in `tokens.css` would never reach the component modules. With a
+handful of single-use, content-derived values, a codegen step or duplicated token would
+be churn for no payoff — the values stay literal, documented here, and commented at each
+rule. Container queries are Baseline Widely Available within our floor (Safari 16.4+), so
+they need no `@supports` guard; the single-column / stacked base is itself the correct
+fallback anywhere they don't apply.
+
 ## Theme resolution & zero-flash
 
 Dark is the default. The initial theme resolves **stored choice → system

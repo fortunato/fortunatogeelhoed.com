@@ -9,7 +9,7 @@
 	position: relative;
 	overflow: hidden;
 	padding: clamp(var(--jb-space-xl), 7vw, var(--jb-space-2xl)) var(--jb-space-lg);
-	border-radius: var(--jb-radius-lg);
+	border-radius: var(--jb-radius-sm);
 	background: linear-gradient(
 		135deg,
 		var(--jb-accent),

@@ -18,13 +18,15 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0 var(--jb-space-lg);
+	/* Mobile-first: the smallest phone is the baseline; padding and the cluster open up at the
+	   tiers below. */
+	padding: 0 var(--jb-space-sm);
 }
 
 .logo,
 .logo:hover {
 	font-family: var(--jb-font-logo);
-	font-size: 1rem;
+	font-size: 0.85rem;
 	font-weight: 800;
 	letter-spacing: 0;
 	color: var(--jb-text-primary);
@@ -45,6 +47,8 @@
 }
 
 .sep {
+	/* Shown only alongside the top-bar nav (wide viewports); hidden in the mobile cluster. */
+	display: none;
 	width: 1px;
 	height: 20px;
 	background: var(--jb-color-border);
@@ -52,7 +56,9 @@
 }
 
 .nav {
-	display: flex;
+	/* Hidden by default — the bottom tab bar is the primary nav on narrow viewports. The
+	   top-bar nav appears at the wide tier below (in step with bottom-nav.module.css). */
+	display: none;
 	align-items: center;
 	gap: var(--jb-space-lg);
 
@@ -96,6 +102,9 @@
 }
 
 .switcher-label {
+	/* The "Built with" label only fits once the top-bar nav is shown; hidden in the
+	   mobile cluster so the logo and switcher don't crowd each other. */
+	display: none;
 	font-family: var(--jb-font-mono);
 	font-size: 0.65rem;
 	color: var(--jb-text-secondary);
@@ -105,19 +114,19 @@
 
 .switcher-buttons {
 	display: flex;
-	gap: 2px;
+	gap: 1px;
 	background: var(--jb-bg-secondary);
 	border-radius: var(--jb-radius-md);
 	padding: 3px;
 }
 
 .switcher-btn {
-	padding: 4px 12px;
+	padding: 4px 6px;
 	border: none;
 	background: transparent;
 	color: var(--jb-text-secondary);
 	font-family: var(--jb-font-mono);
-	font-size: 0.7rem;
+	font-size: 0.55rem;
 	font-weight: 500;
 	letter-spacing: 0.03em;
 	cursor: pointer;
@@ -143,28 +152,16 @@
 /* The theme toggle now lives in the shared <jb-theme-toggle> web component; its
    styles moved to the global styles/components/controls.css. */
 
-/* Below this the bottom tab bar takes over primary navigation, so the top-bar nav and the
-   "Built with" label collapse — otherwise the logo and nav cluster crowd each other on
-   tablet widths. Kept in step with the bottom-nav reveal breakpoint. */
-@media (max-width: 1024px) {
-	.nav {
-		display: none;
-	}
-
+/* Past the smallest phones the cluster gets a little breathing room: standard edge padding,
+   full-size logo, and slightly roomier switcher buttons. */
+@media (width >= 401px) {
 	.header {
 		padding: 0 var(--jb-space-md);
 	}
 
-	.sep {
-		display: none;
-	}
-
-	.switcher-label {
-		display: none;
-	}
-
-	.switcher-buttons {
-		gap: 1px;
+	.logo,
+	.logo:hover {
+		font-size: 1rem;
 	}
 
 	.switcher-btn {
@@ -173,19 +170,32 @@
 	}
 }
 
-/* Small phones: pull the logo + switcher + toggle in so the cluster doesn't clip the edge. */
-@media (max-width: 400px) {
-	.header {
-		padding: 0 var(--jb-space-sm);
+/* Wide viewports: the top-bar nav takes over primary navigation (the bottom tab bar hides at
+   this same width — see bottom-nav.module.css), so the nav, the separator and the "Built with"
+   label appear and the switcher relaxes to its full size. */
+@media (width >= 1025px) {
+	.nav {
+		display: flex;
 	}
 
-	.logo,
-	.logo:hover {
-		font-size: 0.85rem;
+	.sep {
+		display: block;
+	}
+
+	.switcher-label {
+		display: inline;
+	}
+
+	.switcher-buttons {
+		gap: 2px;
+	}
+
+	.header {
+		padding: 0 var(--jb-space-lg);
 	}
 
 	.switcher-btn {
-		padding: 4px 6px;
-		font-size: 0.55rem;
+		padding: 4px 12px;
+		font-size: 0.7rem;
 	}
 }

@@ -22,6 +22,13 @@
 	line-height: 1.6;
 }
 
+/* The section body is a size container: the ribbon rows AND the shared legend (a sibling of the
+   ribbon blocks) react to the width this column actually has, not the viewport. Anonymous query
+   below — this is the single container ancestor of all of them. */
+.exposure-body {
+	container-type: inline-size;
+}
+
 /* One ribbon block (a title + its rows); the section stacks two of these, then a shared
    legend below. */
 .ribbon {
@@ -34,18 +41,20 @@
 	margin-bottom: var(--jb-space-md);
 }
 
+/* Mobile-first: the 6rem label column squeezes the track when narrow, so stack the label above
+   its track by default; the wide tier (container query below) restores the label+track row. */
 .ribbon-row {
 	display: grid;
-	grid-template-columns: 6rem 1fr;
-	align-items: center;
-	gap: var(--jb-space-md);
-	margin-bottom: var(--jb-space-sm);
+	grid-template-columns: 1fr;
+	align-items: start;
+	gap: var(--jb-space-xs);
+	margin-bottom: var(--jb-space-md);
 }
 
 .ribbon-label {
 	font-family: var(--jb-font-mono);
 	font-size: 0.8rem;
-	text-align: right;
+	text-align: left;
 	color: var(--jb-text-secondary);
 }
 
@@ -117,11 +126,13 @@
 
 /* Shared axis + legend, rendered once by the section. The left margins reserve the label
    column so the ticks/legend line up under the tracks. */
+/* Axis + legend reserve the 6rem label column only when the rows use it (wide tier below);
+   in the stacked baseline the label sits above its track, so they run the full width. */
 .ribbon-axis {
 	position: relative;
 	height: 1.2rem;
 	margin-bottom: var(--jb-space-sm);
-	margin-left: calc(6rem + var(--jb-space-md));
+	margin-left: 0;
 }
 
 .ribbon-tick {
@@ -137,7 +148,7 @@
 	flex-wrap: wrap;
 	gap: var(--jb-space-lg);
 	margin-top: var(--jb-space-md);
-	margin-left: calc(6rem + var(--jb-space-md));
+	margin-left: 0;
 	font-size: 0.75rem;
 	color: var(--jb-text-secondary);
 }
@@ -170,22 +181,23 @@
 	}
 }
 
-/* Narrow screens: the 6rem label column squeezes the track, so stack the label above its
-   track and let the axis/legend run the full width. */
-@media (max-width: 640px) {
+/* Wide enough for the 6rem label column beside the track: restore the label+track row, right-
+   align the label, and reserve the matching gutter so the axis ticks and legend line up under
+   the tracks. Threshold is the container's own width (≈ the prior 640px viewport breakpoint). */
+@container (width >= 36rem) {
 	.ribbon-row {
-		grid-template-columns: 1fr;
-		align-items: start;
-		gap: var(--jb-space-xs);
-		margin-bottom: var(--jb-space-md);
+		grid-template-columns: 6rem 1fr;
+		align-items: center;
+		gap: var(--jb-space-md);
+		margin-bottom: var(--jb-space-sm);
 	}
 
 	.ribbon-label {
-		text-align: left;
+		text-align: right;
 	}
 
 	.ribbon-axis,
 	.ribbon-legend {
-		margin-left: 0;
+		margin-left: calc(6rem + var(--jb-space-md));
 	}
 }

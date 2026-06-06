@@ -1,6 +1,6 @@
 <template>
 	<section>
-		<div class="container">
+		<div class="container" :class="styles['services-body']">
 			<p class="section-label">What I do</p>
 			<h2 class="section-title">Services</h2>
 			<div :class="styles['services-grid']" ref="gridRef">

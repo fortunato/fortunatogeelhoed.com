@@ -4,22 +4,31 @@
 	background: var(--jb-bg-secondary);
 }
 
-/* Four metrics laid out evenly: 2×2 by default (never an orphaned 3+1 like auto-fit produced),
-   one column on phones, and a single row only on wide screens where they actually fit. */
+/* The grid reacts to the width it actually has, not the viewport: the surrounding column is a
+   size container (the single anonymous container ancestor, just below), so the column count
+   follows the room available to the metrics. */
+.proof-body {
+	container-type: inline-size;
+}
+
+/* Four metrics laid out evenly. Mobile-first: one column, then 2×2 once there's room for a pair
+   (never an orphaned 3+1 like auto-fit produced), then a single row only where they truly fit.
+   Thresholds are container widths tuned to the prior viewport breakpoints; 76rem stays under the
+   page container's ~82.5rem ceiling so four-up can engage. */
 .proof-grid {
 	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-columns: 1fr;
 	gap: var(--jb-space-lg);
 	margin-top: var(--jb-space-lg);
 }
 
-@media (max-width: 30rem) {
+@container (width >= 27rem) {
 	.proof-grid {
-		grid-template-columns: 1fr;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
 	}
 }
 
-@media (min-width: 85rem) {
+@container (width >= 76rem) {
 	.proof-grid {
 		grid-template-columns: repeat(4, minmax(0, 1fr));
 	}

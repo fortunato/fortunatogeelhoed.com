@@ -3,12 +3,14 @@
 	"namedInputs": {
 		"default": ["{projectRoot}/**/*", "sharedGlobals"],
 		"sharedGlobals": ["{workspaceRoot}/tsconfig.base.json", "{workspaceRoot}/biome.json"],
-		"production": ["default", "!{projectRoot}/**/*.spec.ts", "!{projectRoot}/**/*.test.ts"]
+		"production": ["default", "!{projectRoot}/**/*.spec.ts", "!{projectRoot}/**/*.test.ts"],
+		"globalStyles": ["{workspaceRoot}/styles/**/*"]
 	},
 	"targetDefaults": {
 		"build": {
 			"dependsOn": ["^build"],
-			"inputs": ["production", "^production"],
+			"comment": "globalStyles: the React/Vue/Angular builds consume the shared styles/ tree (component CSS modules + the global sheet) via the @styles alias and Angular styleUrls, but it lives at the workspace root — outside every projectRoot — so it isn't in `default`. Without it, a styles-only change leaves a cached build serving stale CSS.",
+			"inputs": ["production", "^production", "globalStyles"],
 			"cache": true
 		},
 		"dev": {

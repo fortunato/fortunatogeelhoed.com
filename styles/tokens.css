@@ -78,9 +78,9 @@
 		--jb-space-xl: 4rem;
 		--jb-space-2xl: 8rem;
 
-		/* Layout / size */
+		/* Layout / size. Nav height is the mobile baseline; it grows on wider viewports below. */
 		--jb-size-container: min(1320px, 90vw);
-		--jb-size-nav-height: 3.5rem;
+		--jb-size-nav-height: 3rem;
 
 		/* Elevation */
 		--jb-shadow-sm: 0 2px 8px rgb(0 0 0 / 0.12);
@@ -102,7 +102,7 @@
 		--jb-dur-base: 0.3s;
 		--jb-dur-slow: 0.4s;
 		--jb-ease-standard: cubic-bezier(0.2, 0, 0, 1);
-		--jb-ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
+		--jb-ease-emphasized: cubic-bezier(0.4, 0, 0, 1);
 		/* Symmetric ease-in-out (quartic) — accelerates and decelerates evenly, unlike the two
 		   decelerate curves above. For deliberate "morph" transitions where the change should
 		   feel weighted at both ends rather than snapping out (the closing CTA button). */
@@ -136,6 +136,15 @@
 		   Bun, socket.io…) are lifted to at least this so timeline pills keep a visible edge.
 		   Consumed via relative-colour syntax in the timeline styles; light theme leaves it 0. */
 		--jb-pill-lightness-min: 0.62;
+		/* Timeline entry-type text inks (the spine date and type badge). On the dark surface the
+		   vivid identity colours already clear AA as small text, so the inks equal them here; the
+		   light theme darkens them below. The node dot always uses the vivid colour, not these.
+		   Defined as tokens (not a component theme selector) so the dark/light swap survives
+		   Angular's emulated encapsulation, which mis-scopes a `[data-theme] .scoped` ancestor. */
+		--jb-timeline-ink-employee: #5ba8ff;
+		--jb-timeline-ink-side: #facc15;
+		--jb-timeline-ink-side-badge: #b88a06;
+		--jb-timeline-ink-independent: var(--jb-accent);
 	}
 
 	/* Theme: light */
@@ -155,6 +164,13 @@
 		--jb-accent-on-soft: color-mix(in srgb, var(--jb-accent) 80%, black);
 		/* Darken accent text so links/labels clear AA on the secondary surface. */
 		--jb-accent-text: color-mix(in srgb, var(--jb-accent) 82%, black);
+		/* Timeline entry-type text inks darkened for AA: the vivid identity colours only reach
+		   ~1.4–2.3:1 as small spine date / badge text on this near-white surface. The node dot
+		   keeps the vivid colour; independent reuses the AA-tuned accent-text. */
+		--jb-timeline-ink-employee: #1b649f;
+		--jb-timeline-ink-side: #6f5300;
+		--jb-timeline-ink-side-badge: #6f5300;
+		--jb-timeline-ink-independent: var(--jb-accent-text);
 	}
 
 	/* Framework accent overrides — reassign the semantic accent to a primitive. */
@@ -168,10 +184,10 @@
 		--jb-accent: var(--jb-color-accent-angular);
 	}
 
-	/* Mobile overrides */
-	@media (max-width: 768px) {
+	/* Taller bar once there's room for it (the mobile baseline above is the tighter 3rem). */
+	@media (width >= 769px) {
 		:root {
-			--jb-size-nav-height: 3rem;
+			--jb-size-nav-height: 3.5rem;
 		}
 	}
 }

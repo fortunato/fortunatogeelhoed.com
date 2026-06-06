@@ -7,7 +7,7 @@ import type { ProofPoint } from '@fg/shared';
 	styleUrl: '../../../../../styles/components/proof.module.css',
 	template: `
 		<section class="proof">
-			<div class="container">
+			<div class="container proof-body">
 				<p class="section-label">Proof</p>
 				<div class="proof-grid">
 					@for (point of proof(); track point.label) {
