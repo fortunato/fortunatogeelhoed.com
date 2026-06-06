@@ -18,15 +18,15 @@
 		"intensity": "professional"
 	},
 	{
-		"framework": "SnappCMS",
-		"startYear": 2010,
-		"endYear": 2012,
+		"framework": "Wordpress",
+		"startYear": 2008,
+		"endYear": 2015,
 		"intensity": "occasional"
 	},
 	{
-		"framework": "Wordpress",
+		"framework": "SnappCMS",
 		"startYear": 2010,
-		"endYear": 2015,
+		"endYear": 2012,
 		"intensity": "occasional"
 	},
 	{
@@ -64,6 +64,12 @@
 		"startYear": 2020,
 		"endYear": "present",
 		"intensity": "professional"
+	},
+	{
+		"framework": "Symfony",
+		"startYear": 2009,
+		"endYear": 2009,
+		"intensity": "brief"
 	},
 	{
 		"framework": "Symfony",

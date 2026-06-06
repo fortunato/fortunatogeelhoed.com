@@ -155,7 +155,10 @@ const timeline: TimelineData = {
 			client: 'Crypto Trading System',
 			role: 'Parallel to employment',
 			type: 'side-project',
-			highlight: 'Autonomous execution, exchange APIs, homelab infra',
+			highlight: [
+				'Autonomous execution, exchange APIs',
+				'Self-hosted on a homelab platform I run end to end — k3s, Pulumi IaC, CI/CD and network',
+			],
 			tech: {
 				frontend: [
 					'React',
