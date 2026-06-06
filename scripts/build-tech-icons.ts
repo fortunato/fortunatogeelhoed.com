@@ -199,32 +199,11 @@ const BRAND_FALLBACK: Record<string, string> = {
 const STROKE =
 	'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"';
 const GLYPHS = {
-	crab:
-		`<symbol id="i-crab" ${STROKE}>` +
-		'<ellipse cx="12" cy="14" rx="6" ry="4"/>' +
-		'<path d="M10 10.4V8"/><circle cx="10" cy="6.9" r="1"/>' +
-		'<path d="M14 10.4V8"/><circle cx="14" cy="6.9" r="1"/>' +
-		'<circle cx="4.6" cy="11" r="2"/><path d="M6.4 12.2 7.4 13.4"/>' +
-		'<circle cx="19.4" cy="11" r="2"/><path d="M17.6 12.2 16.6 13.4"/>' +
-		'<path d="M6.6 16.6 4.7 18.6M9 17.6 8.1 20M15 17.6 15.9 20M17.4 16.6 19.3 18.6"/>' +
-		'</symbol>',
+	crab: `<symbol id="i-crab" ${STROKE}><ellipse cx="12" cy="14" rx="6" ry="4"/><path d="M10 10.4V8"/><circle cx="10" cy="6.9" r="1"/><path d="M14 10.4V8"/><circle cx="14" cy="6.9" r="1"/><circle cx="4.6" cy="11" r="2"/><path d="M6.4 12.2 7.4 13.4"/><circle cx="19.4" cy="11" r="2"/><path d="M17.6 12.2 16.6 13.4"/><path d="M6.6 16.6 4.7 18.6M9 17.6 8.1 20M15 17.6 15.9 20M17.4 16.6 19.3 18.6"/></symbol>`,
 	cloud: `<symbol id="i-cloud" ${STROKE}><path d="M7 18a4.2 4.2 0 0 1-.6-8.36 5.5 5.5 0 0 1 10.7-.86A3.75 3.75 0 0 1 17 18Z"/></symbol>`,
-	database:
-		`<symbol id="i-database" ${STROKE}>` +
-		'<ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/>' +
-		'<path d="M4.5 5.5v13c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8v-13"/>' +
-		'<path d="M4.5 12c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8"/>' +
-		'</symbol>',
-	layers:
-		`<symbol id="i-layers" ${STROKE}>` +
-		'<path d="m12 2.5 9 4.75-9 4.75-9-4.75z"/>' +
-		'<path d="m3 12 9 4.75L21 12"/>' +
-		'<path d="m3 16.5 9 4.75 9-4.75"/>' +
-		'</symbol>',
-	chat:
-		`<symbol id="i-chat" ${STROKE}>` +
-		'<path d="M20.5 11.5a8 8 0 0 1-8.5 8 9 9 0 0 1-3.6-.75L3.5 20.5l1.75-4.9A8 8 0 1 1 20.5 11.5Z"/>' +
-		'</symbol>',
+	database: `<symbol id="i-database" ${STROKE}><ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/><path d="M4.5 5.5v13c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8v-13"/><path d="M4.5 12c0 1.55 3.36 2.8 7.5 2.8s7.5-1.25 7.5-2.8"/></symbol>`,
+	layers: `<symbol id="i-layers" ${STROKE}><path d="m12 2.5 9 4.75-9 4.75-9-4.75z"/><path d="m3 12 9 4.75L21 12"/><path d="m3 16.5 9 4.75 9-4.75"/></symbol>`,
+	chat: `<symbol id="i-chat" ${STROKE}><path d="M20.5 11.5a8 8 0 0 1-8.5 8 9 9 0 0 1-3.6-.75L3.5 20.5l1.75-4.9A8 8 0 1 1 20.5 11.5Z"/></symbol>`,
 } as const;
 
 const CUSTOM_GLYPHS: Record<string, { id: keyof typeof GLYPHS; brand: string }> = {

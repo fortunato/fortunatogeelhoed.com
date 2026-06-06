@@ -36,7 +36,13 @@
 			"**/custom-elements.json",
 			"tests/visual/__snapshots__",
 			"test-results",
-			"playwright-report"
+			"playwright-report",
+			"**/*.generated.ts",
+			"packages/content/data.json",
+			"packages/content/home.json",
+			"packages/content/timeline.json",
+			"packages/content/frontend-frameworks.json",
+			"packages/content/backend-frameworks.json"
 		]
 	},
 	"overrides": [

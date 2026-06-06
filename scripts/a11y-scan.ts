@@ -30,7 +30,9 @@ async function waitForServer(timeoutMs = 30_000): Promise<void> {
 async function main() {
 	// Serve the built site exactly as it ships. Requires `bun run build` to have produced dist/.
 	const server = Bun.spawn(['bun', 'run', 'packages/api/src/index.ts'], {
-		env: { ...process.env, NODE_ENV: 'production' },
+		// Silence the server's per-request access log so the scan output stays readable;
+		// genuine errors still surface on stderr.
+		env: { ...process.env, NODE_ENV: 'production', LOG_LEVEL: 'silent' },
 		stdout: 'inherit',
 		stderr: 'inherit',
 	});
