@@ -12,6 +12,26 @@
 		padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0));
 		transition: background-color var(--jb-dur-slow) var(--jb-ease-standard), color
 			var(--jb-dur-slow) var(--jb-ease-standard);
+		/* Sticky-footer shell (see #app/app-root + main below). body already carries
+		   min-height: 100dvh from the reset. */
+		display: flex;
+		flex-direction: column;
+	}
+
+	/* Sticky footer: the app container fills the viewport and main takes the slack, so the
+	   footer rests at the bottom of the window on short pages (e.g. Contact) instead of
+	   floating mid-screen — and still flows normally below the content on tall pages. The
+	   fixed header and bottom tab bar are out of flow, so only main and the footer share the
+	   column. Covers all three variants (React/Vue mount in #app, Angular in app-root). */
+	#app,
+	app-root {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+	}
+
+	main {
+		flex: 1;
 	}
 
 	@media (width >= 769px) {
@@ -52,6 +72,11 @@
 		letter-spacing: 0.1em;
 		color: var(--jb-accent-text);
 		margin-bottom: var(--jb-space-xs);
+	}
+
+	/* Booked state for the availability badge: muted rather than alarming (no red). */
+	.section-label[data-state="booked"] {
+		color: var(--jb-text-tertiary);
 	}
 
 	.section-title {

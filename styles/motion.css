@@ -2,6 +2,11 @@
    Everything here is opt-in and gated — browsers without support, and visitors who
    prefer reduced motion or reduced data, get a correct static experience.
 
+   NOTE: this file is excluded from Biome (see biome.json overrides). It uses the
+   :active-view-transition-type() pseudo-class, which Biome 1.9's CSS parser cannot yet
+   read; Lightning CSS (the actual stylesheet build) handles it fine. Drop the override
+   once Biome's parser catches up.
+
    The headline framework-switch "disintegration" is JS-driven (an SVG
    displacement-map shred — see packages/shared/src/disintegrate.ts). This file
    provides the no-JS / Safari / reduced-motion baseline: a gentle cross-fade on the
@@ -12,17 +17,26 @@
 @view-transition {
 	/* biome-ignore lint/correctness/noUnknownProperty: valid @view-transition descriptor */
 	navigation: auto;
+	/* Tag the cross-document framework switch so its root scale/fade can be told apart from
+	   same-document page navigation (which sets no type). */
+	/* biome-ignore lint/correctness/noUnknownProperty: valid @view-transition descriptor */
+	types: jb-switch;
 }
 
 @layer base {
 	@media (prefers-reduced-motion: no-preference) {
 		@supports (view-transition-name: none) {
-			::view-transition-old(root) {
-				animation: jb-switch-out var(--jb-dur-slow) var(--jb-ease-standard) both;
-			}
+			/* Scoped to the framework switch only. Same-document page navigation carries no
+			   type, so its root group falls back to the UA's gentle default cross-fade and the
+			   page chrome is left alone. */
+			:root:active-view-transition-type(jb-switch) {
+				&::view-transition-old(root) {
+					animation: jb-switch-out var(--jb-dur-slow) var(--jb-ease-standard) both;
+				}
 
-			::view-transition-new(root) {
-				animation: jb-switch-in var(--jb-dur-slow) var(--jb-ease-standard) both;
+				&::view-transition-new(root) {
+					animation: jb-switch-in var(--jb-dur-slow) var(--jb-ease-standard) both;
+				}
 			}
 		}
 	}
@@ -92,6 +106,17 @@
 		@supports (view-transition-name: none) {
 			main {
 				view-transition-name: jb-main;
+			}
+
+			/* The fixed chrome gets its own stable groups so page navigation leaves it
+			   frozen — only main animates. The footer stays in `root` on purpose (it sits
+			   in normal flow, so naming it would make it slide between pages). */
+			header {
+				view-transition-name: jb-header;
+			}
+
+			nav[aria-label="Primary"] {
+				view-transition-name: jb-bottom-nav;
 			}
 
 			::view-transition-old(jb-main) {

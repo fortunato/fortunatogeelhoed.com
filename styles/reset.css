@@ -10,7 +10,12 @@
 	}
 
 	html {
-		scroll-behavior: smooth;
+		/* Scrolling stays instant on purpose: route changes reset scroll to the top, and the
+		   page transition's slide is the only motion that should read. A global smooth here
+		   would animate that reset and fight the transition (capturing its snapshot mid-scroll).
+		   In-page smooth scrolling, where wanted, is handled per-case in JS (e.g. Lenis on the
+		   timeline). */
+		scroll-behavior: auto;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
 	}

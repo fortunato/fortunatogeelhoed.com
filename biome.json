@@ -38,5 +38,12 @@
 			"test-results",
 			"playwright-report"
 		]
-	}
+	},
+	"overrides": [
+		{
+			"include": ["styles/motion.css"],
+			"linter": { "enabled": false },
+			"formatter": { "enabled": false }
+		}
+	]
 }
