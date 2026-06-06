@@ -229,7 +229,9 @@
 					"Docker",
 					"Pulumi",
 					"k3s",
-					"Hetzner"
+					"Hetzner",
+					"Grafana",
+					"Loki"
 				],
 				"ai": [
 					"ChatGPT API",

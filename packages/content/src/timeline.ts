@@ -180,6 +180,8 @@ const timeline: TimelineData = {
 					'Pulumi',
 					'k3s',
 					'Hetzner',
+					'Grafana',
+					'Loki',
 				],
 				ai: ['ChatGPT API', 'Claude Code', 'MCP', 'OpenClaw'],
 			},
