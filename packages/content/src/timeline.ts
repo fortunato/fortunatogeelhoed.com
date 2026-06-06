@@ -8,12 +8,12 @@ import type { TimelineData } from '@fg/shared';
  *  single source of truth here prevents a stray character from silently splitting a block.
  *  The values double as the rendered era headings. */
 const ERAS = {
-	now: '2025 — Now',
-	netherlands2020s: '2020s — Netherlands (remote from Spain)',
-	netherlandsLate2010s: 'Late 2010s — Netherlands',
-	melbourne: '2013–2017 — Melbourne, Australia',
-	brisbane: '2007–2013 — Brisbane, Australia',
-	earlyWeb: '2000–2006 — The Early Web (Netherlands & New Zealand)',
+	now: '2025 to now',
+	netherlands2020s: '2020s, Netherlands (remote from Spain)',
+	netherlandsLate2010s: 'Late 2010s, Netherlands',
+	melbourne: '2013–2017, Melbourne, Australia',
+	brisbane: '2007–2013, Brisbane, Australia',
+	earlyWeb: '2000–2006, The Early Web (Netherlands & New Zealand)',
 } as const;
 
 const timeline: TimelineData = {
@@ -27,7 +27,7 @@ const timeline: TimelineData = {
 			client: 'Portfolio Site',
 			role: 'Full-Stack Engineer',
 			type: 'independent',
-			highlight: '3 frameworks, 1 site — you’re looking at it',
+			highlight: '3 frameworks, 1 site: you’re looking at it',
 			tech: {
 				frontend: ['React', 'Angular', 'Vue', 'Vite', 'CSS Modules'],
 				backend: ['Bun', 'Hono'],
@@ -77,7 +77,7 @@ const timeline: TimelineData = {
 			client: 'py-market-structure',
 			role: 'PyPI library',
 			type: 'side-project',
-			highlight: 'Published to PyPI with almost zero prior Python — built with Claude Code',
+			highlight: 'Published to PyPI with almost zero prior Python, built with Claude Code',
 			tech: {
 				frontend: ['Angular', 'RxJS', 'lightweight-charts', 'SCSS Modules'],
 				backend: ['Python', 'PyPI'],
@@ -92,7 +92,7 @@ const timeline: TimelineData = {
 			startYear: 2020,
 			endYear: 2025,
 			client: 'Gemeente Amsterdam',
-			role: 'Lead Full-Stack Engineer — 5.5 years',
+			role: 'Lead Full-Stack Engineer, 5.5 years',
 			type: 'independent',
 			highlight: 'Led frontend across multiple teams; monorepo + feature-sliced architecture',
 			tech: {
@@ -141,7 +141,7 @@ const timeline: TimelineData = {
 			role: 'Freelance Web Developer',
 			type: 'independent',
 			highlight:
-				'Multilingual static site for a private practice — Nuxt SSG, i18n, interactive maps',
+				'Multilingual static site for a private practice: Nuxt SSG, i18n, interactive maps',
 			tech: {
 				frontend: ['Vue', 'Nuxt', 'SCSS', 'Leaflet'],
 			},
@@ -197,7 +197,7 @@ const timeline: TimelineData = {
 			type: 'side-project',
 			highlight: [
 				'MikroTik-routed VLAN network with a home–office fibre link and 2.5GbE wiring',
-				'A NAS running Docker Compose services behind Traefik — Gitea + runners, Vaultwarden, Immich, Grafana/Loki, AdGuard, Verdaccio — reached remotely over NetBird',
+				'A NAS running Docker Compose services behind Traefik (Gitea + runners, Vaultwarden, Immich, Grafana/Loki, AdGuard, Verdaccio), reached remotely over NetBird',
 			],
 			tech: {
 				backend: ['Gitea', 'Immich', 'Vaultwarden', 'Verdaccio'],
@@ -224,7 +224,7 @@ const timeline: TimelineData = {
 			role: 'Lead Full-Stack Engineer',
 			type: 'employee',
 			highlight: [
-				'E-commerce SSR rebuild — 3× Lighthouse improvement',
+				'E-commerce SSR rebuild, 3× Lighthouse improvement',
 				'Beat both the previously-optimized Magento 2 site and the AMP build Google’s own consultants delivered',
 			],
 			tech: {
@@ -259,7 +259,7 @@ const timeline: TimelineData = {
 			type: 'employee',
 			highlight: [
 				'Built CI/CD pipelines adopted across the practice, and a form framework reused across projects',
-				'A hands-on manager — at least half my time stayed in the code',
+				'A hands-on manager, still coding at least half the time',
 			],
 			tech: {
 				frontend: ['React', 'ES2016', 'Webpack', 'SCSS', 'Webpack', 'JSPM'],
@@ -307,7 +307,7 @@ const timeline: TimelineData = {
 			client: 'Visual Jazz Isobar',
 			role: 'Senior Frontend Engineer',
 			type: 'independent',
-			highlight: 'First taste of build automation — Grunt for the front-end pipeline',
+			highlight: 'First taste of build automation: Grunt for the front-end pipeline',
 			tech: {
 				frontend: ['AngularJS', 'RequireJS', 'Webpack'],
 				backend: ['PHP', 'AEM', 'MySQL', 'Wordpress'],
@@ -324,7 +324,7 @@ const timeline: TimelineData = {
 			role: 'Senior Full-Stack Developer',
 			type: 'employee',
 			highlight:
-				'They didn’t want to lose me — kept on remotely through a Brisbane to Melbourne move',
+				'They didn’t want to lose me; kept on remotely through a Brisbane to Melbourne move',
 			tech: {
 				frontend: ['jQuery', 'Backbone', 'Marionette', 'HTML5', 'CSS3'],
 				backend: ['PHP', 'MySQL', 'Kohana', 'Node.js', 'Wordpress'],
@@ -340,8 +340,8 @@ const timeline: TimelineData = {
 			role: 'Senior Full-Stack Developer',
 			type: 'employee',
 			highlight: [
-				'First single-page apps — hand-rolled in jQuery, a plugin per view — as responsive design took hold',
-				'Early cloud — building CentOS AMI images from scratch on EC2',
+				'First single-page apps, hand-rolled in jQuery (a plugin per view), as responsive design took hold',
+				'Early cloud: building CentOS AMI images from scratch on EC2',
 			],
 			tech: {
 				frontend: ['jQuery', 'Ext JS', 'HTML5', 'CSS3'],
@@ -359,7 +359,7 @@ const timeline: TimelineData = {
 			role: 'Joomla extensions',
 			type: 'side-project',
 			highlight:
-				'Free and commercial Joomla extensions, built full-stack — a three-person venture',
+				'Free and commercial Joomla extensions, built full-stack in a three-person venture',
 			tech: {
 				frontend: ['jQuery', 'JavaScript', 'HTML5', 'CSS3'],
 				backend: ['PHP', 'MySQL', 'Joomla', 'Joomla 2'],
@@ -391,7 +391,7 @@ const timeline: TimelineData = {
 			client: 'Custom CMS v2',
 			role: 'Seagull Framework',
 			type: 'side-project',
-			highlight: 'Built another CMS from scratch — this time on the Seagull PHP framework',
+			highlight: 'Built another CMS from scratch, this time on the Seagull PHP framework',
 			tech: {
 				frontend: ['jQuery', 'JavaScript', 'CSS3'],
 				backend: ['PHP', 'MySQL'],

@@ -8,13 +8,13 @@ const home: HomeContent = {
 		name: 'Fortunato Geelhoed',
 		tagline: 'Senior Full-Stack Engineer & Technical Lead',
 		statement:
-			"I build, fix, and lead across React, Vue, and Angular — quick to pick up whatever's next when it makes sense.",
+			"I build, fix, and lead across React, Vue, and Angular, quick to pick up whatever's next when it makes sense.",
 	},
 	services: [
 		{
 			title: 'Full-Stack Engineering',
 			description:
-				'TypeScript end to end — React, NestJS, GraphQL, monorepos. Shipped at scale, in production.',
+				'TypeScript end to end: React, NestJS, GraphQL, monorepos. Shipped at scale, in production.',
 		},
 		{
 			title: 'Frontend Architecture',

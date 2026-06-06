@@ -22,7 +22,7 @@ const bounds = spansBounds(frontendFrameworks, backendFrameworks);
 				<h2 class="section-title head">Frameworks come and go. The craft compounds.</h2>
 				<p class="intro">
 					Twenty-five years on the web means living through every frontend era and the
-					backends beneath it — and staying fluent while the stack reinvents itself.
+					backends beneath it, staying fluent while the stack reinvents itself.
 				</p>
 				<app-framework-ribbon title="Frontend Frameworks" [rows]="frontendRows" [ticks]="ticks" />
 				<app-framework-ribbon title="Backend &amp; CMS" [rows]="backendRows" [ticks]="ticks" />

@@ -7,7 +7,7 @@
 			</h2>
 			<p :class="styles.intro">
 				Twenty-five years on the web means living through every frontend era and the backends
-				beneath it — and staying fluent while the stack reinvents itself.
+				beneath it, staying fluent while the stack reinvents itself.
 			</p>
 			<FrameworkRibbon title="Frontend Frameworks" :rows="frontendRows" :ticks="ticks" />
 			<FrameworkRibbon title="Backend &amp; CMS" :rows="backendRows" :ticks="ticks" />

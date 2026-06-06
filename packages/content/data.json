@@ -11,7 +11,7 @@
 		"slug": "about",
 		"type": "page",
 		"description": "Senior TypeScript engineer based in Spain, building for the web since 2015.",
-		"body": "I'm Fortunato Geelhoed — a senior full-stack engineer based in Spain, working through JiggyBit S.L.\n\nI specialise in TypeScript, React, Vue, and Angular with deep experience in performance optimisation, design systems, and server-side rendering."
+		"body": "I'm Fortunato Geelhoed, a senior full-stack engineer based in Spain, working through JiggyBit S.L.\n\nI specialise in TypeScript, React, Vue, and Angular with deep experience in performance optimisation, design systems, and server-side rendering."
 	},
 	"services": {
 		"title": "Services",

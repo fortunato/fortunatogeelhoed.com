@@ -2,14 +2,14 @@
 	"entries": [
 		{
 			"id": "portfolio",
-			"era": "2025 — Now",
+			"era": "2025 to now",
 			"years": "2026",
 			"startYear": 2026,
 			"endYear": "present",
 			"client": "Portfolio Site",
 			"role": "Full-Stack Engineer",
 			"type": "independent",
-			"highlight": "3 frameworks, 1 site — you’re looking at it",
+			"highlight": "3 frameworks, 1 site: you’re looking at it",
 			"tech": {
 				"frontend": [
 					"React",
@@ -33,7 +33,7 @@
 		},
 		{
 			"id": "ai-healthcare",
-			"era": "2025 — Now",
+			"era": "2025 to now",
 			"years": "2026",
 			"startYear": 2026,
 			"endYear": 2026,
@@ -60,7 +60,7 @@
 		},
 		{
 			"id": "market-breadth",
-			"era": "2025 — Now",
+			"era": "2025 to now",
 			"years": "2025–26",
 			"startYear": 2025,
 			"endYear": 2026,
@@ -94,14 +94,14 @@
 		},
 		{
 			"id": "py-market-structure",
-			"era": "2025 — Now",
+			"era": "2025 to now",
 			"years": "2025–26",
 			"startYear": 2025,
 			"endYear": 2026,
 			"client": "py-market-structure",
 			"role": "PyPI library",
 			"type": "side-project",
-			"highlight": "Published to PyPI with almost zero prior Python — built with Claude Code",
+			"highlight": "Published to PyPI with almost zero prior Python, built with Claude Code",
 			"tech": {
 				"frontend": [
 					"Angular",
@@ -124,12 +124,12 @@
 		},
 		{
 			"id": "amsterdam",
-			"era": "2020s — Netherlands (remote from Spain)",
+			"era": "2020s, Netherlands (remote from Spain)",
 			"years": "2020–25",
 			"startYear": 2020,
 			"endYear": 2025,
 			"client": "Gemeente Amsterdam",
-			"role": "Lead Full-Stack Engineer — 5.5 years",
+			"role": "Lead Full-Stack Engineer, 5.5 years",
 			"type": "independent",
 			"highlight": "Led frontend across multiple teams; monorepo + feature-sliced architecture",
 			"tech": {
@@ -174,14 +174,14 @@
 		},
 		{
 			"id": "neurofeedback-ijburg",
-			"era": "2020s — Netherlands (remote from Spain)",
+			"era": "2020s, Netherlands (remote from Spain)",
 			"years": "2021",
 			"startYear": 2021,
 			"endYear": 2021,
 			"client": "Neurofeedback IJburg",
 			"role": "Freelance Web Developer",
 			"type": "independent",
-			"highlight": "Multilingual static site for a private practice — Nuxt SSG, i18n, interactive maps",
+			"highlight": "Multilingual static site for a private practice: Nuxt SSG, i18n, interactive maps",
 			"tech": {
 				"frontend": [
 					"Vue",
@@ -193,7 +193,7 @@
 		},
 		{
 			"id": "trading-system",
-			"era": "2020s — Netherlands (remote from Spain)",
+			"era": "2020s, Netherlands (remote from Spain)",
 			"years": "2018–now",
 			"startYear": 2018,
 			"endYear": "present",
@@ -243,7 +243,7 @@
 		},
 		{
 			"id": "homelab",
-			"era": "2020s — Netherlands (remote from Spain)",
+			"era": "2020s, Netherlands (remote from Spain)",
 			"years": "2024–now",
 			"startYear": 2024,
 			"endYear": "present",
@@ -252,7 +252,7 @@
 			"type": "side-project",
 			"highlight": [
 				"MikroTik-routed VLAN network with a home–office fibre link and 2.5GbE wiring",
-				"A NAS running Docker Compose services behind Traefik — Gitea + runners, Vaultwarden, Immich, Grafana/Loki, AdGuard, Verdaccio — reached remotely over NetBird"
+				"A NAS running Docker Compose services behind Traefik (Gitea + runners, Vaultwarden, Immich, Grafana/Loki, AdGuard, Verdaccio), reached remotely over NetBird"
 			],
 			"tech": {
 				"backend": [
@@ -276,7 +276,7 @@
 		},
 		{
 			"id": "tele2",
-			"era": "Late 2010s — Netherlands",
+			"era": "Late 2010s, Netherlands",
 			"years": "2017–19",
 			"startYear": 2017,
 			"endYear": 2019,
@@ -284,7 +284,7 @@
 			"role": "Lead Full-Stack Engineer",
 			"type": "employee",
 			"highlight": [
-				"E-commerce SSR rebuild — 3× Lighthouse improvement",
+				"E-commerce SSR rebuild, 3× Lighthouse improvement",
 				"Beat both the previously-optimized Magento 2 site and the AMP build Google’s own consultants delivered"
 			],
 			"tech": {
@@ -311,7 +311,7 @@
 		},
 		{
 			"id": "deloitte-nl",
-			"era": "Late 2010s — Netherlands",
+			"era": "Late 2010s, Netherlands",
 			"years": "2017",
 			"startYear": 2017,
 			"endYear": 2017,
@@ -334,7 +334,7 @@
 		},
 		{
 			"id": "deloitte-au-manager",
-			"era": "2013–2017 — Melbourne, Australia",
+			"era": "2013–2017, Melbourne, Australia",
 			"years": "2016–17",
 			"startYear": 2016,
 			"endYear": 2017,
@@ -343,7 +343,7 @@
 			"type": "employee",
 			"highlight": [
 				"Built CI/CD pipelines adopted across the practice, and a form framework reused across projects",
-				"A hands-on manager — at least half my time stayed in the code"
+				"A hands-on manager, still coding at least half the time"
 			],
 			"tech": {
 				"frontend": [
@@ -365,7 +365,7 @@
 		},
 		{
 			"id": "dastoon",
-			"era": "2013–2017 — Melbourne, Australia",
+			"era": "2013–2017, Melbourne, Australia",
 			"years": "2016",
 			"startYear": 2016,
 			"endYear": 2016,
@@ -388,7 +388,7 @@
 		},
 		{
 			"id": "deloitte-au-consultant",
-			"era": "2013–2017 — Melbourne, Australia",
+			"era": "2013–2017, Melbourne, Australia",
 			"years": "2013–16",
 			"startYear": 2013,
 			"endYear": 2016,
@@ -420,14 +420,14 @@
 		},
 		{
 			"id": "isobar",
-			"era": "2013–2017 — Melbourne, Australia",
+			"era": "2013–2017, Melbourne, Australia",
 			"years": "2013",
 			"startYear": 2013,
 			"endYear": 2013,
 			"client": "Visual Jazz Isobar",
 			"role": "Senior Frontend Engineer",
 			"type": "independent",
-			"highlight": "First taste of build automation — Grunt for the front-end pipeline",
+			"highlight": "First taste of build automation: Grunt for the front-end pipeline",
 			"tech": {
 				"frontend": [
 					"AngularJS",
@@ -447,14 +447,14 @@
 		},
 		{
 			"id": "limelight",
-			"era": "2007–2013 — Brisbane, Australia",
+			"era": "2007–2013, Brisbane, Australia",
 			"years": "2012–13",
 			"startYear": 2012,
 			"endYear": 2013,
 			"client": "Limelight Digital",
 			"role": "Senior Full-Stack Developer",
 			"type": "employee",
-			"highlight": "They didn’t want to lose me — kept on remotely through a Brisbane to Melbourne move",
+			"highlight": "They didn’t want to lose me; kept on remotely through a Brisbane to Melbourne move",
 			"tech": {
 				"frontend": [
 					"jQuery",
@@ -474,7 +474,7 @@
 		},
 		{
 			"id": "cru-digital",
-			"era": "2007–2013 — Brisbane, Australia",
+			"era": "2007–2013, Brisbane, Australia",
 			"years": "2010–12",
 			"startYear": 2010,
 			"endYear": 2012,
@@ -482,8 +482,8 @@
 			"role": "Senior Full-Stack Developer",
 			"type": "employee",
 			"highlight": [
-				"First single-page apps — hand-rolled in jQuery, a plugin per view — as responsive design took hold",
-				"Early cloud — building CentOS AMI images from scratch on EC2"
+				"First single-page apps, hand-rolled in jQuery (a plugin per view), as responsive design took hold",
+				"Early cloud: building CentOS AMI images from scratch on EC2"
 			],
 			"tech": {
 				"frontend": [
@@ -506,14 +506,14 @@
 		},
 		{
 			"id": "mmplugins",
-			"era": "2007–2013 — Brisbane, Australia",
+			"era": "2007–2013, Brisbane, Australia",
 			"years": "2008–12",
 			"startYear": 2008,
 			"endYear": 2012,
 			"client": "mmPlugins",
 			"role": "Joomla extensions",
 			"type": "side-project",
-			"highlight": "Free and commercial Joomla extensions, built full-stack — a three-person venture",
+			"highlight": "Free and commercial Joomla extensions, built full-stack in a three-person venture",
 			"tech": {
 				"frontend": [
 					"jQuery",
@@ -535,7 +535,7 @@
 		},
 		{
 			"id": "ifactory",
-			"era": "2007–2013 — Brisbane, Australia",
+			"era": "2007–2013, Brisbane, Australia",
 			"years": "2007–10",
 			"startYear": 2007,
 			"endYear": 2010,
@@ -569,14 +569,14 @@
 		},
 		{
 			"id": "cms-v2",
-			"era": "2007–2013 — Brisbane, Australia",
+			"era": "2007–2013, Brisbane, Australia",
 			"years": "2008",
 			"startYear": 2008,
 			"endYear": 2009,
 			"client": "Custom CMS v2",
 			"role": "Seagull Framework",
 			"type": "side-project",
-			"highlight": "Built another CMS from scratch — this time on the Seagull PHP framework",
+			"highlight": "Built another CMS from scratch, this time on the Seagull PHP framework",
 			"tech": {
 				"frontend": [
 					"jQuery",
@@ -594,7 +594,7 @@
 		},
 		{
 			"id": "hids",
-			"era": "2000–2006 — The Early Web (Netherlands & New Zealand)",
+			"era": "2000–2006, The Early Web (Netherlands & New Zealand)",
 			"years": "2005–06",
 			"startYear": 2005,
 			"endYear": 2006,
@@ -622,7 +622,7 @@
 		},
 		{
 			"id": "cms-v1",
-			"era": "2000–2006 — The Early Web (Netherlands & New Zealand)",
+			"era": "2000–2006, The Early Web (Netherlands & New Zealand)",
 			"years": "2003–05",
 			"startYear": 2003,
 			"endYear": 2005,
@@ -647,7 +647,7 @@
 		},
 		{
 			"id": "freelance-early",
-			"era": "2000–2006 — The Early Web (Netherlands & New Zealand)",
+			"era": "2000–2006, The Early Web (Netherlands & New Zealand)",
 			"years": "2003–04",
 			"startYear": 2003,
 			"endYear": 2004,
@@ -670,7 +670,7 @@
 		},
 		{
 			"id": "edf",
-			"era": "2000–2006 — The Early Web (Netherlands & New Zealand)",
+			"era": "2000–2006, The Early Web (Netherlands & New Zealand)",
 			"years": "2002–03",
 			"startYear": 2002,
 			"endYear": 2003,
@@ -696,7 +696,7 @@
 		},
 		{
 			"id": "web-inzicht",
-			"era": "2000–2006 — The Early Web (Netherlands & New Zealand)",
+			"era": "2000–2006, The Early Web (Netherlands & New Zealand)",
 			"years": "2000–02",
 			"startYear": 2000,
 			"endYear": 2002,

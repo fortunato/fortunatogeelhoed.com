@@ -6,11 +6,7 @@
 			<p class="section-label">Career</p>
 			<h1 class="section-title">Twenty-five years across the stack</h1>
 			<p :class="styles.intro">
-				From classic ASP and Flash to React, NestJS and agentic workflows — a working life across
-				the frontend, backend, infrastructure and, lately, AI. In the 2010s I was the frontend
-				specialist teams reached for when the UI had to be right — depth that still anchors today's
-				React, Angular and Vue work; the 2020s broadened it back to full-stack and lead. Through
-				every title — engineer, lead, manager — at least half my time has stayed in the code.
+				From classic ASP and Flash to React, NestJS and agentic workflows: a working life across the frontend, backend, infrastructure and, lately, AI. In the 2010s I was the frontend specialist teams reached for when the UI had to be right; that's where today's React, Angular and Vue depth comes from, and the 2020s broadened it back to full-stack and lead. Across every title, engineer to manager, at least half my time has stayed in the code.
 			</p>
 		</div>
 
