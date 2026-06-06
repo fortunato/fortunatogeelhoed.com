@@ -2,7 +2,7 @@
 	"entries": [
 		{
 			"id": "portfolio",
-			"era": "2026 — Now",
+			"era": "2025 — Now",
 			"years": "2026",
 			"startYear": 2026,
 			"endYear": "present",
@@ -33,7 +33,7 @@
 		},
 		{
 			"id": "ai-healthcare",
-			"era": "2026 — Now",
+			"era": "2025 — Now",
 			"years": "2026",
 			"startYear": 2026,
 			"endYear": 2026,
@@ -60,7 +60,7 @@
 		},
 		{
 			"id": "market-breadth",
-			"era": "2026 — Now",
+			"era": "2025 — Now",
 			"years": "2025–26",
 			"startYear": 2025,
 			"endYear": 2026,
@@ -94,7 +94,7 @@
 		},
 		{
 			"id": "py-market-structure",
-			"era": "2026 — Now",
+			"era": "2025 — Now",
 			"years": "2025–26",
 			"startYear": 2025,
 			"endYear": 2026,

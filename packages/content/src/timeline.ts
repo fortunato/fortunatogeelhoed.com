@@ -8,7 +8,7 @@ import type { TimelineData } from '@fg/shared';
  *  single source of truth here prevents a stray character from silently splitting a block.
  *  The values double as the rendered era headings. */
 const ERAS = {
-	now: '2026 — Now',
+	now: '2025 — Now',
 	netherlands2020s: '2020s — Netherlands (remote from Spain)',
 	netherlandsLate2010s: 'Late 2010s — Netherlands',
 	melbourne: '2013–2017 — Melbourne, Australia',
