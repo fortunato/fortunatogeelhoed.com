@@ -107,7 +107,7 @@ describe('getAvailability', () => {
 
 		// Drive the actual app from index.ts (full middleware chain + registered routes), so a
 		// drift in the route path or header would fail here.
-		const { app } = await import('./index');
+		const { app } = await import('../index');
 
 		const res = await app.request('/api/availability');
 		expect(res.status).toBe(200);

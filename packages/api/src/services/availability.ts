@@ -1,5 +1,5 @@
 import { type Availability, availabilitySchema } from '@fg/shared/validation/availability';
-import { logger } from './logger';
+import { logger } from '../logger';
 
 // The contact-page badge is driven by a value Fortunato edits in a GitHub gist, so he can
 // flip his availability from a phone without a redeploy. This module reads that gist and

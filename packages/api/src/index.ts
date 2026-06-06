@@ -1,14 +1,21 @@
 import { buildRobotsTxt, buildSitemap } from '@fg/shared';
-import { contactSchema } from '@fg/shared/validation/contact';
+import { Scalar } from '@scalar/hono-api-reference';
 import { Hono } from 'hono';
+import { openAPIRouteHandler } from 'hono-openapi';
+import { bodyLimit } from 'hono/body-limit';
 import { getCookie, setCookie } from 'hono/cookie';
-import { z } from 'zod';
 import { cssSourceFiles } from '../../../scripts/css-sources';
-import { getAvailability } from './availability';
 import { applyAvailability } from './html';
 import { requestLogger } from './logger';
 import { type AppEnv, frameworkMiddleware } from './middleware/framework';
-import { handleRum } from './rum';
+import { availabilityRateLimit, contactRateLimit, rumRateLimit } from './middleware/rate-limit';
+import { sameOrigin } from './middleware/same-origin';
+import { apiDocumentation } from './openapi';
+import { availabilityRoute } from './routes/availability';
+import { contactRoute } from './routes/contact';
+import { rumRoute } from './routes/rum';
+import { getAvailability } from './services/availability';
+import { RUM_MAX_BYTES } from './services/rum';
 import { renderShell } from './shell';
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -108,30 +115,19 @@ app.get('/__switch', (c) => {
 	return c.redirect(next, 302);
 });
 
-// Contact form submission. Validates with the same Zod schema the browser forms use, so the
-// client and server can never disagree on what counts as valid. Validation-only for now: a
-// well-formed payload is acknowledged but not yet delivered or stored.
-app.post('/api/contact', async (c) => {
-	const payload = await c.req.json().catch(() => null);
-	const result = contactSchema.safeParse(payload);
-	if (!result.success) {
-		return c.json({ errors: z.flattenError(result.error).fieldErrors }, 422);
-	}
-	return c.json({ ok: true });
-});
+// JSON API. Each route's handler and its OpenAPI description are colocated in ./routes; here
+// they are wired behind the shared protection layer — a body-size cap, a per-IP rate limit, and
+// (for the first-party telemetry proxy) a same-origin guard. Keeping that posture in one place
+// makes the whole API's exposure easy to read at a glance.
+app.post('/api/contact', bodyLimit({ maxSize: 16 * 1024 }), contactRateLimit, ...contactRoute);
+app.get('/api/availability', availabilityRateLimit, ...availabilityRoute);
+app.post('/api/rum', bodyLimit({ maxSize: RUM_MAX_BYTES }), sameOrigin, rumRateLimit, ...rumRoute);
 
-// Live availability for the contact-page badge. Reads a gist Fortunato controls, behind a
-// heavy cache so visitor traffic never hits GitHub's rate limit. The handler always returns
-// a valid value, so the page can trust the response without special-casing failures.
-app.get('/api/availability', async (c) => {
-	const data = await getAvailability();
-	c.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
-	return c.json(data);
-});
-
-// First-party proxy for frontend RUM (Grafana Faro). Strips identifiers, hides the collector
-// key, and forwards fire-and-forget. See rum.ts.
-app.post('/api/rum', handleRum);
+// The API describes itself: the OpenAPI document is generated from the route contracts above
+// and served live, with an interactive reference reading from that same path. Registered
+// before the catch-alls so the requests reach these handlers.
+app.get('/api/openapi.json', openAPIRouteHandler(app, { documentation: apiDocumentation }));
+app.get('/api/docs', Scalar({ url: '/api/openapi.json' }));
 
 // Crawler directives, generated from the shared route/SEO definitions so they never drift from
 // what the site actually exposes. Framework-agnostic; only the indexed pages are listed.

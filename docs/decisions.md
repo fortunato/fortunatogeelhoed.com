@@ -152,6 +152,44 @@ to need no consent banner. The reasoning — Faro over a hand-rolled beacon, why
 proxy, and why sessionless removes the banner — is in
 [`frontend-telemetry.md`](frontend-telemetry.md).
 
+### API documentation — code-first OpenAPI
+
+The JSON API describes itself with an OpenAPI 3.1 document generated from the route
+contracts via `hono-openapi`. It is code-first rather than reflective: each route is
+annotated with the same Zod schemas the handlers and browser forms already use
+(`contactSchema`, `availabilitySchema`), so the published spec cannot drift from what
+the server accepts and returns. The document is served live at `/api/openapi.json`,
+with a Scalar reference UI at `/api/docs` reading from that same path — there is no
+checked-in artifact to keep in sync; extracting the spec is just a GET against a
+running server. Validation behaviour is untouched: the routes are *described*, not
+re-validated through the library's middleware, so the existing responses are
+unchanged.
+
+- **`@hono/zod-openapi`** — official, but rewrites every route into its `createRoute`
+  builder and pins to an older Zod major; `hono-openapi` speaks Standard Schema, which
+  Zod 4 implements natively, so the existing schemas wire in directly.
+- **Hand-assembled spec** — possible with Zod 4's `z.toJSONSchema`, but more to
+  maintain and easy to let drift from the live routes.
+
+### API abuse controls — in-process middleware
+
+The public JSON endpoints are protected by a small middleware layer rather than a
+token: the clients are anonymous browsers, so a token would have to ship in the
+frontend bundle and wouldn't be a secret. Instead each route carries a per-IP rate
+limit (strict on contact, generous on the chatty telemetry proxy), the POST routes
+carry a body-size cap, and the first-party RUM proxy additionally requires a
+same-origin request. Counters live in an in-process store — correct for a single
+container and consistent with the in-process availability cache; behind multiple
+replicas the limits would be per-instance, a deliberate non-goal. The client address
+is resolved from a trust-aware helper that, by default, does **not** believe
+`X-Forwarded-For` — a forged header from a direct caller would otherwise bypass the
+limiter. It prefers a configured edge header (`CLIENT_IP_HEADER`, e.g.
+`cf-connecting-ip`), trusts `X-Forwarded-For` only when the number of fronting
+proxies is declared (`TRUSTED_PROXY_HOPS`, taking the entry the outermost trusted
+proxy appended), and otherwise uses the socket address. The new `403`/`413`/`429`
+outcomes are part of each route's OpenAPI description, so the published spec still
+matches reality.
+
 ---
 
 These decisions are distilled from the project's internal research notes and
