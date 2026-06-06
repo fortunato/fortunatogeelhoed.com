@@ -39,6 +39,15 @@ export function Header() {
 						</a>
 					</div>
 				</div>
+				<a
+					className={styles['icon-btn']}
+					href="https://github.com/fortunato/fortunatogeelhoed.com"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="View source on GitHub (opens in a new tab)"
+				>
+					<jb-icon name="github" />
+				</a>
 				<jb-theme-toggle />
 			</div>
 		</header>

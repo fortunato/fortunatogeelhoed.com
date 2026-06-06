@@ -34,6 +34,15 @@ import { NAV_ITEMS } from '@fg/shared';
 						<a class="switcher-btn active" href="/__switch?to=angular">angular</a>
 					</div>
 				</div>
+				<a
+					class="icon-btn"
+					href="https://github.com/fortunato/fortunatogeelhoed.com"
+					target="_blank"
+					rel="noopener noreferrer"
+					aria-label="View source on GitHub (opens in a new tab)"
+				>
+					<jb-icon name="github"></jb-icon>
+				</a>
 				<jb-theme-toggle></jb-theme-toggle>
 			</div>
 		</header>

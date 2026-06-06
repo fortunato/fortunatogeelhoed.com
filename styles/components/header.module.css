@@ -149,6 +149,34 @@
 	}
 }
 
+/* GitHub source link in the header cluster — mirrors the sibling <jb-theme-toggle>
+   so the two icon buttons read as a set. */
+.icon-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	margin-left: var(--jb-space-sm);
+	color: var(--jb-text-secondary);
+	background: transparent;
+	border: none;
+	border-radius: var(--jb-radius-sm);
+	text-decoration: none;
+	transition: color var(--jb-dur-fast) var(--jb-ease-standard), background-color
+		var(--jb-dur-fast) var(--jb-ease-standard);
+
+	&:hover {
+		color: var(--jb-text-primary);
+		background: var(--jb-bg-secondary);
+	}
+
+	& svg {
+		width: 16px;
+		height: 16px;
+	}
+}
+
 /* The theme toggle now lives in the shared <jb-theme-toggle> web component; its
    styles moved to the global styles/components/controls.css. */
 
