@@ -3,7 +3,11 @@ import { Hono } from 'hono';
 import { getCookie, setCookie } from 'hono/cookie';
 import { z } from 'zod';
 import { cssSourceFiles } from '../../../scripts/css-sources';
+import { getAvailability } from './availability';
+import { applyAvailability } from './html';
+import { requestLogger } from './logger';
 import { type AppEnv, frameworkMiddleware } from './middleware/framework';
+import { handleRum } from './rum';
 import { renderShell } from './shell';
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -26,6 +30,9 @@ if (!isDev) {
 }
 
 const app = new Hono<AppEnv>();
+
+// Structured access logging (skips static assets internally).
+app.use('*', requestLogger());
 
 // Framework detection middleware
 app.use('*', frameworkMiddleware);
@@ -112,6 +119,19 @@ app.post('/api/contact', async (c) => {
 	return c.json({ ok: true });
 });
 
+// Live availability for the contact-page badge. Reads a gist Fortunato controls, behind a
+// heavy cache so visitor traffic never hits GitHub's rate limit. The handler always returns
+// a valid value, so the page can trust the response without special-casing failures.
+app.get('/api/availability', async (c) => {
+	const data = await getAvailability();
+	c.header('Cache-Control', 'public, max-age=60, stale-while-revalidate=300');
+	return c.json(data);
+});
+
+// First-party proxy for frontend RUM (Grafana Faro). Strips identifiers, hides the collector
+// key, and forwards fire-and-forget. See rum.ts.
+app.post('/api/rum', handleRum);
+
 if (isDev) {
 	const PORTS: Record<string, number> = { react: 5173, vue: 5174, angular: 5175 };
 
@@ -155,9 +175,14 @@ if (isDev) {
 
 		const file = Bun.file(filePath);
 		if (await file.exists()) {
-			const html = await file.text();
+			let html = applyTheme(await file.text(), theme);
+			// The contact page carries the live availability badge: patch the prerendered markup
+			// to the current value and seed the client so hydration matches.
+			if (c.req.path === '/contact') {
+				html = applyAvailability(html, await getAvailability());
+			}
 			c.header('Cache-Control', 'no-cache');
-			return c.html(applyTheme(html, theme));
+			return c.html(html);
 		}
 
 		// Fallback to root index
@@ -173,6 +198,10 @@ if (isDev) {
 		);
 	});
 }
+
+// Exported so tests can drive the real, fully-wired app (middleware + registered routes)
+// through app.request, rather than re-declaring routes that could drift from these.
+export { app };
 
 export default {
 	port: 3000,

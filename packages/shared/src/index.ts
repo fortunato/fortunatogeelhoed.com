@@ -25,3 +25,7 @@ export { initSwitchTransition } from './disintegrate';
 export { initSmoothScroll, destroySmoothScroll } from './smooth-scroll';
 export { initTimelineMotion, destroyTimelineMotion } from './timeline-motion';
 export { initCardSpotlight } from './card-spotlight';
+export type { Availability } from './validation/availability';
+export { availabilitySchema } from './validation/availability';
+export { availabilityBadge, availabilityBookedLine } from './availability-copy';
+export { readAvailabilitySeed, fetchAvailability } from './availability-client';

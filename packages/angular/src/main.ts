@@ -1,6 +1,7 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { initSwitchTransition } from '@fg/shared';
 import { registerElements } from '@fg/shared/elements';
+import { startRum } from '@fg/shared/rum';
 import { AppComponent } from './app.component';
 import { appConfig } from './app.config';
 
@@ -8,4 +9,7 @@ import { appConfig } from './app.config';
 // prerender (that uses entry-server.ts via CommonEngine).
 registerElements();
 
-bootstrapApplication(AppComponent, appConfig).then(() => initSwitchTransition());
+bootstrapApplication(AppComponent, appConfig).then(() => {
+	initSwitchTransition();
+	startRum('angular');
+});

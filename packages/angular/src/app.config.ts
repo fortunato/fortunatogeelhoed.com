@@ -1,3 +1,4 @@
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import type { ApplicationConfig } from '@angular/core';
 import { provideClientHydration } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling, withViewTransitions } from '@angular/router';
@@ -11,6 +12,9 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
 	providers: [
 		provideClientHydration(),
+		// Fetch-based HttpClient backs the signal-native httpResource() used for live
+		// availability; withFetch keeps it consistent across server and browser.
+		provideHttpClient(withFetch()),
 		// Reset scroll to the top on navigation. withInMemoryScrolling covers instant
 		// navigation and back/forward restore; onViewTransitionCreated resets eagerly —
 		// synchronously after startViewTransition, before the new snapshot is captured — so

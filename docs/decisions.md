@@ -8,7 +8,9 @@ topology and request flow, see [`architecture.md`](architecture.md).
 
 The site is built three times — React, Vue, and Angular — behind a single
 Bun/Hono backend, with a switcher that flips between the live implementations.
-Building the same site three ways behind one backend lets each framework's implementation be read and compared directly, from one content pipeline, one design system, and one server; only the framework layer changes.
+Building the same site three ways behind one backend lets each framework's
+implementation be read and compared directly, from one content pipeline, one
+design system, and one server; only the framework layer changes.
 
 This constraint drives everything below: each framework must pre-render the same
 routes from the same content, and the server must serve whichever one the
@@ -131,6 +133,24 @@ Content is Markdown with frontmatter under `packages/content/`. A plain
 TypeScript module parses it with gray-matter and exposes lookup functions
 consumed **at build time** by each framework's prerender step. No runtime API,
 no database — Git is the CMS, and a content change is just a rebuild.
+
+### Data fetching — idiomatic per framework
+
+The one piece of genuinely dynamic data (the live availability badge) is fetched
+with each framework's canonical data primitive — TanStack Query in React and Vue,
+the signal-native `httpResource()` in Angular — mirroring the per-framework *form*
+library choices. The schema and copy helpers are shared; only the fetching layer
+differs, on purpose. Full rationale, including the alternatives weighed and the
+in-process-cache-not-Redis decision, is in
+[`availability.md`](availability.md).
+
+### Observability — Grafana, banner-free
+
+Backend logs (pino → Grafana Cloud Loki) and frontend RUM (Grafana Faro, run
+sessionless and proxied through the backend) land in one Grafana surface, designed
+to need no consent banner. The reasoning — Faro over a hand-rolled beacon, why the
+proxy, and why sessionless removes the banner — is in
+[`frontend-telemetry.md`](frontend-telemetry.md).
 
 ---
 
