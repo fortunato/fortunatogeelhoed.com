@@ -120,6 +120,18 @@ const SLUGS: Record<string, string | null> = {
 	Gulp: 'gulp',
 	Yeoman: null,
 	Middleman: null,
+	// Homelab / self-hosted platform
+	Hetzner: 'hetzner',
+	Portainer: 'portainer',
+	Traefik: 'traefikproxy',
+	Grafana: 'grafana',
+	Loki: null,
+	AdGuard: 'adguard',
+	Immich: 'immich',
+	Vaultwarden: 'vaultwarden',
+	Verdaccio: 'verdaccio',
+	NetBird: 'netbird',
+	MikroTik: 'mikrotik',
 	// AI / LLM
 	'Claude Code': 'claude',
 	Ollama: 'ollama',

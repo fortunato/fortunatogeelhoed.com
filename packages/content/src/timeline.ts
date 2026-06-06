@@ -157,7 +157,7 @@ const timeline: TimelineData = {
 			type: 'side-project',
 			highlight: [
 				'Autonomous execution, exchange APIs',
-				'Self-hosted on a homelab platform I run end to end — k3s, Pulumi IaC, CI/CD and network',
+				'Runs on a Hetzner k3s cluster, provisioned with Pulumi',
 			],
 			tech: {
 				frontend: [
@@ -171,8 +171,45 @@ const timeline: TimelineData = {
 					'SCSS Modules',
 				],
 				backend: ['Node.js', 'Express', 'NestJS', 'PostgreSQL'],
-				cicd: ['Nx', 'Bitbucket', 'Jenkins', 'Gitea Actions', 'Docker', 'Pulumi', 'k3s'],
+				cicd: [
+					'Nx',
+					'Bitbucket',
+					'Jenkins',
+					'Gitea Actions',
+					'Docker',
+					'Pulumi',
+					'k3s',
+					'Hetzner',
+				],
 				ai: ['ChatGPT API', 'Claude Code', 'MCP', 'OpenClaw'],
+			},
+		},
+		{
+			id: 'homelab',
+			era: ERAS.netherlands2020s,
+			years: '2024–now',
+			startYear: 2024,
+			endYear: 'present',
+			client: 'Self-Hosted Homelab',
+			role: 'Personal platform & network',
+			type: 'side-project',
+			highlight: [
+				'MikroTik-routed VLAN network with a home–office fibre link and 2.5GbE wiring',
+				'A NAS running Docker Compose services behind Traefik — Gitea + runners, Vaultwarden, Immich, Grafana/Loki, AdGuard, Verdaccio — reached remotely over NetBird',
+			],
+			tech: {
+				backend: ['Gitea', 'Immich', 'Vaultwarden', 'Verdaccio'],
+				cicd: [
+					'Docker',
+					'Portainer',
+					'Traefik',
+					'Gitea Actions',
+					'Grafana',
+					'Loki',
+					'AdGuard',
+					'NetBird',
+					'MikroTik',
+				],
 			},
 		},
 		{
