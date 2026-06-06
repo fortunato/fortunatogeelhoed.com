@@ -1,18 +1,53 @@
+import { GITHUB_REPO_URL, LINKEDIN_URL, toParagraphs } from '@fg/shared';
+import styles from '@styles/components/about.module.css';
+import { Link } from 'react-router';
 import { useContent } from '../content';
+
+const PHOTO_ALT =
+	'Fortunato Geelhoed, freelance full-stack TypeScript engineer based on the Costa Blanca, Spain';
 
 export function About() {
 	const content = useContent('about');
+	const paragraphs = toParagraphs(content?.body ?? '');
 
 	return (
-		<section>
-			<div className="container">
-				<span className="section-label">About</span>
-				<h1 className="section-title">{content?.title ?? 'Fortunato Geelhoed'}</h1>
-				<p style={{ color: 'var(--jb-text-secondary)' }}>
-					{content?.body ??
-						'About page content will be loaded from the content pipeline.'}
-				</p>
-			</div>
+		<section className={styles.about}>
+			<article className={`${styles['about-inner']} container`}>
+				<figure className={styles['about-photo']}>
+					<img
+						src="/assets/images/fortunato.webp"
+						alt={PHOTO_ALT}
+						width={480}
+						height={600}
+						decoding="async"
+					/>
+				</figure>
+				<div className={styles['about-prose']}>
+					<span className="section-label">About</span>
+					<h1 className="section-title">Fortunato Geelhoed</h1>
+					{paragraphs.map((paragraph, index) => (
+						<p
+							key={paragraph.slice(0, 32)}
+							className={index === 0 ? styles['about-lead'] : undefined}
+						>
+							{paragraph}
+						</p>
+					))}
+					<div className={styles['about-cta']}>
+						<Link to="/timeline" className={styles['about-cta-primary']}>
+							View the career timeline
+						</Link>
+						<a href={GITHUB_REPO_URL} target="_blank" rel="noopener noreferrer">
+							<jb-icon name="github" />
+							View the source
+						</a>
+						<a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
+							<jb-icon name="linkedin" />
+							LinkedIn
+						</a>
+					</div>
+				</div>
+			</article>
 		</section>
 	);
 }

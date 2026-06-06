@@ -1,7 +1,10 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import { type ContentItem, routes } from '@fg/shared';
+import { type ContentItem, renderSeoHead, resolvePageSeo, routes } from '@fg/shared';
 import contentData from '../content/data.json';
+
+// Anchor in the Vite-built shell that we swap for the per-route SEO head block.
+const TITLE_ANCHOR = '<title>FORTUNATO.GEELHOED</title>';
 
 const distDir = resolve(import.meta.dirname, '../../dist/react');
 const viteOutDir = resolve(distDir);
@@ -16,9 +19,22 @@ async function prerender() {
 		render: (url: string, content?: Record<string, ContentItem>) => Promise<string>;
 	};
 
+	if (!template.includes(TITLE_ANCHOR)) {
+		throw new Error('prerender: title anchor not found in shell — SEO head cannot be injected');
+	}
+
+	const content = contentData as Record<string, ContentItem>;
+
 	for (const route of routes) {
-		const appHtml = await render(route.path, contentData as Record<string, ContentItem>);
-		const html = template.replace('<div id="app"></div>', `<div id="app">${appHtml}</div>`);
+		const appHtml = await render(route.path, content);
+		const page = route.contentSlug ? content[route.contentSlug] : undefined;
+		const seo = resolvePageSeo(route.path, {
+			title: page?.title,
+			description: page?.description,
+		});
+		const html = template
+			.replace(TITLE_ANCHOR, renderSeoHead(route.path, seo))
+			.replace('<div id="app"></div>', `<div id="app">${appHtml}</div>`);
 
 		const filePath =
 			route.path === '/'

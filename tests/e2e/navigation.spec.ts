@@ -2,11 +2,12 @@ import { expect, test } from '@playwright/test';
 
 // Primary navigation, verified end-to-end against the production server: every
 // destination resolves, the active item is marked, the mobile bottom tab bar exposes
-// all three, and the framework switcher stays available.
+// every entry, and the framework switcher stays available.
 const ORIGIN = 'http://localhost:3000';
 const FRAMEWORKS = ['react', 'vue', 'angular'] as const;
 const NAV = [
 	{ label: 'Home', path: '/' },
+	{ label: 'About', path: '/about' },
 	{ label: 'Career', path: '/timeline' },
 	{ label: 'Contact', path: '/contact' },
 ];
@@ -27,7 +28,7 @@ test.describe('primary navigation', () => {
 		});
 	}
 
-	test('exposes a mobile bottom tab bar with the three destinations', async ({ browser }) => {
+	test('exposes a mobile bottom tab bar with every destination', async ({ browser }) => {
 		const context = await browser.newContext({ viewport: { width: 390, height: 800 } });
 		const page = await context.newPage();
 		await page.goto('/');

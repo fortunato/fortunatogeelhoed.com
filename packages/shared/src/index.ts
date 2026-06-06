@@ -15,6 +15,22 @@ export type { Bounds, RibbonSegment, RibbonRow, AxisTick } from './timeline-layo
 export { spansBounds, ribbonRows, axisTicks, LANE_LABELS } from './timeline-layout';
 export type { NavItem } from './nav';
 export { NAV_ITEMS } from './nav';
+export { toParagraphs } from './text';
+export type { PageSeo } from './seo';
+export {
+	SITE_URL,
+	SITE_NAME,
+	OG_IMAGE_PATH,
+	GITHUB_PROFILE_URL,
+	GITHUB_REPO_URL,
+	LINKEDIN_URL,
+	INDEXED_PATHS,
+	isIndexedPath,
+	resolvePageSeo,
+	renderSeoHead,
+	buildRobotsTxt,
+	buildSitemap,
+} from './seo';
 export type { TechVisual } from './tech';
 export { TECH_REGISTRY, techVisual } from './tech';
 export { TECH_SPRITE } from './tech-sprite';

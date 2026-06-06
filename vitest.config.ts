@@ -37,12 +37,13 @@ export default defineConfig({
 					name: 'node',
 					environment: 'node',
 					include: [
-						'packages/shared/src/validation/**/*.test.ts',
+						'packages/shared/src/**/*.test.ts',
 						'packages/content/src/**/*.test.ts',
 						'packages/api/src/**/*.test.ts',
 						'scripts/**/*.test.ts',
 					],
-					exclude: ['**/*.browser.test.*'],
+					// theme.test.ts needs browser APIs (jsdom project); components run in the browser.
+					exclude: ['**/*.browser.test.*', '**/theme.test.ts'],
 				},
 			},
 			{

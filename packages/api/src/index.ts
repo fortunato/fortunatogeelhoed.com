@@ -1,3 +1,4 @@
+import { buildRobotsTxt, buildSitemap } from '@fg/shared';
 import { contactSchema } from '@fg/shared/validation/contact';
 import { Hono } from 'hono';
 import { getCookie, setCookie } from 'hono/cookie';
@@ -131,6 +132,18 @@ app.get('/api/availability', async (c) => {
 // First-party proxy for frontend RUM (Grafana Faro). Strips identifiers, hides the collector
 // key, and forwards fire-and-forget. See rum.ts.
 app.post('/api/rum', handleRum);
+
+// Crawler directives, generated from the shared route/SEO definitions so they never drift from
+// what the site actually exposes. Framework-agnostic; only the indexed pages are listed.
+app.get('/robots.txt', (c) => {
+	c.header('Content-Type', 'text/plain; charset=utf-8');
+	return c.body(buildRobotsTxt());
+});
+
+app.get('/sitemap.xml', (c) => {
+	c.header('Content-Type', 'application/xml; charset=utf-8');
+	return c.body(buildSitemap());
+});
 
 if (isDev) {
 	const PORTS: Record<string, number> = { react: 5173, vue: 5174, angular: 5175 };

@@ -1,0 +1,98 @@
+/* About page: a narrative bio beside a portrait. Semantic --jb-* tokens only. Photo and prose
+   sit side by side on wide viewports and stack (photo first) on mobile. */
+
+.about {
+	padding-block: var(--jb-space-xl);
+}
+
+.about-inner {
+	display: grid;
+	gap: var(--jb-space-xl);
+	align-items: start;
+}
+
+/* Fixed aspect box so layout is stable before the image loads (no shift), and the portrait is
+   cropped consistently whatever the source dimensions. */
+.about-photo {
+	margin: 0;
+	width: 100%;
+	max-width: 22rem;
+	aspect-ratio: 4 / 5;
+	overflow: hidden;
+	border: 1px solid var(--jb-color-border);
+	border-radius: var(--jb-radius-sm);
+	background: var(--jb-bg-card);
+}
+
+.about-photo img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.about-prose p {
+	max-width: 62ch;
+	color: var(--jb-text-secondary);
+	line-height: 1.7;
+}
+
+.about-prose p + p {
+	margin-top: var(--jb-space-md);
+}
+
+/* The opening paragraph reads as a lead: brighter and a touch larger. Selector matches the
+   specificity of `.about-prose p` (and adds a class) so the brighter colour actually wins. */
+.about-prose p.about-lead {
+	color: var(--jb-text-primary);
+	font-size: 1.15rem;
+}
+
+.about-cta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--jb-space-md);
+	margin-top: var(--jb-space-lg);
+}
+
+.about-cta a {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5em;
+	padding: 0.5rem 1rem;
+	border: 1px solid var(--jb-color-border);
+	border-radius: var(--jb-radius-sm);
+	font-size: 0.85rem;
+	font-weight: 600;
+	color: var(--jb-text-primary);
+	transition: border-color var(--jb-dur-base) var(--jb-ease-standard), color var(--jb-dur-base)
+		var(--jb-ease-standard), background-color var(--jb-dur-base) var(--jb-ease-standard);
+}
+
+.about-cta a svg {
+	width: 1.1em;
+	height: 1.1em;
+}
+
+.about-cta a:hover {
+	border-color: var(--jb-accent);
+	color: var(--jb-accent-text);
+}
+
+/* Primary action (the timeline) carries the accent fill; raise specificity past `.about-cta a`. */
+.about-cta a.about-cta-primary {
+	background: var(--jb-accent);
+	border-color: var(--jb-accent);
+	color: var(--jb-text-on-accent);
+}
+
+.about-cta a.about-cta-primary:hover {
+	background: var(--jb-accent-hover);
+	color: var(--jb-text-on-accent);
+}
+
+@media (width >= 769px) {
+	.about-inner {
+		grid-template-columns: minmax(16rem, 22rem) 1fr;
+	}
+}
