@@ -240,7 +240,9 @@
 	}
 	&[data-type="independent"] {
 		background: var(--jb-accent-soft);
-		color: var(--jb-accent-on-soft);
+		/* Text-safe accent: raw accent-on-soft is too dark as this small badge text on the
+		   near-dark soft tint, so use the AA-tuned accent-text (matches the spine date ink). */
+		color: var(--jb-accent-text);
 	}
 	&[data-type="side-project"] {
 		background: color-mix(in srgb, var(--type-side) 14%, transparent);

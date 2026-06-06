@@ -137,14 +137,16 @@
 		   Consumed via relative-colour syntax in the timeline styles; light theme leaves it 0. */
 		--jb-pill-lightness-min: 0.62;
 		/* Timeline entry-type text inks (the spine date and type badge). On the dark surface the
-		   vivid identity colours already clear AA as small text, so the inks equal them here; the
-		   light theme darkens them below. The node dot always uses the vivid colour, not these.
+		   the vivid identity colours (employee, side) already clear AA as small text, so those inks
+		   equal them here; independent uses the AA-tuned accent-text, since the raw brand accent is
+		   too dark as small text on this surface. The light theme darkens them below. The node dot
+		   always uses the vivid colour, not these.
 		   Defined as tokens (not a component theme selector) so the dark/light swap survives
 		   Angular's emulated encapsulation, which mis-scopes a `[data-theme] .scoped` ancestor. */
 		--jb-timeline-ink-employee: #5ba8ff;
 		--jb-timeline-ink-side: #facc15;
 		--jb-timeline-ink-side-badge: #b88a06;
-		--jb-timeline-ink-independent: var(--jb-accent);
+		--jb-timeline-ink-independent: var(--jb-accent-text);
 	}
 
 	/* Theme: light */

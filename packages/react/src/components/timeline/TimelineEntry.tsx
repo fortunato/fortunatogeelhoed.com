@@ -26,7 +26,7 @@ function Pill({ name }: { name: string }) {
 	return (
 		<span className={styles.pill} style={{ '--brand': brand } as CSSProperties}>
 			{icon ? (
-				<svg className={styles['pill-icon']}>
+				<svg className={styles['pill-icon']} aria-hidden="true">
 					<use href={`#i-${icon}`} />
 				</svg>
 			) : null}
@@ -44,7 +44,7 @@ export function TimelineEntry({ entry }: { entry: Entry }) {
 				<div className={styles['spine-role']}>{entry.role}</div>
 				<span className={styles['spine-type']} data-type={entry.type}>
 					{entry.type === 'side-project' ? (
-						<svg className={styles['type-icon']}>
+						<svg className={styles['type-icon']} aria-hidden="true">
 							<use href="#i-branch" />
 						</svg>
 					) : null}
