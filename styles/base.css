@@ -73,7 +73,7 @@
 		font-weight: 600;
 		text-transform: uppercase;
 		letter-spacing: 0.12em;
-		border-radius: var(--jb-radius-md);
+		border-radius: var(--jb-radius-sm);
 		line-height: 1;
 		transition: transform var(--jb-dur-base) var(--jb-ease-standard), box-shadow
 			var(--jb-dur-base) var(--jb-ease-standard), background-color var(--jb-dur-base)

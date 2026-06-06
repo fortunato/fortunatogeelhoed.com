@@ -24,7 +24,7 @@
 			color: var(--jb-text-primary);
 			background: var(--jb-bg-card);
 			border: 1px solid var(--jb-color-border);
-			border-radius: var(--jb-radius-md);
+			border-radius: var(--jb-radius-sm);
 			transition: border-color var(--jb-dur-fast) var(--jb-ease-standard), box-shadow
 				var(--jb-dur-fast) var(--jb-ease-standard);
 
