@@ -34,6 +34,7 @@ const spec = describeRoute({
 			description: 'Payload accepted.',
 			content: { 'application/json': { schema: resolver(successSchema) } },
 		},
+		403: { description: 'Rejected: cross-site request blocked by CSRF protection.' },
 		413: { description: 'Payload exceeds the size limit.' },
 		422: {
 			description: 'Validation failed; errors are keyed by field name.',

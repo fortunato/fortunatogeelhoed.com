@@ -4,12 +4,14 @@ import { Hono } from 'hono';
 import { openAPIRouteHandler } from 'hono-openapi';
 import { bodyLimit } from 'hono/body-limit';
 import { getCookie, setCookie } from 'hono/cookie';
+import { csrf } from 'hono/csrf';
 import { cssSourceFiles } from '../../../scripts/css-sources';
 import { applyAvailability } from './html';
 import { requestLogger } from './logger';
 import { type AppEnv, frameworkMiddleware } from './middleware/framework';
 import { availabilityRateLimit, contactRateLimit, rumRateLimit } from './middleware/rate-limit';
-import { sameOrigin } from './middleware/same-origin';
+import { isFirstPartyOrigin, sameOrigin } from './middleware/same-origin';
+import { DOCS_CSP, securityHeaders, serveHtml } from './middleware/security-headers';
 import { apiDocumentation } from './openapi';
 import { availabilityRoute } from './routes/availability';
 import { contactRoute } from './routes/contact';
@@ -41,6 +43,10 @@ const app = new Hono<AppEnv>();
 
 // Structured access logging (skips static assets internally).
 app.use('*', requestLogger());
+
+// Standard security headers on every response. The Content-Security-Policy is not set here; it is
+// applied per response so the HTML pages can carry a fresh nonce (see serveHtml below).
+app.use('*', securityHeaders);
 
 // Framework detection middleware
 app.use('*', frameworkMiddleware);
@@ -119,7 +125,13 @@ app.get('/__switch', (c) => {
 // they are wired behind the shared protection layer — a body-size cap, a per-IP rate limit, and
 // (for the first-party telemetry proxy) a same-origin guard. Keeping that posture in one place
 // makes the whole API's exposure easy to read at a glance.
-app.post('/api/contact', bodyLimit({ maxSize: 16 * 1024 }), contactRateLimit, ...contactRoute);
+app.post(
+	'/api/contact',
+	bodyLimit({ maxSize: 16 * 1024 }),
+	contactRateLimit,
+	csrf({ origin: isFirstPartyOrigin }),
+	...contactRoute,
+);
 app.get('/api/availability', availabilityRateLimit, ...availabilityRoute);
 app.post('/api/rum', bodyLimit({ maxSize: RUM_MAX_BYTES }), sameOrigin, rumRateLimit, ...rumRoute);
 
@@ -127,7 +139,16 @@ app.post('/api/rum', bodyLimit({ maxSize: RUM_MAX_BYTES }), sameOrigin, rumRateL
 // and served live, with an interactive reference reading from that same path. Registered
 // before the catch-alls so the requests reach these handlers.
 app.get('/api/openapi.json', openAPIRouteHandler(app, { documentation: apiDocumentation }));
-app.get('/api/docs', Scalar({ url: '/api/openapi.json' }));
+// The Scalar reference loads its bundle from a CDN and inlines its own script/style, so it cannot
+// live under the site's strict policy; give the docs response its own relaxed CSP.
+app.get(
+	'/api/docs',
+	async (c, next) => {
+		await next();
+		c.res.headers.set('Content-Security-Policy', DOCS_CSP);
+	},
+	Scalar({ url: '/api/openapi.json' }),
+);
 
 // Crawler directives, generated from the shared route/SEO definitions so they never drift from
 // what the site actually exposes. Framework-agnostic; only the indexed pages are listed.
@@ -190,18 +211,17 @@ if (isDev) {
 			if (c.req.path === '/contact') {
 				html = applyAvailability(html, await getAvailability());
 			}
-			c.header('Cache-Control', 'no-cache');
-			return c.html(html);
+			return serveHtml(c, html);
 		}
 
 		// Fallback to root index
 		const fallback = Bun.file(`./dist/${framework}/index.html`);
 		if (await fallback.exists()) {
-			c.header('Cache-Control', 'no-cache');
-			return c.html(applyTheme(await fallback.text(), theme));
+			return serveHtml(c, applyTheme(await fallback.text(), theme));
 		}
 
-		return c.html(
+		return serveHtml(
+			c,
 			renderShell({ framework, theme, stylesheetPath, bodyHtml: '<p>Page not found</p>' }),
 			404,
 		);

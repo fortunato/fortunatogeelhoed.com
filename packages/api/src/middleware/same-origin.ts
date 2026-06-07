@@ -42,7 +42,9 @@ function isLocalhost(hostname: string): boolean {
 	return hostname === 'localhost' || hostname === '127.0.0.1' || hostname === '[::1]';
 }
 
-function isAllowedOrigin(origin: string): boolean {
+// Exported so the hono/csrf guard on other routes shares one definition of "first party" instead
+// of re-deriving it. Takes an Origin header value; true when its host is one we control.
+export function isFirstPartyOrigin(origin: string): boolean {
 	try {
 		const url = new URL(origin);
 		return ALLOWED.has(url.host.toLowerCase()) || isLocalhost(url.hostname);
@@ -58,7 +60,7 @@ export const sameOrigin: MiddlewareHandler = async (c, next) => {
 
 	// Fallback for clients that do not send Fetch Metadata: the Origin host must be one we control.
 	const origin = c.req.header('origin');
-	if (origin && isAllowedOrigin(origin)) return next();
+	if (origin && isFirstPartyOrigin(origin)) return next();
 
 	return c.body(null, 403);
 };

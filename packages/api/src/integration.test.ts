@@ -84,4 +84,60 @@ describe('/api/contact wiring', () => {
 		expect(statuses.slice(0, 5)).toEqual([200, 200, 200, 200, 200]);
 		expect(statuses[5]).toBe(429);
 	});
+
+	it('blocks a cross-site form-style submission with the CSRF guard (403)', async () => {
+		const res = await app.request('/api/contact', {
+			method: 'POST',
+			headers: {
+				'content-type': 'application/x-www-form-urlencoded',
+				Origin: 'https://evil.test',
+			},
+			body: 'name=Ada&email=ada@example.com&message=hello',
+		});
+		expect(res.status).toBe(403);
+	});
+
+	it('lets a same-origin form submission through the CSRF guard', async () => {
+		const res = await app.request('/api/contact', {
+			method: 'POST',
+			headers: {
+				'content-type': 'application/x-www-form-urlencoded',
+				'Sec-Fetch-Site': 'same-origin',
+			},
+			body: 'name=Ada&email=ada@example.com&message=hello',
+		});
+		// Past CSRF (not 403); the route then rejects the non-JSON body with 422, proving the guard
+		// admitted it rather than blocking it.
+		expect(res.status).toBe(422);
+	});
+
+	it('does not block a cross-origin application/json post (CSRF exempts JSON by design)', async () => {
+		// hono/csrf only acts on form-style content types; this is exactly why /api/rum keeps the
+		// custom same-origin guard instead. Documented here so the limitation is explicit.
+		const res = await app.request('/api/contact', {
+			method: 'POST',
+			headers: { 'content-type': 'application/json', Origin: 'https://evil.test' },
+			body: JSON.stringify({ name: 'Ada', email: 'ada@example.com', message: 'hello there' }),
+		});
+		expect(res.status).toBe(200);
+	});
+});
+
+// The prerendered HTML branch reads files via the Bun runtime, which the Node test runner does not
+// provide, so the nonce/CSP serving path is covered as a unit in security-headers.test.ts. Here we
+// verify the route-level CSP wiring that runs under Node: the docs page exception and the absence of
+// a CSP on the JSON API, plus that the global hardening headers reach those responses.
+describe('security headers wiring', () => {
+	it('gives the Scalar docs page its own jsdelivr-allowing CSP', async () => {
+		const res = await app.request('/api/docs');
+		expect(res.headers.get('Content-Security-Policy')).toContain('https://cdn.jsdelivr.net');
+	});
+
+	it('attaches the standard hardening headers but no CSP to JSON API responses', async () => {
+		const res = await app.request('/api/openapi.json');
+		expect(res.status).toBe(200);
+		expect(res.headers.get('Content-Security-Policy')).toBeNull();
+		expect(res.headers.get('X-Frame-Options')).toBe('DENY');
+		expect(res.headers.get('X-Content-Type-Options')).toBe('nosniff');
+	});
 });
