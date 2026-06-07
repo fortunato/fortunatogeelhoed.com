@@ -17,7 +17,8 @@
 			"@fg/shared": ["../../packages/shared/src"],
 			"@fg/shared/*": ["../../packages/shared/src/*"],
 			"@fg/content": ["../../packages/content/src"],
-			"@fg/content/*": ["../../packages/content/src/*"]
+			"@fg/content/*": ["../../packages/content/src/*"],
+			"@fg/content-data/*": ["../../packages/content/*"]
 		}
 	},
 	"angularCompilerOptions": {

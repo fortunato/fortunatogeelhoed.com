@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
+import homeData from '@fg/content-data/home.json';
 import type { HomeContent } from '@fg/shared';
-import homeData from '../../../content/home.json';
 import { CallToActionComponent } from '../components/home/call-to-action.component';
 import { FrameworkExposureComponent } from '../components/home/framework-exposure.component';
 import { HeroComponent } from '../components/home/hero.component';

@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts">
+import homeData from '@fg/content-data/home.json';
 import type { HomeContent } from '@fg/shared';
-import homeData from '../../../content/home.json';
 import CallToAction from '../components/home/CallToAction.vue';
 import FrameworkExposure from '../components/home/FrameworkExposure.vue';
 import Hero from '../components/home/Hero.vue';

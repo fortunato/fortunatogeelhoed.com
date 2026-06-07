@@ -11,6 +11,7 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			'@fg/shared': resolve(__dirname, '../../packages/shared/src'),
+			'@fg/content-data': resolve(__dirname, '../../packages/content'),
 			'@fg/content': resolve(__dirname, '../../packages/content/src'),
 			'@styles': resolve(__dirname, '../../styles'),
 		},

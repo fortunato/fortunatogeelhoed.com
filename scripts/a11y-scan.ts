@@ -1,7 +1,7 @@
 import { setTimeout as sleep } from 'node:timers/promises';
+import { routes } from '@fg/shared/types/routes';
 import { getViolations, injectAxe } from 'axe-playwright';
 import { chromium } from 'playwright';
-import { routes } from '../packages/shared/src/types/routes';
 
 // Live-site accessibility gate. Boots the production server over the built output and, for
 // each framework variant, drives the real cookie-routing path to every route and runs axe

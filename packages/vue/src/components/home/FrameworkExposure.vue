@@ -22,11 +22,11 @@
 </template>
 
 <script setup lang="ts">
+import backend from '@fg/content-data/backend-frameworks.json';
+import frontend from '@fg/content-data/frontend-frameworks.json';
 import type { FrameworkExposureSpan } from '@fg/shared';
 import { axisTicks, ribbonRows, spansBounds } from '@fg/shared';
 import styles from '@styles/components/framework-ribbon.module.css';
-import backend from '../../../../content/backend-frameworks.json';
-import frontend from '../../../../content/frontend-frameworks.json';
 import FrameworkRibbon from '../timeline/FrameworkRibbon.vue';
 
 const frontendFrameworks = frontend as FrameworkExposureSpan[];

@@ -1,8 +1,8 @@
+import timelineData from '@fg/content-data/timeline.json';
 import type { TimelineData } from '@fg/shared';
 import { TECH_SPRITE, destroyTimelineMotion, initTimelineMotion } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 import { Fragment, useEffect, useRef } from 'react';
-import timelineData from '../../../content/timeline.json';
 import { TimelineEntry } from '../components/timeline/TimelineEntry';
 
 const data = timelineData as TimelineData;

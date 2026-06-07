@@ -1,8 +1,8 @@
+import contentData from '@fg/content-data/data.json';
 import { type ContentItem, initSwitchTransition } from '@fg/shared';
 import { VueQueryPlugin } from '@tanstack/vue-query';
 import { ViteSSG } from 'vite-ssg';
 import { nextTick } from 'vue';
-import contentData from '../../content/data.json';
 import App from './App.vue';
 import { setContent } from './composables/useContent';
 import { routes } from './router';

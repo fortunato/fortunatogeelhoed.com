@@ -13,6 +13,7 @@ import { defineConfig } from 'vitest/config';
 const root = import.meta.dirname;
 const alias = {
 	'@fg/shared': resolve(root, 'packages/shared/src'),
+	'@fg/content-data': resolve(root, 'packages/content'),
 	'@fg/content': resolve(root, 'packages/content/src'),
 	'@styles': resolve(root, 'styles'),
 };

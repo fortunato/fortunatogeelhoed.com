@@ -30,11 +30,11 @@
 </template>
 
 <script setup lang="ts">
+import timelineData from '@fg/content-data/timeline.json';
 import type { TimelineEntry as TEntry, TimelineData } from '@fg/shared';
 import { TECH_SPRITE, destroyTimelineMotion, initTimelineMotion } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
-import timelineData from '../../../content/timeline.json';
 import TimelineEntry from '../components/timeline/TimelineEntry.vue';
 
 const data = timelineData as TimelineData;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import contentData from '@fg/content-data/data.json';
 import type { ContentItem } from '@fg/shared';
-import contentData from '../../content/data.json';
 
 @Injectable({ providedIn: 'root' })
 export class ContentService {

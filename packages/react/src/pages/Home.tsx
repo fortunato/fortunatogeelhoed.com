@@ -1,5 +1,5 @@
+import homeData from '@fg/content-data/home.json';
 import type { HomeContent } from '@fg/shared';
-import homeData from '../../../content/home.json';
 import { CallToAction } from '../components/home/CallToAction';
 import { FrameworkExposure } from '../components/home/FrameworkExposure';
 import { Hero } from '../components/home/Hero';

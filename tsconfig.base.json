@@ -19,7 +19,8 @@
 			"@fg/shared": ["./packages/shared/src/index.ts"],
 			"@fg/shared/*": ["./packages/shared/src/*"],
 			"@fg/content": ["./packages/content/src/index.ts"],
-			"@fg/content/*": ["./packages/content/src/*"]
+			"@fg/content/*": ["./packages/content/src/*"],
+			"@fg/content-data/*": ["./packages/content/*"]
 		},
 		"baseUrl": "."
 	},

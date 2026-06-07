@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
+import backend from '@fg/content-data/backend-frameworks.json';
+import frontend from '@fg/content-data/frontend-frameworks.json';
 import type { FrameworkExposureSpan } from '@fg/shared';
 import { axisTicks, ribbonRows, spansBounds } from '@fg/shared';
-import backend from '../../../../content/backend-frameworks.json';
-import frontend from '../../../../content/frontend-frameworks.json';
 import { FrameworkRibbonComponent } from '../timeline/framework-ribbon.component';
 
 const frontendFrameworks = frontend as FrameworkExposureSpan[];

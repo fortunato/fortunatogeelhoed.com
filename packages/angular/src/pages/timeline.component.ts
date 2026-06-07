@@ -7,9 +7,9 @@ import {
 	viewChild,
 } from '@angular/core';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
+import timelineData from '@fg/content-data/timeline.json';
 import type { TimelineData, TimelineEntry } from '@fg/shared';
 import { TECH_SPRITE, destroyTimelineMotion, initTimelineMotion } from '@fg/shared';
-import timelineData from '../../../content/timeline.json';
 import { TimelineEntryComponent } from '../components/timeline/timeline-entry.component';
 
 const data = timelineData as TimelineData;

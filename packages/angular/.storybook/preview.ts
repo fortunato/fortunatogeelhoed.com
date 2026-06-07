@@ -1,6 +1,6 @@
+import { registerElements } from '@fg/shared/elements';
 import type { Preview } from '@storybook/angular';
 import { applyFramework, applyTheme, themeGlobalTypes } from '../../../.storybook/theme-decorator';
-import { registerElements } from '../../shared/src/elements';
 
 // Angular's builder cannot consume the Vite-shared preview module (CSS/JS imports differ),
 // so this instance reproduces the equivalent wiring: global styles come from angular.json,

@@ -1,9 +1,9 @@
+import contentData from '@fg/content-data/data.json';
 import type { ContentItem } from '@fg/shared';
 import { initSwitchTransition } from '@fg/shared';
 import { registerElements } from '@fg/shared/elements';
 import { startRum } from '@fg/shared/rum';
 import { createRoot, hydrateRoot } from 'react-dom/client';
-import contentData from '../../content/data.json';
 import { App } from './App';
 
 // The page content map (same source the prerender feeds to the server). Without this the
