@@ -16,6 +16,9 @@ const FIELDS = ['name', 'email', 'message'] as const;
 // component (controlled via its `value` property and bubbling native `input` event) to a field.
 export function ContactForm({ disabled = false }: ContactFormProps) {
 	const [sent, setSent] = useState(false);
+	// Honeypot: a hidden field no human fills. Sent with the payload; the server silently drops any
+	// submission that arrives with it set. Kept out of the shared schema so it stays a private trap.
+	const [company, setCompany] = useState('');
 
 	const {
 		control,
@@ -35,7 +38,7 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 		const res = await fetch('/api/contact', {
 			method: 'POST',
 			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify(data),
+			body: JSON.stringify({ ...data, company }),
 		});
 		if (res.ok) {
 			setSent(true);
@@ -115,6 +118,16 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 					</div>
 				)}
 			/>
+			<div className="contact-hp" aria-hidden="true">
+				<input
+					type="text"
+					name="company"
+					tabIndex={-1}
+					autoComplete="off"
+					value={company}
+					onChange={(e) => setCompany(e.target.value)}
+				/>
+			</div>
 			<button type="submit" className="btn" disabled={disabled}>
 				Send
 			</button>

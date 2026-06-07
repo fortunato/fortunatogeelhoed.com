@@ -164,6 +164,16 @@
 		gap: var(--jb-space-xs);
 	}
 
+	/* Honeypot: present in the DOM for bots to fill, taken off-screen and out of the a11y tree
+	   (its wrapper is aria-hidden). Off-screen rather than display:none, which some bots skip. */
+	.contact-hp {
+		position: absolute;
+		left: -9999px;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+	}
+
 	.field-error {
 		color: var(--jb-color-danger);
 		font-size: 0.85rem;

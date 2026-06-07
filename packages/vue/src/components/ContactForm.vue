@@ -63,6 +63,16 @@
 				</div>
 			</template>
 		</form.Field>
+		<div class="contact-hp" aria-hidden="true">
+			<input
+				type="text"
+				name="company"
+				tabindex="-1"
+				autocomplete="off"
+				:value="company"
+				@input="company = ($event.target as HTMLInputElement).value"
+			/>
+		</div>
 		<button type="submit" class="btn" :disabled="disabled">Send</button>
 	</form>
 </template>
@@ -80,6 +90,9 @@ import { ref } from 'vue';
 withDefaults(defineProps<{ disabled?: boolean }>(), { disabled: false });
 
 const sent = ref(false);
+// Honeypot: a hidden field no human fills. Sent with the payload; the server silently drops any
+// submission that arrives with it set. Kept out of the shared schema so it stays a private trap.
+const company = ref('');
 
 const form = useForm({
 	defaultValues: { name: '', email: '', message: '' } as ContactFormData,
@@ -93,7 +106,7 @@ const form = useForm({
 			const res = await fetch('/api/contact', {
 				method: 'POST',
 				headers: { 'content-type': 'application/json' },
-				body: JSON.stringify(value),
+				body: JSON.stringify({ ...value, company: company.value }),
 			});
 			if (res.ok) return undefined;
 			const body = (await res.json().catch(() => null)) as {

@@ -2,6 +2,7 @@ import { contactSchema } from '@fg/shared/validation/contact';
 import type { Context } from 'hono';
 import { describeRoute, resolver } from 'hono-openapi';
 import { z } from 'zod';
+import { logger } from '../logger';
 import { toOpenApiSchema } from '../openapi';
 
 // Contact form submission. Validates with the same Zod schema the browser forms use, so the
@@ -46,6 +47,17 @@ const spec = describeRoute({
 
 async function handler(c: Context): Promise<Response> {
 	const payload = await c.req.json().catch(() => null);
+
+	// Honeypot: `company` is a hidden field no human ever sees or fills. If it arrives non-empty a
+	// bot completed it, so acknowledge success (the bot moves on, none the wiser) and drop the
+	// submission. The field is intentionally absent from contactSchema — which strips unknown keys —
+	// so it never surfaces in the public contract.
+	const honeypot = (payload as Record<string, unknown> | null)?.company;
+	if (typeof honeypot === 'string' ? honeypot.trim() !== '' : honeypot != null) {
+		logger.debug('contact honeypot tripped');
+		return c.json({ ok: true });
+	}
+
 	const result = contactSchema.safeParse(payload);
 	if (!result.success) {
 		return c.json({ errors: z.flattenError(result.error).fieldErrors }, 422);

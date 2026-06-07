@@ -33,4 +33,22 @@ describe('contactSchema', () => {
 		const result = contactSchema.safeParse({ ...valid, name: '  Ada  ' });
 		expect(result.success && result.data.name).toBe('Ada');
 	});
+
+	it('rejects an over-long name', () => {
+		const result = contactSchema.safeParse({ ...valid, name: 'a'.repeat(101) });
+		expect(result.success).toBe(false);
+		expect(result.error?.issues[0]?.message).toBe('Name is too long');
+	});
+
+	it('rejects an over-long email', () => {
+		const result = contactSchema.safeParse({ ...valid, email: `${'a'.repeat(250)}@b.com` });
+		expect(result.success).toBe(false);
+		expect(result.error?.issues[0]?.message).toBe('Email is too long');
+	});
+
+	it('rejects an over-long message', () => {
+		const result = contactSchema.safeParse({ ...valid, message: 'm'.repeat(5001) });
+		expect(result.success).toBe(false);
+		expect(result.error?.issues[0]?.message).toBe('Message is too long');
+	});
 });

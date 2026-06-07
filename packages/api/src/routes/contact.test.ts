@@ -38,4 +38,33 @@ describe('contact route', () => {
 		});
 		expect(res.status).toBe(422);
 	});
+
+	it('silently accepts and drops a submission that fills the honeypot', async () => {
+		const res = await post({
+			name: 'Ada',
+			email: 'ada@example.com',
+			message: 'hello',
+			company: 'Acme Spam Co',
+		});
+		expect(res.status).toBe(200);
+		expect(await res.json()).toEqual({ ok: true });
+	});
+
+	it('short-circuits before validation when the honeypot is filled', async () => {
+		// Invalid fields would normally be a 422; the honeypot must win first, returning a silent 200
+		// so the bot never learns the trap exists.
+		const res = await post({ name: '', email: 'nope', message: '', company: 'bot' });
+		expect(res.status).toBe(200);
+		expect(await res.json()).toEqual({ ok: true });
+	});
+
+	it('accepts a normal submission whose honeypot is empty', async () => {
+		const res = await post({
+			name: 'Ada',
+			email: 'ada@example.com',
+			message: 'hello',
+			company: '',
+		});
+		expect(res.status).toBe(200);
+	});
 });

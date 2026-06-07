@@ -50,7 +50,17 @@ import { JbControlValueAccessor } from '../directives/jb-input.value-accessor';
 						<p class="field-error">{{ msg }}</p>
 					}
 				</div>
-				<button type="submit" class="btn" [disabled]="disabled()">Send</button>
+				<div class="contact-hp" aria-hidden="true">
+						<input
+							type="text"
+							name="company"
+							tabindex="-1"
+							autocomplete="off"
+							[value]="company()"
+							(input)="company.set($any($event.target).value)"
+						/>
+					</div>
+					<button type="submit" class="btn" [disabled]="disabled()">Send</button>
 			</form>
 		}
 	`,
@@ -60,6 +70,10 @@ export class ContactFormComponent {
 	readonly disabled = input(false);
 
 	protected readonly sent = signal(false);
+
+	// Honeypot: a hidden field no human fills. Sent with the payload; the server silently drops any
+	// submission that arrives with it set. Kept out of the shared schema so it stays a private trap.
+	protected readonly company = signal('');
 
 	protected readonly model = signal<ContactFormData>({ name: '', email: '', message: '' });
 	protected readonly form = form(this.model, (path) => {
@@ -90,7 +104,7 @@ export class ContactFormComponent {
 				const res = await fetch('/api/contact', {
 					method: 'POST',
 					headers: { 'content-type': 'application/json' },
-					body: JSON.stringify(this.model()),
+					body: JSON.stringify({ ...this.model(), company: this.company() }),
 				});
 				if (res.ok) {
 					this.sent.set(true);
