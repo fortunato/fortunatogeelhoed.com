@@ -6,7 +6,7 @@
 			"command": "vite --config packages/angular/vite.config.ts --port 5175"
 		},
 		"build": {
-			"command": "vite build --config packages/angular/vite.config.ts && vite build --config packages/angular/vite.config.ssr.ts && bun run packages/angular/prerender.ts"
+			"command": "node scripts/check-node.mjs && vite build --config packages/angular/vite.config.ts && vite build --config packages/angular/vite.config.ssr.ts && bun run packages/angular/prerender.ts"
 		},
 		"test": {
 			"command": "vitest run --project browser-angular"
