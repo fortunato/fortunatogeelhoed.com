@@ -1,7 +1,7 @@
 import backend from '@fg/content-data/backend-frameworks.json';
 import frontend from '@fg/content-data/frontend-frameworks.json';
-import type { FrameworkExposureSpan } from '@fg/shared';
-import { axisTicks, ribbonRows, spansBounds } from '@fg/shared';
+import type { FrameworkExposureSpan, HomeContent } from '@fg/shared';
+import { INTENSITY_LEGEND, axisTicks, ribbonRows, spansBounds } from '@fg/shared';
 import styles from '@styles/components/framework-ribbon.module.css';
 import { FrameworkRibbon } from '../timeline/FrameworkRibbon';
 
@@ -14,24 +14,13 @@ const frontendRows = ribbonRows(frontendFrameworks, bounds);
 const backendRows = ribbonRows(backendFrameworks, bounds);
 const ticks = axisTicks(bounds);
 
-const INTENSITY_LEGEND: { intensity: string; label: string }[] = [
-	{ intensity: 'professional', label: 'Professional / daily' },
-	{ intensity: 'occasional', label: 'Occasional' },
-	{ intensity: 'brief', label: 'Brief' },
-];
-
-export function FrameworkExposure() {
+export function FrameworkExposure({ copy }: { copy: HomeContent['sections']['frameworks'] }) {
 	return (
 		<section className={styles.exposure}>
 			<div className={`container ${styles['exposure-body']}`}>
-				<p className="section-label">Frameworks</p>
-				<h2 className={`section-title ${styles.head}`}>
-					Frameworks come and go. The craft compounds.
-				</h2>
-				<p className={styles.intro}>
-					Twenty-five years on the web means living through every frontend era and the
-					backends beneath it, staying fluent while the stack reinvents itself.
-				</p>
+				<p className="section-label">{copy.label}</p>
+				<h2 className={`section-title ${styles.head}`}>{copy.title}</h2>
+				<p className={styles.intro}>{copy.intro}</p>
 				<FrameworkRibbon title="Frontend Frameworks" rows={frontendRows} ticks={ticks} />
 				<FrameworkRibbon title="Backend &amp; CMS" rows={backendRows} ticks={ticks} />
 				<div className={styles['ribbon-legend']}>

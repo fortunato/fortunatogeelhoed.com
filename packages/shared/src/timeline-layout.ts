@@ -1,4 +1,9 @@
-import type { ExposureIntensity, FrameworkExposureSpan, TimelineYear } from './types/timeline';
+import type {
+	EmploymentType,
+	ExposureIntensity,
+	FrameworkExposureSpan,
+	TimelineYear,
+} from './types/timeline';
 
 // Pure layout maths for the framework ribbons, shared by all three variants so the ribbon
 // rows and axis are positioned identically everywhere (no per-framework drift). No DOM.
@@ -92,3 +97,17 @@ export const LANE_LABELS: Record<string, string> = {
 	cicd: 'CI/CD & Infra',
 	ai: 'AI / LLM',
 };
+
+/** Badge label for how an engagement was held, shown on each timeline entry. */
+export const EMPLOYMENT_TYPE_LABELS: Record<EmploymentType, string> = {
+	employee: 'Employee',
+	independent: 'Independent',
+	'side-project': 'Side project',
+};
+
+/** Framework-ribbon legend, in display order. One source so the three variants match. */
+export const INTENSITY_LEGEND: { intensity: ExposureIntensity; label: string }[] = [
+	{ intensity: 'professional', label: 'Professional / daily' },
+	{ intensity: 'occasional', label: 'Occasional' },
+	{ intensity: 'brief', label: 'Brief' },
+];

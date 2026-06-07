@@ -46,3 +46,10 @@ export interface TimelineData {
 }
 
 export const LANES: Lane[] = ['frontend', 'backend', 'cicd', 'ai'];
+
+/** Header copy for the career timeline page (kicker, heading, intro paragraph). */
+export interface TimelinePageCopy {
+	label: string;
+	title: string;
+	intro: string;
+}

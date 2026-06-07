@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import type { ProofPoint } from '@fg/shared';
+import type { HomeContent, ProofPoint } from '@fg/shared';
 
 @Component({
 	selector: 'app-proof-strip',
@@ -8,7 +8,7 @@ import type { ProofPoint } from '@fg/shared';
 	template: `
 		<section class="proof">
 			<div class="container proof-body">
-				<p class="section-label">Proof</p>
+				<p class="section-label">{{ copy().label }}</p>
 				<div class="proof-grid">
 					@for (point of proof(); track point.label) {
 						<div data-reveal>
@@ -23,4 +23,5 @@ import type { ProofPoint } from '@fg/shared';
 })
 export class ProofStripComponent {
 	readonly proof = input.required<ProofPoint[]>();
+	readonly copy = input.required<HomeContent['sections']['proof']>();
 }

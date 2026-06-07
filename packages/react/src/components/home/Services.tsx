@@ -1,9 +1,15 @@
-import type { ServiceOffering } from '@fg/shared';
+import type { HomeContent, ServiceOffering } from '@fg/shared';
 import { initCardSpotlight } from '@fg/shared';
 import styles from '@styles/components/services.module.css';
 import { useEffect, useRef } from 'react';
 
-export function Services({ services }: { services: ServiceOffering[] }) {
+export function Services({
+	services,
+	copy,
+}: {
+	services: ServiceOffering[];
+	copy: HomeContent['sections']['services'];
+}) {
 	const gridRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
@@ -13,8 +19,8 @@ export function Services({ services }: { services: ServiceOffering[] }) {
 	return (
 		<section>
 			<div className={`container ${styles['services-body']}`}>
-				<p className="section-label">What I do</p>
-				<h2 className="section-title">Services</h2>
+				<p className="section-label">{copy.label}</p>
+				<h2 className="section-title">{copy.title}</h2>
 				<div className={styles['services-grid']} ref={gridRef}>
 					{services.map((service, i) => (
 						<article

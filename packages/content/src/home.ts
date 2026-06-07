@@ -10,6 +10,16 @@ const home: HomeContent = {
 		statement:
 			"I build, fix, and lead across React, Vue, and Angular, quick to pick up whatever's next when it makes sense.",
 	},
+	sections: {
+		services: { label: 'What I do', title: 'Services' },
+		proof: { label: 'Proof' },
+		frameworks: {
+			label: 'Frameworks',
+			title: 'Frameworks come and go. The craft compounds.',
+			intro: 'Twenty-five years on the web means living through every frontend era and the backends beneath it, staying fluent while the stack reinvents itself.',
+		},
+		writing: { label: 'Latest writing', title: 'From the blog', readMore: 'Read more' },
+	},
 	services: [
 		{
 			title: 'Full-Stack Engineering',
@@ -58,6 +68,7 @@ const home: HomeContent = {
 	cta: {
 		heading: "Let's build something together.",
 		href: '/contact',
+		label: 'Get in touch',
 	},
 };
 

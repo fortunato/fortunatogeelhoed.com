@@ -1,9 +1,9 @@
 <template>
 	<Hero :hero="home.hero" />
-	<Services :services="home.services" />
-	<FrameworkExposure />
-	<ProofStrip :proof="home.proof" />
-	<LatestWriting :writing="home.writing" />
+	<Services :services="home.services" :copy="home.sections.services" />
+	<FrameworkExposure :copy="home.sections.frameworks" />
+	<ProofStrip :proof="home.proof" :copy="home.sections.proof" />
+	<LatestWriting :writing="home.writing" :copy="home.sections.writing" />
 	<CallToAction :cta="home.cta" />
 </template>
 

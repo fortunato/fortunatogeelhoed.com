@@ -1,5 +1,5 @@
 <template>
-	<output v-if="sent" class="contact-success">Thanks — I'll be in touch shortly.</output>
+	<output v-if="sent" class="contact-success">Thanks, I'll be in touch shortly.</output>
 	<form v-else novalidate class="contact-form" @submit.prevent="form.handleSubmit()">
 		<form.Field
 			name="name"

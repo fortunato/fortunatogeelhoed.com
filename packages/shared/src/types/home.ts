@@ -19,6 +19,16 @@ export interface WritingTeaserItem {
 	href: string;
 }
 
+/** Static copy for each homepage section header (the small kicker + heading).
+ *  Kept with the content rather than inline in components so all three framework
+ *  variants render the same words from one source. */
+export interface HomeSectionsCopy {
+	services: { label: string; title: string };
+	proof: { label: string };
+	frameworks: { label: string; title: string; intro: string };
+	writing: { label: string; title: string; readMore: string };
+}
+
 /** The full homepage content consumed by the home page. */
 export interface HomeContent {
 	hero: {
@@ -26,11 +36,14 @@ export interface HomeContent {
 		tagline: string;
 		statement: string;
 	};
+	sections: HomeSectionsCopy;
 	services: ServiceOffering[];
 	proof: ProofPoint[];
 	writing: WritingTeaserItem[];
 	cta: {
 		heading: string;
 		href: string;
+		/** Button text. */
+		label: string;
 	};
 }

@@ -3,7 +3,7 @@
 		<div class="container">
 			<div :class="styles['cta-panel']">
 				<h2 :class="styles['cta-heading']" data-reveal>{{ cta.heading }}</h2>
-				<RouterLink :to="cta.href" :class="['btn', styles['cta-btn']]">Get in touch</RouterLink>
+				<RouterLink :to="cta.href" :class="['btn', styles['cta-btn']]">{{ cta.label }}</RouterLink>
 			</div>
 		</div>
 	</section>

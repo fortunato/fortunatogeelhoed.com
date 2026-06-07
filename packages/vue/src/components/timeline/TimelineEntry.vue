@@ -34,8 +34,8 @@
 </template>
 
 <script setup lang="ts">
-import type { EmploymentType, Lane, TimelineEntry } from '@fg/shared';
-import { LANE_LABELS, techVisual } from '@fg/shared';
+import type { Lane, TimelineEntry } from '@fg/shared';
+import { EMPLOYMENT_TYPE_LABELS, LANE_LABELS, techVisual } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 import { computed } from 'vue';
 
@@ -54,9 +54,5 @@ const lanes: { key: Lane; cls: string }[] = [
 	{ key: 'cicd', cls: 'lane-ci' },
 	{ key: 'ai', cls: 'lane-ai' },
 ];
-const typeLabel: Record<EmploymentType, string> = {
-	employee: 'Employee',
-	independent: 'Independent',
-	'side-project': 'Side project',
-};
+const typeLabel = EMPLOYMENT_TYPE_LABELS;
 </script>

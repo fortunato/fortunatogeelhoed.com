@@ -23,7 +23,7 @@ import { JbControlValueAccessor } from '../directives/jb-input.value-accessor';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	template: `
 		@if (sent()) {
-			<output class="contact-success">Thanks — I'll be in touch shortly.</output>
+			<output class="contact-success">Thanks, I'll be in touch shortly.</output>
 		} @else {
 			<form class="contact-form" novalidate (submit)="onSubmit($event)">
 				<div class="contact-field">

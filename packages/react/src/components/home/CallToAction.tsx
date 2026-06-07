@@ -11,7 +11,7 @@ export function CallToAction({ cta }: { cta: HomeContent['cta'] }) {
 						{cta.heading}
 					</h2>
 					<Link to={cta.href} className={`btn ${styles['cta-btn']}`}>
-						Get in touch
+						{cta.label}
 					</Link>
 				</div>
 			</div>

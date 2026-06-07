@@ -23,10 +23,10 @@ const home = homeData as HomeContent;
 	],
 	template: `
 		<app-hero [hero]="home.hero" />
-		<app-services [services]="home.services" />
-		<app-framework-exposure />
-		<app-proof-strip [proof]="home.proof" />
-		<app-latest-writing [writing]="home.writing" />
+		<app-services [services]="home.services" [copy]="home.sections.services" />
+		<app-framework-exposure [copy]="home.sections.frameworks" />
+		<app-proof-strip [proof]="home.proof" [copy]="home.sections.proof" />
+		<app-latest-writing [writing]="home.writing" [copy]="home.sections.writing" />
 		<app-call-to-action [cta]="home.cta" />
 	`,
 })

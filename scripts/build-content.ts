@@ -6,6 +6,7 @@ import {
 	getHomeContent,
 	getPage,
 	getTimeline,
+	getTimelinePage,
 } from '@fg/content';
 import { routes } from '@fg/shared';
 import type { ContentItem } from '@fg/shared';
@@ -29,6 +30,10 @@ await writeFile(
 await writeFile(
 	resolve(contentDir, 'timeline.json'),
 	`${JSON.stringify(getTimeline(), null, '\t')}\n`,
+);
+await writeFile(
+	resolve(contentDir, 'timeline-page.json'),
+	`${JSON.stringify(getTimelinePage(), null, '\t')}\n`,
 );
 await writeFile(
 	resolve(contentDir, 'frontend-frameworks.json'),

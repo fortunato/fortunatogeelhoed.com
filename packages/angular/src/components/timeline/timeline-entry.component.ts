@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
-import type { EmploymentType, Lane, TimelineEntry } from '@fg/shared';
-import { LANE_LABELS, techVisual } from '@fg/shared';
+import type { Lane, TimelineEntry } from '@fg/shared';
+import { EMPLOYMENT_TYPE_LABELS, LANE_LABELS, techVisual } from '@fg/shared';
 
 @Component({
 	selector: 'app-timeline-entry',
@@ -52,11 +52,7 @@ export class TimelineEntryComponent {
 		{ key: 'cicd', cls: 'lane-ci' },
 		{ key: 'ai', cls: 'lane-ai' },
 	];
-	protected readonly typeLabel: Record<EmploymentType, string> = {
-		employee: 'Employee',
-		independent: 'Independent',
-		'side-project': 'Side project',
-	};
+	protected readonly typeLabel = EMPLOYMENT_TYPE_LABELS;
 
 	protected highlights(): string[] {
 		const h = this.entry().highlight;

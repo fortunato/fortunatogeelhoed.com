@@ -3,20 +3,17 @@
 		<div hidden v-html="sprite" />
 
 		<div class="container">
-			<p class="section-label">Career</p>
-			<h1 class="section-title">Twenty-five years across the stack</h1>
-			<p :class="styles.intro">
-				From classic ASP and Flash to React, NestJS and agentic workflows: a working life across the frontend, backend, infrastructure and, lately, AI. In the 2010s I was the frontend specialist teams reached for when the UI had to be right; that's where today's React, Angular and Vue depth comes from, and the 2020s broadened it back to full-stack and lead. Across every title, engineer to manager, at least half my time has stayed in the code.
-			</p>
+			<p class="section-label">{{ page.label }}</p>
+			<h1 class="section-title">{{ page.title }}</h1>
+			<p :class="styles.intro">{{ page.intro }}</p>
 		</div>
 
 		<div :class="styles.timeline">
 			<div :class="styles['lane-headers']" aria-hidden="true">
 				<div :class="styles['lane-header']" />
-				<div :class="styles['lane-header']">Frontend</div>
-				<div :class="styles['lane-header']">Backend / DB</div>
-				<div :class="styles['lane-header']">CI/CD &amp; Infra</div>
-				<div :class="styles['lane-header']">AI / LLM</div>
+				<div v-for="lane in lanes" :key="lane" :class="styles['lane-header']">
+					{{ laneLabels[lane] }}
+				</div>
 			</div>
 
 			<template v-for="row in rows" :key="row.key">
@@ -30,15 +27,25 @@
 </template>
 
 <script setup lang="ts">
+import pageData from '@fg/content-data/timeline-page.json';
 import timelineData from '@fg/content-data/timeline.json';
-import type { TimelineEntry as TEntry, TimelineData } from '@fg/shared';
-import { TECH_SPRITE, destroyTimelineMotion, initTimelineMotion } from '@fg/shared';
+import type { TimelineEntry as TEntry, TimelineData, TimelinePageCopy } from '@fg/shared';
+import {
+	LANES,
+	LANE_LABELS,
+	TECH_SPRITE,
+	destroyTimelineMotion,
+	initTimelineMotion,
+} from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import TimelineEntry from '../components/timeline/TimelineEntry.vue';
 
 const data = timelineData as TimelineData;
+const page = pageData as TimelinePageCopy;
 const sprite = TECH_SPRITE;
+const lanes = LANES;
+const laneLabels = LANE_LABELS;
 const rootRef = ref<HTMLElement | null>(null);
 
 type Row =

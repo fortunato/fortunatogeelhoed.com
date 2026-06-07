@@ -1,7 +1,7 @@
 <template>
 	<section :class="styles.proof">
 		<div class="container" :class="styles['proof-body']">
-			<p class="section-label">Proof</p>
+			<p class="section-label">{{ copy.label }}</p>
 			<div :class="styles['proof-grid']">
 				<div v-for="point in proof" :key="point.label" data-reveal>
 					<p :class="styles['proof-metric']">{{ point.metric }}</p>
@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import type { ProofPoint } from '@fg/shared';
+import type { HomeContent, ProofPoint } from '@fg/shared';
 import styles from '@styles/components/proof.module.css';
 
-defineProps<{ proof: ProofPoint[] }>();
+defineProps<{ proof: ProofPoint[]; copy: HomeContent['sections']['proof'] }>();
 </script>

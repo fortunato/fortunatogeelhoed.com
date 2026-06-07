@@ -54,7 +54,7 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 	});
 
 	if (sent) {
-		return <output className="contact-success">Thanks — I'll be in touch shortly.</output>;
+		return <output className="contact-success">Thanks, I'll be in touch shortly.</output>;
 	}
 
 	return (

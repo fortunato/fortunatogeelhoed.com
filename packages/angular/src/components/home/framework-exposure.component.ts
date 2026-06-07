@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import backend from '@fg/content-data/backend-frameworks.json';
 import frontend from '@fg/content-data/frontend-frameworks.json';
-import type { FrameworkExposureSpan } from '@fg/shared';
-import { axisTicks, ribbonRows, spansBounds } from '@fg/shared';
+import type { FrameworkExposureSpan, HomeContent } from '@fg/shared';
+import { INTENSITY_LEGEND, axisTicks, ribbonRows, spansBounds } from '@fg/shared';
 import { FrameworkRibbonComponent } from '../timeline/framework-ribbon.component';
 
 const frontendFrameworks = frontend as FrameworkExposureSpan[];
@@ -18,12 +18,9 @@ const bounds = spansBounds(frontendFrameworks, backendFrameworks);
 	template: `
 		<section class="exposure">
 			<div class="container exposure-body">
-				<p class="section-label">Frameworks</p>
-				<h2 class="section-title head">Frameworks come and go. The craft compounds.</h2>
-				<p class="intro">
-					Twenty-five years on the web means living through every frontend era and the
-					backends beneath it, staying fluent while the stack reinvents itself.
-				</p>
+				<p class="section-label">{{ copy().label }}</p>
+				<h2 class="section-title head">{{ copy().title }}</h2>
+				<p class="intro">{{ copy().intro }}</p>
 				<app-framework-ribbon title="Frontend Frameworks" [rows]="frontendRows" [ticks]="ticks" />
 				<app-framework-ribbon title="Backend &amp; CMS" [rows]="backendRows" [ticks]="ticks" />
 				<div class="ribbon-legend">
@@ -39,12 +36,9 @@ const bounds = spansBounds(frontendFrameworks, backendFrameworks);
 	`,
 })
 export class FrameworkExposureComponent {
+	readonly copy = input.required<HomeContent['sections']['frameworks']>();
 	protected readonly frontendRows = ribbonRows(frontendFrameworks, bounds);
 	protected readonly backendRows = ribbonRows(backendFrameworks, bounds);
 	protected readonly ticks = axisTicks(bounds);
-	protected readonly intensityLegend = [
-		{ intensity: 'professional', label: 'Professional / daily' },
-		{ intensity: 'occasional', label: 'Occasional' },
-		{ intensity: 'brief', label: 'Brief' },
-	];
+	protected readonly intensityLegend = INTENSITY_LEGEND;
 }

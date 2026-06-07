@@ -7,12 +7,20 @@ import {
 	viewChild,
 } from '@angular/core';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
+import pageData from '@fg/content-data/timeline-page.json';
 import timelineData from '@fg/content-data/timeline.json';
-import type { TimelineData, TimelineEntry } from '@fg/shared';
-import { TECH_SPRITE, destroyTimelineMotion, initTimelineMotion } from '@fg/shared';
+import type { TimelineData, TimelineEntry, TimelinePageCopy } from '@fg/shared';
+import {
+	LANES,
+	LANE_LABELS,
+	TECH_SPRITE,
+	destroyTimelineMotion,
+	initTimelineMotion,
+} from '@fg/shared';
 import { TimelineEntryComponent } from '../components/timeline/timeline-entry.component';
 
 const data = timelineData as TimelineData;
+const page = pageData as TimelinePageCopy;
 
 type Row =
 	| { kind: 'era'; era: string; key: string }
@@ -41,20 +49,19 @@ function buildRows(d: TimelineData): Row[] {
 			<div hidden [innerHTML]="sprite"></div>
 
 			<div class="container">
-				<p class="section-label">Career</p>
-				<h1 class="section-title">Twenty-five years across the stack</h1>
+				<p class="section-label">{{ page.label }}</p>
+				<h1 class="section-title">{{ page.title }}</h1>
 				<p class="intro">
-					From classic ASP and Flash to React, NestJS and agentic workflows: a working life across the frontend, backend, infrastructure and, lately, AI. In the 2010s I was the frontend specialist teams reached for when the UI had to be right; that's where today's React, Angular and Vue depth comes from, and the 2020s broadened it back to full-stack and lead. Across every title, engineer to manager, at least half my time has stayed in the code.
+					{{ page.intro }}
 				</p>
 			</div>
 
 			<div class="timeline">
 				<div class="lane-headers" aria-hidden="true">
 					<div class="lane-header"></div>
-					<div class="lane-header">Frontend</div>
-					<div class="lane-header">Backend / DB</div>
-					<div class="lane-header">CI/CD &amp; Infra</div>
-					<div class="lane-header">AI / LLM</div>
+					@for (lane of lanes; track lane) {
+						<div class="lane-header">{{ laneLabels[lane] }}</div>
+					}
 				</div>
 
 				@for (row of rows; track row.key) {
@@ -73,6 +80,9 @@ export class TimelineComponent implements OnDestroy {
 	private readonly root = viewChild.required<ElementRef<HTMLElement>>('root');
 	protected readonly sprite: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(TECH_SPRITE);
 	protected readonly rows = buildRows(data);
+	protected readonly page = page;
+	protected readonly lanes = LANES;
+	protected readonly laneLabels = LANE_LABELS;
 
 	constructor() {
 		afterNextRender(() => {

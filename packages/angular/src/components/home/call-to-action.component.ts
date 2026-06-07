@@ -12,7 +12,7 @@ import type { HomeContent } from '@fg/shared';
 			<div class="container">
 				<div class="cta-panel">
 					<h2 class="cta-heading" data-reveal>{{ cta().heading }}</h2>
-					<a [routerLink]="cta().href" class="btn cta-btn">Get in touch</a>
+					<a [routerLink]="cta().href" class="btn cta-btn">{{ cta().label }}</a>
 				</div>
 			</div>
 		</section>

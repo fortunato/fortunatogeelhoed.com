@@ -1,5 +1,5 @@
 import type { TimelineEntry as Entry, Lane } from '@fg/shared';
-import { LANE_LABELS, techVisual } from '@fg/shared';
+import { EMPLOYMENT_TYPE_LABELS, LANE_LABELS, techVisual } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 import type { CSSProperties } from 'react';
 
@@ -9,12 +9,6 @@ const LANES: { key: Lane; cls: string }[] = [
 	{ key: 'cicd', cls: 'lane-ci' },
 	{ key: 'ai', cls: 'lane-ai' },
 ];
-
-const TYPE_LABEL: Record<Entry['type'], string> = {
-	employee: 'Employee',
-	independent: 'Independent',
-	'side-project': 'Side project',
-};
 
 function highlights(entry: Entry): string[] {
 	if (!entry.highlight) return [];
@@ -48,7 +42,7 @@ export function TimelineEntry({ entry }: { entry: Entry }) {
 							<use href="#i-branch" />
 						</svg>
 					) : null}
-					{TYPE_LABEL[entry.type]}
+					{EMPLOYMENT_TYPE_LABELS[entry.type]}
 				</span>
 				{highlights(entry).map((h) => (
 					<div key={h} className={styles['spine-highlight']}>

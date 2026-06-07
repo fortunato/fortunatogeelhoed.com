@@ -9,10 +9,18 @@ export type {
 	TimelineEntry,
 	FrameworkExposureSpan,
 	TimelineData,
+	TimelinePageCopy,
 } from './types/timeline';
 export { LANES } from './types/timeline';
 export type { Bounds, RibbonSegment, RibbonRow, AxisTick } from './timeline-layout';
-export { spansBounds, ribbonRows, axisTicks, LANE_LABELS } from './timeline-layout';
+export {
+	spansBounds,
+	ribbonRows,
+	axisTicks,
+	LANE_LABELS,
+	EMPLOYMENT_TYPE_LABELS,
+	INTENSITY_LEGEND,
+} from './timeline-layout';
 export type { NavItem } from './nav';
 export { NAV_ITEMS } from './nav';
 export { toParagraphs } from './text';
@@ -34,7 +42,13 @@ export {
 export type { TechVisual } from './tech';
 export { TECH_REGISTRY, techVisual } from './tech';
 export { TECH_SPRITE } from './tech-sprite';
-export type { HomeContent, ServiceOffering, ProofPoint, WritingTeaserItem } from './types/home';
+export type {
+	HomeContent,
+	HomeSectionsCopy,
+	ServiceOffering,
+	ProofPoint,
+	WritingTeaserItem,
+} from './types/home';
 export type { Theme } from './theme';
 export { getCurrentTheme, setTheme, toggleTheme } from './theme';
 export { initSwitchTransition } from './disintegrate';

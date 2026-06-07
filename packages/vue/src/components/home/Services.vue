@@ -1,8 +1,8 @@
 <template>
 	<section>
 		<div class="container" :class="styles['services-body']">
-			<p class="section-label">What I do</p>
-			<h2 class="section-title">Services</h2>
+			<p class="section-label">{{ copy.label }}</p>
+			<h2 class="section-title">{{ copy.title }}</h2>
 			<div :class="styles['services-grid']" ref="gridRef">
 				<article
 					v-for="(service, i) in services"
@@ -21,12 +21,12 @@
 </template>
 
 <script setup lang="ts">
-import type { ServiceOffering } from '@fg/shared';
+import type { HomeContent, ServiceOffering } from '@fg/shared';
 import { initCardSpotlight } from '@fg/shared';
 import styles from '@styles/components/services.module.css';
 import { onMounted, onUnmounted, ref } from 'vue';
 
-defineProps<{ services: ServiceOffering[] }>();
+defineProps<{ services: ServiceOffering[]; copy: HomeContent['sections']['services'] }>();
 
 const gridRef = ref<HTMLElement | null>(null);
 let cleanup = () => {};

@@ -1,13 +1,19 @@
-import type { WritingTeaserItem } from '@fg/shared';
+import type { HomeContent, WritingTeaserItem } from '@fg/shared';
 import styles from '@styles/components/writing.module.css';
 import { Link } from 'react-router';
 
-export function LatestWriting({ writing }: { writing: WritingTeaserItem[] }) {
+export function LatestWriting({
+	writing,
+	copy,
+}: {
+	writing: WritingTeaserItem[];
+	copy: HomeContent['sections']['writing'];
+}) {
 	return (
 		<section>
 			<div className="container">
-				<p className="section-label">Latest writing</p>
-				<h2 className="section-title">From the blog</h2>
+				<p className="section-label">{copy.label}</p>
+				<h2 className="section-title">{copy.title}</h2>
 				<div className={styles['writing-grid']}>
 					{writing.map((post) => (
 						<Link
@@ -19,7 +25,7 @@ export function LatestWriting({ writing }: { writing: WritingTeaserItem[] }) {
 							<span className={styles['writing-tag']}>{post.tag}</span>
 							<h3 className={styles['writing-title']}>{post.title}</h3>
 							<p className={styles['writing-blurb']}>{post.blurb}</p>
-							<span className={styles['writing-more']}>Read more</span>
+							<span className={styles['writing-more']}>{copy.readMore}</span>
 						</Link>
 					))}
 				</div>
