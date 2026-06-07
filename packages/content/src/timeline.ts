@@ -27,6 +27,7 @@ const timeline: TimelineData = {
 			client: 'Portfolio Site',
 			role: 'Full-Stack Engineer',
 			type: 'independent',
+			domains: ['Developer Tooling'],
 			links: [
 				{ label: 'Read the write-up', href: '/blog' },
 				{
