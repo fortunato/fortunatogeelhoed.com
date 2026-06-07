@@ -105,6 +105,9 @@ export const EMPLOYMENT_TYPE_LABELS: Record<EmploymentType, string> = {
 	'side-project': 'Side project',
 };
 
+/** Badge shown alongside the type badge when a role was held at an agency/consultancy. */
+export const AGENCY_LABEL = 'Agency';
+
 /** Framework-ribbon legend, in display order. One source so the three variants match. */
 export const INTENSITY_LEGEND: { intensity: ExposureIntensity; label: string }[] = [
 	{ intensity: 'professional', label: 'Professional / daily' },

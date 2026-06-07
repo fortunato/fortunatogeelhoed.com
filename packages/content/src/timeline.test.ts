@@ -1,4 +1,5 @@
 import type { EmploymentType, Lane } from '@fg/shared';
+import { DOMAINS } from '@fg/shared';
 import { describe, expect, it } from 'vitest';
 import { getTimeline } from './timeline';
 
@@ -43,7 +44,27 @@ describe('career timeline', () => {
 	});
 
 	it('includes the py-market-structure project', () => {
-		expect(entries.some((e) => e.id === 'py-market-structure')).toBe(true);
+		expect(entries.some((e) => e.id === 'pymarket-structure')).toBe(true);
+	});
+
+	it('only tags entries with known domains', () => {
+		for (const entry of entries) {
+			for (const domain of entry.domains ?? []) {
+				expect(DOMAINS).toContain(domain);
+			}
+		}
+	});
+
+	it('marks the agency roles as agency engagements', () => {
+		const agencies = entries.filter((e) => e.agency);
+		expect(agencies.length).toBeGreaterThanOrEqual(2);
+		expect(entries.find((e) => e.id === 'deloitte-nl')?.agency).toBe(true);
+	});
+
+	it('links py-market-structure to a write-up and its source', () => {
+		const entry = entries.find((e) => e.id === 'pymarket-structure');
+		expect(entry?.links?.length).toBeGreaterThanOrEqual(2);
+		expect(entry?.links?.some((l) => /github\.com/.test(l.href))).toBe(true);
 	});
 
 	it('includes the Neurofeedback IJburg freelance project', () => {

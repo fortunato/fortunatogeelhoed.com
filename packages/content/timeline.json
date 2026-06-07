@@ -9,6 +9,18 @@
 			"client": "Portfolio Site",
 			"role": "Full-Stack Engineer",
 			"type": "independent",
+			"links": [
+				{
+					"label": "Read the write-up",
+					"href": "/blog"
+				},
+				{
+					"label": "GitHub",
+					"href": "https://github.com/fortunato/fortunatogeelhoed.com",
+					"icon": "github",
+					"title": "View this portfolio on GitHub"
+				}
+			],
 			"highlight": "3 frameworks, 1 site: you’re looking at it",
 			"tech": {
 				"frontend": [
@@ -43,6 +55,9 @@
 			"client": "AI Healthcare Startup",
 			"role": "Consulting Engineer",
 			"type": "independent",
+			"domains": [
+				"Healthcare"
+			],
 			"tech": {
 				"frontend": [
 					"React",
@@ -50,7 +65,8 @@
 				],
 				"backend": [
 					"Java",
-					"Spring Boot"
+					"Spring Boot",
+					"PostgreSQL"
 				],
 				"cicd": [
 					"Docker"
@@ -70,6 +86,9 @@
 			"client": "Market Breadth Dashboard",
 			"role": "Full-Stack Engineer",
 			"type": "independent",
+			"domains": [
+				"Fintech & Trading"
+			],
 			"highlight": "Real-time WebSocket market-data ingestion",
 			"tech": {
 				"frontend": [
@@ -96,14 +115,29 @@
 			}
 		},
 		{
-			"id": "py-market-structure",
+			"id": "pymarket-structure",
 			"era": "2025 to now",
 			"years": "2025–26",
 			"startYear": 2025,
 			"endYear": 2026,
-			"client": "py-market-structure",
+			"client": "pymarket-structure",
 			"role": "PyPI library",
 			"type": "side-project",
+			"domains": [
+				"Fintech & Trading"
+			],
+			"links": [
+				{
+					"label": "Read the write-up",
+					"href": "/blog"
+				},
+				{
+					"label": "GitHub",
+					"href": "https://github.com/fortunato/pymarket-structure",
+					"icon": "github",
+					"title": "View py-market-structure on GitHub"
+				}
+			],
 			"highlight": "Published to PyPI with almost zero prior Python experience, built from domain knowledge using Claude Code",
 			"tech": {
 				"frontend": [
@@ -134,6 +168,9 @@
 			"client": "Gemeente Amsterdam",
 			"role": "Lead Full-Stack Engineer, 5.5 years",
 			"type": "independent",
+			"domains": [
+				"Government"
+			],
 			"highlight": "Led frontend across multiple teams; monorepo + feature-sliced architecture",
 			"tech": {
 				"frontend": [
@@ -151,6 +188,7 @@
 					"Node.js",
 					"Express",
 					"NestJS",
+					"PHP",
 					"Symfony",
 					"RxJS",
 					"Azure",
@@ -184,6 +222,9 @@
 			"client": "Neurofeedback IJburg",
 			"role": "Full-Stack Developer",
 			"type": "independent",
+			"domains": [
+				"Healthcare"
+			],
 			"highlight": "Multilingual static site for a private practice: Nuxt SSG + i18n",
 			"tech": {
 				"frontend": [
@@ -203,6 +244,9 @@
 			"client": "Systematic Trading Bot",
 			"role": "Parallel to employment",
 			"type": "side-project",
+			"domains": [
+				"Fintech & Trading"
+			],
 			"highlight": [
 				"Autonomous execution + hundreds of trading pairs in parallel + multi-interval strategy execution + optimized memory footprint",
 				"Runs on a Hetzner k3s cluster, provisioned with Pulumi"
@@ -287,6 +331,10 @@
 			"client": "Tele2",
 			"role": "Lead Full-Stack Engineer",
 			"type": "employee",
+			"domains": [
+				"Telecom",
+				"E-commerce"
+			],
 			"highlight": [
 				"E-commerce SSR rebuild, 3× Lighthouse improvement",
 				"Beat both the previously-optimized Magento 2 site and the AMP build Google’s own consultants delivered"
@@ -323,6 +371,11 @@
 			"client": "Deloitte Digital NL",
 			"role": "Senior Frontend Engineer",
 			"type": "employee",
+			"agency": true,
+			"domains": [
+				"Marketing & Brand",
+				"Insurance"
+			],
 			"highlight": "Bridged Melbourne & Amsterdam frontend teams",
 			"tech": {
 				"frontend": [
@@ -346,6 +399,11 @@
 			"client": "Deloitte Digital AU",
 			"role": "Frontend Lead (Manager)",
 			"type": "employee",
+			"agency": true,
+			"domains": [
+				"Government",
+				"Insurance"
+			],
 			"highlight": [
 				"Built CI/CD pipelines adopted across the practice, and a form framework reused across projects",
 				"A hands-on manager, still coding at least half the time"
@@ -376,6 +434,9 @@
 			"client": "Dastoon",
 			"role": "Technical direction & QA",
 			"type": "independent",
+			"domains": [
+				"E-commerce"
+			],
 			"highlight": "Technical direction and QA over an outsourced Magento 2 fashion store",
 			"tech": {
 				"frontend": [
@@ -399,6 +460,13 @@
 			"client": "Deloitte Digital AU",
 			"role": "Frontend Engineer (Senior Consultant)",
 			"type": "employee",
+			"agency": true,
+			"domains": [
+				"Government",
+				"Telecom",
+				"Finance",
+				"Insurance"
+			],
 			"highlight": "Brought parallel Gulp builds to the frontend guild",
 			"tech": {
 				"frontend": [
@@ -431,6 +499,12 @@
 			"client": "Visual Jazz Isobar",
 			"role": "Senior Frontend Engineer",
 			"type": "independent",
+			"agency": true,
+			"domains": [
+				"Automotive",
+				"E-commerce",
+				"Travel"
+			],
 			"highlight": "First taste of build automation: Grunt for the front-end pipeline",
 			"tech": {
 				"frontend": [
@@ -458,6 +532,11 @@
 			"client": "Limelight Digital",
 			"role": "Senior Full-Stack Developer",
 			"type": "employee",
+			"agency": true,
+			"domains": [
+				"Travel",
+				"Marketing & Brand"
+			],
 			"highlight": "They didn’t want to lose me; kept on remotely through a Brisbane to Melbourne move",
 			"tech": {
 				"frontend": [
@@ -485,6 +564,13 @@
 			"client": "Cru Digital",
 			"role": "Senior Full-Stack Developer",
 			"type": "employee",
+			"agency": true,
+			"domains": [
+				"E-commerce",
+				"Retail",
+				"Hospitality",
+				"Marketing & Brand"
+			],
 			"highlight": [
 				"First single-page apps, hand-rolled in jQuery (a plugin per view), as responsive design took hold",
 				"Early cloud: building CentOS AMI images from scratch on EC2"
@@ -517,6 +603,9 @@
 			"client": "mmPlugins",
 			"role": "Joomla extensions",
 			"type": "side-project",
+			"domains": [
+				"Developer Tooling"
+			],
 			"highlight": "Free and commercial Joomla extensions, built full-stack in a three-person venture",
 			"tech": {
 				"frontend": [
@@ -546,7 +635,15 @@
 			"client": "iFactory",
 			"role": "Lead Full-Stack Engineer",
 			"type": "employee",
-			"highlight": "Lived through the Prototype.js → MooTools → jQuery era",
+			"agency": true,
+			"domains": [
+				"Dating",
+				"E-commerce"
+			],
+			"highlight": [
+				"Lived through the Prototype.js → MooTools → jQuery era",
+				"Managed the Linux dev server and wrote code generators for the team"
+			],
 			"tech": {
 				"frontend": [
 					"Prototype.js",
@@ -580,6 +677,9 @@
 			"client": "Custom CMS v2",
 			"role": "Seagull Framework",
 			"type": "side-project",
+			"domains": [
+				"Developer Tooling"
+			],
 			"highlight": "Built another CMS from scratch, this time on the Seagull PHP framework",
 			"tech": {
 				"frontend": [
@@ -606,6 +706,12 @@
 			"client": "HIDS",
 			"role": "Web Developer",
 			"type": "employee",
+			"agency": true,
+			"domains": [
+				"E-commerce",
+				"Real Estate",
+				"Travel"
+			],
 			"highlight": [
 				"XMLHttpRequest was the new hotness",
 				"Kept on remotely through a move from the Netherlands to New Zealand"
@@ -634,6 +740,9 @@
 			"client": "Custom CMS v1",
 			"role": "Built from scratch",
 			"type": "side-project",
+			"domains": [
+				"Developer Tooling"
+			],
 			"highlight": "Full CMS built from scratch in PHP",
 			"tech": {
 				"frontend": [
@@ -660,6 +769,10 @@
 			"client": "Freelance",
 			"role": "Web Developer",
 			"type": "independent",
+			"domains": [
+				"Travel",
+				"E-commerce"
+			],
 			"tech": {
 				"frontend": [
 					"JavaScript",
@@ -667,7 +780,8 @@
 					"CSS2"
 				],
 				"backend": [
-					"PHP"
+					"PHP",
+					"MySQL"
 				],
 				"cicd": [
 					"SFTP"
@@ -683,6 +797,7 @@
 			"client": "EDF",
 			"role": "Web Developer",
 			"type": "employee",
+			"agency": true,
 			"tech": {
 				"frontend": [
 					"JavaScript",
@@ -709,6 +824,7 @@
 			"client": "Web InZicht",
 			"role": "Web Developer",
 			"type": "employee",
+			"agency": true,
 			"highlight": "Where it all started.",
 			"tech": {
 				"frontend": [

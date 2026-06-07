@@ -27,6 +27,15 @@ const timeline: TimelineData = {
 			client: 'Portfolio Site',
 			role: 'Full-Stack Engineer',
 			type: 'independent',
+			links: [
+				{ label: 'Read the write-up', href: '/blog' },
+				{
+					label: 'GitHub',
+					href: 'https://github.com/fortunato/fortunatogeelhoed.com',
+					icon: 'github',
+					title: 'View this portfolio on GitHub',
+				},
+			],
 			highlight: '3 frameworks, 1 site: you’re looking at it',
 			tech: {
 				frontend: ['React', 'Angular', 'Vue', 'Vite', 'CSS Modules'],
@@ -44,9 +53,10 @@ const timeline: TimelineData = {
 			client: 'AI Healthcare Startup',
 			role: 'Consulting Engineer',
 			type: 'independent',
+			domains: ['Healthcare'],
 			tech: {
 				frontend: ['React', 'SCSS Modules'],
-				backend: ['Java', 'Spring Boot'],
+				backend: ['Java', 'Spring Boot', 'PostgreSQL'],
 				cicd: ['Docker'],
 				ai: ['Claude Code', 'Ollama'],
 			},
@@ -60,6 +70,7 @@ const timeline: TimelineData = {
 			client: 'Market Breadth Dashboard',
 			role: 'Full-Stack Engineer',
 			type: 'independent',
+			domains: ['Fintech & Trading'],
 			highlight: 'Real-time WebSocket market-data ingestion',
 			tech: {
 				frontend: ['React', 'Mantine UI', 'Vite', 'Recharts', 'CSS Modules'],
@@ -69,14 +80,24 @@ const timeline: TimelineData = {
 			},
 		},
 		{
-			id: 'py-market-structure',
+			id: 'pymarket-structure',
 			era: ERAS.now,
 			years: '2025–26',
 			startYear: 2025,
 			endYear: 2026,
-			client: 'py-market-structure',
+			client: 'pymarket-structure',
 			role: 'PyPI library',
 			type: 'side-project',
+			domains: ['Fintech & Trading'],
+			links: [
+				{ label: 'Read the write-up', href: '/blog' },
+				{
+					label: 'GitHub',
+					href: 'https://github.com/fortunato/pymarket-structure',
+					icon: 'github',
+					title: 'View py-market-structure on GitHub',
+				},
+			],
 			highlight:
 				'Published to PyPI with almost zero prior Python experience, built from domain knowledge using Claude Code',
 			tech: {
@@ -95,6 +116,7 @@ const timeline: TimelineData = {
 			client: 'Gemeente Amsterdam',
 			role: 'Lead Full-Stack Engineer, 5.5 years',
 			type: 'independent',
+			domains: ['Government'],
 			highlight: 'Led frontend across multiple teams; monorepo + feature-sliced architecture',
 			tech: {
 				frontend: [
@@ -112,6 +134,7 @@ const timeline: TimelineData = {
 					'Node.js',
 					'Express',
 					'NestJS',
+					'PHP',
 					'Symfony',
 					'RxJS',
 					'Azure',
@@ -141,6 +164,7 @@ const timeline: TimelineData = {
 			client: 'Neurofeedback IJburg',
 			role: 'Full-Stack Developer',
 			type: 'independent',
+			domains: ['Healthcare'],
 			highlight: 'Multilingual static site for a private practice: Nuxt SSG + i18n',
 			tech: {
 				frontend: ['Vue', 'Nuxt', 'SCSS', 'i18n'],
@@ -155,6 +179,7 @@ const timeline: TimelineData = {
 			client: 'Systematic Trading Bot',
 			role: 'Parallel to employment',
 			type: 'side-project',
+			domains: ['Fintech & Trading'],
 			highlight: [
 				'Autonomous execution + hundreds of trading pairs in parallel + multi-interval strategy execution + optimized memory footprint',
 				'Runs on a Hetzner k3s cluster, provisioned with Pulumi',
@@ -224,6 +249,7 @@ const timeline: TimelineData = {
 			client: 'Tele2',
 			role: 'Lead Full-Stack Engineer',
 			type: 'employee',
+			domains: ['Telecom', 'E-commerce'],
 			highlight: [
 				'E-commerce SSR rebuild, 3× Lighthouse improvement',
 				'Beat both the previously-optimized Magento 2 site and the AMP build Google’s own consultants delivered',
@@ -243,6 +269,8 @@ const timeline: TimelineData = {
 			client: 'Deloitte Digital NL',
 			role: 'Senior Frontend Engineer',
 			type: 'employee',
+			agency: true,
+			domains: ['Marketing & Brand', 'Insurance'],
 			highlight: 'Bridged Melbourne & Amsterdam frontend teams',
 			tech: {
 				frontend: ['React', 'Redux', 'ES2016', 'SCSS', 'Webpack'],
@@ -258,6 +286,8 @@ const timeline: TimelineData = {
 			client: 'Deloitte Digital AU',
 			role: 'Frontend Lead (Manager)',
 			type: 'employee',
+			agency: true,
+			domains: ['Government', 'Insurance'],
 			highlight: [
 				'Built CI/CD pipelines adopted across the practice, and a form framework reused across projects',
 				'A hands-on manager, still coding at least half the time',
@@ -277,6 +307,7 @@ const timeline: TimelineData = {
 			client: 'Dastoon',
 			role: 'Technical direction & QA',
 			type: 'independent',
+			domains: ['E-commerce'],
 			highlight: 'Technical direction and QA over an outsourced Magento 2 fashion store',
 			tech: {
 				frontend: ['jQuery', 'HTML5', 'CSS3'],
@@ -292,6 +323,8 @@ const timeline: TimelineData = {
 			client: 'Deloitte Digital AU',
 			role: 'Frontend Engineer (Senior Consultant)',
 			type: 'employee',
+			agency: true,
+			domains: ['Government', 'Telecom', 'Finance', 'Insurance'],
 			highlight: 'Brought parallel Gulp builds to the frontend guild',
 			tech: {
 				frontend: ['AngularJS', 'Backbone', 'jQuery', 'Highcharts', 'SCSS', 'Webpack'],
@@ -308,6 +341,8 @@ const timeline: TimelineData = {
 			client: 'Visual Jazz Isobar',
 			role: 'Senior Frontend Engineer',
 			type: 'independent',
+			agency: true,
+			domains: ['Automotive', 'E-commerce', 'Travel'],
 			highlight: 'First taste of build automation: Grunt for the front-end pipeline',
 			tech: {
 				frontend: ['AngularJS', 'RequireJS', 'Webpack'],
@@ -324,6 +359,8 @@ const timeline: TimelineData = {
 			client: 'Limelight Digital',
 			role: 'Senior Full-Stack Developer',
 			type: 'employee',
+			agency: true,
+			domains: ['Travel', 'Marketing & Brand'],
 			highlight:
 				'They didn’t want to lose me; kept on remotely through a Brisbane to Melbourne move',
 			tech: {
@@ -340,6 +377,8 @@ const timeline: TimelineData = {
 			client: 'Cru Digital',
 			role: 'Senior Full-Stack Developer',
 			type: 'employee',
+			agency: true,
+			domains: ['E-commerce', 'Retail', 'Hospitality', 'Marketing & Brand'],
 			highlight: [
 				'First single-page apps, hand-rolled in jQuery (a plugin per view), as responsive design took hold',
 				'Early cloud: building CentOS AMI images from scratch on EC2',
@@ -359,6 +398,7 @@ const timeline: TimelineData = {
 			client: 'mmPlugins',
 			role: 'Joomla extensions',
 			type: 'side-project',
+			domains: ['Developer Tooling'],
 			highlight:
 				'Free and commercial Joomla extensions, built full-stack in a three-person venture',
 			tech: {
@@ -376,7 +416,12 @@ const timeline: TimelineData = {
 			client: 'iFactory',
 			role: 'Lead Full-Stack Engineer',
 			type: 'employee',
-			highlight: 'Lived through the Prototype.js → MooTools → jQuery era',
+			agency: true,
+			domains: ['Dating', 'E-commerce'],
+			highlight: [
+				'Lived through the Prototype.js → MooTools → jQuery era',
+				'Managed the Linux dev server and wrote code generators for the team',
+			],
 			tech: {
 				frontend: ['Prototype.js', 'MooTools', 'jQuery', 'HTML5', 'CSS3'],
 				backend: ['PHP', 'MySQL', 'Joomla', 'Joomla 2', 'Magento', 'Seagull', 'PEAR'],
@@ -392,6 +437,7 @@ const timeline: TimelineData = {
 			client: 'Custom CMS v2',
 			role: 'Seagull Framework',
 			type: 'side-project',
+			domains: ['Developer Tooling'],
 			highlight: 'Built another CMS from scratch, this time on the Seagull PHP framework',
 			tech: {
 				frontend: ['jQuery', 'JavaScript', 'CSS3'],
@@ -408,6 +454,8 @@ const timeline: TimelineData = {
 			client: 'HIDS',
 			role: 'Web Developer',
 			type: 'employee',
+			agency: true,
+			domains: ['E-commerce', 'Real Estate', 'Travel'],
 			highlight: [
 				'XMLHttpRequest was the new hotness',
 				'Kept on remotely through a move from the Netherlands to New Zealand',
@@ -427,6 +475,7 @@ const timeline: TimelineData = {
 			client: 'Custom CMS v1',
 			role: 'Built from scratch',
 			type: 'side-project',
+			domains: ['Developer Tooling'],
 			highlight: 'Full CMS built from scratch in PHP',
 			tech: {
 				frontend: ['JavaScript', 'XHTML', 'CSS2'],
@@ -443,9 +492,10 @@ const timeline: TimelineData = {
 			client: 'Freelance',
 			role: 'Web Developer',
 			type: 'independent',
+			domains: ['Travel', 'E-commerce'],
 			tech: {
 				frontend: ['JavaScript', 'XHTML', 'CSS2'],
-				backend: ['PHP'],
+				backend: ['PHP', 'MySQL'],
 				cicd: ['SFTP'],
 			},
 		},
@@ -458,6 +508,7 @@ const timeline: TimelineData = {
 			client: 'EDF',
 			role: 'Web Developer',
 			type: 'employee',
+			agency: true,
 			tech: {
 				frontend: ['JavaScript', 'XML', 'XSLT'],
 				backend: ['ASP.NET', 'PHP', 'SQL Server', 'In-house CMS'],
@@ -473,6 +524,7 @@ const timeline: TimelineData = {
 			client: 'Web InZicht',
 			role: 'Web Developer',
 			type: 'employee',
+			agency: true,
 			highlight: 'Where it all started.',
 			tech: {
 				frontend: ['JavaScript', 'HTML', 'CSS2', 'Flash'],

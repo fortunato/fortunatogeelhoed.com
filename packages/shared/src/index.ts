@@ -4,14 +4,16 @@ export { routes } from './types/routes';
 export type {
 	Lane,
 	EmploymentType,
+	Domain,
 	ExposureIntensity,
 	TimelineYear,
 	TimelineEntry,
+	TimelineLink,
 	FrameworkExposureSpan,
 	TimelineData,
 	TimelinePageCopy,
 } from './types/timeline';
-export { LANES } from './types/timeline';
+export { LANES, DOMAINS } from './types/timeline';
 export type { Bounds, RibbonSegment, RibbonRow, AxisTick } from './timeline-layout';
 export {
 	spansBounds,
@@ -19,11 +21,13 @@ export {
 	axisTicks,
 	LANE_LABELS,
 	EMPLOYMENT_TYPE_LABELS,
+	AGENCY_LABEL,
 	INTENSITY_LEGEND,
 } from './timeline-layout';
 export type { NavItem } from './nav';
 export { NAV_ITEMS } from './nav';
 export { toParagraphs } from './text';
+export { isExternalHref } from './url';
 export type { PageSeo } from './seo';
 export {
 	SITE_URL,
