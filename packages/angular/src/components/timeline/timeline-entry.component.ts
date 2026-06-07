@@ -1,13 +1,15 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, input } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { Lane, TimelineEntry } from '@fg/shared';
 import {
 	AGENCY_LABEL,
 	EMPLOYMENT_TYPE_LABELS,
 	LANE_LABELS,
+	entryMatchesTech,
 	isExternalHref,
 	techVisual,
 } from '@fg/shared';
+import { TechFilterService } from '../../tech-filter.service';
 
 @Component({
 	selector: 'app-timeline-entry',
@@ -18,7 +20,12 @@ import {
 	// display:contents so the <article> participates directly in the parent .timeline grid.
 	styles: [':host { display: contents; }'],
 	template: `
-		<article class="entry" [attr.data-type]="entry().type" data-reveal>
+		<article
+			class="entry"
+			[attr.data-type]="entry().type"
+			[attr.data-dimmed]="dimmed() ? 'true' : null"
+			data-reveal
+		>
 			<div class="spine">
 				<div class="spine-years">{{ entry().years }}</div>
 				<div class="spine-client">{{ entry().client }}</div>
@@ -26,7 +33,7 @@ import {
 				<div class="spine-badges">
 					<span class="spine-type" [attr.data-type]="entry().type">
 						@if (entry().type === 'side-project') {
-							<svg class="type-icon"><use href="#i-branch" /></svg>
+							<svg class="type-icon" aria-hidden="true"><use href="#i-branch" /></svg>
 						}
 						{{ typeLabel[entry().type] }}
 					</span>
@@ -78,12 +85,19 @@ import {
 				@if (entry().tech[lane.key]?.length) {
 					<div class="lane {{ lane.cls }}" [attr.data-lane-label]="laneLabels[lane.key]">
 						@for (t of entry().tech[lane.key] ?? []; track t) {
-							<span class="pill" [style.--brand]="v(t).brand">
+							<button
+								type="button"
+								class="pill"
+								[style.--brand]="v(t).brand"
+								[attr.aria-pressed]="filter.isActive(t)"
+								[attr.aria-label]="'Filter by ' + t"
+								(click)="filter.toggle(t)"
+							>
 								@if (v(t).icon) {
-									<svg class="pill-icon"><use [attr.href]="'#i-' + v(t).icon" /></svg>
+									<svg class="pill-icon" aria-hidden="true"><use [attr.href]="'#i-' + v(t).icon" /></svg>
 								}
 								{{ t }}
-							</span>
+							</button>
 						}
 					</div>
 				}
@@ -93,6 +107,11 @@ import {
 })
 export class TimelineEntryComponent {
 	readonly entry = input.required<TimelineEntry>();
+	protected readonly filter = inject(TechFilterService);
+	protected readonly dimmed = computed(() => {
+		const active = this.filter.active();
+		return active.size > 0 && !entryMatchesTech(this.entry(), active);
+	});
 	protected readonly laneLabels = LANE_LABELS;
 	protected readonly v = techVisual;
 	protected readonly lanes: { key: Lane; cls: string }[] = [

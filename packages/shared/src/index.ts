@@ -45,6 +45,18 @@ export {
 } from './seo';
 export type { TechVisual } from './tech';
 export { TECH_REGISTRY, techVisual } from './tech';
+export {
+	techSlug,
+	techNameFromSlug,
+	TECH_SLUG_TO_NAME,
+	entryMatchesTech,
+	parseTechQuery,
+	formatTechQuery,
+	readTechFilter,
+	writeTechFilter,
+	readTechFilterUrl,
+	writeTechFilterUrl,
+} from './tech-filter';
 export { TECH_SPRITE } from './tech-sprite';
 export type {
 	HomeContent,

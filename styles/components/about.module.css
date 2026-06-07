@@ -2,7 +2,9 @@
    sit side by side on wide viewports and stack (photo first) on mobile. */
 
 .about {
-	padding-block: var(--jb-space-xl);
+	/* Top padding left to the global `section` clamp so the accent kicker lines up with the other
+	   content pages; only the bottom keeps the roomier xl. */
+	padding-bottom: var(--jb-space-xl);
 }
 
 .about-inner {
@@ -92,7 +94,14 @@
 }
 
 @media (width >= 769px) {
+	/* Prose (with the kicker + heading) on the left so the About heading lines up with the other
+	   pages' headings; the portrait moves to the right via `order` so both stay in the same row.
+	   DOM order stays photo-first, so the mobile stack (photo above the bio) and the reading order
+	   are unchanged. */
 	.about-inner {
-		grid-template-columns: minmax(16rem, 22rem) 1fr;
+		grid-template-columns: 1fr minmax(16rem, 22rem);
+	}
+	.about-photo {
+		order: 1;
 	}
 }

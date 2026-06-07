@@ -66,6 +66,10 @@
 
 	/* Typography scale */
 	.section-label {
+		/* Block so the kicker sits flush at the content top and its margin-bottom applies, whether
+		   the page renders it as a <p> or a <span> — an inline span otherwise baseline-aligns inside
+		   the parent's taller line box and reads as sitting lower. */
+		display: block;
 		font-size: 0.65rem;
 		font-weight: 600;
 		text-transform: uppercase;

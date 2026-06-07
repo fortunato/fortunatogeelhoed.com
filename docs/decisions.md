@@ -144,6 +144,42 @@ differs, on purpose. Full rationale, including the alternatives weighed and the
 in-process-cache-not-Redis decision, is in
 [`availability.md`](availability.md).
 
+### Client interaction state — idiomatic per framework, platform persistence
+
+The timeline's tech pills are toggle filters: click a pill to filter the timeline to
+roles carrying that technology (AND across active pills), and non-matching rows dim in
+place. The point is to show the *same* cross-cutting reactive-state problem solved
+idiomatically three ways, so the state is held with each framework's native primitive
+rather than a store library:
+
+- **React** — a `useReducer` over a `Set`, shared through Context hosted at the layout
+  level (so a selection survives navigating away and back); deep pill buttons read and
+  toggle it via a hook, no prop-drilling.
+- **Vue** — a module-level `ref<Set>` composable, a singleton for the app's lifetime
+  (the Set is replaced on each write, since mutating it in place is not reactive).
+- **Angular** — a root-provided signal service; pill components inject the same instance
+  and derive their dimming from a `computed`.
+
+No Redux/Zustand/Pinia/NgRx: a single ephemeral Set scoped to one view does not earn a
+store, and TanStack Query already demonstrates a state library where it genuinely fits
+(see *Data fetching* above). Each derives a per-row "dimmed" boolean reactively, and the
+pills are real `<button aria-pressed>` toggles so the filter is keyboard- and
+screen-reader-correct; dimming is visual only (a CSS `filter`, never `display:none`), so
+dimmed rows stay in the accessibility tree.
+
+Persistence spans three navigation hops, handled by the web platform rather than a
+library. The active filter mirrors to the **URL query** (`?tech=react,docker`) via
+`History.replaceState` — a history rewrite, deliberately *not* a router navigation:
+toggling a filter is a state change, so routing it would needlessly push history, re-run
+guards/view-transitions, and (with each framework's scroll restoration) jerk the page to
+the top. The same value also mirrors to **`sessionStorage`**, which — being shared
+per-origin — carries the selection across a framework switch (React → Vue → Angular is a
+cookie set plus a full reload into a different app). On mount the state seeds after
+hydration (so the first client render matches the unfiltered prerender): the URL query
+wins when present, else the persisted value. The shared matching, serialisation, and
+History/storage glue live in one framework-agnostic module; only the reactive state
+binding differs.
+
 ### Observability — Grafana, banner-free
 
 Backend logs (pino → Grafana Cloud Loki) and frontend RUM (Grafana Faro, run

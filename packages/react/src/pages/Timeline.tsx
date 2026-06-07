@@ -6,17 +6,28 @@ import {
 	LANE_LABELS,
 	TECH_SPRITE,
 	destroyTimelineMotion,
+	entryMatchesTech,
 	initTimelineMotion,
 } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
-import { Fragment, useEffect, useRef } from 'react';
+import { Fragment, useEffect, useMemo, useRef } from 'react';
+import { FilterBar } from '../components/timeline/FilterBar';
 import { TimelineEntry } from '../components/timeline/TimelineEntry';
+import { useSyncTechFilterWithUrl, useTechFilter } from '../hooks/useTechFilter';
 
 const data = timelineData as TimelineData;
 const page = pageData as TimelinePageCopy;
 
 export function Timeline() {
 	const rootRef = useRef<HTMLElement>(null);
+	const { active } = useTechFilter();
+	useSyncTechFilterWithUrl();
+
+	const matchCount = useMemo(
+		() => data.entries.filter((e) => entryMatchesTech(e, active)).length,
+		[active],
+	);
+	const filtering = active.size > 0;
 
 	useEffect(() => {
 		const root = rootRef.current;
@@ -31,13 +42,15 @@ export function Timeline() {
 			{/* biome-ignore lint/security/noDangerouslySetInnerHtml: trusted in-house icon sprite */}
 			<div hidden dangerouslySetInnerHTML={{ __html: TECH_SPRITE }} />
 
-			<div className="container">
+			<div className={styles['page-head']}>
 				<p className="section-label">{page.label}</p>
 				<h1 className="section-title">{page.title}</h1>
 				<p className={styles.intro}>{page.intro}</p>
 			</div>
 
-			<div className={styles.timeline}>
+			<div className={styles.timeline} data-filtering={filtering ? 'true' : undefined}>
+				<FilterBar matchCount={matchCount} total={data.entries.length} />
+
 				<div className={styles['lane-headers']} aria-hidden="true">
 					<div className={styles['lane-header']} />
 					{LANES.map((lane) => (

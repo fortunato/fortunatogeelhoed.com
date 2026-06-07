@@ -2,13 +2,15 @@
 	<section :class="styles.page" ref="rootRef">
 		<div hidden v-html="sprite" />
 
-		<div class="container">
+		<div :class="styles['page-head']">
 			<p class="section-label">{{ page.label }}</p>
 			<h1 class="section-title">{{ page.title }}</h1>
 			<p :class="styles.intro">{{ page.intro }}</p>
 		</div>
 
-		<div :class="styles.timeline">
+		<div :class="styles.timeline" :data-filtering="filtering ? 'true' : undefined">
+			<FilterBar :match-count="matchCount" :total="total" />
+
 			<div :class="styles['lane-headers']" aria-hidden="true">
 				<div :class="styles['lane-header']" />
 				<div v-for="lane in lanes" :key="lane" :class="styles['lane-header']">
@@ -35,11 +37,14 @@ import {
 	LANE_LABELS,
 	TECH_SPRITE,
 	destroyTimelineMotion,
+	entryMatchesTech,
 	initTimelineMotion,
 } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
+import FilterBar from '../components/timeline/FilterBar.vue';
 import TimelineEntry from '../components/timeline/TimelineEntry.vue';
+import { useTechFilter, useTechFilterSync } from '../composables/useTechFilter';
 
 const data = timelineData as TimelineData;
 const page = pageData as TimelinePageCopy;
@@ -47,6 +52,14 @@ const sprite = TECH_SPRITE;
 const lanes = LANES;
 const laneLabels = LANE_LABELS;
 const rootRef = ref<HTMLElement | null>(null);
+const total = data.entries.length;
+
+const { active } = useTechFilter();
+useTechFilterSync();
+const filtering = computed(() => active.value.size > 0);
+const matchCount = computed(
+	() => data.entries.filter((e) => entryMatchesTech(e, active.value)).length,
+);
 
 type Row =
 	| { kind: 'era'; era: string; key: string }

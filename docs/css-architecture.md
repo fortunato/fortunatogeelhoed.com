@@ -124,6 +124,19 @@ Two decisions here are deliberate and non-obvious:
 > the shared module file breaks Angular's emulated encapsulation, so components are
 > currently unlayered (correct — scoped styles legitimately win over `@layer base`).
 
+**Invariant — no cross-component descendant selectors.** A descendant selector in a
+shared component stylesheet must have its ancestor *and* its descendant rendered by the
+**same** Angular component. Angular's emulated encapsulation suffixes every selector
+part with that component's `_ngcontent` attribute, so a rule like
+`.timeline[data-filtering] .filter-bar` — where `.timeline` is rendered by one component
+and `.filter-bar` by another — is rewritten to demand a single `_ngcontent` on both and
+silently never matches, while React/Vue CSS Modules (no such attribute) match it fine.
+The bug is therefore invisible in two of the three variants. Express any cross-component
+relationship as a **flag on the descendant's own element** instead: set `data-active` on
+the `.filter-bar` element (from its own component) and style `.filter-bar[data-active]`.
+The motion reveal follows the same rule — the entry's parked state lives on
+`.entry[data-reveal]` (its own element), not on a `.page …` ancestor selector.
+
 ## Responsive design
 
 The site is **mobile-first**: the unprefixed rule is the small-screen baseline, and

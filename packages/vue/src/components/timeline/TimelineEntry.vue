@@ -1,12 +1,17 @@
 <template>
-	<article :class="styles.entry" :data-type="entry.type" data-reveal>
+	<article
+		:class="styles.entry"
+		:data-type="entry.type"
+		:data-dimmed="dimmed ? 'true' : undefined"
+		data-reveal
+	>
 		<div :class="styles.spine">
 			<div :class="styles['spine-years']">{{ entry.years }}</div>
 			<div :class="styles['spine-client']">{{ entry.client }}</div>
 			<div :class="styles['spine-role']">{{ entry.role }}</div>
 			<div :class="styles['spine-badges']">
 				<span :class="styles['spine-type']" :data-type="entry.type">
-					<svg v-if="entry.type === 'side-project'" :class="styles['type-icon']">
+					<svg v-if="entry.type === 'side-project'" :class="styles['type-icon']" aria-hidden="true">
 						<use href="#i-branch" />
 					</svg>
 					{{ typeLabel[entry.type] }}
@@ -45,15 +50,21 @@
 				:class="[styles.lane, styles[lane.cls]]"
 				:data-lane-label="laneLabels[lane.key]"
 			>
-				<span
+				<button
 					v-for="t in entry.tech[lane.key]"
 					:key="t"
+					type="button"
 					:class="styles.pill"
 					:style="{ '--brand': v(t).brand }"
+					:aria-pressed="isActive(t)"
+					:aria-label="`Filter by ${t}`"
+					@click="toggle(t)"
 				>
-					<svg v-if="v(t).icon" :class="styles['pill-icon']"><use :href="`#i-${v(t).icon}`" /></svg>
+					<svg v-if="v(t).icon" :class="styles['pill-icon']" aria-hidden="true">
+						<use :href="`#i-${v(t).icon}`" />
+					</svg>
 					{{ t }}
-				</span>
+				</button>
 			</div>
 		</template>
 	</article>
@@ -65,14 +76,21 @@ import {
 	AGENCY_LABEL,
 	EMPLOYMENT_TYPE_LABELS,
 	LANE_LABELS,
+	entryMatchesTech,
 	isExternalHref,
 	techVisual,
 } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 import { computed } from 'vue';
 import { RouterLink } from 'vue-router';
+import { useTechFilter } from '../../composables/useTechFilter';
 
 const props = defineProps<{ entry: TimelineEntry }>();
+
+const { active, isActive, toggle } = useTechFilter();
+const dimmed = computed(
+	() => active.value.size > 0 && !entryMatchesTech(props.entry, active.value),
+);
 
 const highlights = computed<string[]>(() => {
 	const h = props.entry.highlight;

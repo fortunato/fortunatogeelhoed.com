@@ -3,12 +3,14 @@ import {
 	AGENCY_LABEL,
 	EMPLOYMENT_TYPE_LABELS,
 	LANE_LABELS,
+	entryMatchesTech,
 	isExternalHref,
 	techVisual,
 } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
-import type { CSSProperties } from 'react';
+import { type CSSProperties, useMemo } from 'react';
 import { Link } from 'react-router';
+import { useTechFilter } from '../../hooks/useTechFilter';
 
 const LANES: { key: Lane; cls: string }[] = [
 	{ key: 'frontend', cls: 'lane-fe' },
@@ -24,21 +26,40 @@ function highlights(entry: Entry): string[] {
 
 function Pill({ name }: { name: string }) {
 	const { brand, icon } = techVisual(name);
+	const { isActive, toggle } = useTechFilter();
+	const active = isActive(name);
 	return (
-		<span className={styles.pill} style={{ '--brand': brand } as CSSProperties}>
+		<button
+			type="button"
+			className={styles.pill}
+			style={{ '--brand': brand } as CSSProperties}
+			aria-pressed={active}
+			aria-label={`Filter by ${name}`}
+			onClick={() => toggle(name)}
+		>
 			{icon ? (
 				<svg className={styles['pill-icon']} aria-hidden="true">
 					<use href={`#i-${icon}`} />
 				</svg>
 			) : null}
 			{name}
-		</span>
+		</button>
 	);
 }
 
 export function TimelineEntry({ entry }: { entry: Entry }) {
+	const { active } = useTechFilter();
+	const dimmed = useMemo(
+		() => active.size > 0 && !entryMatchesTech(entry, active),
+		[active, entry],
+	);
 	return (
-		<article className={styles.entry} data-type={entry.type} data-reveal>
+		<article
+			className={styles.entry}
+			data-type={entry.type}
+			data-dimmed={dimmed ? 'true' : undefined}
+			data-reveal
+		>
 			<div className={styles.spine}>
 				<div className={styles['spine-years']}>{entry.years}</div>
 				<div className={styles['spine-client']}>{entry.client}</div>

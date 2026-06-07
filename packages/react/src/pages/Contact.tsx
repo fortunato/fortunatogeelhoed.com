@@ -1,7 +1,7 @@
 import { availabilityBadge, availabilityBookedLine } from '@fg/shared';
 import { ContactForm } from '../components/ContactForm';
 import { useContent } from '../content';
-import { useAvailability } from '../useAvailability';
+import { useAvailability } from '../hooks/useAvailability';
 
 export function Contact() {
 	const content = useContent('contact');

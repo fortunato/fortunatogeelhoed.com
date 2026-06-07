@@ -4,7 +4,26 @@
    Reveal (assemble/disassemble) motion is driven from @fg/shared/timeline-motion. */
 
 .page {
-	padding-top: var(--jb-space-xl);
+	/* Top padding intentionally left to the global `section` rule (a responsive clamp) so the
+	   accent kicker sits at the same height as every other content page. */
+	/* Left indent shared by the lane headers, era labels, spine cell and filter bar so they align
+	   in the grid tier. Defined on .page (not .timeline) so the heading block — a sibling of
+	   .timeline, not a descendant — can read it too and stay on the same rail. */
+	--spine-pad: 1.75rem;
+	/* Own the horizontal rail with the shared page gutter on the left (so the heading block and the
+	   timeline content share one left edge — see .page-head and .timeline) and a plain gutter on
+	   the right. Asymmetric on purpose: the left is the aligned rail; the right just needs a margin,
+	   and keeping it off 100vw avoids any scrollbar-width overflow. */
+	padding-inline-start: var(--jb-page-gutter);
+	padding-inline-end: var(--jb-space-lg);
+}
+
+/* The heading block (kicker + h1 + intro). Left-anchored at the page gutter and capped at the
+   container max, so it lines up with the timeline content on the left while staying narrower than
+   the timeline's lane grid. Replaces the global .container on this page (a .container would centre
+   with its own 90vw model and re-introduce the misalignment). */
+.page-head {
+	max-width: var(--jb-size-container-max);
 }
 
 .intro {
@@ -20,8 +39,6 @@
 	/* minmax(0, …) lets the lanes shrink below their pills' intrinsic width so the pills wrap
 	   instead of forcing the grid wider than its container (which overflowed the viewport). */
 	--cols: var(--spine-w) minmax(0, 1.8fr) minmax(0, 1.6fr) minmax(0, 1.4fr) minmax(0, 1fr);
-	/* Left indent shared by the lane headers, era labels and the spine cell so they align. */
-	--spine-pad: 1.75rem;
 	/* The node dot and the spine line derive from these: the line is centred on the dot
 	   (half the dot, less half the 1px line). Reassigned per-breakpoint so the dot and line
 	   stay coupled when the gutter changes. */
@@ -34,11 +51,15 @@
 	   selector (which Angular's encapsulation mis-scopes). */
 	--type-employee: #5ba8ff;
 	--type-side: #facc15;
+	/* Height of the filter bar's reserved slot (see Filtering below). Carved out of the top
+	   margin so the bar occupies space that already existed — toggling a filter never shifts the
+	   lane headers or rows. */
+	--filter-bar-h: 2.9rem;
 	/* Mobile-first: the stacked single-column layout is the baseline (full width); the dense
 	   multi-lane grid — and the 1400px cap it needs — assemble at the wide tier near the bottom
 	   of this file. The lane custom props above are inert until then. */
 	max-width: 100%;
-	margin: var(--jb-space-2xl) auto 0;
+	margin: calc(var(--jb-space-2xl) - var(--filter-bar-h)) auto 0;
 	position: relative;
 	/* The assemble-on-scroll reveal parks not-yet-revealed lanes translated to the right;
 	   clip that off-screen transient so it never adds a horizontal scrollbar. `clip` (unlike
@@ -447,14 +468,21 @@
 	/* Baseline (era dividers, and entries on narrow screens): fade + rise. --dir (set by
 	   timeline-motion: 1 down, -1 up) flips the sign, so the row rises from below on the way
 	   down and settles down from above on the way up. Falls back to 1 with no JS. */
-	/* Scoped to .page so these bare [data-reveal] rules don't leak out of this CSS module
-	   (attribute selectors aren't hashed) and clobber the homepage's own scroll reveal. */
-	.page [data-reveal] {
+	/* Anchored on each element's own class (the era divider and the entry article), not a
+	   `.page [data-reveal]` ancestor selector, for two reasons: (1) the hashed class scopes the
+	   rule to this CSS module in React/Vue, so the bare [data-reveal] can't leak onto the
+	   homepage's own reveal; (2) `.entry` is rendered by a *different* Angular component than
+	   `.page`, so a `.page … .entry` descendant selector would be scoped away by emulated
+	   ViewEncapsulation and narrow-screen entries would never fade. Same-element compound
+	   selectors stay within each element's own component and work in all three. */
+	.era[data-reveal],
+	.entry[data-reveal] {
 		opacity: 0;
 		transform: translateY(calc(18px * var(--dir, 1)));
 		transition: opacity 0.6s var(--jb-ease-emphasized), transform 0.6s var(--jb-ease-emphasized);
 	}
-	.page [data-reveal][data-in] {
+	.era[data-reveal][data-in],
+	.entry[data-reveal][data-in] {
 		opacity: 1;
 		transform: none;
 	}
@@ -535,16 +563,21 @@
    lanes, with the sticky lane headers naming the columns. */
 @media (width >= 1201px) {
 	.timeline {
-		max-width: 1400px;
+		/* Same width as the heading block, left-anchored to the shared gutter. Because that gutter
+		   is exactly the centring margin for this width, the timeline ends up centred/symmetric and
+		   its outer edges line up with the heading — rather than running off to the right. */
+		max-width: var(--jb-size-container-max);
+		margin-inline: 0 auto;
 	}
 
 	.lane-headers {
 		display: grid;
 	}
 
-	.era {
-		padding-left: var(--spine-pad);
-	}
+	/* The heading, era labels and filter bar stay on the page's left rail (the gutter) — matching
+	   the other pages and the mobile layout — so the career heading never starts further right than
+	   other pages. Only the entry spine is indented by --spine-pad below, to clear its node dot and
+	   line; the era sits at the rail just as it does on mobile. */
 
 	.entry {
 		display: grid;
@@ -574,4 +607,191 @@
 	.lane::before {
 		content: none;
 	}
+}
+
+/* ============================ Filtering ============================ */
+
+/* Each pill is a toggle button: clicking it filters the timeline to rows carrying that tech
+   (AND across active pills). Non-matching rows dim in place; the sticky filter bar lists the
+   active filters and how to clear them. State lives in each framework (Context / composable /
+   signal service); this is purely the presentation. */
+
+/* Reset the UA button so a pill button reads exactly like the former <span>. Deliberately
+   narrow (no `font` shorthand) so it does not clobber .pill's own font-family/size/weight. */
+button.pill {
+	appearance: none;
+	cursor: pointer;
+	text-align: inherit;
+}
+
+@media (hover: hover) {
+	button.pill:not([aria-pressed="true"]):hover {
+		background: color-mix(in srgb, var(--pill-ink) 18%, transparent);
+		border-color: color-mix(in srgb, var(--pill-ink) 45%, transparent);
+	}
+}
+
+button.pill:focus-visible {
+	outline: 2px solid var(--jb-accent);
+	outline-offset: 2px;
+}
+
+/* Pressed (active filter): deeper brand tint + a solid doubled edge + bolder label. Keeps the
+   theme-aware --jb-text-primary ink (rather than filling solid) so it stays legible whatever the
+   brand lightness — contrast must hold across every brand and both themes. */
+.pill[aria-pressed="true"] {
+	background: color-mix(in srgb, var(--pill-ink) 28%, transparent);
+	border-color: var(--pill-ink);
+	box-shadow: inset 0 0 0 1px var(--pill-ink);
+	font-weight: 600;
+}
+
+/* Forced colors (Windows high contrast): the tint, border-mix and box-shadow above are flattened
+   away, so the pressed/active state would be invisible. Re-assert it with system-colour outlines,
+   which forced-colors honours. Outlines don't affect layout, so the bar stays pixel-stable. */
+@media (forced-colors: active) {
+	.pill[aria-pressed="true"] {
+		outline: 2px solid SelectedItem;
+		outline-offset: -2px;
+	}
+	.filter-bar[data-active="true"] {
+		outline: 1px solid CanvasText;
+		outline-offset: -1px;
+	}
+}
+
+/* Dim non-matching rows. Driven through `filter`, NOT opacity: the reveal motion above owns
+   opacity/transform on [data-reveal]/.spine/.lane/.pill, so a separate property composes with it
+   instead of being overwritten. */
+.entry[data-dimmed="true"] {
+	filter: grayscale(0.6) opacity(0.45);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+	.entry {
+		transition: filter var(--jb-dur-base) var(--jb-ease-standard);
+	}
+}
+
+/* Bar above the timeline holding the active filters as removable chips, a Clear-all, and a live
+   result count. It is always present (first child of .timeline) and its height is reserved via
+   --filter-bar-h, so toggling a filter fills space that already existed rather than pushing the
+   lane headers and rows down. Empty (no active filter) it is invisible whitespace. */
+.filter-bar {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	gap: var(--jb-space-sm);
+	min-height: var(--filter-bar-h, 2.9rem);
+	/* Stacked baseline: no horizontal inset, so the bar's contents line up with the era labels
+	   and page heading at the section's content edge (the wide grid re-adds --spine-pad below to
+	   align with the spine/lane headers instead). */
+	padding: var(--jb-space-sm) 0;
+	/* Stay a single row so the reserved height (and the lane-header offset that depends on it)
+	   can never desync: an overflowing set of chips scrolls horizontally rather than wrapping to
+	   a second line. Filters can also be cleared via their pressed pills, so the hidden scrollbar
+	   is not the only affordance. */
+	overflow-x: auto;
+	scrollbar-width: none;
+}
+.filter-bar::-webkit-scrollbar {
+	display: none;
+}
+
+/* Active: the bar gains its chrome and sticks under the nav so the way to clear stays reachable;
+   the lane headers stack below it. Dividers use box-shadow (not border) so the reserved height
+   stays pixel-stable between the empty and active states. The active flag sits on the bar itself
+   (data-active), not on an ancestor, so the rule stays within one Angular component — a
+   `.timeline … .filter-bar` descendant selector would cross the FilterBar/Timeline component
+   boundary and ViewEncapsulation would scope it away (the bar would never stick). */
+.filter-bar[data-active="true"] {
+	position: sticky;
+	top: var(--jb-size-nav-height);
+	z-index: calc(var(--jb-z-base) + 1);
+	background: color-mix(in srgb, var(--jb-bg-primary) 92%, transparent);
+	backdrop-filter: blur(12px);
+	box-shadow: inset 0 1px var(--jb-color-border), inset 0 -1px var(--jb-color-border);
+}
+.timeline[data-filtering="true"] .lane-headers {
+	top: calc(var(--jb-size-nav-height) + var(--filter-bar-h));
+}
+
+.filter-bar-label {
+	font-family: var(--jb-font-mono);
+	font-size: 0.7rem;
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	color: var(--jb-text-tertiary);
+}
+
+/* Shown in the bar's reserved slot while no filter is active, so the pills read as interactive
+   (they otherwise look like static badges) without any louder affordance. */
+.filter-hint {
+	font-family: var(--jb-font-mono);
+	font-size: 0.7rem;
+	letter-spacing: 0.02em;
+	color: var(--jb-text-tertiary);
+}
+
+/* A removable active-filter chip. The whole chip is the remove button (× glyph is decorative). */
+.filter-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	appearance: none;
+	cursor: pointer;
+	font-family: var(--jb-font-mono);
+	font-size: 0.68rem;
+	font-weight: 600;
+	padding: 3px 8px;
+	border-radius: var(--jb-radius-sm);
+	color: var(--jb-text-primary);
+	--pill-ink: var(--brand, var(--jb-text-secondary));
+	background: color-mix(in srgb, var(--pill-ink) 18%, transparent);
+	border: 1px solid var(--pill-ink);
+}
+
+.filter-chip:focus-visible {
+	outline: 2px solid var(--jb-accent);
+	outline-offset: 2px;
+}
+
+.filter-chip-x {
+	width: 0.85em;
+	height: 0.85em;
+	flex-shrink: 0;
+}
+
+.filter-clear {
+	appearance: none;
+	cursor: pointer;
+	font-family: var(--jb-font-mono);
+	font-size: 0.66rem;
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	padding: var(--jb-space-xs) var(--jb-space-sm);
+	border-radius: var(--jb-radius-sm);
+	color: var(--jb-accent-text);
+	background: var(--jb-accent-soft);
+	border: 1px solid color-mix(in srgb, var(--jb-accent) 30%, transparent);
+	transition: background var(--jb-dur-base) var(--jb-ease-standard);
+}
+
+@media (hover: hover) {
+	.filter-clear:hover {
+		background: var(--jb-accent);
+		color: var(--jb-text-on-accent);
+	}
+}
+
+.filter-clear:focus-visible {
+	outline: 2px solid var(--jb-accent);
+	outline-offset: 2px;
+}
+
+.filter-count {
+	margin-left: auto;
+	font-family: var(--jb-font-mono);
+	font-size: 0.66rem;
+	color: var(--jb-text-tertiary);
 }

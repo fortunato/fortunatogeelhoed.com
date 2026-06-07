@@ -80,6 +80,12 @@
 
 		/* Layout / size. Nav height is the mobile baseline; it grows on wider viewports below. */
 		--jb-size-container: min(1320px, 90vw);
+		--jb-size-container-max: 1320px;
+		/* Shared page left/right rail, measured from the viewport: the 2rem floor, or whatever
+		   margin centres a 1320px block. Letting a page's heading block and a wider content block
+		   (e.g. the timeline's 1400px grid) both start at this gutter keeps their left edges
+		   aligned at every width while their max-widths differ. */
+		--jb-page-gutter: max(var(--jb-space-lg), calc((100vw - var(--jb-size-container-max)) / 2));
 		--jb-size-nav-height: 3rem;
 
 		/* Elevation */
