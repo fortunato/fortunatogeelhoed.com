@@ -31,7 +31,7 @@ const timeline: TimelineData = {
 			tech: {
 				frontend: ['React', 'Angular', 'Vue', 'Vite', 'CSS Modules'],
 				backend: ['Bun', 'Hono'],
-				cicd: ['GitHub Actions', 'Docker'],
+				cicd: ['Nx', 'GitHub Actions', 'Docker', 'Pulumi', 'Hetzner'],
 				ai: ['Claude Code'],
 			},
 		},
@@ -64,7 +64,7 @@ const timeline: TimelineData = {
 			tech: {
 				frontend: ['React', 'Mantine UI', 'Vite', 'Recharts', 'CSS Modules'],
 				backend: ['NestJS', 'TimescaleDB', 'WebSockets'],
-				cicd: ['Gitea Actions', 'Docker', 'Nx'],
+				cicd: ['Nx', 'Gitea Actions', 'Docker'],
 				ai: ['Claude Code', 'MCP'],
 			},
 		},
@@ -77,12 +77,13 @@ const timeline: TimelineData = {
 			client: 'py-market-structure',
 			role: 'PyPI library',
 			type: 'side-project',
-			highlight: 'Published to PyPI with almost zero prior Python, built with Claude Code',
+			highlight:
+				'Published to PyPI with almost zero prior Python experience, built from domain knowledge using Claude Code',
 			tech: {
 				frontend: ['Angular', 'RxJS', 'lightweight-charts', 'SCSS Modules'],
-				backend: ['Python', 'PyPI'],
+				backend: ['Python', 'PyPI', 'Freqtrade'],
 				cicd: ['GitHub Actions'],
-				ai: ['Claude Code', 'MCP'],
+				ai: ['Claude Code'],
 			},
 		},
 		{
@@ -138,12 +139,11 @@ const timeline: TimelineData = {
 			startYear: 2021,
 			endYear: 2021,
 			client: 'Neurofeedback IJburg',
-			role: 'Freelance Web Developer',
+			role: 'Full-Stack Developer',
 			type: 'independent',
-			highlight:
-				'Multilingual static site for a private practice: Nuxt SSG, i18n, interactive maps',
+			highlight: 'Multilingual static site for a private practice: Nuxt SSG + i18n',
 			tech: {
-				frontend: ['Vue', 'Nuxt', 'SCSS', 'Leaflet'],
+				frontend: ['Vue', 'Nuxt', 'SCSS', 'i18n'],
 			},
 		},
 		{
@@ -152,11 +152,11 @@ const timeline: TimelineData = {
 			years: '2018–now',
 			startYear: 2018,
 			endYear: 'present',
-			client: 'Crypto Trading System',
+			client: 'Systematic Trading Bot',
 			role: 'Parallel to employment',
 			type: 'side-project',
 			highlight: [
-				'Autonomous execution, exchange APIs',
+				'Autonomous execution + hundreds of trading pairs in parallel + multi-interval strategy execution + optimized memory footprint',
 				'Runs on a Hetzner k3s cluster, provisioned with Pulumi',
 			],
 			tech: {
@@ -177,6 +177,7 @@ const timeline: TimelineData = {
 					'Jenkins',
 					'Gitea Actions',
 					'Docker',
+					'PM2',
 					'Pulumi',
 					'k3s',
 					'Hetzner',
@@ -229,7 +230,7 @@ const timeline: TimelineData = {
 			],
 			tech: {
 				frontend: ['React', 'Redux', 'TypeScript/Flow', 'SSR', 'Webpack', 'SCSS Modules'],
-				backend: ['Node.js', 'Express', 'PHP', 'Salesforce', 'MySQL'],
+				backend: ['Node.js', 'Express', 'PHP', 'Salesforce', 'MySQL', 'Redis'],
 				cicd: ['Jenkins', 'Docker'],
 			},
 		},
@@ -262,7 +263,7 @@ const timeline: TimelineData = {
 				'A hands-on manager, still coding at least half the time',
 			],
 			tech: {
-				frontend: ['React', 'ES2016', 'Webpack', 'SCSS', 'Webpack', 'JSPM'],
+				frontend: ['React', 'ES2016', 'SCSS', 'Webpack', 'JSPM'],
 				backend: ['Sitecore', 'SQL Server'],
 				cicd: ['Bamboo'],
 			},
@@ -394,7 +395,7 @@ const timeline: TimelineData = {
 			highlight: 'Built another CMS from scratch, this time on the Seagull PHP framework',
 			tech: {
 				frontend: ['jQuery', 'JavaScript', 'CSS3'],
-				backend: ['PHP', 'MySQL'],
+				backend: ['PHP', 'MySQL', 'i18n'],
 				cicd: ['Capistrano'],
 			},
 		},
@@ -429,7 +430,7 @@ const timeline: TimelineData = {
 			highlight: 'Full CMS built from scratch in PHP',
 			tech: {
 				frontend: ['JavaScript', 'XHTML', 'CSS2'],
-				backend: ['PHP', 'MySQL'],
+				backend: ['PHP', 'MySQL', 'i18n'],
 				cicd: ['SFTP'],
 			},
 		},

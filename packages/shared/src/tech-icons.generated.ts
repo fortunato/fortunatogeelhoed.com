@@ -334,6 +334,10 @@ export const TECH_REGISTRY: Record<string, { brand: string; icon?: string }> = {
 		"brand": "#0078d7",
 		"icon": "cloud"
 	},
+	"Gitea": {
+		"brand": "#609926",
+		"icon": "gitea"
+	},
 	"Gitea Actions": {
 		"brand": "#609926",
 		"icon": "gitea"

@@ -100,6 +100,7 @@ const SLUGS: Record<string, string | null> = {
 	'GitHub Actions': 'githubactions',
 	'GitLab CI': 'gitlab',
 	'Azure Pipelines': 'azuredevops',
+	Gitea: 'gitea',
 	'Gitea Actions': 'gitea',
 	Docker: 'docker',
 	Jenkins: 'jenkins',

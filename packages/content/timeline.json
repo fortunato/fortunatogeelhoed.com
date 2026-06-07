@@ -23,8 +23,11 @@
 					"Hono"
 				],
 				"cicd": [
+					"Nx",
 					"GitHub Actions",
-					"Docker"
+					"Docker",
+					"Pulumi",
+					"Hetzner"
 				],
 				"ai": [
 					"Claude Code"
@@ -82,9 +85,9 @@
 					"WebSockets"
 				],
 				"cicd": [
+					"Nx",
 					"Gitea Actions",
-					"Docker",
-					"Nx"
+					"Docker"
 				],
 				"ai": [
 					"Claude Code",
@@ -101,7 +104,7 @@
 			"client": "py-market-structure",
 			"role": "PyPI library",
 			"type": "side-project",
-			"highlight": "Published to PyPI with almost zero prior Python, built with Claude Code",
+			"highlight": "Published to PyPI with almost zero prior Python experience, built from domain knowledge using Claude Code",
 			"tech": {
 				"frontend": [
 					"Angular",
@@ -111,14 +114,14 @@
 				],
 				"backend": [
 					"Python",
-					"PyPI"
+					"PyPI",
+					"Freqtrade"
 				],
 				"cicd": [
 					"GitHub Actions"
 				],
 				"ai": [
-					"Claude Code",
-					"MCP"
+					"Claude Code"
 				]
 			}
 		},
@@ -179,15 +182,15 @@
 			"startYear": 2021,
 			"endYear": 2021,
 			"client": "Neurofeedback IJburg",
-			"role": "Freelance Web Developer",
+			"role": "Full-Stack Developer",
 			"type": "independent",
-			"highlight": "Multilingual static site for a private practice: Nuxt SSG, i18n, interactive maps",
+			"highlight": "Multilingual static site for a private practice: Nuxt SSG + i18n",
 			"tech": {
 				"frontend": [
 					"Vue",
 					"Nuxt",
 					"SCSS",
-					"Leaflet"
+					"i18n"
 				]
 			}
 		},
@@ -197,11 +200,11 @@
 			"years": "2018–now",
 			"startYear": 2018,
 			"endYear": "present",
-			"client": "Crypto Trading System",
+			"client": "Systematic Trading Bot",
 			"role": "Parallel to employment",
 			"type": "side-project",
 			"highlight": [
-				"Autonomous execution, exchange APIs",
+				"Autonomous execution + hundreds of trading pairs in parallel + multi-interval strategy execution + optimized memory footprint",
 				"Runs on a Hetzner k3s cluster, provisioned with Pulumi"
 			],
 			"tech": {
@@ -227,6 +230,7 @@
 					"Jenkins",
 					"Gitea Actions",
 					"Docker",
+					"PM2",
 					"Pulumi",
 					"k3s",
 					"Hetzner",
@@ -301,7 +305,8 @@
 					"Express",
 					"PHP",
 					"Salesforce",
-					"MySQL"
+					"MySQL",
+					"Redis"
 				],
 				"cicd": [
 					"Jenkins",
@@ -349,7 +354,6 @@
 				"frontend": [
 					"React",
 					"ES2016",
-					"Webpack",
 					"SCSS",
 					"Webpack",
 					"JSPM"
@@ -585,7 +589,8 @@
 				],
 				"backend": [
 					"PHP",
-					"MySQL"
+					"MySQL",
+					"i18n"
 				],
 				"cicd": [
 					"Capistrano"
@@ -638,7 +643,8 @@
 				],
 				"backend": [
 					"PHP",
-					"MySQL"
+					"MySQL",
+					"i18n"
 				],
 				"cicd": [
 					"SFTP"
