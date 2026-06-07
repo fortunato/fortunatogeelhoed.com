@@ -88,7 +88,7 @@ const timeline: TimelineData = {
 			client: 'pymarket-structure',
 			role: 'PyPI library',
 			type: 'side-project',
-			domains: ['Fintech & Trading'],
+			domains: ['Fintech & Trading', 'Developer Tooling'],
 			links: [
 				{ label: 'Read the write-up', href: '/blog' },
 				{
@@ -221,6 +221,7 @@ const timeline: TimelineData = {
 			client: 'Self-Hosted Homelab',
 			role: 'Personal platform & network',
 			type: 'side-project',
+			domains: ['Infrastructure', 'Developer Tooling'],
 			highlight: [
 				'MikroTik-routed VLAN network with a home–office fibre link and 2.5GbE wiring',
 				'A NAS running Docker Compose services behind Traefik (Gitea + runners, Vaultwarden, Immich, Grafana/Loki, AdGuard, Verdaccio), reached remotely over NetBird',

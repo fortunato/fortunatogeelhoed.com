@@ -24,6 +24,7 @@ export type Domain =
 	| 'Marketing & Brand'
 	| 'Media'
 	| 'Education'
+	| 'Infrastructure'
 	| 'Developer Tooling';
 
 /** Visual intensity of framework exposure on the framework ribbon. */
@@ -106,6 +107,7 @@ export const DOMAINS: Domain[] = [
 	'Marketing & Brand',
 	'Media',
 	'Education',
+	'Infrastructure',
 	'Developer Tooling',
 ];
 

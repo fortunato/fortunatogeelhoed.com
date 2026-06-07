@@ -124,7 +124,8 @@
 			"role": "PyPI library",
 			"type": "side-project",
 			"domains": [
-				"Fintech & Trading"
+				"Fintech & Trading",
+				"Developer Tooling"
 			],
 			"links": [
 				{
@@ -298,6 +299,10 @@
 			"client": "Self-Hosted Homelab",
 			"role": "Personal platform & network",
 			"type": "side-project",
+			"domains": [
+				"Infrastructure",
+				"Developer Tooling"
+			],
 			"highlight": [
 				"MikroTik-routed VLAN network with a home–office fibre link and 2.5GbE wiring",
 				"A NAS running Docker Compose services behind Traefik (Gitea + runners, Vaultwarden, Immich, Grafana/Loki, AdGuard, Verdaccio), reached remotely over NetBird"
