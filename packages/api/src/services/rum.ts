@@ -20,17 +20,20 @@ const APP_KEY = process.env.FARO_APP_KEY;
 export const RUM_MAX_BYTES = 64 * 1024;
 const TIMEOUT_MS = 3_000;
 
-// Remove identifiers we never want relayed. A sessionless client won't set these, but a
-// tampered or out-of-date client could, so we strip them defensively rather than trust input.
+// Return a copy with the identifiers we never relay removed. A sessionless client won't set
+// these, but a tampered or out-of-date one could, so we strip them defensively rather than trust
+// input. We clone rather than mutate so the caller's parsed object is never altered as a side
+// effect. Setting the keys to undefined drops them from the forwarded JSON (JSON.stringify omits
+// undefined), without the cost of the delete operator.
 function sanitise(payload: unknown): unknown {
 	if (payload && typeof payload === 'object') {
-		const meta = (payload as Record<string, unknown>).meta;
+		const obj = payload as Record<string, unknown>;
+		const meta = obj.meta;
 		if (meta && typeof meta === 'object') {
-			// Setting to undefined drops them from the forwarded JSON (JSON.stringify omits
-			// undefined), without the performance cost of the delete operator.
-			const m = meta as Record<string, unknown>;
-			m.session = undefined;
-			m.user = undefined;
+			return {
+				...obj,
+				meta: { ...(meta as Record<string, unknown>), session: undefined, user: undefined },
+			};
 		}
 	}
 	return payload;
@@ -55,7 +58,9 @@ function forward(url: string, payload: unknown): void {
 // Never throws — an empty body, an oversized body, malformed JSON, or a collector that isn't
 // configured (e.g. local dev) are all simply dropped. The route answers 204 regardless.
 export function ingestRum(raw: string): void {
-	if (!raw || raw.length > RUM_MAX_BYTES || !COLLECTOR_URL) return;
+	// Measure real bytes, not string length: the cap is a byte budget shared with the route's
+	// bodyLimit, and a multi-byte payload can be well over it while its `.length` is under.
+	if (!raw || Buffer.byteLength(raw) > RUM_MAX_BYTES || !COLLECTOR_URL) return;
 
 	let payload: unknown;
 	try {

@@ -75,6 +75,17 @@ describe('ingestRum', () => {
 		expect(fetchMock).not.toHaveBeenCalled();
 	});
 
+	it('drops a payload under the character count but over the byte budget', async () => {
+		const fetchMock = stubFetch();
+		const ingestRum = await loadIngest();
+
+		// ~30k multi-byte characters: well under 64k as a JS string length, but ~90k bytes in UTF-8,
+		// so a byte-aware cap must reject it (a length-based cap would have let it through).
+		ingestRum(JSON.stringify({ s: '€'.repeat(30 * 1024) }));
+
+		expect(fetchMock).not.toHaveBeenCalled();
+	});
+
 	it('drops everything when no collector is configured', async () => {
 		const fetchMock = stubFetch();
 		const ingestRum = await loadIngest(''); // FARO_COLLECTOR_URL unset

@@ -48,4 +48,21 @@ describe('clientIp', () => {
 	it('falls back to a shared key when nothing resolves', async () => {
 		expect(await resolve({}, { TRUSTED_PROXY_HOPS: '1' })).toBe('unknown');
 	});
+
+	it('warns once in production when no address source resolves', async () => {
+		vi.resetModules();
+		vi.stubEnv('NODE_ENV', 'production');
+		const { clientIp } = await import('./client-ip');
+		const { logger } = await import('../logger');
+		const warn = vi.spyOn(logger, 'warn').mockImplementation(() => logger);
+
+		const app = new Hono();
+		app.get('/', (c) => c.text(clientIp(c)));
+		await app.request('/');
+		await app.request('/');
+
+		// One loud line for the degraded state, not one per request.
+		expect(warn).toHaveBeenCalledTimes(1);
+		vi.restoreAllMocks();
+	});
 });

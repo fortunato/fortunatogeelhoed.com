@@ -18,6 +18,7 @@ beforeEach(async () => {
 afterEach(() => {
 	vi.useRealTimers();
 	vi.unstubAllGlobals();
+	vi.restoreAllMocks();
 });
 
 // Build a GitHub gist API response wrapping the given availability value.
@@ -100,6 +101,68 @@ describe('getAvailability', () => {
 		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(empty));
 
 		expect(await getAvailability()).toEqual(AVAILABLE);
+	});
+
+	it('falls back and logs at error when the upstream fails on a cold start (no cached value)', async () => {
+		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response('nope', { status: 500 })));
+		const { logger } = await import('../logger');
+		const error = vi.spyOn(logger, 'error').mockImplementation(() => logger);
+
+		// No value has ever been read, so serving the blind optimistic fallback is an error-level
+		// event (we cannot substantiate the badge), not a mere degradation.
+		expect(await getAvailability()).toEqual(AVAILABLE);
+		expect(error).toHaveBeenCalled();
+	});
+
+	it('serves the last good value and logs at warn when a later refresh hits a non-2xx', async () => {
+		const fetchMock = vi
+			.fn()
+			.mockResolvedValueOnce(gistResponse(BOOKED))
+			.mockResolvedValueOnce(new Response('upstream error', { status: 503 }));
+		vi.stubGlobal('fetch', fetchMock);
+		const { logger } = await import('../logger');
+		const warn = vi.spyOn(logger, 'warn').mockImplementation(() => logger);
+
+		await getAvailability(); // populate the cache
+		vi.advanceTimersByTime(TTL_MS + 1); // age it so the next read refreshes
+
+		// Still holding a good value, so the failed refresh is degraded-but-serving (warn), and the
+		// stale value is served rather than the optimistic fallback.
+		expect(await getAvailability()).toEqual(BOOKED);
+		expect(warn).toHaveBeenCalled();
+	});
+
+	it('falls back when the gist is well-formed JSON that violates the schema', async () => {
+		const invalid = new Response(
+			JSON.stringify({
+				files: { 'availability.json': { content: JSON.stringify({ available: 'yes' }) } },
+			}),
+			{ status: 200 },
+		);
+		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(invalid));
+
+		expect(await getAvailability()).toEqual(AVAILABLE);
+	});
+
+	it('collapses concurrent cold reads into a single upstream call', async () => {
+		// Hold the fetch open so both reads are in flight at once. The throttle (one attempt per
+		// TTL) and the single-flight guard together mean only one request ever reaches GitHub.
+		let release: () => void = () => {};
+		const fetchMock = vi.fn().mockImplementation(
+			() =>
+				new Promise<Response>((resolve) => {
+					release = () => resolve(gistResponse(BOOKED));
+				}),
+		);
+		vi.stubGlobal('fetch', fetchMock);
+
+		const first = getAvailability();
+		const second = getAvailability();
+		release();
+		const [a] = await Promise.all([first, second]);
+
+		expect(fetchMock).toHaveBeenCalledTimes(1);
+		expect(a).toEqual(BOOKED);
 	});
 
 	it('serves the value and a cache-control header through the real registered route', async () => {

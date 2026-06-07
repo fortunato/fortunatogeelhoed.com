@@ -2,6 +2,18 @@ import type { Framework } from './middleware/framework';
 
 export type Theme = 'dark' | 'light';
 
+// Escape text that is interpolated into markup. `bodyHtml` is deliberately raw framework output,
+// but `title`/`description` are plain text: escaping them keeps this reusable shell from becoming
+// an injection sink the moment a caller passes a content-derived string. Covers the attribute
+// context (description) too, so `"` is escaped alongside `& < >`.
+function escapeText(s: string): string {
+	return s
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;');
+}
+
 interface ShellOptions {
 	framework: Framework;
 	theme?: Theme;
@@ -32,8 +44,8 @@ export function renderShell({
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	${noindex}
 	<script>${THEME_SCRIPT}</script>
-	<title>${title ?? 'FORTUNATO.GEELHOED — Senior Full-Stack Engineer'}</title>
-	${description ? `<meta name="description" content="${description}">` : ''}
+	<title>${title ? escapeText(title) : 'FORTUNATO.GEELHOED — Senior Full-Stack Engineer'}</title>
+	${description ? `<meta name="description" content="${escapeText(description)}">` : ''}
 	<link rel="preload" href="/assets/fonts/rubik-variable.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="/assets/fonts/space-grotesk-variable.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="/assets/fonts/jetbrains-mono-variable.woff2" as="font" type="font/woff2" crossorigin>

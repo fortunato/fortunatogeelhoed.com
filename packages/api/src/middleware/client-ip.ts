@@ -1,4 +1,5 @@
 import type { Context } from 'hono';
+import { logger } from '../logger';
 
 // Bun passes the server handle as the fetch env; its `requestIP` yields the socket address. We
 // read it directly rather than importing `hono/bun`, whose module graph touches the `Bun` global
@@ -33,6 +34,12 @@ function socketAddress(c: Context): string | undefined {
 //   3. socket address     → the direct connection (correct when there is no proxy).
 const CLIENT_IP_HEADER = process.env.CLIENT_IP_HEADER;
 const TRUSTED_PROXY_HOPS = Number(process.env.TRUSTED_PROXY_HOPS) || 0;
+const isProd = process.env.NODE_ENV === 'production';
+
+// Fired at most once: if resolution ever falls all the way through in production, the socket
+// source is unavailable and every visitor shares a single rate-limit bucket — worth one loud line
+// rather than silently degrading the limiter.
+let warnedNoSource = false;
 
 export function clientIp(c: Context): string {
 	const edge = CLIENT_IP_HEADER && c.req.header(CLIENT_IP_HEADER)?.trim();
@@ -44,11 +51,24 @@ export function clientIp(c: Context): string {
 			?.split(',')
 			.map((entry) => entry.trim())
 			.filter(Boolean);
+		// Counting from the right ignores entries a client pads onto the left — but only when
+		// TRUSTED_PROXY_HOPS is the exact number of proxies that append to X-Forwarded-For. Declaring
+		// more hops than exist makes the index land on a client-supplied value; that correctness rests
+		// on the deployment matching the setting and cannot be verified here.
 		const trusted = hops?.[hops.length - TRUSTED_PROXY_HOPS];
 		if (trusted) return trusted;
 	}
 
 	// No trusted forwarded address — fall back to the socket. There is none for an in-process
 	// app.request during tests; collapse that to a shared key.
-	return socketAddress(c) ?? 'unknown';
+	const socket = socketAddress(c);
+	if (socket) return socket;
+
+	if (isProd && !warnedNoSource) {
+		warnedNoSource = true;
+		logger.warn(
+			'client IP unresolved (no edge header, trusted hop, or socket); rate limiting is using a single shared bucket',
+		);
+	}
+	return 'unknown';
 }

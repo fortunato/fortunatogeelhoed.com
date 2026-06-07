@@ -45,6 +45,14 @@ describe('applyAvailability', () => {
 		expect(out).toContain('\\u003c');
 	});
 
+	it('rewrites data-state whatever quote style the framework emits', () => {
+		const singleQuoted = PAGE.replace('data-state="available"', "data-state='available'");
+		const out = applyAvailability(singleQuoted, { available: false, until: '' });
+
+		expect(out).toContain('data-state="booked"');
+		expect(out).not.toContain("data-state='available'");
+	});
+
 	it('tolerates extra attributes and inner nodes around the badge', () => {
 		const ng = PAGE.replace(
 			'<span class="section-label" data-availability-badge="true" data-state="available">Available Now</span>',

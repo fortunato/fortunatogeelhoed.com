@@ -23,7 +23,12 @@ export function applyAvailability(html: string, a: Availability): string {
 	let out = html.replace(
 		/<span([^>]*data-availability-badge[^>]*)>[\s\S]*?<\/span>/,
 		(_match, attrs: string) => {
-			const nextAttrs = attrs.replace(/data-state="[^"]*"/, `data-state="${state}"`);
+			// Quote-agnostic: frameworks may emit double-, single-, or unquoted attribute values, and
+			// a value left unrewritten would ship stale optimistic state.
+			const nextAttrs = attrs.replace(
+				/data-state=("[^"]*"|'[^']*'|[^\s>]+)/,
+				`data-state="${state}"`,
+			);
 			return `<span${nextAttrs}>${badge}</span>`;
 		},
 	);
