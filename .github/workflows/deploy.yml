@@ -1,0 +1,68 @@
+name: Deploy
+
+# Publishing a versioned GitHub Release builds an immutable, version-tagged image and rolls that
+# exact version onto the running server. Provisioning is separate and run by hand; this never
+# touches the server's infrastructure, only the running container.
+on:
+  release:
+    types: [published]
+  # Manual build-and-push only — the deploy job is skipped. Use this to seed the first image to
+  # GHCR before the server exists, so the initial `pulumi up` has an image to pull. See infra/README.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  image:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.meta.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: meta
+        run: echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}:${{ steps.meta.outputs.tag }}
+            ghcr.io/${{ github.repository }}:latest
+          # Persist BuildKit cache in the GitHub Actions cache so rebuilds reuse layers across runs
+          # (the runner is ephemeral, so a Dockerfile cache mount alone would not survive).
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: image
+    # Deploy only on a real release. A manual (workflow_dispatch) run just seeds the image — the
+    # server may not exist yet, so there is nothing to deploy to.
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    steps:
+      # Join the tailnet as an ephemeral node so the deploy can reach the server, which exposes no
+      # public SSH. The node deregisters when the job ends.
+      - name: Connect to the tailnet
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:fg-deploy
+      # The deploy key is restricted to a forced command on the server, so this can only trigger a
+      # pull-and-swap of the requested tag — the tag is passed as the SSH command.
+      - name: Roll the server to the released version
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/id_deploy \
+            root@fg-app "${{ needs.image.outputs.tag }}"
