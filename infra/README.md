@@ -47,10 +47,11 @@ the server to already exist**. Break the cycle by seeding an image *before* prov
    - an **admin** SSH keypair (for break-glass root access over the tailnet);
    - a **deploy** SSH keypair (its public half is restricted to the deploy script on the server;
      its private half becomes a GitHub Actions secret).
-5. **Tailscale**: create an **OAuth client** that issues ephemeral `tag:fg-deploy` nodes, and an
-   ACL that lets `tag:fg-deploy` reach the server's SSH port. The server joins the tailnet at boot
-   via a reusable auth key tagged `tag:fg-server`, with node-key expiry disabled so it does not drop
-   off the network.
+5. **Tailscale**: apply [`tailscale-policy.hujson`](./tailscale-policy.hujson) in the admin console
+   (Access controls) — it declares the `tag:fg-server` / `tag:fg-deploy` tags and the SSH access
+   rules. Create an **OAuth client** that issues ephemeral `tag:fg-deploy` nodes (for CI). The
+   server joins the tailnet at boot via a reusable auth key tagged `tag:fg-server`; tagging it also
+   disables node-key expiry so it does not drop off the network.
 
 ## Configure the stack
 
@@ -62,18 +63,20 @@ pulumi stack init prod
 # non-secret
 pulumi config set domain fortunatogeelhoed.com
 pulumi config set imageRepo ghcr.io/<owner>/<repo>
-pulumi config set ghcrUser <github-user>
 pulumi config set ahasendFromEmail no-reply@fortunatogeelhoed.com
 pulumi config set adminSshPublicKey "ssh-ed25519 AAAA... admin"
 pulumi config set deploySshPublicKey "ssh-ed25519 AAAA... deploy"
 # location / serverType / ahasendFromName are optional (defaults: nbg1 / cx23 / the domain)
 
 # secrets
-pulumi config set --secret ghcrToken <read:packages PAT>
 pulumi config set --secret tailscaleAuthKey <tailscale auth key>
 pulumi config set --secret ahasendApiKey <AhaSend api key>
 pulumi config set --secret ahasendAccountId <AhaSend account id>
 pulumi config set --secret ahasendToEmail <destination inbox>
+
+# Private image only — leave both unset for a public GHCR package (recommended):
+# pulumi config set ghcrUser <github-user>
+# pulumi config set --secret ghcrToken <read:packages PAT>
 ```
 
 > The stack config file can hold encrypted secrets. It is `.gitignore`d here by default; only

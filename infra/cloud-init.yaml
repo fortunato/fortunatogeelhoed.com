@@ -90,8 +90,8 @@ runcmd:
   - >
     printf 'command="/opt/fg/deploy.sh",no-agent-forwarding,no-port-forwarding,no-pty,no-X11-forwarding %s\n'
     "$(cat /root/.ssh/fg_deploy.pub)" >> /root/.ssh/authorized_keys
-  # Authenticate to GHCR (only needed for a private image; harmless for a public one).
-  - echo "__GHCR_TOKEN__" | docker login ghcr.io -u "__GHCR_USER__" --password-stdin
+  # Log in to GHCR only when a token is configured (private image); a public image pulls anonymously.
+  - if [ -n "__GHCR_TOKEN__" ]; then echo "__GHCR_TOKEN__" | docker login ghcr.io -u "__GHCR_USER__" --password-stdin; fi
   # Start the app only if an image has already been pushed. If none exists yet, provisioning still
   # completes cleanly and the first deploy will start it. Seed an image before the first
   # `pulumi up` (see infra/README.md, "Bootstrap order").

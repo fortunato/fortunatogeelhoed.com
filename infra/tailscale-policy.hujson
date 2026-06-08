@@ -1,0 +1,25 @@
+// Tailscale access policy for fortunatogeelhoed.com.
+//
+// Applied by hand in the Tailscale admin console (Access controls). Tailscale is not part of the
+// Pulumi program, so nothing in this repo applies this automatically — it is kept here so the
+// access model is reproducible and reviewable alongside the rest of the infrastructure.
+//
+// HuJSON (JSON with comments and trailing commas), the format the Tailscale policy editor uses.
+{
+	// Tags must be declared here before they can be assigned to a device or an auth key. The server
+	// authenticates with an auth key tagged fg-server; CI joins as an ephemeral fg-deploy node via an
+	// OAuth client. Tagging a device also disables its node-key expiry, so the server does not drop
+	// off the tailnet.
+	"tagOwners": {
+		"tag:fg-server": ["autogroup:admin"],
+		"tag:fg-deploy": ["autogroup:admin"],
+	},
+
+	// The only access granted on the tailnet is SSH to the server; everything else is denied.
+	"acls": [
+		// Admin (you) may SSH the server for break-glass administration.
+		{ "action": "accept", "src": ["autogroup:admin"], "dst": ["tag:fg-server:22"] },
+		// The CI deploy node may SSH the server, where a forced command limits it to the deploy script.
+		{ "action": "accept", "src": ["tag:fg-deploy"], "dst": ["tag:fg-server:22"] },
+	],
+}

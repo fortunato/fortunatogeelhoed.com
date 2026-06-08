@@ -12,15 +12,17 @@ const cfg = new pulumi.Config();
 const domain = cfg.require('domain');
 const location = cfg.get('location') ?? 'nbg1';
 const serverType = cfg.get('serverType') ?? 'cx23';
-const ghcrUser = cfg.require('ghcrUser');
 const imageRepo = cfg.require('imageRepo'); // e.g. ghcr.io/fortunato/fortunatogeelhoed.com
+const ghcrUser = cfg.get('ghcrUser') ?? ''; // only used when the image package is private
 const adminSshKey = cfg.require('adminSshPublicKey');
 const deploySshKey = cfg.require('deploySshPublicKey');
 const fromEmail = cfg.require('ahasendFromEmail');
 const fromName = cfg.get('ahasendFromName') ?? 'fortunatogeelhoed.com';
 
 // Secrets — set with: pulumi config set --secret <key> <value>
-const ghcrToken = cfg.requireSecret('ghcrToken'); // read:packages PAT, for the server to pull
+// ghcrToken is the toggle for a private image: set it (with ghcrUser) and the server logs in to
+// GHCR; leave it unset and a public image is pulled anonymously.
+const ghcrToken = cfg.getSecret('ghcrToken');
 const tailscaleAuthKey = cfg.requireSecret('tailscaleAuthKey');
 const ahasendApiKey = cfg.requireSecret('ahasendApiKey');
 const ahasendAccountId = cfg.requireSecret('ahasendAccountId');
@@ -48,7 +50,7 @@ const userData = pulumi
 	.apply(([token, ts, apiKey, accountId, toEmail]) =>
 		template
 			.replaceAll('__GHCR_USER__', ghcrUser)
-			.replaceAll('__GHCR_TOKEN__', token)
+			.replaceAll('__GHCR_TOKEN__', token ?? '')
 			.replaceAll('__IMAGE_REPO__', imageRepo)
 			.replaceAll('__DOMAIN__', domain)
 			.replaceAll('__DEPLOY_PUBKEY__', deploySshKey)
