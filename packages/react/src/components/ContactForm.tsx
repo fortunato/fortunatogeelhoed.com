@@ -16,6 +16,9 @@ const FIELDS = ['name', 'email', 'message'] as const;
 // component (controlled via its `value` property and bubbling native `input` event) to a field.
 export function ContactForm({ disabled = false }: ContactFormProps) {
 	const [sent, setSent] = useState(false);
+	// True when a valid submission could not be delivered (a 502, or the request never reached the
+	// server). Surfaces a general "try again" message rather than a false success.
+	const [failed, setFailed] = useState(false);
 	// Honeypot: a hidden field no human fills. Sent with the payload; the server silently drops any
 	// submission that arrives with it set. Kept out of the shared schema so it stays a private trap.
 	const [company, setCompany] = useState('');
@@ -35,22 +38,37 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 	// back onto react-hook-form's own error state via setError; they clear automatically when the
 	// field re-validates on the next edit (reValidateMode defaults to 'onChange').
 	const onSubmit = handleSubmit(async (data) => {
-		const res = await fetch('/api/contact', {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({ ...data, company }),
-		});
+		setFailed(false);
+		let res: Response;
+		try {
+			res = await fetch('/api/contact', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ ...data, company }),
+			});
+		} catch {
+			// Never reached the server (offline, aborted) — show the general failure.
+			setFailed(true);
+			return;
+		}
 		if (res.ok) {
 			setSent(true);
 			return;
 		}
+		// A 422 carries field errors to map back onto the inputs; a 502 (valid but undelivered) or
+		// any other failure has none, so it surfaces as a general "try again" message.
 		const body = (await res.json().catch(() => null)) as {
 			errors?: Partial<Record<keyof ContactFormData, string[]>>;
 		} | null;
+		let hadFieldError = false;
 		for (const field of FIELDS) {
 			const message = body?.errors?.[field]?.[0];
-			if (message) setError(field, { type: 'server', message });
+			if (message) {
+				setError(field, { type: 'server', message });
+				hadFieldError = true;
+			}
 		}
+		if (!hadFieldError) setFailed(true);
 	});
 
 	if (sent) {
@@ -128,6 +146,15 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 					onChange={(e) => setCompany(e.target.value)}
 				/>
 			</div>
+			{failed && (
+				<p className="contact-error" role="alert">
+					Something went wrong sending your message. Please try again.
+				</p>
+			)}
+			<p className="contact-privacy">
+				Your name, email, and message are emailed to me so I can reply — they are not stored
+				on this site.
+			</p>
 			<button type="submit" className="btn" disabled={disabled}>
 				Send
 			</button>

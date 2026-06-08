@@ -46,7 +46,7 @@ describe('OpenAPI document', () => {
 		expect(body.required).toEqual(expect.arrayContaining(['name', 'email', 'message']));
 		const props = body.properties as Record<string, OpenAPIV3_1.SchemaObject>;
 		expect(props.email?.format).toBe('email');
-		// 200/422 are the handler's own outcomes; 403/413/429 come from the CSRF, body-limit and
+		// 200/422/502 are the handler's own outcomes; 403/413/429 come from the CSRF, body-limit and
 		// rate-limit guards in front of it — documented so the spec stays truthful to what callers
 		// can see.
 		expect(Object.keys(post.responses ?? {}).sort()).toEqual([
@@ -55,6 +55,7 @@ describe('OpenAPI document', () => {
 			'413',
 			'422',
 			'429',
+			'502',
 		]);
 	});
 

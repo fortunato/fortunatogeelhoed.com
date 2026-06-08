@@ -73,6 +73,13 @@
 				@input="company = ($event.target as HTMLInputElement).value"
 			/>
 		</div>
+		<p v-if="failed" class="contact-error" role="alert">
+			Something went wrong sending your message. Please try again.
+		</p>
+		<p class="contact-privacy">
+			Your name, email, and message are emailed to me so I can reply — they are not stored on
+			this site.
+		</p>
 		<button type="submit" class="btn" :disabled="disabled">Send</button>
 	</form>
 </template>
@@ -90,6 +97,9 @@ import { ref } from 'vue';
 withDefaults(defineProps<{ disabled?: boolean }>(), { disabled: false });
 
 const sent = ref(false);
+// True when a valid submission could not be delivered (a 502, or the request never reached the
+// server). Surfaces a general "try again" message rather than a false success.
+const failed = ref(false);
 // Honeypot: a hidden field no human fills. Sent with the payload; the server silently drops any
 // submission that arrives with it set. Kept out of the shared schema so it stays a private trap.
 const company = ref('');
@@ -103,11 +113,19 @@ const form = useForm({
 		// error state. Each field's listener clears its own server error on edit (matching React and
 		// Angular), so there is no parallel server-error store.
 		onSubmitAsync: async ({ value }) => {
-			const res = await fetch('/api/contact', {
-				method: 'POST',
-				headers: { 'content-type': 'application/json' },
-				body: JSON.stringify({ ...value, company: company.value }),
-			});
+			failed.value = false;
+			let res: Response;
+			try {
+				res = await fetch('/api/contact', {
+					method: 'POST',
+					headers: { 'content-type': 'application/json' },
+					body: JSON.stringify({ ...value, company: company.value }),
+				});
+			} catch {
+				// Never reached the server — fail the submit so the success view does not show.
+				failed.value = true;
+				return 'send-failed';
+			}
 			if (res.ok) return undefined;
 			const body = (await res.json().catch(() => null)) as {
 				errors?: Partial<Record<keyof ContactFormData, string[]>>;
@@ -116,6 +134,12 @@ const form = useForm({
 			for (const field of ['name', 'email', 'message'] as const) {
 				const message = body?.errors?.[field]?.[0];
 				if (message) fields[field] = { message };
+			}
+			// A 502 (valid but undelivered) carries no field errors — surface the general message
+			// and keep the submit failed so onSubmit (success) never runs.
+			if (Object.keys(fields).length === 0) {
+				failed.value = true;
+				return 'send-failed';
 			}
 			return { fields };
 		},

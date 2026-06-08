@@ -4,10 +4,11 @@ import { describeRoute, resolver } from 'hono-openapi';
 import { z } from 'zod';
 import { logger } from '../logger';
 import { toOpenApiSchema } from '../openapi';
+import { sendContactEmail } from '../services/email';
 
 // Contact form submission. Validates with the same Zod schema the browser forms use, so the
-// client and server can never disagree on what counts as valid. Validation-only for now: a
-// well-formed payload is acknowledged but not yet delivered or stored.
+// client and server can never disagree on what counts as valid. A well-formed payload is then
+// delivered by email; it is not stored. Delivery is fail-closed (see the handler).
 
 // Response shapes that exist only to document the API — they are contract artifacts, not
 // validation rules, so unlike contactSchema they are not shared with the frontend. They mirror
@@ -17,13 +18,14 @@ const successSchema = z.object({ ok: z.literal(true) });
 const errorSchema = z.object({
 	errors: z.record(z.string(), z.array(z.string())),
 });
+const deliveryErrorSchema = z.object({ error: z.literal('delivery_failed') });
 
 const spec = describeRoute({
 	tags: ['Contact'],
 	summary: 'Submit the contact form',
 	description:
-		'Validates a contact submission against the same schema the browser forms use. A ' +
-		'well-formed payload is acknowledged; it is not yet stored or delivered.',
+		'Validates a contact submission against the same schema the browser forms use, then ' +
+		'delivers it by email. The submission is not stored.',
 	requestBody: {
 		required: true,
 		content: {
@@ -42,6 +44,10 @@ const spec = describeRoute({
 			content: { 'application/json': { schema: resolver(errorSchema) } },
 		},
 		429: { description: 'Rate limit exceeded.' },
+		502: {
+			description: 'The submission was valid but could not be delivered upstream.',
+			content: { 'application/json': { schema: resolver(deliveryErrorSchema) } },
+		},
 	},
 });
 
@@ -61,6 +67,14 @@ async function handler(c: Context): Promise<Response> {
 	const result = contactSchema.safeParse(payload);
 	if (!result.success) {
 		return c.json({ errors: z.flattenError(result.error).fieldErrors }, 422);
+	}
+
+	// Valid payload: deliver it. Fail closed — a provider error or missing configuration returns a
+	// 502 so the visitor knows it did not go through and can retry, rather than a false success that
+	// would silently lose a real lead. The cause is logged inside the service, never the secrets.
+	const sent = await sendContactEmail(result.data);
+	if (!sent.ok) {
+		return c.json({ error: 'delivery_failed' }, 502);
 	}
 	return c.json({ ok: true });
 }

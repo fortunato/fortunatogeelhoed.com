@@ -189,6 +189,20 @@
 		font-weight: 600;
 	}
 
+	/* Shown when a valid submission could not be delivered (a 502 or network failure). */
+	.contact-error {
+		margin-top: var(--jb-space-sm);
+		color: var(--jb-color-danger);
+		font-weight: 600;
+	}
+
+	/* Brief notice that the message is emailed, not stored. */
+	.contact-privacy {
+		margin-top: var(--jb-space-sm);
+		color: var(--jb-text-tertiary);
+		font-size: 0.85rem;
+	}
+
 	.contact-meta {
 		display: flex;
 		flex-wrap: wrap;

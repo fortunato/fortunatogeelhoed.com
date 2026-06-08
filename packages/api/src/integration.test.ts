@@ -1,5 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+// Delivery is mocked to succeed: this file exercises the protection middleware wiring around the
+// contact route (body cap, same-origin guard, rate limit), not the email send. Without this a
+// valid submission would attempt an unconfigured send and fail closed with 502.
+vi.mock('./services/email', () => ({ sendContactEmail: vi.fn(async () => ({ ok: true })) }));
+
 // The route modules are tested in isolation elsewhere; this file verifies the *wiring* in
 // index.ts — that the shared protection layer (body-size cap, same-origin guard, per-IP rate
 // limit) actually sits in front of the JSON endpoints, in the right order. Each test re-imports

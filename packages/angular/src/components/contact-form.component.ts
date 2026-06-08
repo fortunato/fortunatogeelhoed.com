@@ -60,6 +60,15 @@ import { JbControlValueAccessor } from '../directives/jb-input.value-accessor';
 							(input)="company.set($any($event.target).value)"
 						/>
 					</div>
+					@if (failed()) {
+						<p class="contact-error" role="alert">
+							Something went wrong sending your message. Please try again.
+						</p>
+					}
+					<p class="contact-privacy">
+						Your name, email, and message are emailed to me so I can reply — they are not
+						stored on this site.
+					</p>
 					<button type="submit" class="btn" [disabled]="disabled()">Send</button>
 			</form>
 		}
@@ -70,6 +79,10 @@ export class ContactFormComponent {
 	readonly disabled = input(false);
 
 	protected readonly sent = signal(false);
+
+	// True when a valid submission could not be delivered (a 502, or the request never reached the
+	// server). Surfaces a general "try again" message rather than a false success.
+	protected readonly failed = signal(false);
 
 	// Honeypot: a hidden field no human fills. Sent with the payload; the server silently drops any
 	// submission that arrives with it set. Kept out of the shared schema so it stays a private trap.
@@ -101,11 +114,19 @@ export class ContactFormComponent {
 		// the matching fields as native ValidationErrors.
 		await submit(this.form, {
 			action: async () => {
-				const res = await fetch('/api/contact', {
-					method: 'POST',
-					headers: { 'content-type': 'application/json' },
-					body: JSON.stringify({ ...this.model(), company: this.company() }),
-				});
+				this.failed.set(false);
+				let res: Response;
+				try {
+					res = await fetch('/api/contact', {
+						method: 'POST',
+						headers: { 'content-type': 'application/json' },
+						body: JSON.stringify({ ...this.model(), company: this.company() }),
+					});
+				} catch {
+					// Never reached the server — surface the general failure.
+					this.failed.set(true);
+					return undefined;
+				}
 				if (res.ok) {
 					this.sent.set(true);
 					return undefined;
@@ -118,16 +139,19 @@ export class ContactFormComponent {
 					email: this.form.email,
 					message: this.form.message,
 				};
-				return (Object.keys(fields) as (keyof ContactFormData)[])
+				const serverErrors = (Object.keys(fields) as (keyof ContactFormData)[])
 					.map((field) => ({ field, message: body?.errors?.[field]?.[0] }))
 					.filter(
 						(e): e is { field: keyof ContactFormData; message: string } => !!e.message,
 					)
 					.map((e) => ({
 						fieldTree: fields[e.field],
-						kind: 'server',
+						kind: 'server' as const,
 						message: e.message,
 					}));
+				// A 502 (valid but undelivered) carries no field errors — surface the general message.
+				if (serverErrors.length === 0) this.failed.set(true);
+				return serverErrors;
 			},
 		});
 	}

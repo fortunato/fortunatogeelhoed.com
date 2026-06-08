@@ -1,6 +1,11 @@
 import { Hono } from 'hono';
-import { describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { contactRoute } from './contact';
+
+// The provider call is mocked here: these tests cover the route's behaviour — validation, the
+// honeypot, and fail-closed delivery — not the live email send (that path is exercised manually).
+const sendContactEmail = vi.hoisted(() => vi.fn());
+vi.mock('../services/email', () => ({ sendContactEmail }));
 
 // Drive the route module in isolation (no global middleware), so this covers the handler + its
 // validation wiring directly.
@@ -15,17 +20,32 @@ async function post(body: unknown): Promise<Response> {
 }
 
 describe('contact route', () => {
-	it('accepts a well-formed submission', async () => {
+	beforeEach(() => {
+		sendContactEmail.mockReset();
+		sendContactEmail.mockResolvedValue({ ok: true });
+	});
+
+	it('accepts a well-formed submission and delivers it', async () => {
 		const res = await post({ name: 'Ada', email: 'ada@example.com', message: 'hello' });
 		expect(res.status).toBe(200);
 		expect(await res.json()).toEqual({ ok: true });
+		expect(sendContactEmail).toHaveBeenCalledTimes(1);
 	});
 
-	it('rejects an invalid submission with field-keyed errors', async () => {
+	it('returns 502 when a valid submission cannot be delivered', async () => {
+		// Fail closed: the visitor must learn it did not go through, not see a false success.
+		sendContactEmail.mockResolvedValue({ ok: false, reason: 'upstream' });
+		const res = await post({ name: 'Ada', email: 'ada@example.com', message: 'hello' });
+		expect(res.status).toBe(502);
+		expect(await res.json()).toEqual({ error: 'delivery_failed' });
+	});
+
+	it('rejects an invalid submission with field-keyed errors and sends nothing', async () => {
 		const res = await post({ name: '', email: 'not-an-email', message: '' });
 		expect(res.status).toBe(422);
 		const body = (await res.json()) as { errors: Record<string, string[]> };
 		expect(Object.keys(body.errors).sort()).toEqual(['email', 'message', 'name']);
+		expect(sendContactEmail).not.toHaveBeenCalled();
 	});
 
 	it('rejects a non-JSON body', async () => {
@@ -37,9 +57,10 @@ describe('contact route', () => {
 			body: 'not json',
 		});
 		expect(res.status).toBe(422);
+		expect(sendContactEmail).not.toHaveBeenCalled();
 	});
 
-	it('silently accepts and drops a submission that fills the honeypot', async () => {
+	it('silently accepts and drops a submission that fills the honeypot, without sending', async () => {
 		const res = await post({
 			name: 'Ada',
 			email: 'ada@example.com',
@@ -48,6 +69,7 @@ describe('contact route', () => {
 		});
 		expect(res.status).toBe(200);
 		expect(await res.json()).toEqual({ ok: true });
+		expect(sendContactEmail).not.toHaveBeenCalled();
 	});
 
 	it('short-circuits before validation when the honeypot is filled', async () => {
@@ -56,6 +78,7 @@ describe('contact route', () => {
 		const res = await post({ name: '', email: 'nope', message: '', company: 'bot' });
 		expect(res.status).toBe(200);
 		expect(await res.json()).toEqual({ ok: true });
+		expect(sendContactEmail).not.toHaveBeenCalled();
 	});
 
 	it('accepts a normal submission whose honeypot is empty', async () => {
@@ -66,5 +89,6 @@ describe('contact route', () => {
 			company: '',
 		});
 		expect(res.status).toBe(200);
+		expect(sendContactEmail).toHaveBeenCalledTimes(1);
 	});
 });
