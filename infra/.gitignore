@@ -1,0 +1,7 @@
+node_modules/
+bin/
+# Stack config can hold encrypted secrets; keep it out of the public repo unless your Pulumi
+# backend (Pulumi Cloud or an external passphrase) makes committing the ciphertext safe.
+Pulumi.*.yaml
+*.env
+.env

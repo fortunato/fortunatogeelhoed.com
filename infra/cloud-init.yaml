@@ -1,0 +1,107 @@
+#cloud-config
+# First-boot bootstrap only. Kept deliberately minimal and free of any app version so that routine
+# deploys never need to touch it (changing this file forces the server to be replaced). Placeholders
+# (__LIKE_THIS__) are filled in from Pulumi config before this is passed as user data.
+package_update: true
+packages:
+  - docker.io
+
+write_files:
+  # Cap container logs so they can never fill the disk and take the whole host down with them.
+  - path: /etc/docker/daemon.json
+    permissions: '0644'
+    content: |
+      {
+        "log-driver": "json-file",
+        "log-opts": { "max-size": "10m", "max-file": "3" }
+      }
+
+  - path: /etc/fg/app.env
+    permissions: '0600'
+    owner: root:root
+    content: |
+      NODE_ENV=production
+      TRUSTED_PROXY_HOPS=1
+      CLIENT_IP_HEADER=
+      AHASEND_API_KEY=__AHASEND_API_KEY__
+      AHASEND_ACCOUNT_ID=__AHASEND_ACCOUNT_ID__
+      AHASEND_FROM_EMAIL=__AHASEND_FROM_EMAIL__
+      AHASEND_FROM_NAME=__AHASEND_FROM_NAME__
+      AHASEND_TO_EMAIL=__AHASEND_TO_EMAIL__
+
+  - path: /etc/fg/Caddyfile
+    permissions: '0644'
+    content: |
+      __DOMAIN__ {
+        encode zstd gzip
+        reverse_proxy app:3000
+      }
+
+  - path: /opt/fg/deploy.sh
+    permissions: '0755'
+    content: |
+      #!/usr/bin/env bash
+      # Forced-command deploy: the CI deploy key may run only this script. The requested image tag
+      # arrives as the original SSH command; anything but a simple tag is refused.
+      set -euo pipefail
+      TAG="${SSH_ORIGINAL_COMMAND:-latest}"
+      case "$TAG" in
+        *[!a-zA-Z0-9._-]*) echo "refusing suspicious tag: $TAG" >&2; exit 1 ;;
+      esac
+      IMAGE="__IMAGE_REPO__:${TAG}"
+
+      run_app() { docker run -d --name app --restart unless-stopped --network web --env-file /etc/fg/app.env "$1"; }
+
+      # Remember the running image so a failed deploy can be rolled back to it.
+      PREV="$(docker inspect --format '{{.Config.Image}}' app 2>/dev/null || true)"
+
+      docker pull "$IMAGE"
+      docker rm -f app 2>/dev/null || true
+      run_app "$IMAGE"
+
+      # Wait for the image's healthcheck to report healthy before declaring success.
+      for _ in $(seq 1 30); do
+        status="$(docker inspect --format '{{.State.Health.Status}}' app 2>/dev/null || echo starting)"
+        [ "$status" = healthy ] && { echo "deployed $TAG"; docker image prune -f; exit 0; }
+        [ "$status" = unhealthy ] && break
+        sleep 2
+      done
+
+      echo "deploy of $TAG did not become healthy; rolling back" >&2
+      docker rm -f app 2>/dev/null || true
+      [ -n "$PREV" ] && { run_app "$PREV"; echo "rolled back to $PREV" >&2; }
+      exit 1
+
+  - path: /root/.ssh/fg_deploy.pub
+    permissions: '0644'
+    content: '__DEPLOY_PUBKEY__'
+
+runcmd:
+  # Enable Docker and restart it so the log-rotation defaults in daemon.json take effect (the
+  # package may have started dockerd before that file was written).
+  - systemctl enable docker
+  - systemctl restart docker
+  - docker network create web || true
+  # Tailscale provides the only path for administrative and deploy SSH; no public SSH port is open.
+  - curl -fsSL https://tailscale.com/install.sh | sh
+  - tailscale up --authkey=__TAILSCALE_AUTHKEY__ --hostname=fg-app
+  # Restrict the CI deploy key to the deploy script only (forced command, no shell, no forwarding).
+  - install -d -m 0700 /root/.ssh
+  - >
+    printf 'command="/opt/fg/deploy.sh",no-agent-forwarding,no-port-forwarding,no-pty,no-X11-forwarding %s\n'
+    "$(cat /root/.ssh/fg_deploy.pub)" >> /root/.ssh/authorized_keys
+  # Authenticate to GHCR (only needed for a private image; harmless for a public one).
+  - echo "__GHCR_TOKEN__" | docker login ghcr.io -u "__GHCR_USER__" --password-stdin
+  # Start the app only if an image has already been pushed. If none exists yet, provisioning still
+  # completes cleanly and the first deploy will start it. Seed an image before the first
+  # `pulumi up` (see infra/README.md, "Bootstrap order").
+  - >
+    docker pull __IMAGE_REPO__:latest
+    && docker run -d --name app --restart unless-stopped --network web --env-file /etc/fg/app.env __IMAGE_REPO__:latest
+    || echo "no image on GHCR yet; the first deploy will start the app"
+  - >
+    docker run -d --name caddy --restart unless-stopped --network web
+    -p 80:80 -p 443:443
+    -v /etc/fg/Caddyfile:/etc/caddy/Caddyfile:ro
+    -v caddy_data:/data -v caddy_config:/config
+    caddy:2

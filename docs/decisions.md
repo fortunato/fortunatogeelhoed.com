@@ -234,3 +234,60 @@ hero entrance, same-document View Transitions, and a scoped Lenis smooth scroll
 on the desktop timeline — now ships; how it is built, and why the broader GSAP
 layer stays deferred, is covered in
 [`motion-and-navigation.md`](motion-and-navigation.md).
+
+## Hosting & delivery
+
+This records how the site is hosted and how a contact message is delivered.
+
+### Contact email through a hosted provider
+
+The contact form sends mail through a hosted transactional email provider over its HTTPS API. We do
+not run a mail server. Running one means owning deliverability: sender reputation, SPF and DKIM,
+blocklist monitoring, and abuse handling. For the message the site exists to capture, mail lost to
+spam or a bounce is the worst outcome, so that work is not worth owning. The HTTPS API also avoids
+the outbound port 25 restrictions that cloud hosts apply.
+
+Delivery is fail-closed. A valid submission that cannot be sent returns an error the visitor can
+retry, not a false success. Failures are logged without secrets. Alerting on them, if we want it,
+belongs in the operations layer against those logs rather than in the application. Nothing is stored
+on the server; the message is relayed and then gone. That is also why the form shows a short privacy
+note rather than a consent checkbox.
+
+### One server, defined in code
+
+The app runs as a single container on one small cloud server, behind Caddy, which terminates TLS and
+renews certificates on its own. One instance suits the in-process design described under *API abuse
+controls*: the rate limiter and the availability cache assume a single container, and running
+multiple replicas is a non-goal. The server is defined with Pulumi in TypeScript, the same language
+as the app, so the infrastructure is ordinary code in this repository. The public firewall opens
+only the web ports. There is no public SSH, and port 25 stays closed because no mail leaves the box.
+
+### Provisioning and deployment are separate
+
+Provisioning and deployment change at different rates, so they are kept apart. Provisioning is rare
+and run by hand. The server's first-boot script carries no application version, so a normal deploy
+never rebuilds the host; rebuilding it would change its address and certificate and cause downtime.
+Deployment is automated. Publishing a versioned release builds an immutable, version-tagged image
+and rolls that version onto the running server, replacing only the container. Rolling back means
+redeploying an earlier version.
+
+### Access to the server
+
+Access for deploys and administration is the part most likely to be over-permissioned, so it is kept
+narrow. The host has no public SSH; the only ports open to the internet are the web ports.
+Administration and deploys travel over a private Tailscale network, an encrypted WireGuard mesh.
+This removes the public SSH surface, and it means continuous integration does not need a fixed,
+allow-listed IP address.
+
+Roles on that network are set by tag, namespaced to this project so they do not collide with other
+hosts on the same tailnet. The server is a long-lived node tagged tag:fg-server, and the maintainer's
+own machine joins to administer it. Continuous integration joins only for the length of a deploy, as
+a short-lived node tagged tag:fg-deploy that is removed when the job ends. The access rules allow two
+paths: the maintainer to the server, and a tag:fg-deploy node to the server's SSH port. Nothing else
+on the network can reach it.
+
+The server adds a second limit. The deploy key is bound to one forced command that pulls the
+requested image and swaps the container, so a release can deploy and nothing more: no shell, no
+arbitrary commands, and no way to change the infrastructure, which stays a hand-run Pulumi task. One
+requirement comes with this model: the server's Tailscale node key must be set not to expire, or the
+server leaves the private network and deploys stop reaching it.

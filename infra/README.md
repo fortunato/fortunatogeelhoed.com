@@ -1,0 +1,129 @@
+# Infrastructure
+
+The production host for fortunatogeelhoed.com, defined with [Pulumi](https://www.pulumi.com/) in
+TypeScript. It provisions a single small Hetzner Cloud server that runs the application container
+behind [Caddy](https://caddyserver.com/) (automatic HTTPS). Email is sent through AhaSend over
+HTTPS, so the server runs no mail software and never needs port 25.
+
+This is a self-contained project, separate from the application workspace: it has its own
+dependencies and its own `pulumi up` / `pulumi preview` lifecycle.
+
+## Two lifecycles
+
+- **Provisioning** (this project) is run **by hand**, only when the infrastructure changes. The
+  first-boot bootstrap (`cloud-init.yaml`) is deliberately minimal and contains no app version, so
+  routine deploys never require re-provisioning. Changing `cloud-init.yaml` replaces the server.
+- **Deployment** is automated by `.github/workflows/deploy.yml`: publishing a versioned GitHub
+  Release builds a version-tagged image and rolls that exact tag onto the running server. It never
+  runs Pulumi.
+
+## Bootstrap order (first time only)
+
+There is a deliberate ordering to the very first setup, because two things would otherwise deadlock:
+the server's first-boot script **pulls the app image from GHCR**, but the automated deploy **needs
+the server to already exist**. Break the cycle by seeding an image *before* provisioning:
+
+1. Do the **One-time setup** and **Configure the stack** below (accounts, keys, Pulumi config).
+2. **Seed the first image to GHCR.** In GitHub, run the **Deploy** workflow manually
+   (Actions → *Deploy* → *Run workflow*). With no release attached it only **builds and pushes
+   `:latest`** — the deploy job is skipped because there is no server yet.
+3. **`pulumi up`.** The server boots and cloud-init pulls that `:latest` image, so the app starts
+   immediately. (If you skip step 2, provisioning still succeeds cleanly, but the app stays down
+   until the first release deploys it.)
+4. **Point DNS** at the output IP (below) so Caddy can obtain a certificate.
+5. **Add the deploy secrets** (below) so future releases can reach the server.
+6. **From now on**, publish a release `vX.Y.Z`: the workflow builds the new version and deploys it
+   onto the running server, waiting for the container's healthcheck and **rolling back automatically
+   if it never becomes healthy**. Roll back manually by re-running a deploy for a previous tag.
+
+## One-time setup
+
+1. **Accounts** (free tiers are sufficient): Hetzner Cloud, Pulumi, Tailscale; an AhaSend account
+   with a **verified sender domain** (SPF/DKIM records on the domain).
+2. **State backend**: log in to Pulumi (`pulumi login`) so state and encrypted config live in a
+   durable backend rather than on one machine.
+3. **Hetzner token**: `export HCLOUD_TOKEN=...` (or `pulumi config set --secret hcloud:token ...`).
+4. **Keys**:
+   - an **admin** SSH keypair (for break-glass root access over the tailnet);
+   - a **deploy** SSH keypair (its public half is restricted to the deploy script on the server;
+     its private half becomes a GitHub Actions secret).
+5. **Tailscale**: create an **OAuth client** that issues ephemeral `tag:fg-deploy` nodes, and an
+   ACL that lets `tag:fg-deploy` reach the server's SSH port. The server joins the tailnet at boot
+   via a reusable auth key tagged `tag:fg-server`, with node-key expiry disabled so it does not drop
+   off the network.
+
+## Configure the stack
+
+```sh
+cd infra
+bun install
+pulumi stack init prod
+
+# non-secret
+pulumi config set domain fortunatogeelhoed.com
+pulumi config set imageRepo ghcr.io/<owner>/<repo>
+pulumi config set ghcrUser <github-user>
+pulumi config set ahasendFromEmail no-reply@fortunatogeelhoed.com
+pulumi config set adminSshPublicKey "ssh-ed25519 AAAA... admin"
+pulumi config set deploySshPublicKey "ssh-ed25519 AAAA... deploy"
+# location / serverType / ahasendFromName are optional (defaults: nbg1 / cx23 / the domain)
+
+# secrets
+pulumi config set --secret ghcrToken <read:packages PAT>
+pulumi config set --secret tailscaleAuthKey <tailscale auth key>
+pulumi config set --secret ahasendApiKey <AhaSend api key>
+pulumi config set --secret ahasendAccountId <AhaSend account id>
+pulumi config set --secret ahasendToEmail <destination inbox>
+```
+
+> The stack config file can hold encrypted secrets. It is `.gitignore`d here by default; only
+> commit it if your backend (Pulumi Cloud, or an external passphrase) makes the ciphertext safe to
+> publish. The rendered `cloud-init` (which contains plaintext secrets) exists only transiently in
+> Pulumi state — keep state private.
+
+## Provision
+
+Seed an image first (see **Bootstrap order**, step 2) so the first boot has something to pull.
+
+```sh
+pulumi preview          # expect only SshKey / Firewall / Server, and no secret in the diff
+pulumi up
+pulumi stack output ipv4
+pulumi stack output ipv6
+```
+
+Validate on a throwaway stack first (`pulumi up` then `pulumi destroy`) with a temporary token.
+
+## After provisioning
+
+1. **DNS** (at your registrar): point the apex `A` record at the `ipv4` output and `AAAA` at
+   `ipv6`. Caddy can only obtain a certificate once DNS resolves to the server.
+2. **GitHub Actions secrets** (repo → Settings → Secrets): `DEPLOY_SSH_KEY` (the deploy private
+   key), `TS_OAUTH_CLIENT_ID`, `TS_OAUTH_SECRET`. Image push uses the built-in `GITHUB_TOKEN`.
+3. **Deploy**: publish a release `vX.Y.Z`; the workflow builds, pushes, and rolls it out. Roll
+   back by re-running the deploy for a previous tag.
+
+## Uptime monitoring
+
+The container restart policy recovers crashes and reboots, but it cannot report that the site is
+down. A wedged process, a crash loop, an expired certificate, a dead host, or broken DNS all look
+healthy to it. Uptime is therefore checked from outside the host: a request to the site over HTTPS
+runs every minute and alerts on failure. An external check covers all of those failure modes
+whatever state the host is in.
+
+The check runs in Grafana Synthetic Monitoring, because backend logs and frontend telemetry already
+go to Grafana Cloud and its free tier covers one check and alert. UptimeRobot and Healthchecks.io
+are equivalent alternatives.
+
+## Notes
+
+- **GHCR package visibility**: the image holds only the built public site (no secrets — those are
+  runtime env), so making the package **public** is recommended. Public pulls need no credentials,
+  so you can drop `ghcrToken` and the `docker login` line; public packages are also free with no
+  storage limit. If you keep it private, the server pulls using the `read:packages` token in
+  `ghcrToken`. After the first push, set visibility under the repo's Packages settings.
+- `cx23` is the Cost-Optimized tier (2 vCPU / 4 GB) — generous for a static-serving Bun process. It
+  carries a "Limited availability" badge; if `pulumi up` cannot obtain one, set
+  `pulumi config set serverType cx32` (Regular Performance) and retry.
+- Dependency versions in `package.json` are starting points; pin them to what `bun install`
+  resolves.

@@ -1,0 +1,6 @@
+name: fortunatogeelhoed-com
+runtime:
+  name: nodejs
+  options:
+    packagemanager: bun
+description: Single Hetzner Cloud host for fortunatogeelhoed.com — the app container behind Caddy.
