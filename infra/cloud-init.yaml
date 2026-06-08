@@ -28,6 +28,18 @@ write_files:
       AHASEND_FROM_EMAIL=__AHASEND_FROM_EMAIL__
       AHASEND_FROM_NAME=__AHASEND_FROM_NAME__
       AHASEND_TO_EMAIL=__AHASEND_TO_EMAIL__
+      # Single level gate in front of both stdout and Loki. Blank uses the app's built-in default
+      # (info in production). Set e.g. debug to widen, warn to quiet, without a code release.
+      LOG_LEVEL=__LOG_LEVEL__
+      # Log shipping to hosted Loki. All three optional: when any is blank the app keeps logging to
+      # stdout only (and the container logs are still captured by Docker's json-file driver above).
+      LOKI_HOST=__LOKI_HOST__
+      LOKI_USER=__LOKI_USER__
+      LOKI_TOKEN=__LOKI_TOKEN__
+      # Frontend RUM (Grafana Faro) forwarding target for the first-party /api/rum proxy. Optional:
+      # without a collector URL the proxy drops payloads and answers 204, so the site is unaffected.
+      FARO_COLLECTOR_URL=__FARO_COLLECTOR_URL__
+      FARO_APP_KEY=__FARO_APP_KEY__
 
   - path: /etc/fg/Caddyfile
     permissions: '0644'

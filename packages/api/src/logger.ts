@@ -2,8 +2,10 @@ import type { MiddlewareHandler } from 'hono';
 import pino, { type Logger } from 'pino';
 
 const isDev = process.env.NODE_ENV !== 'production';
+// `||` (not `??`) so a present-but-empty LOG_LEVEL — as the deploy env file supplies when the level
+// is left unset — falls through to the default rather than handing pino an invalid empty level.
 const level =
-	process.env.LOG_LEVEL ??
+	process.env.LOG_LEVEL ||
 	(process.env.NODE_ENV === 'test' ? 'silent' : isDev ? 'debug' : 'info');
 
 // Structured logging with one firm rule: stdout is always the source of truth and can

@@ -19,6 +19,18 @@ const deploySshKey = cfg.require('deploySshPublicKey');
 const fromEmail = cfg.require('ahasendFromEmail');
 const fromName = cfg.get('ahasendFromName') ?? 'fortunatogeelhoed.com';
 
+// Optional override for the log level applied to both stdout and Loki. Left unset the app uses its
+// built-in default (info in production), the conventional production baseline.
+const logLevel = cfg.get('logLevel') ?? '';
+
+// Log shipping to hosted Loki (Grafana Cloud). Optional: leave these unset and the app logs to
+// stdout only. The push endpoint and instance id are not secret; only the token is.
+const lokiHost = cfg.get('lokiHost') ?? ''; // e.g. https://logs-prod-012.grafana.net
+const lokiUser = cfg.get('lokiUser') ?? ''; // Grafana Cloud Loki instance/user id (numeric)
+
+// Frontend RUM (Grafana Faro) collector for the first-party /api/rum proxy. Optional, like Loki.
+const faroCollectorUrl = cfg.get('faroCollectorUrl') ?? ''; // Grafana Cloud Faro receiver URL
+
 // Secrets — set with: pulumi config set --secret <key> <value>
 // ghcrToken is the toggle for a private image: set it (with ghcrUser) and the server logs in to
 // GHCR; leave it unset and a public image is pulled anonymously.
@@ -27,6 +39,8 @@ const tailscaleAuthKey = cfg.requireSecret('tailscaleAuthKey');
 const ahasendApiKey = cfg.requireSecret('ahasendApiKey');
 const ahasendAccountId = cfg.requireSecret('ahasendAccountId');
 const ahasendToEmail = cfg.requireSecret('ahasendToEmail');
+const lokiToken = cfg.getSecret('lokiToken'); // Grafana Cloud access-policy token (logs:write)
+const faroAppKey = cfg.getSecret('faroAppKey'); // Faro collector key (sent as x-api-key, kept server-side)
 
 // Admin key gives root access over the private tailnet and suppresses the emailed root password.
 const sshKey = new hcloud.SshKey('admin', { name: 'fg-admin', publicKey: adminSshKey });
@@ -46,8 +60,16 @@ const firewall = new hcloud.Firewall('web', {
 // and lives only transiently inside Pulumi state — keep that state private; never commit it.
 const template = readFileSync(new URL('./cloud-init.yaml', import.meta.url), 'utf8');
 const userData = pulumi
-	.all([ghcrToken, tailscaleAuthKey, ahasendApiKey, ahasendAccountId, ahasendToEmail])
-	.apply(([token, ts, apiKey, accountId, toEmail]) =>
+	.all([
+		ghcrToken,
+		tailscaleAuthKey,
+		ahasendApiKey,
+		ahasendAccountId,
+		ahasendToEmail,
+		lokiToken,
+		faroAppKey,
+	])
+	.apply(([token, ts, apiKey, accountId, toEmail, lToken, fKey]) =>
 		template
 			.replaceAll('__GHCR_USER__', ghcrUser)
 			.replaceAll('__GHCR_TOKEN__', token ?? '')
@@ -59,7 +81,13 @@ const userData = pulumi
 			.replaceAll('__AHASEND_ACCOUNT_ID__', accountId)
 			.replaceAll('__AHASEND_FROM_EMAIL__', fromEmail)
 			.replaceAll('__AHASEND_FROM_NAME__', fromName)
-			.replaceAll('__AHASEND_TO_EMAIL__', toEmail),
+			.replaceAll('__AHASEND_TO_EMAIL__', toEmail)
+			.replaceAll('__LOG_LEVEL__', logLevel)
+			.replaceAll('__LOKI_HOST__', lokiHost)
+			.replaceAll('__LOKI_USER__', lokiUser)
+			.replaceAll('__LOKI_TOKEN__', lToken ?? '')
+			.replaceAll('__FARO_COLLECTOR_URL__', faroCollectorUrl)
+			.replaceAll('__FARO_APP_KEY__', fKey ?? ''),
 	);
 
 const server = new hcloud.Server('app', {

@@ -68,11 +68,19 @@ pulumi config set adminSshPublicKey "ssh-ed25519 AAAA... admin"
 pulumi config set deploySshPublicKey "ssh-ed25519 AAAA... deploy"
 # location / serverType / ahasendFromName are optional (defaults: nbg1 / cx23 / the domain)
 
+# observability (optional — see "Observability" below; omit any and that pipeline stays off)
+pulumi config set logLevel info                                # omit for the built-in prod default (info)
+pulumi config set lokiHost https://logs-prod-012.grafana.net   # Loki push endpoint
+pulumi config set lokiUser <grafana cloud loki instance id>    # numeric user id
+pulumi config set faroCollectorUrl <grafana cloud faro receiver url>
+
 # secrets
 pulumi config set --secret tailscaleAuthKey <tailscale auth key>
 pulumi config set --secret ahasendApiKey <AhaSend api key>
 pulumi config set --secret ahasendAccountId <AhaSend account id>
 pulumi config set --secret ahasendToEmail <destination inbox>
+pulumi config set --secret lokiToken <grafana cloud access-policy token, logs:write>
+pulumi config set --secret faroAppKey <grafana cloud faro app key>
 
 # Private image only — leave both unset for a public GHCR package (recommended):
 # pulumi config set ghcrUser <github-user>
@@ -105,6 +113,28 @@ Validate on a throwaway stack first (`pulumi up` then `pulumi destroy`) with a t
    key), `TS_OAUTH_CLIENT_ID`, `TS_OAUTH_SECRET`. Image push uses the built-in `GITHUB_TOKEN`.
 3. **Deploy**: publish a release `vX.Y.Z`; the workflow builds, pushes, and rolls it out. Roll
    back by re-running the deploy for a previous tag.
+
+## Observability
+
+Two independent pipelines ship telemetry to Grafana Cloud (free tier). Both are optional: leave a
+pipeline's config unset and the app simply doesn't ship that signal — stdout logging and the site
+itself are never affected.
+
+- **Backend logs** — pino ships structured logs to Loki via `LOKI_HOST` / `LOKI_USER` /
+  `LOKI_TOKEN`. The host is the Loki **push** endpoint and the user is the numeric instance id, both
+  shown on the Loki data-source details page in Grafana Cloud; the token is an **Access Policy**
+  token scoped `logs:write` (Grafana Cloud → Access Policies). All three must be present or pino
+  falls back to stdout only. `LOG_LEVEL` gates both stdout and Loki and defaults to `info` (the
+  conventional production baseline); set it (e.g. `warn`) only to deviate.
+- **Frontend RUM** — the browser posts errors and Web Vitals to the first-party `/api/rum` proxy,
+  which forwards to the Grafana Cloud **Faro** receiver using `FARO_COLLECTOR_URL` (the receiver URL
+  from Frontend Observability → Settings → Web SDK) and `FARO_APP_KEY` (sent as `x-api-key`). The
+  key is kept server-side and never reaches the browser. Without the collector URL the proxy drops
+  payloads and answers 204.
+
+These map 1:1 to the `loki*` / `faro*` Pulumi config above; set them with the rest of the stack
+config and `pulumi up` carries them into the server's `app.env`. Confirm logs are flowing in Grafana
+with `{app="fortunatogeelhoed"}` (the labels pino attaches).
 
 ## Uptime monitoring
 
