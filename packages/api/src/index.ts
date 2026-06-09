@@ -162,6 +162,17 @@ app.get('/sitemap.xml', (c) => {
 	return c.body(buildSitemap());
 });
 
+// Browsers, crawlers and link unfurlers fetch /favicon.ico at the root with no markup hint.
+// That path never matches /assets/*, so serve the icon here instead of letting it fall through
+// to the HTML app shell (which would 404 or, worse, be cached as the icon for a year).
+app.get('/favicon.ico', async (c) => {
+	const file = Bun.file('./static/icons/favicon.ico');
+	if (!(await file.exists())) return c.notFound();
+	c.header('Content-Type', 'image/x-icon');
+	c.header('Cache-Control', isDev ? 'no-cache' : 'public, max-age=31536000, immutable');
+	return c.body(await file.arrayBuffer());
+});
+
 if (isDev) {
 	const PORTS: Record<string, number> = { react: 5173, vue: 5174, angular: 5175 };
 

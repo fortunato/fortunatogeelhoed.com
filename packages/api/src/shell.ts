@@ -46,6 +46,12 @@ export function renderShell({
 	<script>${THEME_SCRIPT}</script>
 	<title>${title ? escapeText(title) : 'FORTUNATO.GEELHOED — Senior Full-Stack Engineer'}</title>
 	${description ? `<meta name="description" content="${escapeText(description)}">` : ''}
+	<link rel="icon" href="/favicon.ico" sizes="any">
+	<link rel="icon" href="/assets/icons/favicon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="/assets/icons/apple-touch-icon.png">
+	<link rel="manifest" href="/assets/icons/site.webmanifest">
+	<meta name="theme-color" content="#0a0a0a" media="(prefers-color-scheme: dark)">
+	<meta name="theme-color" content="#fafafa" media="(prefers-color-scheme: light)">
 	<link rel="preload" href="/assets/fonts/rubik-variable.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="/assets/fonts/space-grotesk-variable.woff2" as="font" type="font/woff2" crossorigin>
 	<link rel="preload" href="/assets/fonts/jetbrains-mono-variable.woff2" as="font" type="font/woff2" crossorigin>
