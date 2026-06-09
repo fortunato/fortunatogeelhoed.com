@@ -117,13 +117,26 @@ jobs:
         run: |
           # Address the server by its current tailnet IP, not the MagicDNS name. A replaced server
           # keeps the tag:fg-server tag, but Tailscale suffixes a reused hostname (fg-app-1, ...) and
-          # leaves the old name pointing at the dead registration. The one online tag:fg-server node
-          # is the live server, whatever its name.
-          ip=$(tailscale status --json | jq -r '
-            [ .Peer[]?
-              | select(.Online == true and ((.Tags // []) | index("tag:fg-server")))
-              | .TailscaleIPs[]? | select(test("\\.")) ][0] // empty')
-          if [ -z "$ip" ]; then echo "no online tag:fg-server node on the tailnet" >&2; exit 1; fi
+          # leaves the old name pointing at the dead registration. The live server is the one online
+          # node matching the fg-app hostname or the tag (peer tags are not always exposed across
+          # nodes, so match either). Retry briefly to let the netmap converge after joining.
+          for attempt in 1 2 3 4 5; do
+            status=$(tailscale status --json)
+            ip=$(echo "$status" | jq -r '
+              [ .Peer[]?
+                | select(.Online == true
+                    and (((.HostName // "") | ascii_downcase | startswith("fg-app"))
+                         or ((.Tags // []) | index("tag:fg-server"))))
+                | .TailscaleIPs[]? | select(test("\\.")) ][0] // empty')
+            [ -n "$ip" ] && break
+            echo "attempt $attempt: no online fg-app node yet; waiting..."
+            sleep 5
+          done
+          if [ -z "$ip" ]; then
+            echo "no online fg-app node on the tailnet. peers visible to this runner:" >&2
+            echo "$status" | jq -r '.Peer[]? | "  host=\(.HostName) online=\(.Online) tags=\(.Tags) ips=\(.TailscaleIPs)"' >&2
+            exit 1
+          fi
           echo "deploying to $ip"
           echo "SERVER_IP=$ip" >> "$GITHUB_ENV"
           mkdir -p ~/.ssh
