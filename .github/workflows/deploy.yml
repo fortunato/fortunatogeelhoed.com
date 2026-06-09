@@ -112,11 +112,56 @@ jobs:
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:fg-deploy
       # The deploy key is restricted to a forced command on the server, so this can only trigger a
-      # pull-and-swap of the requested tag — the tag is passed as the SSH command.
+      # pull-and-swap of the requested tag; the tag is passed as the SSH command.
       - name: Roll the server to the released version
         run: |
+          # Address the server by its current tailnet IP, not the MagicDNS name. A replaced server
+          # keeps the tag:fg-server tag, but Tailscale suffixes a reused hostname (fg-app-1, ...) and
+          # leaves the old name pointing at the dead registration. The one online tag:fg-server node
+          # is the live server, whatever its name.
+          ip=$(tailscale status --json | jq -r '
+            [ .Peer[]?
+              | select(.Online == true and ((.Tags // []) | index("tag:fg-server")))
+              | .TailscaleIPs[]? | select(test("\\.")) ][0] // empty')
+          if [ -z "$ip" ]; then echo "no online tag:fg-server node on the tailnet" >&2; exit 1; fi
+          echo "deploying to $ip"
+          echo "SERVER_IP=$ip" >> "$GITHUB_ENV"
           mkdir -p ~/.ssh
           printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/id_deploy
           chmod 600 ~/.ssh/id_deploy
           ssh -o StrictHostKeyChecking=accept-new -i ~/.ssh/id_deploy \
-            root@fg-app "${{ needs.image.outputs.tag }}"
+            root@"$ip" "${{ needs.image.outputs.tag }}"
+      # Housekeeping, never a release gate: a replaced server leaves its old tag:fg-server device
+      # registered, which is what makes Tailscale suffix the hostname. Delete every tag:fg-server
+      # device except the one just deployed to (matched by its current address). Offline-safe by
+      # construction: the live server is excluded, so it can only ever remove dead registrations.
+      - name: Prune stale tailnet registrations
+        continue-on-error: true
+        env:
+          TS_API_CLIENT_ID: ${{ secrets.TS_API_CLIENT_ID }}
+          TS_API_SECRET: ${{ secrets.TS_API_SECRET }}
+        run: |
+          [ -n "$SERVER_IP" ] || { echo "no server ip resolved; skipping prune"; exit 0; }
+          token=$(curl -fsS https://api.tailscale.com/api/v2/oauth/token \
+            -d "grant_type=client_credentials" \
+            -d "client_id=$TS_API_CLIENT_ID" -d "client_secret=$TS_API_SECRET" | jq -r '.access_token // empty')
+          [ -n "$token" ] || { echo "could not obtain tailscale api token" >&2; exit 1; }
+          devices=$(curl -fsS -H "Authorization: Bearer $token" \
+            https://api.tailscale.com/api/v2/tailnet/-/devices)
+          # Safety: only prune once the live server is positively found by address, so the exclusion
+          # below is guaranteed to protect it. If it is not found (e.g. address formats differ), skip
+          # rather than risk deleting the running server.
+          if [ "$(echo "$devices" | jq --arg ip "$SERVER_IP" '[.devices[] | select((.addresses // []) | index($ip))] | length')" -lt 1 ]; then
+            echo "live server $SERVER_IP not in device list; skipping prune for safety" >&2; exit 0
+          fi
+          echo "$devices" | jq -r --arg ip "$SERVER_IP" '
+            .devices[]
+            | select((.tags // []) | index("tag:fg-server"))
+            | select((.addresses // []) | index($ip) | not)
+            | "\(.id) \(.name)"' \
+          | while read -r id name; do
+              [ -n "$id" ] || continue
+              echo "pruning stale device $name ($id)"
+              curl -fsS -X DELETE -H "Authorization: Bearer $token" \
+                "https://api.tailscale.com/api/v2/device/$id"
+            done

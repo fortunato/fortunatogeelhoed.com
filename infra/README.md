@@ -110,9 +110,20 @@ Validate on a throwaway stack first (`pulumi up` then `pulumi destroy`) with a t
 1. **DNS** (at your registrar): point the apex `A` record at the `ipv4` output and `AAAA` at
    `ipv6`. Caddy can only obtain a certificate once DNS resolves to the server.
 2. **GitHub Actions secrets** (repo → Settings → Secrets): `DEPLOY_SSH_KEY` (the deploy private
-   key), `TS_OAUTH_CLIENT_ID`, `TS_OAUTH_SECRET`. Image push uses the built-in `GITHUB_TOKEN`.
+   key), `TS_OAUTH_CLIENT_ID`, `TS_OAUTH_SECRET` (the OAuth client that joins CI as `tag:fg-deploy`).
+   Image push uses the built-in `GITHUB_TOKEN`. Optional: `FARO_SOURCEMAP_API_KEY` (frontend sourcemap
+   upload, see `docs/frontend-telemetry.md`); `TS_API_CLIENT_ID` / `TS_API_SECRET` (a second Tailscale
+   OAuth client, scoped `devices:core` write on `tag:fg-server`, used to prune stale device
+   registrations after a server replacement).
 3. **Deploy**: publish a release `vX.Y.Z`; the workflow builds, pushes, and rolls it out. Roll
    back by re-running the deploy for a previous tag.
+
+   The roll targets the server by its **current tailnet address** (the one online `tag:fg-server`
+   node), not the `fg-app` MagicDNS name: replacing the server leaves the old registration behind, so
+   Tailscale suffixes the reused name (`fg-app-1`) and the bare name points at the dead node. A
+   best-effort prune step then deletes the stale `tag:fg-server` registrations (never the live one,
+   which is matched and excluded by address), so they stop accumulating. If `TS_API_*` is unset the
+   prune is skipped; addressing by tag still works.
 
 ## Observability
 
