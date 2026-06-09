@@ -93,6 +93,8 @@
 		"@angular/compiler-cli": "^21.2.15",
 		"@biomejs/biome": "^1.9.0",
 		"@custom-elements-manifest/analyzer": "^0.11.0",
+		"@grafana/faro-cli": "^0.10.0",
+		"@grafana/faro-rollup-plugin": "^0.11.0",
 		"@nx/js": "^20.0.0",
 		"@nx/vite": "^20.0.0",
 		"@playwright/test": "^1.60.0",

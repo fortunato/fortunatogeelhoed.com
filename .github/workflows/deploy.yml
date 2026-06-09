@@ -14,6 +14,14 @@ permissions:
   contents: read
   packages: write
 
+# Grafana Faro identifiers for the single `fortunatogeelhoed.com` app. None are secret (they identify
+# the app/stack/endpoint; the only secret is the upload token, FARO_SOURCEMAP_API_KEY). The endpoint
+# comes from Frontend Observability > Settings > Source Maps; the CLI auths as Bearer <stackId>:<key>.
+env:
+  FARO_SOURCEMAP_ENDPOINT: https://faro-api-prod-eu-west-2.grafana.net/faro/api/v1
+  FARO_APP_ID: '6056'
+  FARO_STACK_ID: '1681452'
+
 jobs:
   image:
     runs-on: ubuntu-latest
@@ -37,10 +45,56 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository }}:${{ steps.meta.outputs.tag }}
             ghcr.io/${{ github.repository }}:latest
+          # The tag is the per-build bundle version: the client builds inject `<framework>-<tag>` so
+          # runtime errors carry it; the sourcemaps job uploads maps under the same ids.
+          build-args: |
+            FARO_BUNDLE_VERSION=${{ steps.meta.outputs.tag }}
+            FARO_SOURCEMAP_ENDPOINT=${{ env.FARO_SOURCEMAP_ENDPOINT }}
           # Persist BuildKit cache in the GitHub Actions cache so rebuilds reuse layers across runs
           # (the runner is ephemeral, so a Dockerfile cache mount alone would not survive).
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+  sourcemaps:
+    needs: image
+    # Release only, and best-effort: publishing source maps is a convenience for de-obfuscating
+    # production errors in Grafana, never a gate on shipping. continue-on-error keeps a failed upload
+    # from failing the workflow, and deploy does not depend on this job, so they run in parallel.
+    if: github.event_name == 'release'
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      # Re-runs the build with the same args, so the cache from the image job is reused and only the
+      # export stage runs; pulls the maps (kept out of the runtime image) onto the runner.
+      - name: Export source maps from the build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          target: sourcemaps
+          build-args: |
+            FARO_BUNDLE_VERSION=${{ needs.image.outputs.tag }}
+            FARO_SOURCEMAP_ENDPOINT=${{ env.FARO_SOURCEMAP_ENDPOINT }}
+          cache-from: type=gha
+          outputs: type=local,dest=sourcemaps
+      - uses: oven-sh/setup-bun@v2
+      # One upload per framework, each scoped to its own maps and explicit bundle id — the explicit
+      # id is what lets the three frameworks share a single Faro app without colliding.
+      - name: Upload source maps to Faro
+        env:
+          FARO_API_KEY: ${{ secrets.FARO_SOURCEMAP_API_KEY }}
+        run: |
+          for fw in react vue angular; do
+            bunx @grafana/faro-cli@0.10.0 upload \
+              --endpoint "$FARO_SOURCEMAP_ENDPOINT" \
+              --app-id "$FARO_APP_ID" --stack-id "$FARO_STACK_ID" \
+              --api-key "$FARO_API_KEY" \
+              --bundle-id "$fw-${{ needs.image.outputs.tag }}" \
+              --output-path "sourcemaps/$fw" \
+              --recursive --gzip-payload --verbose
+          done
 
   deploy:
     needs: image

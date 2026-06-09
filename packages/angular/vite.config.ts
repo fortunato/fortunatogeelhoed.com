@@ -2,14 +2,18 @@ import { resolve } from 'node:path';
 import angular from '@analogjs/vite-plugin-angular';
 import { defineConfig } from 'vite';
 import { cssTargets } from '../../scripts/css-targets';
+import { faroSourcemapMode, faroSourcemaps } from '../../scripts/faro-sourcemaps';
 import { serveCssDev } from '../../scripts/vite-css-dev';
 
+// This config builds only the client bundle; the server build uses vite.config.ssr.ts, so the Faro
+// plugin here never touches SSR output.
 export default defineConfig({
 	plugins: [
 		angular({
 			tsconfig: resolve(__dirname, 'tsconfig.json'),
 		}),
 		serveCssDev(),
+		...faroSourcemaps('angular'),
 	],
 	root: resolve(__dirname),
 	cacheDir: resolve(__dirname, '../../node_modules/.vite-angular'),
@@ -33,6 +37,8 @@ export default defineConfig({
 	build: {
 		outDir: resolve(__dirname, '../../dist/angular'),
 		emptyOutDir: true,
+		// 'hidden' (no sourceMappingURL comment) on release client builds only; maps go to Faro.
+		sourcemap: faroSourcemapMode(),
 	},
 	server: {
 		port: 5175,

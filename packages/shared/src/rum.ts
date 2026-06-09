@@ -20,7 +20,10 @@ async function initRum(appName: string): Promise<void> {
 		);
 		initializeFaro({
 			url: '/api/rum',
-			app: { name: appName, version: '1' },
+			// One Faro application for the whole site; the framework is a namespace so the three
+			// variants are distinguishable in Grafana while sharing one app and collector. Sourcemap
+			// de-obfuscation keys on the per-build bundle id (injected by the build), not the name.
+			app: { name: 'fortunatogeelhoed.com', namespace: appName, version: '1' },
 			sessionTracking: { enabled: false },
 			instrumentations: [new ErrorsInstrumentation(), new WebVitalsInstrumentation()],
 		});

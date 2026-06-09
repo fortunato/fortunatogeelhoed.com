@@ -122,6 +122,42 @@ logs to stdout and is otherwise unaffected. A shipping outage drops logs, never
 requests. Loki was chosen for the same reasons as Faro: a generous free tier and a
 single, familiar Grafana surface for both backend logs and frontend RUM.
 
+## Source maps: de-obfuscating production errors
+
+Production JavaScript is minified, so a Faro error stack trace points at unreadable
+positions. Uploading each build's source maps to Grafana lets the Frontend
+Observability UI resolve those traces back to original `.ts`/`.tsx`/`.vue` source.
+The maps are uploaded to Grafana, never served from the site.
+
+### One app, three frameworks, per-build bundle ids
+
+The three frontends report to a single Faro application (`fortunatogeelhoed.com`);
+the framework is carried as the app *namespace* (`react`/`vue`/`angular`), so one
+collector and one app cover all three while staying distinguishable in Grafana.
+De-obfuscation does not match on the app name: it matches on a **bundle id**, a
+per-build identifier injected into the JavaScript and attached to every error. Each
+framework's build emits its own bundle id (`<framework>-<release>`), so a React
+error resolves against React's maps even though all three share one app name.
+
+### Build and publish are separate phases
+
+Producing the maps and publishing them are kept apart, mirroring the build/deploy
+split used for the server:
+
+- **Build (no secret, no network).** During the release image build each client
+  build emits hidden source maps (no `sourceMappingURL` comment) and injects its
+  bundle id. It does not upload. The maps are then moved out of the served tree, so
+  the runtime image ships the bundle ids but none of the maps.
+- **Publish (release only, best-effort).** A separate CI job exports the maps from
+  the build and uploads them to the Faro source map API, once per framework under
+  its explicit bundle id. It never blocks the deploy: a failed upload only costs
+  readable traces, not a release.
+
+This keeps the image build reproducible and credential-free, and means the upload
+token lives only in the publish step, never in image history. Outside a release
+build the whole pipeline is inert: local and test builds emit no maps and run no
+plugin.
+
 ## Configuration
 
 All collector endpoints and credentials are server-side environment variables and
@@ -130,7 +166,13 @@ are never logged:
 - Frontend RUM: `FARO_COLLECTOR_URL`, `FARO_APP_KEY`.
 - Backend logs: `LOKI_HOST`, `LOKI_USER`, `LOKI_TOKEN`.
 
-Absent these, the site runs normally — telemetry simply isn't shipped.
+Absent these, the site runs normally; telemetry simply isn't shipped.
+
+Source map upload is configured in CI, not at runtime. The upload endpoint, app id,
+and stack id are non-secret identifiers committed in the deploy workflow; only the
+upload token is a secret (`FARO_SOURCEMAP_API_KEY`, an access policy token scoped
+`sourcemaps:read`/`write`/`delete`). The release build is told its version through
+the `FARO_BUNDLE_VERSION` build argument, which becomes the bundle id suffix.
 
 ## Files
 
@@ -139,3 +181,7 @@ Absent these, the site runs normally — telemetry simply isn't shipped.
 - `packages/api/src/logger.ts` — pino logger + request logging middleware.
 - Client entries (`packages/*/src/main.*`) — schedule RUM init off the critical
   path.
+- `scripts/faro-sourcemaps.ts` — build-time bundle-id injection + hidden source
+  maps, gated to release builds; wired into each `packages/*/vite.config.ts`.
+- `Dockerfile` (`sourcemaps` stage) and `.github/workflows/deploy.yml`
+  (`sourcemaps` job) — export the maps and upload them per framework.

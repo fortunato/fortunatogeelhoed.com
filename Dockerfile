@@ -10,7 +10,23 @@ COPY package.json bun.lock .bun-version ./
 COPY patches ./patches
 RUN bun install --frozen-lockfile
 COPY . .
+# Faro sourcemap inputs. Both default empty so a plain build emits no maps and runs no plugin; a
+# release build sets a version (enabling per-build bundle ids + hidden sourcemaps) and the upload
+# endpoint. Never pass the upload token here — build args persist in image history.
+ARG FARO_BUNDLE_VERSION=
+ARG FARO_SOURCEMAP_ENDPOINT=
+ENV FARO_BUNDLE_VERSION=$FARO_BUNDLE_VERSION \
+	FARO_SOURCEMAP_ENDPOINT=$FARO_SOURCEMAP_ENDPOINT
 RUN bun run build
+# Move emitted sourcemaps out of the served tree: 'hidden' drops the sourceMappingURL comment but the
+# .map files remain on disk and the asset handler would serve them. The runtime stage copies the now
+# map-free dist; the maps live only in /app/maps, for the separate publish step to export and upload.
+RUN mkdir -p /app/maps \
+	&& (cd dist && find . -name '*.map' -exec cp --parents {} /app/maps/ \; && find . -name '*.map' -delete)
+
+# ---- sourcemaps: export-only stage; `docker build --target sourcemaps --output` pulls the maps ----
+FROM scratch AS sourcemaps
+COPY --from=build /app/maps /
 
 # ---- deps: production-only node_modules (no dev toolchain) ----
 FROM oven/bun:1.3 AS deps

@@ -3,15 +3,18 @@ import { resolve } from 'node:path';
 import vue from '@vitejs/plugin-vue';
 import { defineConfig } from 'vite';
 import { cssTargets } from '../../scripts/css-targets';
+import { faroSourcemapMode, faroSourcemaps } from '../../scripts/faro-sourcemaps';
 import { serveCssDev } from '../../scripts/vite-css-dev';
 
-export default defineConfig({
+// Function form so the Faro plugin can be skipped on vite-ssg's server pass.
+export default defineConfig(({ isSsrBuild }) => ({
 	plugins: [
 		// Treat <jb-*> tags as native custom elements so Vue passes props as DOM
 		// properties and v-model uses the value/input convention instead of trying to
 		// resolve them as Vue components.
 		vue({ template: { compilerOptions: { isCustomElement: (tag) => tag.startsWith('jb-') } } }),
 		serveCssDev(),
+		...faroSourcemaps('vue', isSsrBuild),
 	],
 	root: resolve(__dirname),
 	cacheDir: resolve(__dirname, '../../node_modules/.vite-vue'),
@@ -32,6 +35,8 @@ export default defineConfig({
 	build: {
 		outDir: resolve(__dirname, '../../dist/vue'),
 		emptyOutDir: true,
+		// 'hidden' (no sourceMappingURL comment) on release client builds only; maps go to Faro.
+		sourcemap: faroSourcemapMode(isSsrBuild),
 	},
 	server: {
 		port: 5174,
@@ -44,4 +49,4 @@ export default defineConfig({
 		script: 'async',
 		dirStyle: 'nested',
 	},
-});
+}));
