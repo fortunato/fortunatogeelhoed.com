@@ -50,8 +50,11 @@ the server to already exist**. Break the cycle by seeding an image *before* prov
 5. **Tailscale**: apply [`tailscale-policy.hujson`](./tailscale-policy.hujson) in the admin console
    (Access controls) — it declares the `tag:fg-server` / `tag:fg-deploy` tags and the SSH access
    rules. Create an **OAuth client** that issues ephemeral `tag:fg-deploy` nodes (for CI). The
-   server joins the tailnet at boot via a reusable auth key tagged `tag:fg-server`; tagging it also
-   disables node-key expiry so it does not drop off the network.
+   server joins the tailnet at boot with a reusable auth key and applies `tag:fg-server` itself via
+   `--advertise-tags` in `cloud-init.yaml` (so the tag is explicit in the infrastructure rather than
+   implicit in how the key was created). The auth key need only be a reusable key whose owner is
+   permitted to apply that tag (an admin owns it via `tagOwners`). The tag is what the deploy ACL
+   keys on, and it disables node-key expiry so the server does not drop off the network.
 
 ## Configure the stack
 

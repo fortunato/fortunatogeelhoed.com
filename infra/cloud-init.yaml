@@ -95,8 +95,12 @@ runcmd:
   - systemctl restart docker
   - docker network create web || true
   # Tailscale provides the only path for administrative and deploy SSH; no public SSH port is open.
+  # --advertise-tags applies tag:fg-server explicitly rather than relying on the auth key being a
+  # tagged key: it makes the tag (which the deploy ACL keys on, and which disables node-key expiry)
+  # visible in the infrastructure, and fails the join loudly if the tag cannot be applied instead of
+  # silently joining untagged and unreachable.
   - curl -fsSL https://tailscale.com/install.sh | sh
-  - tailscale up --authkey=__TAILSCALE_AUTHKEY__ --hostname=fg-app
+  - tailscale up --authkey=__TAILSCALE_AUTHKEY__ --hostname=fg-app --advertise-tags=tag:fg-server
   # Restrict the CI deploy key to the deploy script only (forced command, no shell, no forwarding).
   - install -d -m 0700 /root/.ssh
   - >
