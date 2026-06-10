@@ -6,17 +6,20 @@ import type { HomeContent } from '@fg/shared';
 const home: HomeContent = {
 	hero: {
 		name: 'Fortunato Geelhoed',
-		tagline: 'Senior Full-Stack Engineer & Technical Lead',
+		tagline: 'Full-Stack Engineer & Technical Lead, 25 years in',
 		statement:
-			"I build, fix, and lead across React, Vue, and Angular, quick to pick up whatever's next when it makes sense.",
+			'I build, fix, and lead TypeScript platforms end to end. This site is built three times, in React, Vue, and Angular, to illustrate that the fundamentals carry across all of them.',
 	},
 	sections: {
-		services: { label: 'What I do', title: 'Services' },
+		services: { label: 'What I do', title: 'What I can do for you' },
+		approach: { label: 'How I work', title: "A few things I've learned to do." },
 		proof: { label: 'Proof' },
 		frameworks: {
 			label: 'Frameworks',
 			title: 'Frameworks come and go. The craft compounds.',
-			intro: 'Twenty-five years on the web means living through every frontend era and the backends beneath it, staying fluent while the stack reinvents itself.',
+			intro:
+				"When I started in 2000, I was building with ASP, Flash, and table layouts. I've relearned the job every few years since.",
+			link: { label: 'See the full timeline', href: '/career' },
 		},
 		writing: { label: 'Latest writing', title: 'From the blog', readMore: 'Read more' },
 	},
@@ -24,31 +27,54 @@ const home: HomeContent = {
 		{
 			title: 'Full-Stack Engineering',
 			description:
-				'TypeScript end to end: React, NestJS, GraphQL, monorepos. Shipped at scale, in production.',
+				'TypeScript from the database to the browser: React, NestJS, GraphQL and REST APIs, Nx monorepos, plus the CI/CD and containers around it. Built to run in production.',
 		},
 		{
 			title: 'Frontend Architecture',
 			description:
-				'Design systems, micro-frontends, server-side rendering and component libraries that hold up as teams grow.',
+				'Frontends built to outlast the team that started them. Design systems, micro-frontends shipped as packages, server-side and static rendering for performance.',
 		},
 		{
 			title: 'AI Integration & Automation',
 			description:
-				'MCP servers, agentic workflows and AI-augmented development woven into real delivery.',
+				'MCP servers, agentic workflows, RAG over your own data, and self-hosted models for when privacy rules out the cloud.',
 		},
 		{
 			title: 'Technical Leadership',
 			description:
-				'Architecture decisions, mentoring and tech-debt strategy. I lead while staying in the code.',
+				'Architecture calls, tech-debt strategy, design reviews, without stepping away from the code.',
+		},
+	],
+	principles: [
+		{
+			title: 'Work it out before building it',
+			description:
+				'I figure out how the parts fit together first, so the design holds when the requirements move.',
+		},
+		{
+			title: 'Leave the team stronger',
+			description:
+				"Test coverage, static analysis, careful review, and sharing what I know. The aim is a team that's in better shape than before I arrived.",
+		},
+		{
+			title: 'Fast, but I own what ships',
+			description:
+				"I build with AI in the loop to move quickly, and I stay responsible for every line that goes out. I don't ship code I can't explain.",
+		},
+		{
+			title: 'Pay down the debt that matters',
+			description:
+				'Not all tech debt is worth fixing. I rank it by what actually slows delivery, so a refactor pays for itself instead of becoming the project.',
 		},
 	],
 	proof: [
-		{ metric: '5.5 years', label: 'Municipality of Amsterdam, almost fully remote' },
-		{ metric: '3×', label: 'Lighthouse gain on the Tele2 sim-only configurator rebuild' },
-		{ metric: 'PyPI', label: 'Published library with nex to zero prior Python experience' },
+		{ metric: '5.5 years', label: 'Full-stack project lead, Municipality of Amsterdam' },
+		{ metric: '3×', label: "Faster Tele2 Sim-Only page, beating Google's own AMP version" },
+		{ metric: 'PyPI', label: 'Published a library with next to zero prior Python experience' },
 		{
-			metric: 'Global',
-			label: 'Two decades across the Netherlands, Australia, New Zealand & Spain',
+			metric: 'Remote',
+			label:
+				'Worked for Dutch and Australian teams from the Netherlands, Australia, New Zealand, and Spain',
 		},
 	],
 	writing: [
@@ -59,16 +85,17 @@ const home: HomeContent = {
 			href: '/blog',
 		},
 		{
-			tag: 'AI',
-			title: 'Cognitive Debt & Agentic Workflows',
-			blurb: "What happens when you ship code you don't fully understand?",
+			tag: 'Build',
+			title: 'Too React',
+			blurb:
+				'A recruiter told me I was "too React" for an Angular role. So I built this site in all three.',
 			href: '/blog',
 		},
 	],
 	cta: {
-		heading: "Let's build something together.",
+		heading: "I'd love to hear what you're building or fixing.",
 		href: '/contact',
-		label: 'Get in touch',
+		label: 'Send me a message',
 	},
 };
 
