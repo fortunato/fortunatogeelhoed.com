@@ -9,7 +9,7 @@ export function Header() {
 				FORTUNATO<span className={styles.dot}>.</span>GEELHOED
 			</Link>
 			<div className={styles['header-right']}>
-				<nav className={styles.nav}>
+				<nav className={styles.nav} aria-label="Primary">
 					{NAV_ITEMS.map((item) => (
 						<NavLink
 							key={item.path}
@@ -28,6 +28,7 @@ export function Header() {
 						<a
 							className={`${styles['switcher-btn']} ${styles.active}`}
 							href="/__switch?to=react"
+							aria-current="true"
 						>
 							react
 						</a>

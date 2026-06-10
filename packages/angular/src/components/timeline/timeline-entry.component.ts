@@ -8,6 +8,7 @@ import {
 	entryMatchesTech,
 	isExternalHref,
 	techVisual,
+	timelineDatetime,
 } from '@fg/shared';
 import { TechFilterService } from '../../tech-filter.service';
 import { ButtonDirective } from '../ui/button.directive';
@@ -28,8 +29,8 @@ import { ButtonDirective } from '../ui/button.directive';
 			data-reveal
 		>
 			<div class="spine">
-				<div class="spine-years">{{ entry().years }}</div>
-				<div class="spine-client">{{ entry().client }}</div>
+				<div class="spine-years"><time [attr.datetime]="datetime(entry().years)">{{ entry().years }}</time></div>
+				<h3 class="spine-client">{{ entry().client }}</h3>
 				<div class="spine-role">{{ entry().role }}</div>
 				<div class="spine-badges">
 					<span class="tag tag--status" [attr.data-kind]="entry().type">
@@ -87,6 +88,7 @@ import { ButtonDirective } from '../ui/button.directive';
 			@for (lane of lanes; track lane.key) {
 				@if (entry().tech[lane.key]?.length) {
 					<div class="lane {{ lane.cls }}" [attr.data-lane-label]="laneLabels[lane.key]">
+						<span class="visually-hidden">{{ laneLabels[lane.key] }}</span>
 						@for (t of entry().tech[lane.key] ?? []; track t) {
 							<button
 								type="button"
@@ -116,6 +118,7 @@ export class TimelineEntryComponent {
 		return active.size > 0 && !entryMatchesTech(this.entry(), active);
 	});
 	protected readonly laneLabels = LANE_LABELS;
+	protected readonly datetime = timelineDatetime;
 	protected readonly v = techVisual;
 	protected readonly lanes: { key: Lane; cls: string }[] = [
 		{ key: 'frontend', cls: 'lane-fe' },

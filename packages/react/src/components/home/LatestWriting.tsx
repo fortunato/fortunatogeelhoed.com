@@ -10,25 +10,24 @@ export function LatestWriting({
 	copy: HomeContent['sections']['writing'];
 }) {
 	return (
-		<section>
+		<section aria-labelledby="writing-title">
 			<div className="container">
 				<p className="section-label">{copy.label}</p>
-				<h2 className="section-title">{copy.title}</h2>
-				<div className={styles['writing-grid']}>
+				<h2 className="section-title" id="writing-title">
+					{copy.title}
+				</h2>
+				<ul className={styles['writing-grid']}>
 					{writing.map((post) => (
-						<Link
-							key={post.title}
-							to={post.href}
-							className={styles['writing-card']}
-							data-reveal
-						>
-							<span className={styles['writing-tag']}>{post.tag}</span>
-							<h3 className={styles['writing-title']}>{post.title}</h3>
-							<p className={styles['writing-blurb']}>{post.blurb}</p>
-							<span className={styles['writing-more']}>{copy.readMore}</span>
-						</Link>
+						<li key={post.title}>
+							<Link to={post.href} className={styles['writing-card']} data-reveal>
+								<span className={styles['writing-tag']}>{post.tag}</span>
+								<h3 className={styles['writing-title']}>{post.title}</h3>
+								<p className={styles['writing-blurb']}>{post.blurb}</p>
+								<span className={styles['writing-more']}>{copy.readMore}</span>
+							</Link>
+						</li>
 					))}
-				</div>
+				</ul>
 			</div>
 		</section>
 	);

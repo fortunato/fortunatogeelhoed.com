@@ -27,9 +27,14 @@ import { JbControlValueAccessor } from '../directives/jb-input.value-accessor';
 		} @else {
 			<form class="contact-form" novalidate (submit)="onSubmit($event)">
 				<div class="contact-field">
-					<jb-input name="name" label="Name" [formField]="form.name"></jb-input>
+					<jb-input
+						name="name"
+						label="Name"
+						[formField]="form.name"
+						[attr.error-id]="fieldError(form.name()) ? 'error-name' : null"
+					></jb-input>
 					@if (fieldError(form.name()); as msg) {
-						<p class="field-error">{{ msg }}</p>
+						<p class="field-error" id="error-name">{{ msg }}</p>
 					}
 				</div>
 				<div class="contact-field">
@@ -39,15 +44,21 @@ import { JbControlValueAccessor } from '../directives/jb-input.value-accessor';
 						label="Email"
 						autocomplete="email"
 						[formField]="form.email"
+						[attr.error-id]="fieldError(form.email()) ? 'error-email' : null"
 					></jb-input>
 					@if (fieldError(form.email()); as msg) {
-						<p class="field-error">{{ msg }}</p>
+						<p class="field-error" id="error-email">{{ msg }}</p>
 					}
 				</div>
 				<div class="contact-field">
-					<jb-textarea name="message" label="Message" [formField]="form.message"></jb-textarea>
+					<jb-textarea
+						name="message"
+						label="Message"
+						[formField]="form.message"
+						[attr.error-id]="fieldError(form.message()) ? 'error-message' : null"
+					></jb-textarea>
 					@if (fieldError(form.message()); as msg) {
-						<p class="field-error">{{ msg }}</p>
+						<p class="field-error" id="error-message">{{ msg }}</p>
 					}
 				</div>
 				<div class="contact-hp" aria-hidden="true">
@@ -66,7 +77,7 @@ import { JbControlValueAccessor } from '../directives/jb-input.value-accessor';
 						</p>
 					}
 					<p class="contact-privacy">
-						Your name, email, and message are emailed to me so I can reply — they are not
+						Your name, email, and message are emailed to me so I can reply. They are not
 						stored on this site.
 					</p>
 					<button type="submit" class="btn btn--marketing" [disabled]="disabled()">Send</button>

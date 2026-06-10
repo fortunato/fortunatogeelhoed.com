@@ -18,6 +18,9 @@
 	grid-template-columns: 1fr;
 	gap: var(--jb-space-lg);
 	margin-top: var(--jb-space-lg);
+	margin-bottom: 0;
+	padding: 0;
+	list-style: none;
 }
 
 @container (width >= 27rem) {

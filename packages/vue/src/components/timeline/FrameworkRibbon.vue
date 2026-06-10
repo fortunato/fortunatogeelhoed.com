@@ -11,18 +11,20 @@
 				{{ tick.year }}
 			</span>
 		</div>
-		<div v-for="row in rows" :key="row.framework" :class="styles['ribbon-row']">
-			<span :class="styles['ribbon-label']">{{ row.framework }}</span>
-			<div :class="styles['ribbon-track']">
-				<span
-					v-for="(seg, i) in row.segments"
-					:key="i"
-					:class="styles['ribbon-seg']"
-					:data-intensity="seg.intensity"
-					:style="segStyle(seg)"
-				/>
-			</div>
-		</div>
+		<ul :class="styles['ribbon-rows']">
+			<li v-for="row in rows" :key="row.framework" :class="styles['ribbon-row']">
+				<span :class="styles['ribbon-label']">{{ row.framework }}</span>
+				<div :class="styles['ribbon-track']">
+					<span
+						v-for="(seg, i) in row.segments"
+						:key="i"
+						:class="styles['ribbon-seg']"
+						:data-intensity="seg.intensity"
+						:style="segStyle(seg)"
+					/>
+				</div>
+			</li>
+		</ul>
 	</div>
 </template>
 

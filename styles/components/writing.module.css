@@ -8,6 +8,14 @@
 	grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
 	gap: var(--jb-space-lg);
 	margin-top: var(--jb-space-lg);
+	margin-bottom: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* The <li> is a structural wrapper only; the card stays the grid item so layout is unchanged. */
+.writing-grid > li {
+	display: contents;
 }
 
 .writing-card {

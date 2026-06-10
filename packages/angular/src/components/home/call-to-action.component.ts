@@ -9,10 +9,10 @@ import { ButtonDirective } from '../ui/button.directive';
 	imports: [RouterLink, ButtonDirective],
 	styleUrl: '../../../../../styles/components/cta.module.css',
 	template: `
-		<section class="cta">
+		<section class="cta" aria-labelledby="cta-title">
 			<div class="container">
 				<div class="cta-panel">
-					<h2 class="cta-heading" data-reveal>{{ cta().heading }}</h2>
+					<h2 class="cta-heading" id="cta-title" data-reveal>{{ cta().heading }}</h2>
 					<a jbButton variant="inverted" tone="marketing" [routerLink]="cta().href">{{ cta().label }}</a>
 				</div>
 			</div>

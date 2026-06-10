@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, nothing } from 'lit';
 
 // Form-associated text input, shared by all three framework variants.
 //
@@ -31,6 +31,9 @@ export class JbInput extends LitElement {
 		autocomplete: { type: String },
 		required: { type: Boolean },
 		disabled: { type: Boolean },
+		// Id of the external error message element to associate when in an error state. When set,
+		// the inner control is marked aria-invalid and points at it via aria-describedby.
+		errorId: { type: String, attribute: 'error-id' },
 	};
 
 	declare name: string;
@@ -41,6 +44,7 @@ export class JbInput extends LitElement {
 	declare autocomplete: string;
 	declare required: boolean;
 	declare disabled: boolean;
+	declare errorId: string;
 
 	#internals: ElementInternals;
 
@@ -54,6 +58,7 @@ export class JbInput extends LitElement {
 		this.autocomplete = '';
 		this.required = false;
 		this.disabled = false;
+		this.errorId = '';
 		this.#internals = this.attachInternals();
 	}
 
@@ -78,6 +83,8 @@ export class JbInput extends LitElement {
 				autocomplete=${this.autocomplete || 'on'}
 				?required=${this.required}
 				?disabled=${this.disabled}
+				aria-invalid=${this.errorId ? 'true' : nothing}
+				aria-describedby=${this.errorId || nothing}
 				@input=${(e: Event) => this.#onInput(e)}
 				@blur=${() => this.#onBlur()}
 			/>

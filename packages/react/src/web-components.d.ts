@@ -16,6 +16,8 @@ interface JbFieldProps {
 	label?: string;
 	required?: boolean;
 	disabled?: boolean;
+	// Id of the error message element to associate when the field is invalid.
+	errorId?: string;
 }
 
 declare module 'react' {

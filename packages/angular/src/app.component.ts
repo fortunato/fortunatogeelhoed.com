@@ -8,6 +8,7 @@ import { HeaderComponent } from './components/header.component';
 	selector: 'app-root',
 	standalone: true,
 	imports: [RouterOutlet, HeaderComponent, FooterComponent, BottomNavComponent],
-	template: '<app-header /><main><router-outlet /></main><app-footer /><app-bottom-nav />',
+	template:
+		'<a class="skip-link" href="#main">Skip to content</a><app-header /><main id="main" tabindex="-1"><router-outlet /></main><app-footer /><app-bottom-nav />',
 })
 export class AppComponent {}

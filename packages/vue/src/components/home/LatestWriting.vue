@@ -1,22 +1,18 @@
 <template>
-	<section>
+	<section aria-labelledby="writing-title">
 		<div class="container">
 			<p class="section-label">{{ copy.label }}</p>
-			<h2 class="section-title">{{ copy.title }}</h2>
-			<div :class="styles['writing-grid']">
-				<RouterLink
-					v-for="post in writing"
-					:key="post.title"
-					:to="post.href"
-					:class="styles['writing-card']"
-					data-reveal
-				>
-					<span :class="styles['writing-tag']">{{ post.tag }}</span>
-					<h3 :class="styles['writing-title']">{{ post.title }}</h3>
-					<p :class="styles['writing-blurb']">{{ post.blurb }}</p>
-					<span :class="styles['writing-more']">{{ copy.readMore }}</span>
-				</RouterLink>
-			</div>
+			<h2 class="section-title" id="writing-title">{{ copy.title }}</h2>
+			<ul :class="styles['writing-grid']">
+				<li v-for="post in writing" :key="post.title">
+					<RouterLink :to="post.href" :class="styles['writing-card']" data-reveal>
+						<span :class="styles['writing-tag']">{{ post.tag }}</span>
+						<h3 :class="styles['writing-title']">{{ post.title }}</h3>
+						<p :class="styles['writing-blurb']">{{ post.blurb }}</p>
+						<span :class="styles['writing-more']">{{ copy.readMore }}</span>
+					</RouterLink>
+				</li>
+			</ul>
 		</div>
 	</section>
 </template>

@@ -1,10 +1,10 @@
 <template>
-	<section data-band>
+	<section data-band aria-labelledby="approach-title">
 		<div class="container" :class="styles['approach-body']">
 			<p class="section-label">{{ copy.label }}</p>
-			<h2 class="section-title">{{ copy.title }}</h2>
-			<div :class="styles['approach-grid']">
-				<article
+			<h2 class="section-title" id="approach-title">{{ copy.title }}</h2>
+			<ul :class="styles['approach-grid']">
+				<li
 					v-for="principle in principles"
 					:key="principle.title"
 					:class="styles.principle"
@@ -12,8 +12,8 @@
 				>
 					<h3 :class="styles['principle-title']">{{ principle.title }}</h3>
 					<p :class="styles['principle-desc']">{{ principle.description }}</p>
-				</article>
-			</div>
+				</li>
+			</ul>
 		</div>
 	</section>
 </template>

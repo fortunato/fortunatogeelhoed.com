@@ -67,7 +67,7 @@ export function Timeline() {
 						<Fragment key={entry.id}>
 							{showEra ? (
 								<div className={styles.era} data-reveal>
-									<span className={styles['era-label']}>{entry.era}</span>
+									<h2 className={styles['era-label']}>{entry.era}</h2>
 								</div>
 							) : null}
 							<TimelineEntry entry={entry} />

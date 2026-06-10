@@ -10,20 +10,22 @@ export function Services({
 	services: ServiceOffering[];
 	copy: HomeContent['sections']['services'];
 }) {
-	const gridRef = useRef<HTMLDivElement>(null);
+	const gridRef = useRef<HTMLUListElement>(null);
 
 	useEffect(() => {
 		if (gridRef.current) return initCardSpotlight(gridRef.current);
 	}, []);
 
 	return (
-		<section>
+		<section aria-labelledby="services-title">
 			<div className={`container ${styles['services-body']}`}>
 				<p className="section-label">{copy.label}</p>
-				<h2 className="section-title">{copy.title}</h2>
-				<div className={styles['services-grid']} ref={gridRef}>
+				<h2 className="section-title" id="services-title">
+					{copy.title}
+				</h2>
+				<ul className={styles['services-grid']} ref={gridRef}>
 					{services.map((service, i) => (
-						<article
+						<li
 							key={service.title}
 							className={styles['service-card']}
 							data-reveal
@@ -34,9 +36,9 @@ export function Services({
 							</span>
 							<h3 className={styles['service-title']}>{service.title}</h3>
 							<p className={styles['service-desc']}>{service.description}</p>
-						</article>
+						</li>
 					))}
-				</div>
+				</ul>
 			</div>
 		</section>
 	);

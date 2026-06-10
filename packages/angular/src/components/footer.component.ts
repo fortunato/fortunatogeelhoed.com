@@ -27,7 +27,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 					</a>
 				</nav>
 				<p class="footer-legal">
-					© {{ year }} JiggyBit S.L. — built in React, Vue and Angular on one backend.
+					© {{ year }} JiggyBit S.L., built in React, Vue and Angular on one backend.
 				</p>
 			</div>
 		</footer>

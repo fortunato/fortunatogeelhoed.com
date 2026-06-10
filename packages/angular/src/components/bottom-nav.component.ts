@@ -12,7 +12,7 @@ import { NAV_ITEMS } from '@fg/shared';
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	styleUrl: '../../../../styles/components/bottom-nav.module.css',
 	template: `
-		<nav class="bottom-nav" aria-label="Primary">
+		<nav class="bottom-nav" aria-label="Mobile">
 			@for (item of navItems; track item.path) {
 				<a
 					class="bottom-nav-item"

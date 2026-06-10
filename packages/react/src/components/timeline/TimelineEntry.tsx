@@ -6,6 +6,7 @@ import {
 	entryMatchesTech,
 	isExternalHref,
 	techVisual,
+	timelineDatetime,
 } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 import { type CSSProperties, useMemo } from 'react';
@@ -61,8 +62,10 @@ export function TimelineEntry({ entry }: { entry: Entry }) {
 			data-reveal
 		>
 			<div className={styles.spine}>
-				<div className={styles['spine-years']}>{entry.years}</div>
-				<div className={styles['spine-client']}>{entry.client}</div>
+				<div className={styles['spine-years']}>
+					<time dateTime={timelineDatetime(entry.years)}>{entry.years}</time>
+				</div>
+				<h3 className={styles['spine-client']}>{entry.client}</h3>
 				<div className={styles['spine-role']}>{entry.role}</div>
 				<div className={styles['spine-badges']}>
 					<span className="tag tag--status" data-kind={entry.type}>
@@ -129,6 +132,7 @@ export function TimelineEntry({ entry }: { entry: Entry }) {
 						className={`${styles.lane} ${styles[cls]}`}
 						data-lane-label={LANE_LABELS[key]}
 					>
+						<span className="visually-hidden">{LANE_LABELS[key]}</span>
 						{entry.tech[key]?.map((t) => (
 							<Pill key={t} name={t} />
 						))}

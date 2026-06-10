@@ -87,11 +87,14 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 							label="Name"
 							value={field.value}
 							disabled={disabled}
+							errorId={errors.name?.message ? 'error-name' : undefined}
 							onInput={(e) => field.onChange((e.target as HTMLInputElement).value)}
 							onBlur={field.onBlur}
 						/>
 						{errors.name?.message && (
-							<p className="field-error">{errors.name.message}</p>
+							<p className="field-error" id="error-name">
+								{errors.name.message}
+							</p>
 						)}
 					</div>
 				)}
@@ -108,11 +111,14 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 							autocomplete="email"
 							value={field.value}
 							disabled={disabled}
+							errorId={errors.email?.message ? 'error-email' : undefined}
 							onInput={(e) => field.onChange((e.target as HTMLInputElement).value)}
 							onBlur={field.onBlur}
 						/>
 						{errors.email?.message && (
-							<p className="field-error">{errors.email.message}</p>
+							<p className="field-error" id="error-email">
+								{errors.email.message}
+							</p>
 						)}
 					</div>
 				)}
@@ -127,11 +133,14 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 							label="Message"
 							value={field.value}
 							disabled={disabled}
+							errorId={errors.message?.message ? 'error-message' : undefined}
 							onInput={(e) => field.onChange((e.target as HTMLTextAreaElement).value)}
 							onBlur={field.onBlur}
 						/>
 						{errors.message?.message && (
-							<p className="field-error">{errors.message.message}</p>
+							<p className="field-error" id="error-message">
+								{errors.message.message}
+							</p>
 						)}
 					</div>
 				)}
@@ -152,7 +161,7 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 				</p>
 			)}
 			<p className="contact-privacy">
-				Your name, email, and message are emailed to me so I can reply — they are not stored
+				Your name, email, and message are emailed to me so I can reply. They are not stored
 				on this site.
 			</p>
 			<button type="submit" className="btn btn--marketing" disabled={disabled}>

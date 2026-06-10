@@ -14,7 +14,7 @@ import { ContentService } from '../content.service';
 	template: `
 		<section class="about">
 			<article class="about-inner container">
-				<figure class="about-photo">
+				<div class="about-photo">
 					<img
 						src="/assets/images/fortunato.webp"
 						[alt]="photoAlt"
@@ -22,7 +22,7 @@ import { ContentService } from '../content.service';
 						height="600"
 						decoding="async"
 					/>
-				</figure>
+				</div>
 				<div class="about-prose">
 					<span class="section-label">About</span>
 					<h1 class="section-title">Fortunato Geelhoed</h1>

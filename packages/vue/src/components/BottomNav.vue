@@ -1,5 +1,5 @@
 <template>
-	<nav :class="styles['bottom-nav']" aria-label="Primary">
+	<nav :class="styles['bottom-nav']" aria-label="Mobile">
 		<RouterLink
 			v-for="item in navItems"
 			:key="item.path"

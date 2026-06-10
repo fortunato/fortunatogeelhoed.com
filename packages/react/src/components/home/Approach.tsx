@@ -9,18 +9,20 @@ export function Approach({
 	copy: HomeContent['sections']['approach'];
 }) {
 	return (
-		<section data-band>
+		<section data-band aria-labelledby="approach-title">
 			<div className={`container ${styles['approach-body']}`}>
 				<p className="section-label">{copy.label}</p>
-				<h2 className="section-title">{copy.title}</h2>
-				<div className={styles['approach-grid']}>
+				<h2 className="section-title" id="approach-title">
+					{copy.title}
+				</h2>
+				<ul className={styles['approach-grid']}>
 					{principles.map((principle) => (
-						<article key={principle.title} className={styles.principle} data-reveal>
+						<li key={principle.title} className={styles.principle} data-reveal>
 							<h3 className={styles['principle-title']}>{principle.title}</h3>
 							<p className={styles['principle-desc']}>{principle.description}</p>
-						</article>
+						</li>
 					))}
-				</div>
+				</ul>
 			</div>
 		</section>
 	);

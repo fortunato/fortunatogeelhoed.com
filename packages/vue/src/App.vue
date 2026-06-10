@@ -1,6 +1,7 @@
 <template>
+	<a class="skip-link" href="#main">Skip to content</a>
 	<Header />
-	<main>
+	<main id="main" tabindex="-1">
 		<RouterView />
 	</main>
 	<Footer />

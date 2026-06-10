@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit';
+import { LitElement, html, nothing } from 'lit';
 
 // Form-associated multi-line input — a thin sibling of jb-input for the contact
 // message field. Same single-channel ElementInternals pattern and light-DOM styling.
@@ -18,6 +18,9 @@ export class JbTextarea extends LitElement {
 		rows: { type: Number },
 		required: { type: Boolean },
 		disabled: { type: Boolean },
+		// Id of the external error message element to associate when in an error state. When set,
+		// the inner control is marked aria-invalid and points at it via aria-describedby.
+		errorId: { type: String, attribute: 'error-id' },
 	};
 
 	declare name: string;
@@ -27,6 +30,7 @@ export class JbTextarea extends LitElement {
 	declare rows: number;
 	declare required: boolean;
 	declare disabled: boolean;
+	declare errorId: string;
 
 	#internals: ElementInternals;
 
@@ -39,6 +43,7 @@ export class JbTextarea extends LitElement {
 		this.rows = 4;
 		this.required = false;
 		this.disabled = false;
+		this.errorId = '';
 		this.#internals = this.attachInternals();
 	}
 
@@ -62,6 +67,8 @@ export class JbTextarea extends LitElement {
 				rows=${this.rows}
 				?required=${this.required}
 				?disabled=${this.disabled}
+				aria-invalid=${this.errorId ? 'true' : nothing}
+				aria-describedby=${this.errorId || nothing}
 				@input=${(e: Event) => this.#onInput(e)}
 				@blur=${() => this.#onBlur()}
 			></textarea>

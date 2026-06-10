@@ -6,7 +6,7 @@ import { NavLink } from 'react-router';
 // where the header's top-bar nav takes over). Driven by the shared NAV_ITEMS.
 export function BottomNav() {
 	return (
-		<nav className={styles['bottom-nav']} aria-label="Primary">
+		<nav className={styles['bottom-nav']} aria-label="Mobile">
 			{NAV_ITEMS.map((item) => (
 				<NavLink
 					key={item.path}

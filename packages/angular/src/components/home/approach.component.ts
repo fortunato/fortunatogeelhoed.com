@@ -6,18 +6,18 @@ import type { HomeContent, Principle } from '@fg/shared';
 	standalone: true,
 	styleUrl: '../../../../../styles/components/approach.module.css',
 	template: `
-		<section data-band>
+		<section data-band aria-labelledby="approach-title">
 			<div class="container approach-body">
 				<p class="section-label">{{ copy().label }}</p>
-				<h2 class="section-title">{{ copy().title }}</h2>
-				<div class="approach-grid">
+				<h2 class="section-title" id="approach-title">{{ copy().title }}</h2>
+				<ul class="approach-grid">
 					@for (principle of principles(); track principle.title) {
-						<article class="principle" data-reveal>
+						<li class="principle" data-reveal>
 							<h3 class="principle-title">{{ principle.title }}</h3>
 							<p class="principle-desc">{{ principle.description }}</p>
-						</article>
+						</li>
 					}
-				</div>
+				</ul>
 			</div>
 		</section>
 	`,

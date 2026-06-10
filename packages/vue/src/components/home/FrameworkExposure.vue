@@ -1,17 +1,17 @@
 <template>
-	<section>
+	<section aria-labelledby="frameworks-title">
 		<div class="container" :class="styles['exposure-body']">
 			<p class="section-label">{{ copy.label }}</p>
-			<h2 :class="['section-title', styles.head]">{{ copy.title }}</h2>
+			<h2 :class="['section-title', styles.head]" id="frameworks-title">{{ copy.title }}</h2>
 			<p :class="styles.intro">{{ copy.intro }}</p>
 			<FrameworkRibbon title="Frontend Frameworks" :rows="frontendRows" :ticks="ticks" />
-			<FrameworkRibbon title="Backend &amp; CMS" :rows="backendRows" :ticks="ticks" />
-			<div :class="styles['ribbon-legend']">
-				<span v-for="item in intensityLegend" :key="item.intensity" :class="styles['legend-item']">
+			<FrameworkRibbon title="Backend & CMS" :rows="backendRows" :ticks="ticks" />
+			<ul :class="styles['ribbon-legend']">
+				<li v-for="item in intensityLegend" :key="item.intensity" :class="styles['legend-item']">
 					<span :class="styles['legend-swatch']" :data-intensity="item.intensity" />
 					{{ item.label }}
-				</span>
-			</div>
+				</li>
+			</ul>
 			<Link :to="copy.link.href" variant="arrow" :class="styles['exposure-link']">{{ copy.link.label }}</Link>
 		</div>
 	</section>

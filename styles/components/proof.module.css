@@ -17,6 +17,15 @@
 	grid-template-columns: 1fr;
 	gap: var(--jb-space-lg);
 	margin-top: var(--jb-space-lg);
+	margin-bottom: 0;
+}
+
+/* Each metric is a <dl> group: the visible order is the big metric above its label, while the
+   markup keeps the term (label, <dt>) before its description (metric, <dd>). column-reverse
+   reconciles the two without reordering the DOM. */
+.proof-item {
+	display: flex;
+	flex-direction: column-reverse;
 }
 
 @container (width >= 27rem) {
@@ -35,6 +44,7 @@
    brighter band travelling over an otherwise-accent gradient, clipped to the text. Frozen
    under reduced motion; solid under forced colors (clipped gradients vanish there). */
 .proof-metric {
+	margin: 0;
 	font-family: var(--jb-font-display);
 	font-size: clamp(2.4rem, 6vw, 3.5rem);
 	font-weight: 800;

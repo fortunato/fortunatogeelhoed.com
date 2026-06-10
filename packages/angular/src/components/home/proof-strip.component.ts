@@ -6,17 +6,17 @@ import type { HomeContent, ProofPoint } from '@fg/shared';
 	standalone: true,
 	styleUrl: '../../../../../styles/components/proof.module.css',
 	template: `
-		<section data-band>
+		<section data-band [attr.aria-label]="copy().label">
 			<div class="container proof-body">
 				<p class="section-label">{{ copy().label }}</p>
-				<div class="proof-grid">
+				<dl class="proof-grid">
 					@for (point of proof(); track point.label) {
-						<div data-reveal>
-							<p class="proof-metric">{{ point.metric }}</p>
-							<p class="proof-label">{{ point.label }}</p>
+						<div class="proof-item" data-reveal>
+							<dt class="proof-label">{{ point.label }}</dt>
+							<dd class="proof-metric">{{ point.metric }}</dd>
 						</div>
 					}
-				</div>
+				</dl>
 			</div>
 		</section>
 	`,

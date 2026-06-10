@@ -14,19 +14,19 @@ import { initCardSpotlight } from '@fg/shared';
 	standalone: true,
 	styleUrl: '../../../../../styles/components/services.module.css',
 	template: `
-		<section>
+		<section aria-labelledby="services-title">
 			<div class="container services-body">
 				<p class="section-label">{{ copy().label }}</p>
-				<h2 class="section-title">{{ copy().title }}</h2>
-				<div class="services-grid" #grid>
+				<h2 class="section-title" id="services-title">{{ copy().title }}</h2>
+				<ul class="services-grid" #grid>
 					@for (service of services(); track service.title; let i = $index) {
-						<article class="service-card" data-reveal data-spotlight>
+						<li class="service-card" data-reveal data-spotlight>
 							<span class="service-index">{{ pad(i) }}</span>
 							<h3 class="service-title">{{ service.title }}</h3>
 							<p class="service-desc">{{ service.description }}</p>
-						</article>
+						</li>
 					}
-				</div>
+				</ul>
 			</div>
 		</section>
 	`,

@@ -20,7 +20,7 @@
 
 			<template v-for="row in rows" :key="row.key">
 				<div v-if="row.kind === 'era'" :class="styles.era" data-reveal>
-					<span :class="styles['era-label']">{{ row.era }}</span>
+					<h2 :class="styles['era-label']">{{ row.era }}</h2>
 				</div>
 				<TimelineEntry v-else :entry="row.entry" />
 			</template>

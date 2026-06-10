@@ -6,8 +6,10 @@
 		data-reveal
 	>
 		<div :class="styles.spine">
-			<div :class="styles['spine-years']">{{ entry.years }}</div>
-			<div :class="styles['spine-client']">{{ entry.client }}</div>
+			<div :class="styles['spine-years']">
+				<time :datetime="datetime(entry.years)">{{ entry.years }}</time>
+			</div>
+			<h3 :class="styles['spine-client']">{{ entry.client }}</h3>
 			<div :class="styles['spine-role']">{{ entry.role }}</div>
 			<div :class="styles['spine-badges']">
 				<span class="tag tag--status" :data-kind="entry.type">
@@ -50,6 +52,7 @@
 				:class="[styles.lane, styles[lane.cls]]"
 				:data-lane-label="laneLabels[lane.key]"
 			>
+				<span class="visually-hidden">{{ laneLabels[lane.key] }}</span>
 				<button
 					v-for="t in entry.tech[lane.key]"
 					:key="t"
@@ -79,6 +82,7 @@ import {
 	entryMatchesTech,
 	isExternalHref,
 	techVisual,
+	timelineDatetime,
 } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 import { computed } from 'vue';
@@ -98,6 +102,7 @@ const highlights = computed<string[]>(() => {
 });
 
 const laneLabels = LANE_LABELS;
+const datetime = timelineDatetime;
 const v = techVisual;
 const lanes: { key: Lane; cls: string }[] = [
 	{ key: 'frontend', cls: 'lane-fe' },

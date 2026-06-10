@@ -13,7 +13,7 @@ export function About() {
 	return (
 		<section className={styles.about}>
 			<article className={`${styles['about-inner']} container`}>
-				<figure className={styles['about-photo']}>
+				<div className={styles['about-photo']}>
 					<img
 						src="/assets/images/fortunato.webp"
 						alt={PHOTO_ALT}
@@ -21,7 +21,7 @@ export function About() {
 						height={600}
 						decoding="async"
 					/>
-				</figure>
+				</div>
 				<div className={styles['about-prose']}>
 					<span className="section-label">About</span>
 					<h1 className="section-title">Fortunato Geelhoed</h1>

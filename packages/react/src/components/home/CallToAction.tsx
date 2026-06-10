@@ -4,10 +4,10 @@ import { Button } from '../ui/Button';
 
 export function CallToAction({ cta }: { cta: HomeContent['cta'] }) {
 	return (
-		<section className={styles.cta}>
+		<section className={styles.cta} aria-labelledby="cta-title">
 			<div className="container">
 				<div className={styles['cta-panel']}>
-					<h2 className={styles['cta-heading']} data-reveal>
+					<h2 className={styles['cta-heading']} id="cta-title" data-reveal>
 						{cta.heading}
 					</h2>
 					<Button to={cta.href} variant="inverted" tone="marketing">

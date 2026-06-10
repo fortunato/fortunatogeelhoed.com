@@ -12,10 +12,11 @@
 						label="Name"
 						:value="field.state.value"
 						:disabled="disabled"
+						:error-id="field.state.meta.isTouched && field.state.meta.errors.length ? 'error-name' : undefined"
 						@input="field.handleChange(($event.target as HTMLInputElement).value)"
 						@blur="field.handleBlur"
 					/>
-					<p v-if="field.state.meta.isTouched && field.state.meta.errors.length" class="field-error">
+					<p v-if="field.state.meta.isTouched && field.state.meta.errors.length" id="error-name" class="field-error">
 						{{ field.state.meta.errors[0]?.message }}
 					</p>
 				</div>
@@ -34,10 +35,11 @@
 						autocomplete="email"
 						:value="field.state.value"
 						:disabled="disabled"
+						:error-id="field.state.meta.isTouched && field.state.meta.errors.length ? 'error-email' : undefined"
 						@input="field.handleChange(($event.target as HTMLInputElement).value)"
 						@blur="field.handleBlur"
 					/>
-					<p v-if="field.state.meta.isTouched && field.state.meta.errors.length" class="field-error">
+					<p v-if="field.state.meta.isTouched && field.state.meta.errors.length" id="error-email" class="field-error">
 						{{ field.state.meta.errors[0]?.message }}
 					</p>
 				</div>
@@ -54,10 +56,11 @@
 						label="Message"
 						:value="field.state.value"
 						:disabled="disabled"
+						:error-id="field.state.meta.isTouched && field.state.meta.errors.length ? 'error-message' : undefined"
 						@input="field.handleChange(($event.target as HTMLTextAreaElement).value)"
 						@blur="field.handleBlur"
 					/>
-					<p v-if="field.state.meta.isTouched && field.state.meta.errors.length" class="field-error">
+					<p v-if="field.state.meta.isTouched && field.state.meta.errors.length" id="error-message" class="field-error">
 						{{ field.state.meta.errors[0]?.message }}
 					</p>
 				</div>
@@ -77,7 +80,7 @@
 			Something went wrong sending your message. Please try again.
 		</p>
 		<p class="contact-privacy">
-			Your name, email, and message are emailed to me so I can reply — they are not stored on
+			Your name, email, and message are emailed to me so I can reply. They are not stored on
 			this site.
 		</p>
 		<button type="submit" class="btn btn--marketing" :disabled="disabled">Send</button>

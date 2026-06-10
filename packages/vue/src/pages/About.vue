@@ -1,11 +1,11 @@
 <template>
 	<section :class="styles.about">
 		<article :class="[styles['about-inner'], 'container']">
-			<figure :class="styles['about-photo']">
+			<div :class="styles['about-photo']">
 				<!-- Bound src (not a static attribute) so Vue's SFC compiler treats it as a runtime
 				     URL served by the API, not a build-time module import to resolve. -->
 				<img :src="photoSrc" :alt="photoAlt" width="480" height="600" decoding="async" />
-			</figure>
+			</div>
 			<div :class="styles['about-prose']">
 				<span class="section-label">About</span>
 				<h1 class="section-title">Fortunato Geelhoed</h1>

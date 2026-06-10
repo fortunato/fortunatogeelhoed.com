@@ -27,27 +27,29 @@ export function FrameworkRibbon({
 					</span>
 				))}
 			</div>
-			{rows.map((row) => (
-				<div key={row.framework} className={styles['ribbon-row']}>
-					<span className={styles['ribbon-label']}>{row.framework}</span>
-					<div className={styles['ribbon-track']}>
-						{row.segments.map((seg, i) => (
-							<span
-								// biome-ignore lint/suspicious/noArrayIndexKey: segments are positional and stable
-								key={i}
-								className={styles['ribbon-seg']}
-								data-intensity={seg.intensity}
-								style={{
-									left: `${seg.left}%`,
-									...(seg.intensity !== 'brief'
-										? { width: `${seg.width}%` }
-										: {}),
-								}}
-							/>
-						))}
-					</div>
-				</div>
-			))}
+			<ul className={styles['ribbon-rows']}>
+				{rows.map((row) => (
+					<li key={row.framework} className={styles['ribbon-row']}>
+						<span className={styles['ribbon-label']}>{row.framework}</span>
+						<div className={styles['ribbon-track']}>
+							{row.segments.map((seg, i) => (
+								<span
+									// biome-ignore lint/suspicious/noArrayIndexKey: segments are positional and stable
+									key={i}
+									className={styles['ribbon-seg']}
+									data-intensity={seg.intensity}
+									style={{
+										left: `${seg.left}%`,
+										...(seg.intensity !== 'brief'
+											? { width: `${seg.width}%` }
+											: {}),
+									}}
+								/>
+							))}
+						</div>
+					</li>
+				))}
+			</ul>
 		</div>
 	);
 }

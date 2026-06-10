@@ -369,6 +369,46 @@
 		overflow: hidden;
 	}
 
+	/* Visually hidden but available to assistive tech. Standard clip pattern, shared by any
+	   label that should be read aloud without taking up visible space. */
+	.visually-hidden {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		padding: 0;
+		margin: -1px;
+		overflow: hidden;
+		clip: rect(0, 0, 0, 0);
+		white-space: nowrap;
+		border: 0;
+	}
+
+	/* Skip link: the first focusable element on every page. Off-screen until focused, then it
+	   anchors to the top-left so keyboard and screen-reader users can jump straight to the
+	   main content past the header and navigation. */
+	.skip-link {
+		position: absolute;
+		top: var(--jb-space-sm);
+		left: var(--jb-space-sm);
+		z-index: 1000;
+		padding: var(--jb-space-xs) var(--jb-space-sm);
+		background: var(--jb-bg-secondary);
+		color: var(--jb-text-primary);
+		border: 1px solid var(--jb-color-border);
+		border-radius: var(--jb-radius-sm);
+		font-weight: 600;
+		transform: translateY(calc(-100% - var(--jb-space-sm)));
+	}
+
+	.skip-link:not(:focus) {
+		clip: rect(0, 0, 0, 0);
+		clip-path: inset(50%);
+	}
+
+	.skip-link:focus {
+		transform: none;
+	}
+
 	.field-error {
 		color: var(--jb-color-danger);
 		font-size: 0.85rem;

@@ -34,6 +34,13 @@
 	margin-bottom: var(--jb-space-md);
 }
 
+/* The framework tracks are a list; the wrapper carries no visible affordance of its own. */
+.ribbon-rows {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
 /* Mobile-first: the 6rem label column squeezes the track when narrow, so stack the label above
    its track by default; the wide tier (container query below) restores the label+track row. */
 .ribbon-row {
@@ -141,7 +148,10 @@
 	flex-wrap: wrap;
 	gap: var(--jb-space-lg);
 	margin-top: var(--jb-space-md);
+	margin-bottom: 0;
 	margin-left: 0;
+	padding: 0;
+	list-style: none;
 	font-size: 0.75rem;
 	color: var(--jb-text-secondary);
 }

@@ -15,7 +15,7 @@ import { NAV_ITEMS } from '@fg/shared';
 				FORTUNATO<span class="dot">.</span>GEELHOED
 			</a>
 			<div class="header-right">
-				<nav class="nav">
+				<nav class="nav" aria-label="Primary">
 					@for (item of navItems; track item.path) {
 						<a
 							[routerLink]="item.path"
@@ -31,7 +31,7 @@ import { NAV_ITEMS } from '@fg/shared';
 					<div class="switcher-buttons">
 						<a class="switcher-btn" href="/__switch?to=react">react</a>
 						<a class="switcher-btn" href="/__switch?to=vue">vue</a>
-						<a class="switcher-btn active" href="/__switch?to=angular">angular</a>
+						<a class="switcher-btn active" href="/__switch?to=angular" aria-current="true">angular</a>
 					</div>
 				</div>
 				<a

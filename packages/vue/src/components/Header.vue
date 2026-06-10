@@ -4,7 +4,7 @@
 			FORTUNATO<span :class="styles.dot">.</span>GEELHOED
 		</RouterLink>
 		<div :class="styles['header-right']">
-			<nav :class="styles.nav">
+			<nav :class="styles.nav" aria-label="Primary">
 				<RouterLink v-for="item in navItems" :key="item.path" :to="item.path">
 					{{ item.label }}
 				</RouterLink>
@@ -14,7 +14,7 @@
 				<span :class="styles['switcher-label']">Built with</span>
 				<div :class="styles['switcher-buttons']">
 					<a :class="styles['switcher-btn']" href="/__switch?to=react">react</a>
-					<a :class="[styles['switcher-btn'], styles.active]" href="/__switch?to=vue">vue</a>
+					<a :class="[styles['switcher-btn'], styles.active]" href="/__switch?to=vue" aria-current="true">vue</a>
 					<a :class="styles['switcher-btn']" href="/__switch?to=angular">angular</a>
 				</div>
 			</div>

@@ -26,7 +26,7 @@ export function Footer() {
 					</a>
 				</nav>
 				<p className={styles['footer-legal']}>
-					© {new Date().getFullYear()} JiggyBit S.L. — built in React, Vue and Angular on
+					© {new Date().getFullYear()} JiggyBit S.L., built in React, Vue and Angular on
 					one backend.
 				</p>
 			</div>

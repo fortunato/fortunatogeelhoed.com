@@ -8,8 +8,11 @@ export function Layout() {
 	return (
 		// The timeline filter lives above the outlet so a selection survives navigating away and back.
 		<TechFilterProvider>
+			<a className="skip-link" href="#main">
+				Skip to content
+			</a>
 			<Header />
-			<main>
+			<main id="main" tabIndex={-1}>
 				<Outlet />
 			</main>
 			<Footer />

@@ -19,7 +19,7 @@
 				</a>
 			</nav>
 			<p :class="styles['footer-legal']">
-				© {{ year }} JiggyBit S.L. — built in React, Vue and Angular on one backend.
+				© {{ year }} JiggyBit S.L., built in React, Vue and Angular on one backend.
 			</p>
 		</div>
 	</footer>

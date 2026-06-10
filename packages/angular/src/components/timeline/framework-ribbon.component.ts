@@ -17,21 +17,23 @@ import type { AxisTick, RibbonRow } from '@fg/shared';
 					<span class="ribbon-tick" [style.left.%]="tick.left">{{ tick.year }}</span>
 				}
 			</div>
-			@for (row of rows(); track row.framework) {
-				<div class="ribbon-row">
-					<span class="ribbon-label">{{ row.framework }}</span>
-					<div class="ribbon-track">
-						@for (seg of row.segments; track $index) {
-							<span
-								class="ribbon-seg"
-								[attr.data-intensity]="seg.intensity"
-								[style.left.%]="seg.left"
-								[style.width.%]="seg.intensity !== 'brief' ? seg.width : null"
-							></span>
-						}
-					</div>
-				</div>
-			}
+			<ul class="ribbon-rows">
+				@for (row of rows(); track row.framework) {
+					<li class="ribbon-row">
+						<span class="ribbon-label">{{ row.framework }}</span>
+						<div class="ribbon-track">
+							@for (seg of row.segments; track $index) {
+								<span
+									class="ribbon-seg"
+									[attr.data-intensity]="seg.intensity"
+									[style.left.%]="seg.left"
+									[style.width.%]="seg.intensity !== 'brief' ? seg.width : null"
+								></span>
+							}
+						</div>
+					</li>
+				}
+			</ul>
 		</div>
 	`,
 })
