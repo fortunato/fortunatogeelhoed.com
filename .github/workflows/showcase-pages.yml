@@ -2,9 +2,14 @@ name: Component Showcase
 
 # Builds the composed component showcase, enforces cross-framework visual parity, and
 # publishes it to GitHub Pages on the components.fortunatogeelhoed.com sub-domain.
+#
+# Release-gated, like the site deploy: the showcase tracks the last published release, not every
+# push to main, so both public surfaces move together. Parity is still enforced on every push and
+# pull request by the CI workflow; the gate here is a pre-publish safety net. A manual run
+# republishes the current commit.
 on:
-  push:
-    branches: [main]
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:
