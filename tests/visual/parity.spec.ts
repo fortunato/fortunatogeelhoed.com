@@ -63,6 +63,9 @@ for (const component of COMPONENTS) {
 			await page.evaluate(() => document.fonts.ready);
 			await expect(el).toHaveScreenshot(component.baseline, {
 				mask: component.mask.map((selector) => page.locator(selector)),
+				// Tall whole-page subjects can need more than the 5s default to present two
+				// identical consecutive frames on a loaded CI runner.
+				timeout: component.reducedMotion ? 15_000 : 5_000,
 			});
 		});
 	}

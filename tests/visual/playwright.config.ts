@@ -25,8 +25,6 @@ export default defineConfig({
 	// Platform-suffixed so Linux baselines are used consistently locally and in CI.
 	snapshotPathTemplate: '{testDir}/__snapshots__/{arg}-{platform}{ext}',
 	expect: {
-		// Tall whole-page subjects need more than the 5s default to settle to two identical
-		// frames on a loaded CI runner.
-		toHaveScreenshot: { maxDiffPixelRatio: 0.03, animations: 'disabled', timeout: 15_000 },
+		toHaveScreenshot: { maxDiffPixelRatio: 0.03, animations: 'disabled' },
 	},
 });
