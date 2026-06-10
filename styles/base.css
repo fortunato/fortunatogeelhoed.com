@@ -216,6 +216,14 @@
 		padding: clamp(var(--jb-space-lg), 5vw, var(--jb-space-xl)) var(--jb-space-lg);
 	}
 
+	/* Banded sections: a neutral surface with hairline top/bottom edges. One shared definition
+	   gives the homepage an alternating rhythm without each section inventing its own background.
+	   Bands are never placed adjacent, so the hairlines never double up. */
+	section[data-band] {
+		background: var(--jb-bg-secondary);
+		border-block: 1px solid var(--jb-color-border);
+	}
+
 	/* Code / mono */
 	code {
 		font-family: var(--jb-font-mono);

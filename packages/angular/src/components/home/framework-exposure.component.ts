@@ -17,7 +17,7 @@ const bounds = spansBounds(frontendFrameworks, backendFrameworks);
 	imports: [FrameworkRibbonComponent, RouterLink],
 	styleUrls: ['../../../../../styles/components/framework-ribbon.module.css'],
 	template: `
-		<section class="exposure">
+		<section>
 			<div class="container exposure-body">
 				<p class="section-label">{{ copy().label }}</p>
 				<h2 class="section-title head">{{ copy().title }}</h2>

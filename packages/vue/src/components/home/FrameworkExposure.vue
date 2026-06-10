@@ -1,5 +1,5 @@
 <template>
-	<section :class="styles.exposure">
+	<section>
 		<div class="container" :class="styles['exposure-body']">
 			<p class="section-label">{{ copy.label }}</p>
 			<h2 :class="['section-title', styles.head]">{{ copy.title }}</h2>

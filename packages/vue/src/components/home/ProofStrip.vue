@@ -1,5 +1,5 @@
 <template>
-	<section :class="styles.proof">
+	<section data-band>
 		<div class="container" :class="styles['proof-body']">
 			<p class="section-label">{{ copy.label }}</p>
 			<div :class="styles['proof-grid']">

@@ -9,7 +9,7 @@ export function ProofStrip({
 	copy: HomeContent['sections']['proof'];
 }) {
 	return (
-		<section className={styles.proof}>
+		<section data-band>
 			<div className={`container ${styles['proof-body']}`}>
 				<p className="section-label">{copy.label}</p>
 				<div className={styles['proof-grid']}>

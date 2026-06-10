@@ -6,7 +6,7 @@ import type { HomeContent, ProofPoint } from '@fg/shared';
 	standalone: true,
 	styleUrl: '../../../../../styles/components/proof.module.css',
 	template: `
-		<section class="proof">
+		<section data-band>
 			<div class="container proof-body">
 				<p class="section-label">{{ copy().label }}</p>
 				<div class="proof-grid">

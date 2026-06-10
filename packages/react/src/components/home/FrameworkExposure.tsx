@@ -17,7 +17,7 @@ const ticks = axisTicks(bounds);
 
 export function FrameworkExposure({ copy }: { copy: HomeContent['sections']['frameworks'] }) {
 	return (
-		<section className={styles.exposure}>
+		<section>
 			<div className={`container ${styles['exposure-body']}`}>
 				<p className="section-label">{copy.label}</p>
 				<h2 className={`section-title ${styles.head}`}>{copy.title}</h2>

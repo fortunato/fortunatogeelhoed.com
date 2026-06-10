@@ -2,13 +2,6 @@
    a shared year axis and a shared legend. Used by the homepage "Frameworks" section across
    the three variants; semantic --jb-* tokens only. */
 
-/* The whole section reads as a distinct "feature band" — a faint accent wash with hairline
-   borders — so it separates cleanly from the plain Services section above it. */
-.exposure {
-	background: color-mix(in srgb, var(--jb-accent) 4%, var(--jb-bg-primary));
-	border-block: 1px solid var(--jb-color-border);
-}
-
 /* Section heading: tighten the gap under the title so the title + intro read as a pair,
    then a clear break before the ribbons. (Overrides the global .section-title margin.) */
 .head {

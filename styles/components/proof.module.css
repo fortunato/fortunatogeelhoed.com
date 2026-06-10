@@ -1,8 +1,5 @@
-/* Homepage proof strip — shared across the three variants. Semantic --jb-* tokens only. */
-
-.proof {
-	background: var(--jb-bg-secondary);
-}
+/* Homepage proof strip — shared across the three variants. Semantic --jb-* tokens only. The
+   section's banded background comes from the shared `section[data-band]` rule in base.css. */
 
 /* The grid reacts to the width it actually has, not the viewport: the surrounding column is a
    size container (the single anonymous container ancestor, just below), so the column count
