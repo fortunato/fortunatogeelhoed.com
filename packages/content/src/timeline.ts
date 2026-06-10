@@ -41,7 +41,7 @@ const timeline: TimelineData = {
 			tech: {
 				frontend: ['React', 'Angular', 'Vue', 'Vite', 'CSS Modules'],
 				backend: ['Bun', 'Hono'],
-				cicd: ['Nx', 'GitHub Actions', 'Docker', 'Pulumi', 'Hetzner'],
+				cicd: ['Nx', 'GitHub Actions', 'Docker', 'Pulumi', 'Hetzner', 'Grafana', 'Loki'],
 				ai: ['Claude Code'],
 			},
 		},
@@ -75,7 +75,7 @@ const timeline: TimelineData = {
 			highlight: 'Real-time WebSocket market-data ingestion',
 			tech: {
 				frontend: ['React', 'Mantine UI', 'Vite', 'Recharts', 'CSS Modules'],
-				backend: ['NestJS', 'TimescaleDB', 'WebSockets'],
+				backend: ['Node.js', 'NestJS', 'PostgreSQL', 'TimescaleDB', 'WebSockets'],
 				cicd: ['Nx', 'Gitea Actions', 'Docker'],
 				ai: ['Claude Code', 'MCP'],
 			},
@@ -157,13 +157,13 @@ const timeline: TimelineData = {
 			},
 		},
 		{
-			id: 'neurofeedback-ijburg',
+			id: 'freelance-healthcare',
 			era: ERAS.netherlands2020s,
 			years: '2021',
 			startYear: 2021,
 			endYear: 2021,
-			client: 'Neurofeedback IJburg',
-			role: 'Full-Stack Developer',
+			client: 'Freelance',
+			role: 'Full-Stack Engineer',
 			type: 'independent',
 			domains: ['Healthcare'],
 			highlight: 'Multilingual static site for a private practice: Nuxt SSG + i18n',
@@ -196,7 +196,15 @@ const timeline: TimelineData = {
 					'SWC',
 					'SCSS Modules',
 				],
-				backend: ['Node.js', 'Express', 'NestJS', 'PostgreSQL'],
+				backend: [
+					'Node.js',
+					'Express',
+					'NestJS',
+					'MariaDB',
+					'PostgreSQL',
+					'TimescaleDB',
+					'WebSockets',
+				],
 				cicd: [
 					'Nx',
 					'Bitbucket',
@@ -257,7 +265,15 @@ const timeline: TimelineData = {
 				'Beat both the previously-optimized Magento 2 site and the AMP build Google’s own consultants delivered',
 			],
 			tech: {
-				frontend: ['React', 'Redux', 'TypeScript/Flow', 'SSR', 'Webpack', 'SCSS Modules'],
+				frontend: [
+					'React',
+					'Redux',
+					'TypeScript/Flow',
+					'SSR',
+					'Storybook',
+					'Webpack',
+					'SCSS Modules',
+				],
 				backend: ['Node.js', 'Express', 'PHP', 'Salesforce', 'MySQL', 'Redis'],
 				cicd: ['Jenkins', 'Docker'],
 			},
@@ -295,22 +311,23 @@ const timeline: TimelineData = {
 				'A hands-on manager, still coding at least half the time',
 			],
 			tech: {
-				frontend: ['React', 'ES2016', 'SCSS', 'Webpack', 'JSPM'],
+				frontend: ['React', 'ES2016', 'SCSS', 'Webpack', 'JSPM', 'Storybook'],
 				backend: ['Sitecore', 'SQL Server'],
 				cicd: ['Bamboo'],
 			},
 		},
 		{
-			id: 'dastoon',
+			id: 'freelance-ecommerce',
 			era: ERAS.melbourne,
 			years: '2016',
 			startYear: 2016,
 			endYear: 2016,
-			client: 'Dastoon',
+			client: 'Freelance',
 			role: 'Technical direction & QA',
 			type: 'independent',
 			domains: ['E-commerce'],
-			highlight: 'Technical direction and QA over an outsourced Magento 2 fashion store',
+			highlight:
+				'Technical direction and QA over an outsourced Magento 2 fashion store build',
 			tech: {
 				frontend: ['jQuery', 'HTML5', 'CSS3'],
 				backend: ['PHP', 'Magento 2', 'MySQL'],
@@ -348,7 +365,7 @@ const timeline: TimelineData = {
 			highlight: 'First taste of build automation: Grunt for the front-end pipeline',
 			tech: {
 				frontend: ['AngularJS', 'RequireJS', 'Webpack'],
-				backend: ['PHP', 'AEM', 'MySQL', 'Wordpress'],
+				backend: ['PHP', 'AEM', 'MySQL', 'Wordpress', 'Node.js'],
 				cicd: ['Grunt'],
 			},
 		},
@@ -401,8 +418,10 @@ const timeline: TimelineData = {
 			role: 'Joomla extensions',
 			type: 'side-project',
 			domains: ['Developer Tooling'],
-			highlight:
-				'Free and commercial Joomla extensions, built full-stack in a three-person venture',
+			highlight: [
+				'Carousels, galleries, sticky headers and full-page backgrounds, hand-rolled in jQuery before CSS could do any of it',
+				'Free and commercial, built full-stack in a three-person venture',
+			],
 			tech: {
 				frontend: ['jQuery', 'JavaScript', 'HTML5', 'CSS3'],
 				backend: ['PHP', 'MySQL', 'Joomla', 'Joomla 2'],

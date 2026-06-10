@@ -67,8 +67,8 @@ describe('career timeline', () => {
 		expect(entry?.links?.some((l) => /github\.com/.test(l.href))).toBe(true);
 	});
 
-	it('includes the Neurofeedback IJburg freelance project', () => {
-		const entry = entries.find((e) => e.id === 'neurofeedback-ijburg');
+	it('includes the freelance healthcare project', () => {
+		const entry = entries.find((e) => e.id === 'freelance-healthcare');
 		expect(entry).toBeDefined();
 		expect(entry?.tech.frontend).toContain('Nuxt');
 	});

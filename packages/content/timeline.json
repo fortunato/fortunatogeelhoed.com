@@ -42,7 +42,9 @@
 					"GitHub Actions",
 					"Docker",
 					"Pulumi",
-					"Hetzner"
+					"Hetzner",
+					"Grafana",
+					"Loki"
 				],
 				"ai": [
 					"Claude Code"
@@ -102,7 +104,9 @@
 					"CSS Modules"
 				],
 				"backend": [
+					"Node.js",
 					"NestJS",
+					"PostgreSQL",
 					"TimescaleDB",
 					"WebSockets"
 				],
@@ -218,13 +222,13 @@
 			}
 		},
 		{
-			"id": "neurofeedback-ijburg",
+			"id": "freelance-healthcare",
 			"era": "2020s, Netherlands (remote from Spain)",
 			"years": "2021",
 			"startYear": 2021,
 			"endYear": 2021,
-			"client": "Neurofeedback IJburg",
-			"role": "Full-Stack Developer",
+			"client": "Freelance",
+			"role": "Full-Stack Engineer",
 			"type": "independent",
 			"domains": [
 				"Healthcare"
@@ -270,7 +274,10 @@
 					"Node.js",
 					"Express",
 					"NestJS",
-					"PostgreSQL"
+					"MariaDB",
+					"PostgreSQL",
+					"TimescaleDB",
+					"WebSockets"
 				],
 				"cicd": [
 					"Nx",
@@ -353,6 +360,7 @@
 					"Redux",
 					"TypeScript/Flow",
 					"SSR",
+					"Storybook",
 					"Webpack",
 					"SCSS Modules"
 				],
@@ -422,7 +430,8 @@
 					"ES2016",
 					"SCSS",
 					"Webpack",
-					"JSPM"
+					"JSPM",
+					"Storybook"
 				],
 				"backend": [
 					"Sitecore",
@@ -434,18 +443,18 @@
 			}
 		},
 		{
-			"id": "dastoon",
+			"id": "freelance-ecommerce",
 			"era": "2013–2017, Melbourne, Australia",
 			"years": "2016",
 			"startYear": 2016,
 			"endYear": 2016,
-			"client": "Dastoon",
+			"client": "Freelance",
 			"role": "Technical direction & QA",
 			"type": "independent",
 			"domains": [
 				"E-commerce"
 			],
-			"highlight": "Technical direction and QA over an outsourced Magento 2 fashion store",
+			"highlight": "Technical direction and QA over an outsourced Magento 2 fashion store build",
 			"tech": {
 				"frontend": [
 					"jQuery",
@@ -524,7 +533,8 @@
 					"PHP",
 					"AEM",
 					"MySQL",
-					"Wordpress"
+					"Wordpress",
+					"Node.js"
 				],
 				"cicd": [
 					"Grunt"
@@ -614,7 +624,10 @@
 			"domains": [
 				"Developer Tooling"
 			],
-			"highlight": "Free and commercial Joomla extensions, built full-stack in a three-person venture",
+			"highlight": [
+				"Carousels, galleries, sticky headers and full-page backgrounds, hand-rolled in jQuery before CSS could do any of it",
+				"Free and commercial, built full-stack in a three-person venture"
+			],
 			"tech": {
 				"frontend": [
 					"jQuery",

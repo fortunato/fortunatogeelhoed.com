@@ -43,12 +43,12 @@ const home: HomeContent = {
 		},
 	],
 	proof: [
-		{ metric: '5.5 years', label: 'Municipality of Amsterdam, fully remote' },
-		{ metric: '3×', label: 'Lighthouse gain on the Tele2 e-commerce rebuild' },
-		{ metric: 'PyPI', label: 'Published library with zero prior Python experience' },
+		{ metric: '5.5 years', label: 'Municipality of Amsterdam, almost fully remote' },
+		{ metric: '3×', label: 'Lighthouse gain on the Tele2 sim-only configurator rebuild' },
+		{ metric: 'PyPI', label: 'Published library with nex to zero prior Python experience' },
 		{
 			metric: 'Global',
-			label: 'Two decades across the Netherlands, Australia, NZ & Spain',
+			label: 'Two decades across the Netherlands, Australia, New Zealand & Spain',
 		},
 	],
 	writing: [
