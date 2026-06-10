@@ -128,6 +128,46 @@ describe('/api/contact wiring', () => {
 	});
 });
 
+// The framework switch sets the cookie and sends the visitor back to the page they came from.
+// The path is recovered from the Referer, whose host is checked against the canonical site rather
+// than this request's own origin: behind the production proxy the request origin is the internal
+// address, so an origin-to-origin comparison would bounce every switch to the home page. app.request
+// reproduces that exactly — its request origin is http://localhost while the Referer is the public
+// https origin — so these tests would fail under the old self-origin check.
+describe('/__switch', () => {
+	it('sets the framework cookie and returns to the referring page', async () => {
+		const res = await app.request('/__switch?to=vue', {
+			headers: { Referer: 'https://fortunatogeelhoed.com/career?tech=React' },
+		});
+		expect(res.status).toBe(302);
+		expect(res.headers.get('location')).toBe('/career?tech=React');
+		expect(res.headers.get('set-cookie')).toContain('framework=vue');
+	});
+
+	it('falls back to the home page when there is no referer', async () => {
+		const res = await app.request('/__switch?to=angular');
+		expect(res.status).toBe(302);
+		expect(res.headers.get('location')).toBe('/');
+	});
+
+	it('ignores a cross-site referer', async () => {
+		const res = await app.request('/__switch?to=vue', {
+			headers: { Referer: 'https://evil.test/timeline' },
+		});
+		expect(res.status).toBe(302);
+		expect(res.headers.get('location')).toBe('/');
+	});
+
+	it('ignores an unrecognised target but still honours the referer', async () => {
+		const res = await app.request('/__switch?to=svelte', {
+			headers: { Referer: 'https://fortunatogeelhoed.com/about' },
+		});
+		expect(res.status).toBe(302);
+		expect(res.headers.get('location')).toBe('/about');
+		expect(res.headers.get('set-cookie')).toBeNull();
+	});
+});
+
 // The prerendered HTML branch reads files via the Bun runtime, which the Node test runner does not
 // provide, so the nonce/CSP serving path is covered as a unit in security-headers.test.ts. Here we
 // verify the route-level CSP wiring that runs under Node: the docs page exception and the absence of

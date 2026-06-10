@@ -113,7 +113,14 @@ app.get('/__switch', (c) => {
 	if (ref) {
 		try {
 			const u = new URL(ref);
-			if (u.origin === new URL(c.req.url).origin) next = u.pathname + u.search;
+			// Keep the visitor on the page they came from, but only for a same-site referer, and
+			// only its path (the redirect is always relative, so the switch can never bounce off
+			// site). The host is checked against the canonical allow-list rather than this request's
+			// own URL: behind the production reverse proxy c.req.url's origin is the internal address
+			// (http://app:3000), so comparing against it would never match the public origin and
+			// every switch would fall back to the home page.
+			if (isFirstPartyOrigin(u.origin) && u.pathname !== '/__switch')
+				next = u.pathname + u.search;
 		} catch {
 			// malformed referer — fall back to "/"
 		}
