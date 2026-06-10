@@ -113,13 +113,20 @@ app.get('/__switch', (c) => {
 	if (ref) {
 		try {
 			const u = new URL(ref);
-			// Keep the visitor on the page they came from, but only for a same-site referer, and
-			// only its path (the redirect is always relative, so the switch can never bounce off
-			// site). The host is checked against the canonical allow-list rather than this request's
-			// own URL: behind the production reverse proxy c.req.url's origin is the internal address
-			// (http://app:3000), so comparing against it would never match the public origin and
-			// every switch would fall back to the home page.
-			if (isFirstPartyOrigin(u.origin) && u.pathname !== '/__switch')
+			// Keep the visitor on the page they came from, but only for a same-site referer, and only
+			// its path (the redirect is always relative, so the switch can never bounce off site). A
+			// referer counts as same-site when its origin is on the canonical allow-list OR its host
+			// matches this request's own forwarded host. The allow-list check depends on PUBLIC_HOST
+			// being configured for the deployment; the host comparison needs no configuration and so
+			// works on any domain the app is served from (behind the reverse proxy the public host
+			// arrives as X-Forwarded-Host / Host, while c.req.url's origin is the internal app:3000).
+			// Trusting the spoofable forwarded host is safe here precisely because the redirect is
+			// relative: the worst a forged host achieves is preserving a path on a same-document
+			// redirect that already cannot leave the site.
+			const fwd = c.req.header('x-forwarded-host') ?? c.req.header('host') ?? '';
+			const reqHost = (fwd.split(',')[0] ?? '').trim().toLowerCase();
+			const sameAsRequestHost = reqHost !== '' && u.host.toLowerCase() === reqHost;
+			if ((isFirstPartyOrigin(u.origin) || sameAsRequestHost) && u.pathname !== '/__switch')
 				next = u.pathname + u.search;
 		} catch {
 			// malformed referer — fall back to "/"

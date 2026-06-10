@@ -23,6 +23,10 @@ write_files:
       NODE_ENV=production
       TRUSTED_PROXY_HOPS=1
       CLIENT_IP_HEADER=
+      # The public host the site is served on. Adds this domain to the first-party allow-list so the
+      # same-origin guards (RUM, contact CSRF) and the framework switch recognise our own pages when
+      # the deployment domain differs from the canonical site URL.
+      PUBLIC_HOST=__DOMAIN__
       AHASEND_API_KEY=__AHASEND_API_KEY__
       AHASEND_ACCOUNT_ID=__AHASEND_ACCOUNT_ID__
       AHASEND_FROM_EMAIL=__AHASEND_FROM_EMAIL__
