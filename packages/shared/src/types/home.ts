@@ -25,7 +25,12 @@ export interface WritingTeaserItem {
 export interface HomeSectionsCopy {
 	services: { label: string; title: string };
 	proof: { label: string };
-	frameworks: { label: string; title: string; intro: string };
+	frameworks: {
+		label: string;
+		title: string;
+		intro: string;
+		link: { label: string; href: string };
+	};
 	writing: { label: string; title: string; readMore: string };
 }
 

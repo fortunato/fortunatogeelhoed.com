@@ -15,7 +15,11 @@
 		"frameworks": {
 			"label": "Frameworks",
 			"title": "Frameworks come and go. The craft compounds.",
-			"intro": "Twenty-five years on the web means living through every frontend era and the backends beneath it, staying fluent while the stack reinvents itself."
+			"intro": "Twenty-five years on the web means living through every frontend era and the backends beneath it, staying fluent while the stack reinvents itself.",
+			"link": {
+				"label": "See the full career timeline",
+				"href": "/career"
+			}
 		},
 		"writing": {
 			"label": "Latest writing",

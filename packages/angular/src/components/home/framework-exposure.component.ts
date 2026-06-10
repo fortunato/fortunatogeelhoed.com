@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import backend from '@fg/content-data/backend-frameworks.json';
 import frontend from '@fg/content-data/frontend-frameworks.json';
 import type { FrameworkExposureSpan, HomeContent } from '@fg/shared';
@@ -13,7 +14,7 @@ const bounds = spansBounds(frontendFrameworks, backendFrameworks);
 @Component({
 	selector: 'app-framework-exposure',
 	standalone: true,
-	imports: [FrameworkRibbonComponent],
+	imports: [FrameworkRibbonComponent, RouterLink],
 	styleUrls: ['../../../../../styles/components/framework-ribbon.module.css'],
 	template: `
 		<section class="exposure">
@@ -31,6 +32,7 @@ const bounds = spansBounds(frontendFrameworks, backendFrameworks);
 						</span>
 					}
 				</div>
+				<a [routerLink]="copy().link.href" class="exposure-link">{{ copy().link.label }}</a>
 			</div>
 		</section>
 	`,

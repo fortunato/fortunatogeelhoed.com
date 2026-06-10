@@ -3,6 +3,7 @@ import frontend from '@fg/content-data/frontend-frameworks.json';
 import type { FrameworkExposureSpan, HomeContent } from '@fg/shared';
 import { INTENSITY_LEGEND, axisTicks, ribbonRows, spansBounds } from '@fg/shared';
 import styles from '@styles/components/framework-ribbon.module.css';
+import { Link } from 'react-router';
 import { FrameworkRibbon } from '../timeline/FrameworkRibbon';
 
 const frontendFrameworks = frontend as FrameworkExposureSpan[];
@@ -34,6 +35,9 @@ export function FrameworkExposure({ copy }: { copy: HomeContent['sections']['fra
 						</span>
 					))}
 				</div>
+				<Link to={copy.link.href} className={styles['exposure-link']}>
+					{copy.link.label}
+				</Link>
 			</div>
 		</section>
 	);
