@@ -1,60 +1,98 @@
 name: CI
 
-# Runs the full test suite on every push and pull request and blocks on failure.
+# Runs the full test suite on every push and pull request and blocks on failure. The suite is split
+# into independent jobs that run in parallel; the long pole is the showcase job (Storybook build plus
+# its visual and per-story checks), so the lighter jobs finish hidden underneath it.
 on:
   push:
     branches: [main]
   pull_request:
 
+# Only the latest commit on a branch needs to be green; cancel superseded runs to free runners.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
 jobs:
-  # Fast tier: pure logic + real-browser component tests. No site build required.
-  unit-and-component:
+  # Cheapest gate: static analysis with no build, so a lint or type error fails in seconds.
+  static:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version-file: .bun-version
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-      - name: Install Playwright browser
-        run: bunx playwright install --with-deps chromium
+      - uses: ./.github/actions/setup
+      - name: Lint
+        run: bun run lint
+      - name: Typecheck
+        run: bun run typecheck
+
+  # Pure logic tests. No browser, so this job skips the Playwright install entirely.
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
       - name: Unit tests
         run: bun run test:unit
+
+  # Real-browser component tests across the shared, React, Vue, and Angular projects.
+  component:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          playwright: 'true'
       - name: Component tests
         run: bun run test:component
 
-  # Integration tier: accessibility, end-to-end, and visual parity run against the built
-  # site. Pinned to Linux so committed visual baselines match.
-  integration:
+  # Built-site tier: accessibility and end-to-end run against one site build. Pinned to Linux so
+  # committed visual baselines match.
+  site:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: oven-sh/setup-bun@v2
+      - uses: ./.github/actions/setup
         with:
-          bun-version-file: .bun-version
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: .nvmrc
-      - name: Install dependencies
-        run: bun install --frozen-lockfile
-      - name: Install Playwright browser
-        run: bunx playwright install --with-deps chromium
+          playwright: 'true'
       - name: Build the site
         run: bun run build
       - name: Accessibility scan (WCAG 2.1 AA)
         run: bun run test:a11y
       - name: End-to-end tests
         run: bun run test:e2e
+
+  # Showcase tier and the long pole: the Storybook build feeds both the cross-framework visual parity
+  # check and the per-story accessibility + smoke pass, so they share one build here.
+  showcase:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          playwright: 'true'
       - name: Build the showcase
         run: bun run build-storybook
       - name: Cross-framework visual parity
         run: bun run test:visual
       - name: Per-story accessibility + smoke
         run: bun run test:storybook
+
+  # Single required check for branch protection: stays green only if every job above succeeded, so
+  # renaming or adding a job never silently drops it from the required set.
+  ci-success:
+    if: always()
+    needs: [static, unit, component, site, showcase]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify all jobs passed
+        run: |
+          for result in ${{ join(needs.*.result, ' ') }}; do
+            if [ "$result" != "success" ]; then
+              echo "One or more CI jobs did not succeed: ${{ join(needs.*.result, ', ') }}"
+              exit 1
+            fi
+          done
+          echo "All CI jobs succeeded."
