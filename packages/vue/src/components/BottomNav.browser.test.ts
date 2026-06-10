@@ -14,7 +14,7 @@ const router = createRouter({
 	history: createMemoryHistory(),
 	routes: [
 		{ path: '/', component: blank },
-		{ path: '/timeline', component: blank },
+		{ path: '/career', component: blank },
 		{ path: '/contact', component: blank },
 	],
 });
@@ -27,7 +27,7 @@ async function renderNav(path = '/') {
 
 const DESTINATIONS: [string, string][] = [
 	['Home', '/'],
-	['Career', '/timeline'],
+	['Career', '/career'],
 	['Contact', '/contact'],
 ];
 
@@ -40,7 +40,7 @@ describe('BottomNav (Vue)', () => {
 	});
 
 	it('marks the current destination as active', async () => {
-		await renderNav('/timeline');
+		await renderNav('/career');
 		expect(screen.getByRole('link', { name: 'Career' }).getAttribute('aria-current')).toBe(
 			'page',
 		);

@@ -29,7 +29,7 @@ import { ContentService } from '../content.service';
 						<p [class.about-lead]="first">{{ paragraph }}</p>
 					}
 					<div class="about-cta">
-						<a class="about-cta-primary" routerLink="/timeline">View the career timeline</a>
+						<a class="about-cta-primary" routerLink="/career">View the career timeline</a>
 						<a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer">
 							<jb-icon name="github"></jb-icon>
 							View the source

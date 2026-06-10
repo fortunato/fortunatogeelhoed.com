@@ -8,7 +8,7 @@ const FRAMEWORKS = ['react', 'vue', 'angular'] as const;
 const NAV = [
 	{ label: 'Home', path: '/' },
 	{ label: 'About', path: '/about' },
-	{ label: 'Career', path: '/timeline' },
+	{ label: 'Career', path: '/career' },
 	{ label: 'Contact', path: '/contact' },
 ];
 
@@ -41,14 +41,14 @@ test.describe('primary navigation', () => {
 	});
 
 	test('marks the current destination as active', async ({ page }) => {
-		await page.goto('/timeline');
+		await page.goto('/career');
 		await expect(
 			page.locator('a[aria-current="page"]', { hasText: 'Career' }).first(),
 		).toBeAttached();
 	});
 
 	test('keeps the framework switcher available', async ({ page }) => {
-		await page.goto('/timeline');
+		await page.goto('/career');
 		await expect(page.locator('a[href="/__switch?to=vue"]')).toBeVisible();
 	});
 

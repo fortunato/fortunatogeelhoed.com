@@ -17,7 +17,7 @@
 					{{ paragraph }}
 				</p>
 				<div :class="styles['about-cta']">
-					<RouterLink to="/timeline" :class="styles['about-cta-primary']">
+					<RouterLink to="/career" :class="styles['about-cta-primary']">
 						View the career timeline
 					</RouterLink>
 					<a :href="githubRepoUrl" target="_blank" rel="noopener noreferrer">

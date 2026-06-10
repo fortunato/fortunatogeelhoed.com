@@ -11,7 +11,7 @@ test.describe('home ↔ timeline transition', () => {
 		await expect(page.getByRole('heading', { level: 1 })).toContainText('Fortunato');
 
 		await page.getByRole('link', { name: 'Career' }).first().click();
-		await expect(page).toHaveURL(/\/timeline$/);
+		await expect(page).toHaveURL(/\/career$/);
 		await expect(page.getByRole('heading', { name: /Twenty-five years/ })).toBeVisible();
 
 		await page.getByRole('link', { name: 'Home' }).first().click();
@@ -23,7 +23,7 @@ test.describe('home ↔ timeline transition', () => {
 		const page = await context.newPage();
 		await page.goto('/');
 		await page.getByRole('link', { name: 'Career' }).first().click();
-		await expect(page).toHaveURL(/\/timeline$/);
+		await expect(page).toHaveURL(/\/career$/);
 		await expect(page.getByRole('heading', { name: /Twenty-five years/ })).toBeVisible();
 		await context.close();
 	});
@@ -37,7 +37,7 @@ test.describe('home ↔ timeline transition', () => {
 		await expect(page.getByRole('link', { name: 'Career' }).first()).toBeVisible();
 
 		// The timeline route resolves and is fully pre-rendered without JS.
-		await page.goto('/timeline');
+		await page.goto('/career');
 		await expect(page.getByRole('heading', { name: /Twenty-five years/ })).toBeVisible();
 		await expect(page.getByText('Gemeente Amsterdam')).toBeVisible();
 		await context.close();

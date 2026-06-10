@@ -11,7 +11,7 @@ afterEach(cleanup);
 
 const DESTINATIONS: [string, string][] = [
 	['Home', '/'],
-	['Career', '/timeline'],
+	['Career', '/career'],
 	['Contact', '/contact'],
 ];
 
@@ -29,7 +29,7 @@ describe('BottomNav (React)', () => {
 
 	it('marks the current destination as active', () => {
 		render(
-			<MemoryRouter initialEntries={['/timeline']}>
+			<MemoryRouter initialEntries={['/career']}>
 				<BottomNav />
 			</MemoryRouter>,
 		);

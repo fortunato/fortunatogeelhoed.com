@@ -37,7 +37,7 @@ async function renderTimeline() {
 		// Catch-all stub so the page's nav/footer RouterLinks resolve without warnings.
 		routes: [{ path: '/:rest(.*)*', component: { template: '<div />' } }],
 	});
-	router.push('/timeline');
+	router.push('/career');
 	await router.isReady();
 	render(Timeline, { global: { plugins: [router] } });
 	await screen.findAllByRole('button', { name: 'Filter by React' });

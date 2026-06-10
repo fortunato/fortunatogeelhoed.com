@@ -81,7 +81,7 @@ test.describe('core web vitals budget', () => {
 		});
 
 		test(`timeline stays within budget in ${framework}`, async ({ browser }) => {
-			const { lcp, cls, inp } = await measure(browser, framework, '/timeline');
+			const { lcp, cls, inp } = await measure(browser, framework, '/career');
 			expect(lcp).toBeLessThanOrEqual(LCP_BUDGET_MS);
 			expect(cls).toBeLessThanOrEqual(CLS_BUDGET);
 			expect(inp).toBeLessThanOrEqual(TIMELINE_INP_BUDGET_MS);

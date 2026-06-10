@@ -8,7 +8,7 @@ export const OG_IMAGE_PATH = '/assets/images/fortunato.webp';
 // The pages worth surfacing to search engines. The remaining scaffolded routes
 // (/services, /work, /blog) are deferred placeholders, so they are kept out of the sitemap
 // and marked noindex rather than competing for crawl budget with thin content.
-export const INDEXED_PATHS = ['/', '/about', '/timeline', '/contact'];
+export const INDEXED_PATHS = ['/', '/about', '/career', '/contact'];
 
 export function isIndexedPath(path: string): boolean {
 	return INDEXED_PATHS.includes(path);
@@ -39,7 +39,7 @@ const SEO_BY_PATH: Record<string, PageSeo> = {
 		description:
 			'Senior full-stack and TypeScript engineer freelancing from the Costa Blanca, Spain. Full-stack since before it was fashionable; React, Vue, and Angular; quality- and test-first.',
 	},
-	'/timeline': {
+	'/career': {
 		title: 'Career Timeline: 25 Years Building the Web | Fortunato Geelhoed',
 		description:
 			'A 25-year career building for the web: frontend, backend, CI/CD, databases, and AI/LLM work across React, Angular, Vue, Node.js, and more.',

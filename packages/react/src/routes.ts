@@ -17,7 +17,7 @@ export const routes: RouteObject[] = [
 			{ path: '/services', Component: Services },
 			{ path: '/work', Component: Work },
 			{ path: '/blog', Component: Blog },
-			{ path: '/timeline', Component: Timeline },
+			{ path: '/career', Component: Timeline },
 			{ path: '/contact', Component: Contact },
 		],
 	},

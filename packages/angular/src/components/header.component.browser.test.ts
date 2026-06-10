@@ -18,7 +18,7 @@ describe('HeaderComponent (Angular)', () => {
 		await renderHeader();
 		const destinations: [string, string][] = [
 			['Home', '/'],
-			['Career', '/timeline'],
+			['Career', '/career'],
 			['Contact', '/contact'],
 		];
 		for (const [label, path] of destinations) {

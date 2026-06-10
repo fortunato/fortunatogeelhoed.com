@@ -34,7 +34,7 @@ export function About() {
 						</p>
 					))}
 					<div className={styles['about-cta']}>
-						<Link to="/timeline" className={styles['about-cta-primary']}>
+						<Link to="/career" className={styles['about-cta-primary']}>
 							View the career timeline
 						</Link>
 						<a href={GITHUB_REPO_URL} target="_blank" rel="noopener noreferrer">

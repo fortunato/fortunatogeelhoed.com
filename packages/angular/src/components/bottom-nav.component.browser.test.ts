@@ -14,13 +14,13 @@ class BlankComponent {}
 
 const ROUTES = [
 	{ path: '', component: BlankComponent },
-	{ path: 'timeline', component: BlankComponent },
+	{ path: 'career', component: BlankComponent },
 	{ path: 'contact', component: BlankComponent },
 ];
 
 const DESTINATIONS: [string, string][] = [
 	['Home', '/'],
-	['Career', '/timeline'],
+	['Career', '/career'],
 	['Contact', '/contact'],
 ];
 
@@ -36,7 +36,7 @@ describe('BottomNavComponent (Angular)', () => {
 		const { navigate } = await render(BottomNavComponent, {
 			providers: [provideRouter(ROUTES)],
 		});
-		await navigate('/timeline');
+		await navigate('/career');
 		expect(screen.getByRole('link', { name: 'Career' }).getAttribute('aria-current')).toBe(
 			'page',
 		);

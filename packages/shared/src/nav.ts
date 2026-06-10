@@ -12,6 +12,6 @@ export interface NavItem {
 export const NAV_ITEMS: NavItem[] = [
 	{ label: 'Home', path: '/', icon: 'home' },
 	{ label: 'About', path: '/about', icon: 'about' },
-	{ label: 'Career', path: '/timeline', icon: 'timeline' },
+	{ label: 'Career', path: '/career', icon: 'timeline' },
 	{ label: 'Contact', path: '/contact', icon: 'contact' },
 ];
