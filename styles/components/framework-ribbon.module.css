@@ -175,32 +175,11 @@
 }
 
 /* A quiet way out of the band: a link under the legend into the full career timeline, so the
-   "what I've worked with" chart leads to "where I worked with it". Section-aligned (not indented
-   into the label gutter like the axis/legend) so it reads with the title and intro. The arrow is
-   the same CSS-drawn chevron as the writing cards — the display font lacks a → glyph — and nudges
-   right on hover. */
+   "what I've worked with" chart leads to "where I worked with it". Layout only here (position it
+   below the chart, aligned with the title/intro rather than indented into the axis gutter); its
+   appearance is the shared `.link--arrow` primitive. */
 .exposure-link {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5em;
 	margin-top: var(--jb-space-lg);
-	font-family: var(--jb-font-mono);
-	font-size: 0.8rem;
-	color: var(--jb-accent-text);
-
-	&::after {
-		content: "";
-		width: 0.4em;
-		height: 0.4em;
-		border-top: 2px solid currentColor;
-		border-right: 2px solid currentColor;
-		transform: rotate(45deg);
-		transition: transform var(--jb-dur-base) var(--jb-ease-standard);
-	}
-
-	&:hover::after {
-		transform: rotate(45deg) translate(1px, -1px);
-	}
 }
 
 /* Wide enough for the 6rem label column beside the track: restore the label+track row, right-

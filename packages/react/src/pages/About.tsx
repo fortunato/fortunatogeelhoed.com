@@ -1,6 +1,6 @@
 import { GITHUB_REPO_URL, LINKEDIN_URL, toParagraphs } from '@fg/shared';
 import styles from '@styles/components/about.module.css';
-import { Link } from 'react-router';
+import { Button } from '../components/ui/Button';
 import { useContent } from '../content';
 
 const PHOTO_ALT =
@@ -34,17 +34,25 @@ export function About() {
 						</p>
 					))}
 					<div className={styles['about-cta']}>
-						<Link to="/career" className={styles['about-cta-primary']}>
-							View the career timeline
-						</Link>
-						<a href={GITHUB_REPO_URL} target="_blank" rel="noopener noreferrer">
-							<jb-icon name="github" />
+						<Button to="/career">View the career timeline</Button>
+						<Button
+							variant="secondary"
+							href={GITHUB_REPO_URL}
+							target="_blank"
+							rel="noopener noreferrer"
+							icon="github"
+						>
 							View the source
-						</a>
-						<a href={LINKEDIN_URL} target="_blank" rel="noopener noreferrer">
-							<jb-icon name="linkedin" />
+						</Button>
+						<Button
+							variant="secondary"
+							href={LINKEDIN_URL}
+							target="_blank"
+							rel="noopener noreferrer"
+							icon="linkedin"
+						>
 							LinkedIn
-						</a>
+						</Button>
 					</div>
 				</div>
 			</article>

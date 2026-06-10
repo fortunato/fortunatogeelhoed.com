@@ -1,0 +1,49 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundations/Buttons & Links" />
+
+# Buttons & links
+
+Every action and link on the site is built from a small, shared set of primitives rather than a
+bespoke style per content block. The look is owned by global classes (`styles/base.css`) that
+consume `--jb-` tokens; each framework ships its own thin, idiomatic implementation over those
+classes. Open the same primitive under **React**, **Vue**, and **Angular** to compare the three
+implementations rendering the identical result in each framework's brand accent.
+
+## The primitives
+
+Just two: **Button** and **Link**.
+
+- **Button** — the action. One polymorphic component renders a real `<button>`, an internal
+  router link, or an external `<a>`, as the usage needs. Variants: `primary`, `inverted` (for the
+  accent panel, e.g. the closing call-to-action), `secondary` (bordered), `ghost` (quiet).
+  - **Medium** is the prominent, body-font, uppercase action (the call-to-action).
+  - **Small** is the compact, monospace, accent-soft action for dense rows — the timeline entry's
+    write-up (`size="sm"`) and source (`size="sm" variant="secondary"`) links. The smaller size is
+    deliberately quieter (soft fill, not a solid one) so a row of them never competes with a real
+    call-to-action.
+- **Link** — the text-first link. `inline` for prose, `arrow` for the "read more" / "see the
+  timeline" affordance.
+
+Each framework wires these idiomatically: a polymorphic `forwardRef` component in React, a
+`<component :is>` component in Vue, and an attribute directive (`a[jbButton]`, `button[jbButton]`)
+in Angular, so routing and native button semantics stay on the real host element.
+
+## Scope: content actions, not metadata or chrome
+
+This system deliberately covers **content actions** — the call-to-action, the timeline write-up
+and source links, the about-page actions, and the read-more affordances. Two neighbouring families
+are intentionally left out:
+
+- **Navigation chrome** — the header navigation, the framework switcher, the mobile bottom tab bar,
+  and the header icon button. Layout-bound singletons with their own interaction semantics
+  (`aria-current` for the active item, roving focus for the segmented switcher).
+- **Tags & badges** — the timeline's employment-type, side-project, domain, and agency labels, and
+  the technology tags. These are **metadata, not actions**: they label, they don't navigate or
+  submit. They're a separate family with their own page (**Foundations / Tags & Badges**) — and,
+  deliberately, no component. The timeline's `aria-pressed` filter toggles are a third thing again:
+  a stateful control, out of scope of both systems.
+
+That boundary is a design decision, not an omission. Folding non-interactive labels or stateful
+toggles into a generic Button would drag metadata and widget-state concerns into a primitive whose
+job is a single action. Knowing what to leave out keeps the primitives small and honest.

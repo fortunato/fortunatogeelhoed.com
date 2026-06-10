@@ -10,11 +10,12 @@ import {
 	techVisual,
 } from '@fg/shared';
 import { TechFilterService } from '../../tech-filter.service';
+import { ButtonDirective } from '../ui/button.directive';
 
 @Component({
 	selector: 'app-timeline-entry',
 	standalone: true,
-	imports: [RouterLink],
+	imports: [RouterLink, ButtonDirective],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	styleUrls: ['../../../../../styles/components/timeline.module.css'],
 	// display:contents so the <article> participates directly in the parent .timeline grid.
@@ -31,20 +32,20 @@ import { TechFilterService } from '../../tech-filter.service';
 				<div class="spine-client">{{ entry().client }}</div>
 				<div class="spine-role">{{ entry().role }}</div>
 				<div class="spine-badges">
-					<span class="spine-type" [attr.data-type]="entry().type">
+					<span class="tag tag--status" [attr.data-kind]="entry().type">
 						@if (entry().type === 'side-project') {
 							<svg class="type-icon" aria-hidden="true"><use href="#i-branch" /></svg>
 						}
 						{{ typeLabel[entry().type] }}
 					</span>
 					@if (entry().agency) {
-						<span class="spine-agency">{{ agencyLabel }}</span>
+						<span class="tag tag--neutral">{{ agencyLabel }}</span>
 					}
 				</div>
 				@if (entry().domains?.length) {
 					<div class="spine-domains">
 						@for (d of entry().domains ?? []; track d) {
-							<span class="domain">{{ d }}</span>
+							<span class="tag tag--neutral">{{ d }}</span>
 						}
 					</div>
 				}
@@ -56,8 +57,10 @@ import { TechFilterService } from '../../tech-filter.service';
 						@for (l of entry().links ?? []; track l.href) {
 							@if (isExternal(l.href)) {
 								<a
+									jbButton
+									variant="secondary"
+									size="sm"
 									[href]="l.href"
-									class="spine-link spine-link-external"
 									[attr.title]="l.title"
 									[attr.aria-label]="(l.title ?? l.label) + ' (opens in a new tab)'"
 									target="_blank"
@@ -69,7 +72,7 @@ import { TechFilterService } from '../../tech-filter.service';
 									{{ l.label }}
 								</a>
 							} @else {
-								<a [routerLink]="l.href" class="spine-link" [attr.title]="l.title">
+								<a jbButton size="sm" [routerLink]="l.href" [attr.title]="l.title">
 									@if (l.icon) {
 										<jb-icon [attr.name]="l.icon"></jb-icon>
 									}

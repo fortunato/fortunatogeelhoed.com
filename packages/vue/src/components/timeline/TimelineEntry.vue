@@ -10,36 +10,36 @@
 			<div :class="styles['spine-client']">{{ entry.client }}</div>
 			<div :class="styles['spine-role']">{{ entry.role }}</div>
 			<div :class="styles['spine-badges']">
-				<span :class="styles['spine-type']" :data-type="entry.type">
+				<span class="tag tag--status" :data-kind="entry.type">
 					<svg v-if="entry.type === 'side-project'" :class="styles['type-icon']" aria-hidden="true">
 						<use href="#i-branch" />
 					</svg>
 					{{ typeLabel[entry.type] }}
 				</span>
-				<span v-if="entry.agency" :class="styles['spine-agency']">{{ agencyLabel }}</span>
+				<span v-if="entry.agency" class="tag tag--neutral">{{ agencyLabel }}</span>
 			</div>
 			<div v-if="entry.domains?.length" :class="styles['spine-domains']">
-				<span v-for="d in entry.domains" :key="d" :class="styles.domain">{{ d }}</span>
+				<span v-for="d in entry.domains" :key="d" class="tag tag--neutral">{{ d }}</span>
 			</div>
 			<div v-for="h in highlights" :key="h" :class="styles['spine-highlight']">{{ h }}</div>
 			<div v-if="entry.links?.length" :class="styles['spine-links']">
 				<template v-for="l in entry.links" :key="l.href">
-					<a
+					<Button
 						v-if="isExternal(l.href)"
+						size="sm"
+						variant="secondary"
 						:href="l.href"
-						:class="[styles['spine-link'], styles['spine-link-external']]"
+						:icon="l.icon"
 						target="_blank"
 						rel="noopener noreferrer"
 						:title="l.title"
 						:aria-label="`${l.title ?? l.label} (opens in a new tab)`"
 					>
-						<jb-icon v-if="l.icon" :name="l.icon" />
 						{{ l.label }}
-					</a>
-					<RouterLink v-else :to="l.href" :class="styles['spine-link']" :title="l.title">
-						<jb-icon v-if="l.icon" :name="l.icon" />
+					</Button>
+					<Button v-else size="sm" :to="l.href" :icon="l.icon" :title="l.title">
 						{{ l.label }}
-					</RouterLink>
+					</Button>
 				</template>
 			</div>
 		</div>
@@ -82,8 +82,8 @@ import {
 } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 import { computed } from 'vue';
-import { RouterLink } from 'vue-router';
 import { useTechFilter } from '../../composables/useTechFilter';
+import Button from '../ui/Button.vue';
 
 const props = defineProps<{ entry: TimelineEntry }>();
 

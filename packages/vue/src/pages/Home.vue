@@ -1,6 +1,7 @@
 <template>
 	<Hero :hero="home.hero" />
 	<Services :services="home.services" :copy="home.sections.services" />
+	<Approach :principles="home.principles" :copy="home.sections.approach" />
 	<FrameworkExposure :copy="home.sections.frameworks" />
 	<ProofStrip :proof="home.proof" :copy="home.sections.proof" />
 	<LatestWriting :writing="home.writing" :copy="home.sections.writing" />
@@ -10,6 +11,7 @@
 <script setup lang="ts">
 import homeData from '@fg/content-data/home.json';
 import type { HomeContent } from '@fg/shared';
+import Approach from '../components/home/Approach.vue';
 import CallToAction from '../components/home/CallToAction.vue';
 import FrameworkExposure from '../components/home/FrameworkExposure.vue';
 import Hero from '../components/home/Hero.vue';

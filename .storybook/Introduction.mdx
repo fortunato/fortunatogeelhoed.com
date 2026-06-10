@@ -24,14 +24,20 @@ that links them together, so the whole catalogue loads from one place. Every sec
 site's real stylesheet, design tokens, and light/dark theme — toggle the theme from the toolbar
 in any section and it behaves exactly as the live site does.
 
-## The web components
+## What is (and isn't) a web component
 
-The `jb-*` elements deliberately show two encapsulation styles side by side:
+The design system draws a deliberate, behaviour-based boundary — three tiers, visible across the
+catalogue:
 
-- `jb-input` / `jb-textarea` / `jb-theme-toggle` use **light DOM**, so the global stylesheet and
-  inherited `--jb-` design tokens style them directly — and they are form-associated, so native
-  validation and framework form bindings work as if they were ordinary inputs.
-- `jb-tech-tag` uses **shadow DOM** with self-contained styles, kept on-palette purely through
-  inherited custom properties.
+- **Shared, stateful / form-associated primitives → web components.** `jb-input`, `jb-textarea`,
+  and `jb-theme-toggle` are **light DOM** and form-associated, so the global stylesheet and the
+  inherited `--jb-` tokens style them directly and native validation + framework form bindings work
+  as if they were ordinary inputs. `jb-icon` is a light-DOM glyph.
+- **Interactive actions (buttons, links) → per framework.** They carry routing/native-button idiom
+  worth showing in each framework, so they're authored as React/Vue/Angular components over a shared
+  global class layer. See **Foundations / Buttons & Links**.
+- **Inert metadata (tags, badges) → a pure CSS class layer, no component at all.** A status or
+  category label is a `<span>`; wrapping it in a component would be ceremony. See
+  **Foundations / Tags & Badges**.
 
 Browse the **Web Components** section to see each element, its states, and its generated API.

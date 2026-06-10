@@ -62,6 +62,7 @@ export type {
 	HomeContent,
 	HomeSectionsCopy,
 	ServiceOffering,
+	Principle,
 	ProofPoint,
 	WritingTeaserItem,
 } from './types/home';

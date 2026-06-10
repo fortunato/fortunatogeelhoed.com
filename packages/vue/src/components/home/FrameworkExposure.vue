@@ -12,7 +12,7 @@
 					{{ item.label }}
 				</span>
 			</div>
-			<RouterLink :to="copy.link.href" :class="styles['exposure-link']">{{ copy.link.label }}</RouterLink>
+			<Link :to="copy.link.href" variant="arrow" :class="styles['exposure-link']">{{ copy.link.label }}</Link>
 		</div>
 	</section>
 </template>
@@ -23,8 +23,8 @@ import frontend from '@fg/content-data/frontend-frameworks.json';
 import type { FrameworkExposureSpan, HomeContent } from '@fg/shared';
 import { INTENSITY_LEGEND, axisTicks, ribbonRows, spansBounds } from '@fg/shared';
 import styles from '@styles/components/framework-ribbon.module.css';
-import { RouterLink } from 'vue-router';
 import FrameworkRibbon from '../timeline/FrameworkRibbon.vue';
+import Link from '../ui/Link.vue';
 
 defineProps<{ copy: HomeContent['sections']['frameworks'] }>();
 

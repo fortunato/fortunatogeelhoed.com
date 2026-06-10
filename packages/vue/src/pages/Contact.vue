@@ -8,9 +8,9 @@
 			<ContactForm />
 
 			<p class="contact-meta">
-				<jb-tech-tag>Vue</jb-tech-tag>
-				<jb-tech-tag>TypeScript</jb-tech-tag>
-				<jb-tech-tag>Vite</jb-tech-tag>
+				<span class="tag tag--tech">Vue</span>
+				<span class="tag tag--tech">TypeScript</span>
+				<span class="tag tag--tech">Vite</span>
 			</p>
 		</div>
 	</section>

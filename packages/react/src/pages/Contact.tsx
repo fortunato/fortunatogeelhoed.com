@@ -31,9 +31,9 @@ export function Contact() {
 				<ContactForm />
 
 				<p className="contact-meta">
-					<jb-tech-tag>React</jb-tech-tag>
-					<jb-tech-tag>TypeScript</jb-tech-tag>
-					<jb-tech-tag>Vite</jb-tech-tag>
+					<span className="tag tag--tech">React</span>
+					<span className="tag tag--tech">TypeScript</span>
+					<span className="tag tag--tech">Vite</span>
 				</p>
 			</div>
 		</section>

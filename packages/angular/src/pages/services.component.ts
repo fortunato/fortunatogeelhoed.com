@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { toParagraphs } from '@fg/shared';
 import { ContentService } from '../content.service';
 
 @Component({
@@ -9,12 +10,19 @@ import { ContentService } from '../content.service';
 			<div class="container">
 				<span class="section-label">What I Do</span>
 				<h1 class="section-title">{{ content?.title ?? 'Services' }}</h1>
-				<p style="color: var(--jb-text-secondary)">{{ content?.body ?? 'Services page content will be loaded from the content pipeline.' }}</p>
+				<div
+					style="max-width: 62ch; display: flex; flex-direction: column; gap: var(--jb-space-md); color: var(--jb-text-secondary); line-height: 1.7"
+				>
+					@for (paragraph of paragraphs; track paragraph) {
+						<p>{{ paragraph }}</p>
+					}
+				</div>
 			</div>
 		</section>
 	`,
 })
 export class ServicesComponent {
 	private contentService = inject(ContentService);
-	content = this.contentService.getContent('services');
+	protected content = this.contentService.getContent('services');
+	protected paragraphs = toParagraphs(this.content?.body ?? '');
 }

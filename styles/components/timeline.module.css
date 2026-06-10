@@ -49,8 +49,8 @@
 	   inks for the spine date and type badge are theme-aware tokens (--jb-timeline-ink-* in
 	   tokens.css) so they can darken for AA on the light surface without a component theme
 	   selector (which Angular's encapsulation mis-scopes). */
-	--type-employee: #5ba8ff;
-	--type-side: #facc15;
+	--type-employee: var(--jb-status-employee);
+	--type-side: var(--jb-status-side);
 	/* Height of the filter bar's reserved slot (see Filtering below). Carved out of the top
 	   margin so the bar occupies space that already existed — toggling a filter never shifts the
 	   lane headers or rows. */
@@ -242,35 +242,8 @@
 	margin-top: 2px;
 }
 
-.spine-type {
-	display: inline-flex;
-	align-items: center;
-	gap: 4px;
-	font-family: var(--jb-font-mono);
-	font-size: 0.6rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
-	padding: 2px 8px;
-	border-radius: 99px;
-
-	&[data-type="employee"] {
-		background: color-mix(in srgb, var(--type-employee) 14%, transparent);
-		color: var(--jb-timeline-ink-employee);
-	}
-	&[data-type="independent"] {
-		background: var(--jb-accent-soft);
-		/* Text-safe accent: raw accent-on-soft is too dark as this small badge text on the
-		   near-dark soft tint, so use the AA-tuned accent-text (matches the spine date ink). */
-		color: var(--jb-accent-text);
-	}
-	&[data-type="side-project"] {
-		background: color-mix(in srgb, var(--type-side) 14%, transparent);
-		color: var(--jb-timeline-ink-side-badge);
-	}
-}
-
-/* Badge row: the employment-type badge plus, where it applies, the agency qualifier. */
+/* Badge row: the employment-type status tag plus, where it applies, the agency qualifier. The
+   tags are the shared .tag primitive (.tag--status / .tag--neutral; see styles/base.css). */
 .spine-badges {
 	display: inline-flex;
 	flex-wrap: wrap;
@@ -279,42 +252,13 @@
 	margin-top: 6px;
 }
 
-/* Agency qualifier — same pill shape as the type badge but neutral, so it reads as a setting
-   (where the role was held) rather than a fourth employment type. */
-.spine-agency {
-	display: inline-flex;
-	align-items: center;
-	font-family: var(--jb-font-mono);
-	font-size: 0.6rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
-	padding: 2px 8px;
-	border-radius: 99px;
-	color: var(--jb-text-tertiary);
-	border: 1px solid var(--jb-color-border);
-}
-
-/* Domain / sector chips. Deliberately muted and uncolored so they stay distinct from the
-   brand-colored tech pills in the lanes — these answer "what industry", not "what stack". */
+/* Domain / sector chips (the shared .tag--neutral primitive): "what industry", not "what stack",
+   so they stay distinct from the brand-coloured tech tokens in the lanes. */
 .spine-domains {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 5px;
 	margin-top: 8px;
-}
-
-.domain {
-	font-family: var(--jb-font-mono);
-	font-size: 0.6rem;
-	font-weight: 500;
-	text-transform: uppercase;
-	letter-spacing: 0.05em;
-	padding: 2px 8px;
-	border-radius: 99px;
-	color: var(--jb-text-tertiary);
-	border: 1px solid var(--jb-color-border);
-	background: color-mix(in srgb, var(--jb-text-tertiary) 6%, transparent);
 }
 
 .spine-highlight {
@@ -325,60 +269,13 @@
 	line-height: 1.5;
 }
 
-/* Entry links (write-up, source repo…) sit side by side as compact pills. The internal
-   write-up is the primary action (accent fill); external links read as secondary (neutral
-   outline + brand glyph), so the two are distinguishable at a glance. */
+/* Entry links (write-up, source repo…) sit side by side as a compact row. The links themselves
+   are the shared Button primitive at its small size (write-up = default, source = secondary). */
 .spine-links {
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--jb-space-sm);
 	margin-top: var(--jb-space-sm);
-}
-
-.spine-link {
-	display: inline-flex;
-	align-items: center;
-	gap: 5px;
-	font-family: var(--jb-font-mono);
-	font-size: 0.62rem;
-	font-weight: 600;
-	letter-spacing: 0.02em;
-	padding: var(--jb-space-xs) var(--jb-space-sm);
-	border-radius: var(--jb-radius-sm);
-	white-space: nowrap;
-	text-decoration: none;
-	cursor: pointer;
-	/* Primary: the on-site write-up, accent-tinted like a button. */
-	color: var(--jb-accent-text);
-	background: var(--jb-accent-soft);
-	border: 1px solid color-mix(in srgb, var(--jb-accent) 30%, transparent);
-	transition: background var(--jb-dur-base) var(--jb-ease-standard), border-color
-		var(--jb-dur-base) var(--jb-ease-standard);
-
-	&:hover {
-		background: var(--jb-accent);
-		border-color: var(--jb-accent);
-		color: var(--jb-text-on-accent);
-	}
-
-	svg {
-		width: 0.95em;
-		height: 0.95em;
-	}
-}
-
-/* Secondary: external links (source repo, demos) — neutral so they don't compete with the
-   primary write-up, with the brand glyph carrying the recognition. */
-.spine-link-external {
-	color: var(--jb-text-secondary);
-	background: transparent;
-	border-color: var(--jb-color-border);
-
-	&:hover {
-		background: transparent;
-		border-color: color-mix(in srgb, var(--jb-accent) 40%, transparent);
-		color: var(--jb-text-primary);
-	}
 }
 
 /* Lanes + pills. Stacked baseline: each lane is a full-width row prefixed with its label

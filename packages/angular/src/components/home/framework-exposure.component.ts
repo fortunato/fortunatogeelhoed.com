@@ -5,6 +5,7 @@ import frontend from '@fg/content-data/frontend-frameworks.json';
 import type { FrameworkExposureSpan, HomeContent } from '@fg/shared';
 import { INTENSITY_LEGEND, axisTicks, ribbonRows, spansBounds } from '@fg/shared';
 import { FrameworkRibbonComponent } from '../timeline/framework-ribbon.component';
+import { LinkDirective } from '../ui/link.directive';
 
 const frontendFrameworks = frontend as FrameworkExposureSpan[];
 const backendFrameworks = backend as FrameworkExposureSpan[];
@@ -14,7 +15,7 @@ const bounds = spansBounds(frontendFrameworks, backendFrameworks);
 @Component({
 	selector: 'app-framework-exposure',
 	standalone: true,
-	imports: [FrameworkRibbonComponent, RouterLink],
+	imports: [FrameworkRibbonComponent, RouterLink, LinkDirective],
 	styleUrls: ['../../../../../styles/components/framework-ribbon.module.css'],
 	template: `
 		<section>
@@ -32,7 +33,7 @@ const bounds = spansBounds(frontendFrameworks, backendFrameworks);
 						</span>
 					}
 				</div>
-				<a [routerLink]="copy().link.href" class="exposure-link">{{ copy().link.label }}</a>
+				<a jbLink variant="arrow" [routerLink]="copy().link.href" class="exposure-link">{{ copy().link.label }}</a>
 			</div>
 		</section>
 	`,

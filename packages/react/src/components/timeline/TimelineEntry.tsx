@@ -9,8 +9,8 @@ import {
 } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 import { type CSSProperties, useMemo } from 'react';
-import { Link } from 'react-router';
 import { useTechFilter } from '../../hooks/useTechFilter';
+import { Button } from '../ui/Button';
 
 const LANES: { key: Lane; cls: string }[] = [
 	{ key: 'frontend', cls: 'lane-fe' },
@@ -65,7 +65,7 @@ export function TimelineEntry({ entry }: { entry: Entry }) {
 				<div className={styles['spine-client']}>{entry.client}</div>
 				<div className={styles['spine-role']}>{entry.role}</div>
 				<div className={styles['spine-badges']}>
-					<span className={styles['spine-type']} data-type={entry.type}>
+					<span className="tag tag--status" data-kind={entry.type}>
 						{entry.type === 'side-project' ? (
 							<svg className={styles['type-icon']} aria-hidden="true">
 								<use href="#i-branch" />
@@ -73,14 +73,12 @@ export function TimelineEntry({ entry }: { entry: Entry }) {
 						) : null}
 						{EMPLOYMENT_TYPE_LABELS[entry.type]}
 					</span>
-					{entry.agency ? (
-						<span className={styles['spine-agency']}>{AGENCY_LABEL}</span>
-					) : null}
+					{entry.agency ? <span className="tag tag--neutral">{AGENCY_LABEL}</span> : null}
 				</div>
 				{entry.domains?.length ? (
 					<div className={styles['spine-domains']}>
 						{entry.domains.map((d) => (
-							<span key={d} className={styles.domain}>
+							<span key={d} className="tag tag--neutral">
 								{d}
 							</span>
 						))}
@@ -95,28 +93,29 @@ export function TimelineEntry({ entry }: { entry: Entry }) {
 					<div className={styles['spine-links']}>
 						{entry.links.map((l) =>
 							isExternalHref(l.href) ? (
-								<a
+								<Button
 									key={l.href}
+									size="sm"
+									variant="secondary"
 									href={l.href}
-									className={`${styles['spine-link']} ${styles['spine-link-external']}`}
 									target="_blank"
 									rel="noopener noreferrer"
 									title={l.title}
 									aria-label={`${l.title ?? l.label} (opens in a new tab)`}
+									icon={l.icon}
 								>
-									{l.icon ? <jb-icon name={l.icon} /> : null}
 									{l.label}
-								</a>
+								</Button>
 							) : (
-								<Link
+								<Button
 									key={l.href}
+									size="sm"
 									to={l.href}
-									className={styles['spine-link']}
 									title={l.title}
+									icon={l.icon}
 								>
-									{l.icon ? <jb-icon name={l.icon} /> : null}
 									{l.label}
-								</Link>
+								</Button>
 							),
 						)}
 					</div>

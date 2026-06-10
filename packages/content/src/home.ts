@@ -17,8 +17,7 @@ const home: HomeContent = {
 		frameworks: {
 			label: 'Frameworks',
 			title: 'Frameworks come and go. The craft compounds.',
-			intro:
-				"When I started in 2000, I was building with ASP, Flash, and table layouts. I've relearned the job every few years since.",
+			intro: "When I started in 2000, I was building with ASP, Flash, and table layouts. I've relearned the job every few years since.",
 			link: { label: 'See the full timeline', href: '/career' },
 		},
 		writing: { label: 'Latest writing', title: 'From the blog', readMore: 'Read more' },
@@ -73,8 +72,7 @@ const home: HomeContent = {
 		{ metric: 'PyPI', label: 'Published a library with next to zero prior Python experience' },
 		{
 			metric: 'Remote',
-			label:
-				'Worked for Dutch and Australian teams from the Netherlands, Australia, New Zealand, and Spain',
+			label: 'Worked for Dutch and Australian teams from the Netherlands, Australia, New Zealand, and Spain',
 		},
 	],
 	writing: [
@@ -87,8 +85,7 @@ const home: HomeContent = {
 		{
 			tag: 'Build',
 			title: 'Too React',
-			blurb:
-				'A recruiter told me I was "too React" for an Angular role. So I built this site in all three.',
+			blurb: 'A recruiter told me I was "too React" for an Angular role. So I built this site in all three.',
 			href: '/blog',
 		},
 	],

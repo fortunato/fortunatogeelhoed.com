@@ -1,0 +1,40 @@
+/* Homepage "How I work" principles — the judgment behind the code. Deliberately quieter than the
+   services cards: a typographic list with an accent rule, not animated surfaces. The contrast in
+   weight is intentional, so the two sections never compete. Semantic --jb-* tokens only. */
+
+/* The grid follows the room the cards actually have, not the viewport (the column is a size
+   container), matching the services section's behaviour. */
+.approach-body {
+	container-type: inline-size;
+}
+
+.approach-grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--jb-space-lg);
+	margin-top: var(--jb-space-lg);
+}
+
+/* Two columns once the container is wide enough for a comfortable pair; never an orphaned 3+1. */
+@container (width >= 40rem) {
+	.approach-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+.principle {
+	padding-left: var(--jb-space-md);
+	border-left: 2px solid color-mix(in srgb, var(--jb-accent) 55%, transparent);
+}
+
+.principle-title {
+	font-family: var(--jb-font-display);
+	font-size: 1.2rem;
+	font-weight: 700;
+	margin-bottom: var(--jb-space-xs);
+}
+
+.principle-desc {
+	color: var(--jb-text-secondary);
+	line-height: 1.6;
+}

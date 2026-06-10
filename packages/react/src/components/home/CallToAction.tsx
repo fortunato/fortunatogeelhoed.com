@@ -1,6 +1,6 @@
 import type { HomeContent } from '@fg/shared';
 import styles from '@styles/components/cta.module.css';
-import { Link } from 'react-router';
+import { Button } from '../ui/Button';
 
 export function CallToAction({ cta }: { cta: HomeContent['cta'] }) {
 	return (
@@ -10,9 +10,9 @@ export function CallToAction({ cta }: { cta: HomeContent['cta'] }) {
 					<h2 className={styles['cta-heading']} data-reveal>
 						{cta.heading}
 					</h2>
-					<Link to={cta.href} className={`btn ${styles['cta-btn']}`}>
+					<Button to={cta.href} variant="inverted" tone="marketing">
 						{cta.label}
-					</Link>
+					</Button>
 				</div>
 			</div>
 		</section>

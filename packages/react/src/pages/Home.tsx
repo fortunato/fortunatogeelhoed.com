@@ -1,5 +1,6 @@
 import homeData from '@fg/content-data/home.json';
 import type { HomeContent } from '@fg/shared';
+import { Approach } from '../components/home/Approach';
 import { CallToAction } from '../components/home/CallToAction';
 import { FrameworkExposure } from '../components/home/FrameworkExposure';
 import { Hero } from '../components/home/Hero';
@@ -14,6 +15,7 @@ export function Home() {
 		<>
 			<Hero hero={home.hero} />
 			<Services services={home.services} copy={home.sections.services} />
+			<Approach principles={home.principles} copy={home.sections.approach} />
 			<FrameworkExposure copy={home.sections.frameworks} />
 			<ProofStrip proof={home.proof} copy={home.sections.proof} />
 			<LatestWriting writing={home.writing} copy={home.sections.writing} />

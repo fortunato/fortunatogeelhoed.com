@@ -5,7 +5,9 @@ import type { Preview } from '@storybook/web-components-vite';
 const preview: Preview = {
 	parameters: {
 		options: {
-			storySort: { order: ['Introduction', 'Web Components', 'React', 'Vue', 'Angular'] },
+			storySort: {
+				order: ['Introduction', 'Foundations', 'Web Components', 'React', 'Vue', 'Angular'],
+			},
 		},
 	},
 };

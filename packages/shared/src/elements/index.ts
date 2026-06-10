@@ -11,7 +11,6 @@
 // it entirely), whereas an invoked function is always retained.
 import { JbIcon } from './jb-icon';
 import { JbInput } from './jb-input';
-import { JbTechTag } from './jb-tech-tag';
 import { JbTextarea } from './jb-textarea';
 import { JbThemeToggle } from './jb-theme-toggle';
 
@@ -24,8 +23,7 @@ export function registerElements(): void {
 	define('jb-input', JbInput);
 	define('jb-textarea', JbTextarea);
 	define('jb-theme-toggle', JbThemeToggle);
-	define('jb-tech-tag', JbTechTag);
 	define('jb-icon', JbIcon);
 }
 
-export { JbInput, JbTextarea, JbThemeToggle, JbTechTag, JbIcon };
+export { JbInput, JbTextarea, JbThemeToggle, JbIcon };

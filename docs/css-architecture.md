@@ -329,3 +329,45 @@ stay as enhancements.
 
 <!-- When the framework-switch disintegration lands, credit Mike Bespalov's
      "Thanos snap" technique here and in the effect's source. -->
+
+## Button & Link primitives
+
+Every action and link is built from two primitives defined as global classes in `styles/base.css`
+(`@layer base`) and consumed identically by the React, Vue, and Angular wrappers under each
+package's `components/ui/`. Keeping the appearance in the global layer (not per-component modules)
+is deliberate: an unlayered CSS Module would out-specify a layered `.btn` rule and silently win, so
+the modules own layout only and the primitives own appearance.
+
+The **Button** has three orthogonal axes:
+
+- **variant** (paint): `primary` (accent fill), `inverted` (on an accent panel), `secondary`
+  (bordered), `ghost` (accent text, no border).
+- **size** (geometry + density): `md` is the prominent body-font action; `sm` is the compact,
+  monospace, accent-soft action for dense rows (the timeline write-up + source links). The small
+  size is a quieter identity by design so a row of them never competes with a real call to action.
+- **tone** (casing): the default is **sentence-case**, for in-content actions. `marketing` is the
+  loud uppercase + letter-spaced treatment, an **opt-in reserved for headline calls to action** —
+  currently the homepage closing CTA and the contact submit, nothing else.
+
+The **Link** is text-first: `inline` (accent link, underline on hover) and `arrow` (a trailing
+read-more affordance).
+
+Out of scope of this system: navigation chrome (header nav, framework switcher, bottom tab bar,
+icon buttons) and non-interactive tags/badges (covered next). Those label or filter; they do not act.
+
+## Tags & badges
+
+The inert metadata labels — employment-type status, industry/sector, agency, and technology tags —
+are a `.tag` family in `styles/base.css` (`@layer base`), **with no component at all**. A tag is a
+`<span class="tag …">`; wrapping a coloured span in a component would be ceremony for zero
+behaviour. This is the third tier of a deliberate, behaviour-based boundary:
+
+- stateful / form-associated primitives → **web components** (`jb-input`, `jb-theme-toggle`)
+- interactive idiom (routing/submit) → **per-framework** components over a global class layer (Button/Link)
+- inert metadata → a **pure class layer**, no component (Tag)
+
+Variants: `.tag--status` (colour-coded by `data-kind`, with theme-independent identity fills and
+AA-tuned theme-aware text inks `--jb-timeline-ink-*`), `.tag--neutral` (uncoloured taxonomy label),
+and `.tag--tech` (technology token). **Shape carries meaning**: a full pill (`99px`) is a taxonomy
+label; the small radius is a technology token, sharing the shape of the interactive filter pills.
+A `forced-colors` rule re-asserts a system-colour border so the tints survive high-contrast mode.

@@ -91,28 +91,167 @@
 		margin-bottom: var(--jb-space-lg);
 	}
 
-	/* Buttons */
+	/* Buttons — the shared action primitive. `.btn` alone is the primary, medium size; variant
+	   and size modifiers are orthogonal (variants repaint, sizes change geometry). inline-flex so
+	   an optional leading/trailing glyph (jb-icon) sits centred with the label; text-only buttons
+	   are unaffected. */
 	.btn {
-		display: inline-block;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5em;
 		padding: 14px 40px;
 		background: var(--jb-accent);
 		color: var(--jb-text-on-accent);
 		font-family: var(--jb-font-body);
 		font-size: 0.85rem;
 		font-weight: 600;
-		text-transform: uppercase;
-		letter-spacing: 0.12em;
 		border-radius: var(--jb-radius-sm);
 		line-height: 1;
-		transition: transform var(--jb-dur-base) var(--jb-ease-standard), box-shadow
+		transition: background-color var(--jb-dur-base) var(--jb-ease-standard);
+	}
+
+	.btn:hover {
+		background: var(--jb-accent-hover);
+		color: var(--jb-text-on-accent);
+	}
+
+	/* Variant: inverted — the primary action against an accent panel (e.g. the closing CTA).
+	   Morphs colour on hover instead of lifting. */
+	.btn--inverted {
+		background: var(--jb-text-on-accent);
+		color: var(--jb-accent);
+		transition: background-color var(--jb-dur-slow) var(--jb-ease-in-out), color
+			var(--jb-dur-slow) var(--jb-ease-in-out);
+	}
+
+	.btn--inverted:hover {
+		background: color-mix(in srgb, var(--jb-text-on-accent) 70%, var(--jb-accent));
+		color: var(--jb-accent);
+	}
+
+	/* Variant: secondary — bordered, transparent fill; the quieter action that defers to a
+	   nearby primary. */
+	.btn--secondary {
+		background: transparent;
+		color: var(--jb-text-primary);
+		border: 1px solid var(--jb-color-border);
+		transition: border-color var(--jb-dur-base) var(--jb-ease-standard), color
 			var(--jb-dur-base) var(--jb-ease-standard), background-color var(--jb-dur-base)
 			var(--jb-ease-standard);
 	}
 
-	.btn:hover {
+	.btn--secondary:hover {
+		background: transparent;
+		border-color: var(--jb-accent);
+		color: var(--jb-accent-text);
+	}
+
+	/* Variant: ghost — no border, accent text; the lightest action. */
+	.btn--ghost {
+		background: transparent;
+		color: var(--jb-accent-text);
+		transition: background-color var(--jb-dur-base) var(--jb-ease-standard), color
+			var(--jb-dur-base) var(--jb-ease-standard);
+	}
+
+	.btn--ghost:hover {
+		background: var(--jb-accent-soft);
+		color: var(--jb-accent-text);
+	}
+
+	/* Tone: marketing — the loud, uppercase, tracked treatment, reserved for headline calls to
+	   action (the closing CTA, the contact submit). In-content actions use the sentence-case
+	   default. Composes with any variant. */
+	.btn--marketing {
+		text-transform: uppercase;
+		letter-spacing: 0.12em;
+	}
+
+	/* Size: small — the compact action for dense rows (e.g. the timeline entry write-up + source
+	   links). Quieter than the medium button by design: monospace and accent-soft rather than a
+	   solid fill, so a row of them never competes with a primary call-to-action. The soft fill is
+	   a property of the small size, not a separate primitive. Pair with --secondary for the
+	   neutral, outbound treatment (e.g. a GitHub link, where the brand glyph carries it). */
+	.btn--sm {
+		gap: 6px;
+		padding: 0.4rem 0.85rem;
+		font-family: var(--jb-font-mono);
+		font-size: 0.7rem;
+		letter-spacing: 0.02em;
+		text-transform: none;
+		white-space: nowrap;
+		background: var(--jb-accent-soft);
+		color: var(--jb-accent-text);
+		border: 1px solid color-mix(in srgb, var(--jb-accent) 30%, transparent);
+		transition: background-color var(--jb-dur-base) var(--jb-ease-standard), border-color
+			var(--jb-dur-base) var(--jb-ease-standard);
+	}
+
+	.btn--sm:hover {
+		background: var(--jb-accent);
+		border-color: var(--jb-accent);
 		color: var(--jb-text-on-accent);
-		transform: translateY(-2px);
-		box-shadow: var(--jb-shadow-md);
+	}
+
+	.btn--sm.btn--secondary {
+		background: transparent;
+		color: var(--jb-text-secondary);
+		border-color: var(--jb-color-border);
+	}
+
+	.btn--sm.btn--secondary:hover {
+		background: transparent;
+		border-color: color-mix(in srgb, var(--jb-accent) 40%, transparent);
+		color: var(--jb-text-primary);
+	}
+
+	.btn svg {
+		width: 1em;
+		height: 1em;
+		flex-shrink: 0;
+	}
+
+	.btn:disabled,
+	.btn[aria-disabled="true"] {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+
+	/* Link — text-first. `.link` is the inline accent link (underline on hover); `.link--arrow`
+	   adds a trailing arrow affordance for "read more" / "see more" links. */
+	.link {
+		color: var(--jb-accent-text);
+		text-decoration: none;
+		transition: color var(--jb-dur-fast) var(--jb-ease-standard);
+	}
+
+	.link:hover {
+		color: var(--jb-accent-hover);
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
+	}
+
+	.link--arrow {
+		/* Fully percent-encoded SVG: spaces and angle brackets are escaped (%20 %3C %3E) so no
+		   CSS minifier or browser can mis-parse the data URI when it is substituted into the
+		   mask shorthand. A partially-encoded form renders in some engines but collapses the
+		   masked box in stricter ones. */
+		--jb-arrow-right: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23000'%20stroke-width='2.5'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M5%2012h14'/%3E%3Cpath%20d='m13%206%206%206-6%206'/%3E%3C/svg%3E");
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4em;
+	}
+
+	/* A horizontal arrow drawn as a mask of currentColor — font-independent (the display face
+	   lacks a → glyph) and it optically centres against the label, unlike a rotated corner. */
+	.link--arrow::after {
+		content: "";
+		width: 0.8em;
+		height: 0.8em;
+		background-color: currentColor;
+		-webkit-mask: var(--jb-arrow-right) center / contain no-repeat;
+		mask: var(--jb-arrow-right) center / contain no-repeat;
 	}
 
 	/* Cards */
@@ -132,15 +271,67 @@
 		box-shadow: var(--jb-shadow-lg);
 	}
 
-	/* Tech tags */
-	.tech-tag {
+	/* Tags & badges — inert metadata labels (NOT actions; the action primitives are .btn / .link).
+	   A tag is a <span>; by design there is no Tag component. Shape carries meaning: a full pill is
+	   a taxonomy label (status / category), a small radius is a technology token (and shares the
+	   shape of the interactive filter pill). */
+	.tag {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
 		font-family: var(--jb-font-mono);
+		font-size: 0.6rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		padding: 2px 8px;
+		border-radius: 99px;
+		border: 1px solid transparent;
+		white-space: nowrap;
+	}
+
+	/* Status: colour-coded by kind. Independent uses the framework accent; employee and
+	   side-project use their identity fills with AA-tuned, theme-aware text inks. */
+	.tag--status[data-kind="independent"] {
+		background: var(--jb-accent-soft);
+		color: var(--jb-accent-text);
+	}
+
+	.tag--status[data-kind="employee"] {
+		background: color-mix(in srgb, var(--jb-status-employee) 14%, transparent);
+		color: var(--jb-timeline-ink-employee);
+	}
+
+	.tag--status[data-kind="side-project"] {
+		background: color-mix(in srgb, var(--jb-status-side) 14%, transparent);
+		color: var(--jb-timeline-ink-side-badge);
+	}
+
+	/* Neutral: an uncoloured taxonomy label (sector / domain, agency qualifier). */
+	.tag--neutral {
+		color: var(--jb-text-tertiary);
+		border-color: var(--jb-color-border);
+		background: color-mix(in srgb, var(--jb-text-tertiary) 6%, transparent);
+	}
+
+	/* Tech: a technology token. Square-ish (shares the filter-pill shape), sentence-case. */
+	.tag--tech {
+		border-radius: var(--jb-radius-sm);
+		text-transform: none;
+		letter-spacing: normal;
+		font-weight: 500;
 		font-size: 0.65rem;
 		padding: 3px 8px;
-		background: var(--jb-accent-soft);
 		color: var(--jb-accent-on-soft);
-		border-radius: var(--jb-radius-sm);
-		font-weight: 500;
+		background: var(--jb-accent-soft);
+	}
+
+	/* High contrast: tints/borders flatten away, so re-assert a system-colour border so the
+	   labels stay visible (mirrors the timeline filter pills). */
+	@media (forced-colors: active) {
+		.tag {
+			border-color: CanvasText;
+		}
 	}
 
 	/* Container */

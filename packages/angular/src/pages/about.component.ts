@@ -1,12 +1,13 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { GITHUB_REPO_URL, LINKEDIN_URL, toParagraphs } from '@fg/shared';
+import { ButtonDirective } from '../components/ui/button.directive';
 import { ContentService } from '../content.service';
 
 @Component({
 	selector: 'app-about',
 	standalone: true,
-	imports: [RouterLink],
+	imports: [RouterLink, ButtonDirective],
 	// Allow the <jb-icon> custom element in this template.
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	styleUrl: '../../../../styles/components/about.module.css',
@@ -29,12 +30,24 @@ import { ContentService } from '../content.service';
 						<p [class.about-lead]="first">{{ paragraph }}</p>
 					}
 					<div class="about-cta">
-						<a class="about-cta-primary" routerLink="/career">View the career timeline</a>
-						<a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer">
+						<a jbButton routerLink="/career">View the career timeline</a>
+						<a
+							jbButton
+							variant="secondary"
+							[href]="githubRepoUrl"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
 							<jb-icon name="github"></jb-icon>
 							View the source
 						</a>
-						<a [href]="linkedinUrl" target="_blank" rel="noopener noreferrer">
+						<a
+							jbButton
+							variant="secondary"
+							[href]="linkedinUrl"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
 							<jb-icon name="linkedin"></jb-icon>
 							LinkedIn
 						</a>

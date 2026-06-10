@@ -1,18 +1,19 @@
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { HomeContent } from '@fg/shared';
+import { ButtonDirective } from '../ui/button.directive';
 
 @Component({
 	selector: 'app-call-to-action',
 	standalone: true,
-	imports: [RouterLink],
+	imports: [RouterLink, ButtonDirective],
 	styleUrl: '../../../../../styles/components/cta.module.css',
 	template: `
 		<section class="cta">
 			<div class="container">
 				<div class="cta-panel">
 					<h2 class="cta-heading" data-reveal>{{ cta().heading }}</h2>
-					<a [routerLink]="cta().href" class="btn cta-btn">{{ cta().label }}</a>
+					<a jbButton variant="inverted" tone="marketing" [routerLink]="cta().href">{{ cta().label }}</a>
 				</div>
 			</div>
 		</section>

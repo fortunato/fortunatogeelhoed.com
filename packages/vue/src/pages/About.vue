@@ -17,17 +17,25 @@
 					{{ paragraph }}
 				</p>
 				<div :class="styles['about-cta']">
-					<RouterLink to="/career" :class="styles['about-cta-primary']">
-						View the career timeline
-					</RouterLink>
-					<a :href="githubRepoUrl" target="_blank" rel="noopener noreferrer">
-						<jb-icon name="github" />
+					<Button to="/career">View the career timeline</Button>
+					<Button
+						variant="secondary"
+						:href="githubRepoUrl"
+						icon="github"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
 						View the source
-					</a>
-					<a :href="linkedinUrl" target="_blank" rel="noopener noreferrer">
-						<jb-icon name="linkedin" />
+					</Button>
+					<Button
+						variant="secondary"
+						:href="linkedinUrl"
+						icon="linkedin"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
 						LinkedIn
-					</a>
+					</Button>
 				</div>
 			</div>
 		</article>
@@ -37,7 +45,7 @@
 <script setup lang="ts">
 import { GITHUB_REPO_URL, LINKEDIN_URL, toParagraphs } from '@fg/shared';
 import styles from '@styles/components/about.module.css';
-import { RouterLink } from 'vue-router';
+import Button from '../components/ui/Button.vue';
 import { useContent } from '../composables/useContent';
 
 const { content } = useContent('about');

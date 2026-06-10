@@ -10,6 +10,12 @@ export interface ProofPoint {
 	label: string;
 }
 
+/** A homepage "how I work" principle — a senior-judgment trait, shown rather than asserted. */
+export interface Principle {
+	title: string;
+	description: string;
+}
+
 /** A homepage recent-writing teaser entry. `href` resolves to a real route. */
 export interface WritingTeaserItem {
 	/** Short topical kicker shown above the title (e.g. "AI", "Career"). */
@@ -24,6 +30,7 @@ export interface WritingTeaserItem {
  *  variants render the same words from one source. */
 export interface HomeSectionsCopy {
 	services: { label: string; title: string };
+	approach: { label: string; title: string };
 	proof: { label: string };
 	frameworks: {
 		label: string;
@@ -43,6 +50,7 @@ export interface HomeContent {
 	};
 	sections: HomeSectionsCopy;
 	services: ServiceOffering[];
+	principles: Principle[];
 	proof: ProofPoint[];
 	writing: WritingTeaserItem[];
 	cta: {

@@ -34,7 +34,7 @@
 }
 
 .about-prose p {
-	max-width: 62ch;
+	max-width: var(--jb-measure);
 	color: var(--jb-text-secondary);
 	line-height: 1.7;
 }
@@ -50,47 +50,14 @@
 	font-size: 1.15rem;
 }
 
+/* Layout only: the action row. The actions themselves are the shared Button primitive at its
+   default (sentence-case) tone: the timeline link is primary, the social links are secondary. */
 .about-cta {
 	display: flex;
 	flex-wrap: wrap;
+	align-items: center;
 	gap: var(--jb-space-md);
 	margin-top: var(--jb-space-lg);
-}
-
-.about-cta a {
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5em;
-	padding: 0.5rem 1rem;
-	border: 1px solid var(--jb-color-border);
-	border-radius: var(--jb-radius-sm);
-	font-size: 0.85rem;
-	font-weight: 600;
-	color: var(--jb-text-primary);
-	transition: border-color var(--jb-dur-base) var(--jb-ease-standard), color var(--jb-dur-base)
-		var(--jb-ease-standard), background-color var(--jb-dur-base) var(--jb-ease-standard);
-}
-
-.about-cta a svg {
-	width: 1.1em;
-	height: 1.1em;
-}
-
-.about-cta a:hover {
-	border-color: var(--jb-accent);
-	color: var(--jb-accent-text);
-}
-
-/* Primary action (the timeline) carries the accent fill; raise specificity past `.about-cta a`. */
-.about-cta a.about-cta-primary {
-	background: var(--jb-accent);
-	border-color: var(--jb-accent);
-	color: var(--jb-text-on-accent);
-}
-
-.about-cta a.about-cta-primary:hover {
-	background: var(--jb-accent-hover);
-	color: var(--jb-text-on-accent);
 }
 
 @media (width >= 769px) {

@@ -37,21 +37,12 @@
 	font-weight: 800;
 	letter-spacing: -0.02em;
 	margin-bottom: var(--jb-space-lg);
-}
-
-/* Invert the button so it reads as the primary action against the accent panel. Hover simply
-   morphs the background colour (label flips for contrast) on a symmetric ease over the slow
-   duration — no lift, no wipe. */
-.cta-btn {
-	background: var(--jb-text-on-accent);
-	color: var(--jb-accent);
-	transition: background-color var(--jb-dur-slow) var(--jb-ease-in-out), color var(--jb-dur-slow)
-		var(--jb-ease-in-out);
-
-	&:hover {
-		background: color-mix(in srgb, var(--jb-text-on-accent) 70%, var(--jb-accent));
-		color: var(--jb-accent);
-		transform: none;
-		box-shadow: none;
-	}
+	/* Keep the display headline off the panel's left/right edges. The ch measure is sized in the
+	   heading's own font, so it scales with the clamp() above; the cap holds the line to a confident
+	   two-line block on wide panels rather than stretching edge to edge, without forcing a cramped
+	   three-to-four line stack. Centred via auto margins; the inline padding is the mobile floor, so
+	   even a short line never kisses the panel edge. */
+	max-width: 24ch;
+	margin-inline: auto;
+	padding-inline: var(--jb-space-md);
 }

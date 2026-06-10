@@ -68,10 +68,11 @@ all three frameworks. It is intentionally excluded from the visual-parity gate b
 framework-switcher button differs per section by design. The Angular header required working
 around an upstream bug — see "Patched dependencies" below.
 
-The elements deliberately show both encapsulation modes, and the showcase preserves that:
+The web components are the framework-agnostic, stateful/form-associated primitives:
 `jb-input` / `jb-textarea` / `jb-theme-toggle` use light DOM (styled by the global stylesheet and
-inherited `--jb-` tokens, and form-associated for native validation), while `jb-tech-tag` uses
-shadow DOM, kept on-palette purely through inherited custom properties.
+inherited `--jb-` tokens, and form-associated for native validation), and `jb-icon` is a light-DOM
+glyph. Inert presentational labels are intentionally *not* web components — tags/badges are a pure
+CSS class layer (`.tag`); see the CSS architecture doc.
 
 Registration is an explicit `registerElements()` call in each section's browser-only preview —
 never a build-time import, because the shared barrel is also imported in Node during prerender,

@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, computed, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { availabilityBadge, availabilityBookedLine } from '@fg/shared';
 import { AvailabilityService } from '../availability.service';
 import { ContactFormComponent } from '../components/contact-form.component';
@@ -7,10 +7,7 @@ import { ContentService } from '../content.service';
 @Component({
 	selector: 'app-contact',
 	standalone: true,
-	// The page reuses the shared contact-form composite; CUSTOM_ELEMENTS_SCHEMA allows the
-	// <jb-tech-tag> custom elements around it.
 	imports: [ContactFormComponent],
-	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	// Skip hydration for this page: the badge/sub-line are rewritten server-side to the live
 	// availability and re-rendered client-side from the same seeded value, so skipping avoids
 	// a structural hydration mismatch while producing no visible change.
@@ -25,9 +22,9 @@ import { ContentService } from '../content.service';
 				<app-contact-form></app-contact-form>
 
 				<p class="contact-meta">
-					<jb-tech-tag>Angular</jb-tech-tag>
-					<jb-tech-tag>TypeScript</jb-tech-tag>
-					<jb-tech-tag>Vite</jb-tech-tag>
+					<span class="tag tag--tech">Angular</span>
+					<span class="tag tag--tech">TypeScript</span>
+					<span class="tag tag--tech">Vite</span>
 				</p>
 			</div>
 		</section>

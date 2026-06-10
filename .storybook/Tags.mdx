@@ -1,0 +1,46 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundations/Tags & Badges" />
+
+# Tags & badges
+
+Tags are **inert metadata labels** — they describe something (an employment type, an industry, a
+technology), they don't navigate or submit. The look is owned by global `.tag` classes in
+`styles/base.css` and is consumed identically by all three frameworks. You can see them live under
+**React / Vue / Angular → Timeline** (status + category) and **→ Contact** (technology).
+
+## There is, deliberately, no Tag component
+
+A tag is a `<span class="tag …">`. It has no React/Vue/Angular component and no web component, and
+that is the point. The design system draws a behaviour-based boundary:
+
+- **stateful / form-associated** primitives → web components (`jb-input`, `jb-theme-toggle`)
+- **interactive idiom** (routing, submit) → per-framework components (see Buttons & Links)
+- **inert metadata** → a pure CSS class layer, no component
+
+Wrapping a coloured `<span>` in a component would be ceremony for zero behaviour. Knowing what *not*
+to build is part of the system.
+
+## Variants
+
+- **`.tag--status`** — colour-coded by `data-kind` (`employee` / `independent` / `side-project`).
+  The fills are theme-independent identity colours; the text uses AA-tuned, theme-aware inks
+  (`--jb-timeline-ink-*`) so the labels stay legible in both light and dark.
+- **`.tag--neutral`** — an uncoloured taxonomy label, bordered and muted. Used for industry/sector
+  and the agency qualifier.
+- **`.tag--tech`** — a technology token (accent-soft, sentence-case).
+
+## Shape is meaningful
+
+The shape is not incidental — it tells you what kind of thing the label is:
+
+- **Full pill** (`border-radius: 99px`) → a **taxonomy** label (status, category).
+- **Small radius** (`--jb-radius-sm`) → a **technology token**, sharing the shape of the
+  interactive filter pills in the timeline lanes. Square-ish = a tech token (and maybe a live
+  filter); pill = an inert taxonomy label.
+
+## Accessibility
+
+The meaning never rides on colour alone — every status tag carries its text label. Decorative
+glyphs (e.g. the side-project branch icon) are `aria-hidden`, and a `forced-colors` rule re-asserts
+a system-colour border so the tints survive Windows high-contrast mode.

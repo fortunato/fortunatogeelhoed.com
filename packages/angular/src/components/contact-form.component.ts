@@ -69,7 +69,7 @@ import { JbControlValueAccessor } from '../directives/jb-input.value-accessor';
 						Your name, email, and message are emailed to me so I can reply — they are not
 						stored on this site.
 					</p>
-					<button type="submit" class="btn" [disabled]="disabled()">Send</button>
+					<button type="submit" class="btn btn--marketing" [disabled]="disabled()">Send</button>
 			</form>
 		}
 	`,

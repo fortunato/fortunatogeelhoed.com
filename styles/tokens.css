@@ -37,6 +37,12 @@
 
 		/* Status */
 		--jb-color-danger-500: #e5484d;
+
+		/* Employment-type identity fills for status tags (theme-independent; the matching
+		   AA-tuned text inks are the --jb-timeline-ink-* tokens below). Independent uses the
+		   framework accent, so it has no fixed colour here. */
+		--jb-status-employee: #5ba8ff;
+		--jb-status-side: #facc15;
 	}
 
 	/* ========================================================================
@@ -81,6 +87,8 @@
 		/* Layout / size. Nav height is the mobile baseline; it grows on wider viewports below. */
 		--jb-size-container: min(1320px, 90vw);
 		--jb-size-container-max: 1320px;
+		/* Optimal reading measure for running body copy (~60-70ch). */
+		--jb-measure: 65ch;
 		/* Shared page left/right rail, measured from the viewport: the 2rem floor, or whatever
 		   margin centres a 1320px block. Letting a page's heading block and a wider content block
 		   (e.g. the timeline's 1400px grid) both start at this gutter keeps their left edges
@@ -168,7 +176,7 @@
 		   secondary surface (#f0f0f0), where #6f6f6f only reached ~4.4:1. */
 		--jb-text-tertiary: var(--jb-color-neutral-650);
 		--jb-color-border: var(--jb-color-neutral-200);
-		/* Darken accent-on-soft so small tech-tag text clears AA on the pale soft tint. */
+		/* Darken accent-on-soft so small tech-tag (.tag--tech) text clears AA on the pale soft tint. */
 		--jb-accent-on-soft: color-mix(in srgb, var(--jb-accent) 80%, black);
 		/* Darken accent text so links/labels clear AA on the secondary surface. */
 		--jb-accent-text: color-mix(in srgb, var(--jb-accent) 82%, black);

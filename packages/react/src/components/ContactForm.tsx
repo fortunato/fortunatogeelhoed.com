@@ -155,7 +155,7 @@ export function ContactForm({ disabled = false }: ContactFormProps) {
 				Your name, email, and message are emailed to me so I can reply — they are not stored
 				on this site.
 			</p>
-			<button type="submit" className="btn" disabled={disabled}>
+			<button type="submit" className="btn btn--marketing" disabled={disabled}>
 				Send
 			</button>
 		</form>
