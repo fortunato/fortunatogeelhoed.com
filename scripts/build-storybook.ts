@@ -64,9 +64,11 @@ async function run(step: Step): Promise<void> {
 	}
 }
 
-for (const step of steps) {
-	await run(step);
-}
+// The portal owns and clears the tree root, so it must finish before anything writes a subfolder.
+// The four section builds each own a distinct subfolder and are independent, so they run together.
+const [portal, ...sectionSteps] = steps;
+await run(portal);
+await Promise.all(sectionSteps.map(run));
 
 // Verify every section is present and reachable from one origin (each must expose index.json).
 const sections = ['web-components', 'react', 'vue', 'angular'];
