@@ -77,7 +77,7 @@ function buildRows(d: TimelineData): Row[] {
 
 				@for (row of rows; track row.key) {
 					@if (row.kind === 'era') {
-						<div class="era" data-reveal><span class="era-label">{{ row.era }}</span></div>
+						<div class="era" data-reveal><h2 class="era-label">{{ row.era }}</h2></div>
 					} @else {
 						<app-timeline-entry [entry]="row.entry" />
 					}
