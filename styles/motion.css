@@ -90,6 +90,14 @@
 		[data-enter="3"] {
 			animation-delay: 0.25s;
 		}
+
+		/* Arrived via a framework switch: the reassemble already brings the page in, so
+		   it is the hero's entrance — don't play the staggered fade-in on top of it. The
+		   marker is set by the inline <head> script before first paint, so the entrance
+		   never starts (nothing to cancel). Fresh / direct loads still get the stagger. */
+		:root[data-switched] [data-enter] {
+			animation: none;
+		}
 	}
 
 	@keyframes jb-enter {
