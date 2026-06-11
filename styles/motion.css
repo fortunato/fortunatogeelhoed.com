@@ -75,6 +75,19 @@
 		}
 	}
 
+	/* The framework-switch reassemble is the page's entrance: rows already on screen when it
+	   plays should arrive at rest, not assemble on top of it. timeline-motion marks those rows
+	   [data-instant] for one frame while it snaps them to their revealed state, which kills the
+	   per-row transition (and the node-dot ::before) for that frame only. Rows scrolled into
+	   view afterwards never get the marker, so the normal assemble choreography is untouched.
+	   !important because those reveal transitions live in framework-scoped component styles
+	   this global sheet cannot outrank by specificity (or layering) alone. */
+	[data-reveal][data-instant],
+	[data-reveal][data-instant] *,
+	[data-reveal][data-instant]::before {
+		transition: none !important;
+	}
+
 	/* Signature hero entrance on load (the hero sits above the fold, so a scroll
 	   reveal would never fire). Staggered; suppressed under reduced motion. */
 	@media (prefers-reduced-motion: no-preference) {
