@@ -18,6 +18,10 @@
 	gap: var(--jb-space-lg);
 	margin-top: var(--jb-space-lg);
 	margin-bottom: 0;
+	/* Top-align the items so the big metrics share a baseline across the row. Without this the
+	   cells stretch to the tallest label and column-reverse floats each metric up by its own
+	   label height, leaving them on a staircase. */
+	align-items: start;
 }
 
 /* Each metric is a <dl> group: the visible order is the big metric above its label, while the
