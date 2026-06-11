@@ -41,7 +41,16 @@ const timeline: TimelineData = {
 			tech: {
 				frontend: ['React', 'Angular', 'Vue', 'Vite', 'CSS Modules'],
 				backend: ['Bun', 'Hono'],
-				cicd: ['Nx', 'GitHub Actions', 'Docker', 'Pulumi', 'Hetzner', 'Grafana', 'Loki'],
+				cicd: [
+					'Nx',
+					'GitHub Actions',
+					'Docker',
+					'Pulumi',
+					'Hetzner',
+					'Grafana',
+					'Loki',
+					'Tailscale',
+				],
 				ai: ['Claude Code'],
 			},
 		},
@@ -72,10 +81,11 @@ const timeline: TimelineData = {
 			role: 'Full-Stack Engineer',
 			type: 'independent',
 			domains: ['Fintech & Trading'],
-			highlight: 'Real-time WebSocket market-data ingestion',
+			highlight:
+				'Live WebSocket ingestion into a real-time market-breadth and regime dashboard, with multi-timeframe confluence',
 			tech: {
 				frontend: ['React', 'Mantine UI', 'Vite', 'Recharts', 'CSS Modules'],
-				backend: ['Node.js', 'NestJS', 'PostgreSQL', 'TimescaleDB', 'WebSockets'],
+				backend: ['Node.js', 'NestJS', 'PostgreSQL', 'TimescaleDB', 'Prisma', 'WebSockets'],
 				cicd: ['Nx', 'Gitea Actions', 'Docker'],
 				ai: ['Claude Code', 'MCP'],
 			},
@@ -139,6 +149,7 @@ const timeline: TimelineData = {
 					'Symfony',
 					'RxJS',
 					'Azure',
+					'Prisma',
 					'PostgreSQL',
 					'PostGIS',
 					'Blob Storage',
@@ -146,7 +157,7 @@ const timeline: TimelineData = {
 				],
 				cicd: [
 					'Nx',
-					'GitLab CI',
+					'GitLab',
 					'Azure Pipelines',
 					'GitHub Actions',
 					'Docker',

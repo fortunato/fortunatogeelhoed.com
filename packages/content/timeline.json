@@ -44,7 +44,8 @@
 					"Pulumi",
 					"Hetzner",
 					"Grafana",
-					"Loki"
+					"Loki",
+					"Tailscale"
 				],
 				"ai": [
 					"Claude Code"
@@ -94,7 +95,7 @@
 			"domains": [
 				"Fintech & Trading"
 			],
-			"highlight": "Real-time WebSocket market-data ingestion",
+			"highlight": "Live WebSocket ingestion into a real-time market-breadth and regime dashboard, with multi-timeframe confluence",
 			"tech": {
 				"frontend": [
 					"React",
@@ -108,6 +109,7 @@
 					"NestJS",
 					"PostgreSQL",
 					"TimescaleDB",
+					"Prisma",
 					"WebSockets"
 				],
 				"cicd": [
@@ -200,6 +202,7 @@
 					"Symfony",
 					"RxJS",
 					"Azure",
+					"Prisma",
 					"PostgreSQL",
 					"PostGIS",
 					"Blob Storage",
@@ -207,7 +210,7 @@
 				],
 				"cicd": [
 					"Nx",
-					"GitLab CI",
+					"GitLab",
 					"Azure Pipelines",
 					"GitHub Actions",
 					"Docker",
