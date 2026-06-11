@@ -322,9 +322,9 @@ const timeline: TimelineData = {
 				'A hands-on manager, still coding at least half the time',
 			],
 			tech: {
-				frontend: ['React', 'ES2016', 'SCSS', 'Webpack', 'JSPM', 'Storybook'],
+				frontend: ['React', 'ES2016', 'SCSS', 'Webpack', 'JSPM', 'Storybook', 'Middleman'],
 				backend: ['Sitecore', 'SQL Server'],
-				cicd: ['Bamboo'],
+				cicd: ['Bamboo', 'Grunt', 'Gulp'],
 			},
 		},
 		{
@@ -357,9 +357,17 @@ const timeline: TimelineData = {
 			domains: ['Government', 'Telecom', 'Finance', 'Insurance'],
 			highlight: 'Brought parallel Gulp builds to the frontend guild',
 			tech: {
-				frontend: ['AngularJS', 'Backbone', 'jQuery', 'Highcharts', 'SCSS', 'Webpack'],
+				frontend: [
+					'AngularJS',
+					'Backbone',
+					'jQuery',
+					'Highcharts',
+					'SCSS',
+					'Webpack',
+					'Middleman',
+				],
 				backend: ['Sitecore', 'SQL Server'],
-				cicd: ['Bamboo', 'Grunt', 'Gulp', 'Yeoman', 'Middleman'],
+				cicd: ['Bamboo', 'Grunt', 'Gulp'],
 			},
 		},
 		{
@@ -396,6 +404,7 @@ const timeline: TimelineData = {
 			tech: {
 				frontend: ['jQuery', 'Backbone', 'Marionette', 'HTML5', 'CSS3'],
 				backend: ['PHP', 'MySQL', 'Kohana', 'Node.js', 'Wordpress'],
+				cicd: ['Bash', 'Capistrano', 'SFTP'],
 			},
 		},
 		{
@@ -416,7 +425,7 @@ const timeline: TimelineData = {
 			tech: {
 				frontend: ['jQuery', 'Ext JS', 'HTML5', 'CSS3'],
 				backend: ['PHP', 'MySQL', 'SnappCMS', 'Magento'],
-				cicd: ['Mercurial', 'Amazon EC2'],
+				cicd: ['Bash', 'Mercurial', 'Amazon EC2'],
 			},
 		},
 		{

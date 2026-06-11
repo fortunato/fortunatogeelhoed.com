@@ -434,14 +434,17 @@
 					"SCSS",
 					"Webpack",
 					"JSPM",
-					"Storybook"
+					"Storybook",
+					"Middleman"
 				],
 				"backend": [
 					"Sitecore",
 					"SQL Server"
 				],
 				"cicd": [
-					"Bamboo"
+					"Bamboo",
+					"Grunt",
+					"Gulp"
 				]
 			}
 		},
@@ -495,7 +498,8 @@
 					"jQuery",
 					"Highcharts",
 					"SCSS",
-					"Webpack"
+					"Webpack",
+					"Middleman"
 				],
 				"backend": [
 					"Sitecore",
@@ -504,9 +508,7 @@
 				"cicd": [
 					"Bamboo",
 					"Grunt",
-					"Gulp",
-					"Yeoman",
-					"Middleman"
+					"Gulp"
 				]
 			}
 		},
@@ -573,6 +575,11 @@
 					"Kohana",
 					"Node.js",
 					"Wordpress"
+				],
+				"cicd": [
+					"Bash",
+					"Capistrano",
+					"SFTP"
 				]
 			}
 		},
@@ -610,6 +617,7 @@
 					"Magento"
 				],
 				"cicd": [
+					"Bash",
 					"Mercurial",
 					"Amazon EC2"
 				]
