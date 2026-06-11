@@ -443,7 +443,7 @@ export const TECH_REGISTRY: Record<string, { brand: string; icon?: string }> = {
 		"icon": "grafana"
 	},
 	"Loki": {
-		"brand": "#888888"
+		"brand": "#f9a825"
 	},
 	"AdGuard": {
 		"brand": "#68BC71",
@@ -462,7 +462,7 @@ export const TECH_REGISTRY: Record<string, { brand: string; icon?: string }> = {
 		"icon": "verdaccio"
 	},
 	"NetBird": {
-		"brand": "#888888"
+		"brand": "#ff6200"
 	},
 	"MikroTik": {
 		"brand": "#293239",

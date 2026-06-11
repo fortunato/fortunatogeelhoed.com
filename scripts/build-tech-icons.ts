@@ -135,7 +135,7 @@ const SLUGS: Record<string, string | null> = {
 	Immich: 'immich',
 	Vaultwarden: 'vaultwarden',
 	Verdaccio: 'verdaccio',
-	NetBird: 'netbird',
+	NetBird: null,
 	MikroTik: 'mikrotik',
 	// AI / LLM
 	'Claude Code': 'claude',
@@ -194,6 +194,8 @@ const BRAND_FALLBACK: Record<string, string> = {
 	SFTP: '#3a6ea5',
 	Yeoman: '#ffbf00',
 	Middleman: '#9c5b8b',
+	Loki: '#f9a825',
+	NetBird: '#ff6200',
 };
 
 // Original hand-drawn glyphs composed from primitives — own artwork, NOT brand logos. Used
