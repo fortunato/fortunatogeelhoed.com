@@ -16,7 +16,8 @@ const HOST = 'components.fortunatogeelhoed.com';
 
 type Step = { name: string; cmd: string[] };
 
-const steps: Step[] = [
+// A non-empty tuple: the portal build always leads, so destructuring it off the front is sound.
+const steps: [Step, ...Step[]] = [
 	{ name: 'portal', cmd: ['storybook', 'build', '-c', '.storybook', '-o', 'dist/storybook'] },
 	{
 		name: 'web-components',

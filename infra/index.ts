@@ -61,14 +61,7 @@ const firewall = new hcloud.Firewall('web', {
 // and lives only transiently inside Pulumi state — keep that state private; never commit it.
 const template = readFileSync(new URL('./cloud-init.yaml', import.meta.url), 'utf8');
 const userData = pulumi
-	.all([
-		ghcrToken,
-		tailscaleAuthKey,
-		ahasendApiKey,
-		ahasendAccountId,
-		ahasendToEmail,
-		lokiToken,
-	])
+	.all([ghcrToken, tailscaleAuthKey, ahasendApiKey, ahasendAccountId, ahasendToEmail, lokiToken])
 	.apply(([token, ts, apiKey, accountId, toEmail, lToken]) =>
 		template
 			.replaceAll('__GHCR_USER__', ghcrUser)
