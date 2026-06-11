@@ -17,6 +17,10 @@ import { logger } from '../logger';
 
 const GIST_ID = process.env.AVAILABILITY_GIST_ID ?? '6b9e17e49b45c78833cc2b4a5ab0c771';
 const GIST_URL = `https://api.github.com/gists/${GIST_ID}`;
+// The file within the gist that holds the value. Overridable alongside the gist id so both
+// halves of the coordinate (which gist, which file) move together, and named once here so the
+// lookup and the "missing" error message can never disagree.
+const GIST_FILENAME = process.env.AVAILABILITY_GIST_FILE ?? 'fg-availability.json';
 const TOKEN = process.env.GITHUB_TOKEN;
 const TTL_MS = Number(process.env.AVAILABILITY_TTL_MS) || 120_000;
 const TIMEOUT_MS = 3_000;
@@ -71,9 +75,9 @@ async function refresh(): Promise<void> {
 		}
 
 		const body = (await res.json()) as { files?: Record<string, { content?: string }> };
-		const content = body?.files?.['availability.json']?.content;
+		const content = body?.files?.[GIST_FILENAME]?.content;
 		if (typeof content !== 'string') {
-			logger[sev]('availability gist is missing availability.json');
+			logger[sev]({ file: GIST_FILENAME }, 'availability gist is missing its file');
 			return;
 		}
 

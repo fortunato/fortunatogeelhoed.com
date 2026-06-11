@@ -24,7 +24,7 @@ afterEach(() => {
 // Build a GitHub gist API response wrapping the given availability value.
 function gistResponse(value: unknown, etag = '"v1"'): Response {
 	return new Response(
-		JSON.stringify({ files: { 'availability.json': { content: JSON.stringify(value) } } }),
+		JSON.stringify({ files: { 'fg-availability.json': { content: JSON.stringify(value) } } }),
 		{ status: 200, headers: { etag } },
 	);
 }
@@ -88,7 +88,7 @@ describe('getAvailability', () => {
 
 	it('falls back when the gist content is not valid JSON', async () => {
 		const bad = new Response(
-			JSON.stringify({ files: { 'availability.json': { content: 'not json{' } } }),
+			JSON.stringify({ files: { 'fg-availability.json': { content: 'not json{' } } }),
 			{ status: 200 },
 		);
 		vi.stubGlobal('fetch', vi.fn().mockResolvedValue(bad));
@@ -135,7 +135,9 @@ describe('getAvailability', () => {
 	it('falls back when the gist is well-formed JSON that violates the schema', async () => {
 		const invalid = new Response(
 			JSON.stringify({
-				files: { 'availability.json': { content: JSON.stringify({ available: 'yes' }) } },
+				files: {
+					'fg-availability.json': { content: JSON.stringify({ available: 'yes' }) },
+				},
 			}),
 			{ status: 200 },
 		);
