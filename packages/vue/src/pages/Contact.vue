@@ -6,12 +6,6 @@
 			<p data-availability-line style="color: var(--jb-text-secondary)">{{ body }}</p>
 
 			<ContactForm />
-
-			<p class="contact-meta">
-				<span class="tag tag--tech">Vue</span>
-				<span class="tag tag--tech">TypeScript</span>
-				<span class="tag tag--tech">Vite</span>
-			</p>
 		</div>
 	</section>
 </template>

@@ -29,12 +29,6 @@ export function Contact() {
 				</p>
 
 				<ContactForm />
-
-				<p className="contact-meta">
-					<span className="tag tag--tech">React</span>
-					<span className="tag tag--tech">TypeScript</span>
-					<span className="tag tag--tech">Vite</span>
-				</p>
 			</div>
 		</section>
 	);

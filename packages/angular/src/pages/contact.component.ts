@@ -20,12 +20,6 @@ import { ContentService } from '../content.service';
 				<p data-availability-line style="color: var(--jb-text-secondary)">{{ body() }}</p>
 
 				<app-contact-form></app-contact-form>
-
-				<p class="contact-meta">
-					<span class="tag tag--tech">Angular</span>
-					<span class="tag tag--tech">TypeScript</span>
-					<span class="tag tag--tech">Vite</span>
-				</p>
 			</div>
 		</section>
 	`,
