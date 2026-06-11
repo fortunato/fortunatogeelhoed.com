@@ -9,6 +9,9 @@
 	justify-content: center;
 	min-height: calc(100vh - var(--jb-size-nav-height));
 	min-height: calc(100dvh - var(--jb-size-nav-height));
+	/* A single hairline marks the end of the fold; it reuses the banded-section edge color and
+	   never doubles up since the hero is always followed by a plain section. */
+	border-bottom: 1px solid var(--jb-color-border);
 }
 
 /* Diagonal repeating-name wallpaper behind the hero (decorative). Theme-adaptive via
