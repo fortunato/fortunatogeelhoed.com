@@ -59,31 +59,29 @@
 	line-height: 1.6;
 }
 
-/* margin-top:auto pins the link to the bottom so cards of unequal title length stay aligned.
-   The arrow is a CSS-drawn chevron (the display font lacks a → glyph, which fell back and
-   misaligned); inline-flex keeps it centred with the label. It nudges right on card hover. */
+/* The same arrow-link affordance used for "see the full timeline" (the shared `.link--arrow`
+   primitive): a masked horizontal arrow, accent colour, underline on hover, no arrow motion.
+   margin-top:auto pins it to the card bottom so cards of unequal title length stay aligned. */
 .writing-more {
 	display: inline-flex;
 	align-items: center;
-	gap: 0.5em;
+	gap: 0.4em;
 	margin-top: auto;
-	font-size: 0.8rem;
-	font-weight: 600;
-	text-transform: uppercase;
-	letter-spacing: 0.1em;
 	color: var(--jb-accent-text);
+	transition: color var(--jb-dur-fast) var(--jb-ease-standard);
 
 	&::after {
 		content: "";
-		width: 0.4em;
-		height: 0.4em;
-		border-top: 2px solid currentColor;
-		border-right: 2px solid currentColor;
-		transform: rotate(45deg);
-		transition: transform var(--jb-dur-base) var(--jb-ease-standard);
+		width: 0.8em;
+		height: 0.8em;
+		background-color: currentColor;
+		-webkit-mask: var(--jb-arrow-right) center / contain no-repeat;
+		mask: var(--jb-arrow-right) center / contain no-repeat;
 	}
 }
 
-.writing-card:hover .writing-more::after {
-	transform: rotate(45deg) translate(1px, -1px);
+.writing-card:hover .writing-more {
+	color: var(--jb-accent-hover);
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
 }

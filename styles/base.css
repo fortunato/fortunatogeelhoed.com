@@ -233,11 +233,8 @@
 	}
 
 	.link--arrow {
-		/* Fully percent-encoded SVG: spaces and angle brackets are escaped (%20 %3C %3E) so no
-		   CSS minifier or browser can mis-parse the data URI when it is substituted into the
-		   mask shorthand. A partially-encoded form renders in some engines but collapses the
-		   masked box in stricter ones. */
-		--jb-arrow-right: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23000'%20stroke-width='2.5'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M5%2012h14'/%3E%3Cpath%20d='m13%206%206%206-6%206'/%3E%3C/svg%3E");
+		/* Arrow glyph lives in the tokens layer (`--jb-arrow-right`) so the card "read more"
+		   links share the exact same affordance. */
 		display: inline-flex;
 		align-items: center;
 		gap: 0.4em;

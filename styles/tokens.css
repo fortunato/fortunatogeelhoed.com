@@ -121,6 +121,14 @@
 		   decelerate curves above. For deliberate "morph" transitions where the change should
 		   feel weighted at both ends rather than snapping out (the closing CTA button). */
 		--jb-ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+
+		/* Iconography. Shared right-arrow glyph for every "read more" / "see more" affordance,
+		   masked as currentColor so it inherits the link colour and is independent of the display
+		   font (which lacks a → glyph). Fully percent-encoded SVG: spaces and angle brackets are
+		   escaped (%20 %3C %3E) so no CSS minifier or browser can mis-parse the data URI when it
+		   is substituted into the mask shorthand; a partially-encoded form collapses the masked
+		   box in stricter engines. */
+		--jb-arrow-right: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%20fill='none'%20stroke='%23000'%20stroke-width='2.5'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cpath%20d='M5%2012h14'/%3E%3Cpath%20d='m13%206%206%206-6%206'/%3E%3C/svg%3E");
 	}
 
 	/* Register the accent so it can interpolate during the framework switch
