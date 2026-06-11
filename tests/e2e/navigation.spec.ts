@@ -32,7 +32,7 @@ test.describe('primary navigation', () => {
 		const context = await browser.newContext({ viewport: { width: 390, height: 800 } });
 		const page = await context.newPage();
 		await page.goto('/');
-		const bottomNav = page.locator('nav[aria-label="Primary"]');
+		const bottomNav = page.locator('nav[aria-label="Mobile"]');
 		await expect(bottomNav).toBeVisible();
 		for (const item of NAV) {
 			await expect(bottomNav.getByRole('link', { name: item.label })).toBeVisible();
@@ -55,7 +55,7 @@ test.describe('primary navigation', () => {
 	test('homepage calls-to-action resolve without dead ends', async ({ page }) => {
 		await page.goto('/');
 		// The closing CTA must reach the contact page.
-		const cta = page.getByRole('link', { name: 'Get in touch' });
+		const cta = page.getByRole('link', { name: 'Send me a message' });
 		await expect(cta).toHaveAttribute('href', '/contact');
 		expect((await page.goto('/contact'))?.ok()).toBe(true);
 
