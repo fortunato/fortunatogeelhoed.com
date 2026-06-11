@@ -14,8 +14,10 @@ import { logger } from '../logger';
 // route at routes/rum.ts. Collection is strictly best-effort: a blocked, slow, or unconfigured
 // collector must never affect the visitor's page.
 
+// The collector URL embeds Grafana Faro's write key in its path (.../collect/<key>), so the URL is
+// the whole credential and there is no separate header to send. Keeping it server-side is what hides
+// that key from the browser.
 const COLLECTOR_URL = process.env.FARO_COLLECTOR_URL;
-const APP_KEY = process.env.FARO_APP_KEY;
 // The body-size cap, shared with the route's bodyLimit so the two never disagree.
 export const RUM_MAX_BYTES = 64 * 1024;
 const TIMEOUT_MS = 3_000;
@@ -42,11 +44,9 @@ function sanitise(payload: unknown): unknown {
 function forward(url: string, payload: unknown): void {
 	const controller = new AbortController();
 	const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
-	const headers: Record<string, string> = { 'content-type': 'application/json' };
-	if (APP_KEY) headers['x-api-key'] = APP_KEY;
 	fetch(url, {
 		method: 'POST',
-		headers,
+		headers: { 'content-type': 'application/json' },
 		body: JSON.stringify(payload),
 		signal: controller.signal,
 	})

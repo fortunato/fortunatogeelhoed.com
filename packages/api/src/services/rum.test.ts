@@ -1,12 +1,11 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-// The collector URL and key are read at module load, so each test re-imports ingestRum with the
-// env it needs. ingestRum forwards fire-and-forget but calls fetch synchronously, so a stubbed
-// fetch is observable immediately after the call returns.
-async function loadIngest(url = 'https://collector.test/ingest', key = '') {
+// The collector URL is read at module load, so each test re-imports ingestRum with the env it
+// needs. ingestRum forwards fire-and-forget but calls fetch synchronously, so a stubbed fetch is
+// observable immediately after the call returns.
+async function loadIngest(url = 'https://collector.test/ingest') {
 	vi.resetModules();
 	vi.stubEnv('FARO_COLLECTOR_URL', url);
-	vi.stubEnv('FARO_APP_KEY', key);
 	return (await import('./rum')).ingestRum;
 }
 
@@ -50,18 +49,6 @@ describe('ingestRum', () => {
 
 		const body = JSON.parse(forwardInit(fetchMock).body);
 		expect(body.meta).toEqual({ app: 'portfolio' });
-	});
-
-	it('attaches the collector key only when one is configured', async () => {
-		const withKey = stubFetch();
-		let ingestRum = await loadIngest('https://collector.test/ingest', 'secret-key');
-		ingestRum(JSON.stringify({ a: 1 }));
-		expect(forwardInit(withKey).headers['x-api-key']).toBe('secret-key');
-
-		const withoutKey = stubFetch();
-		ingestRum = await loadIngest();
-		ingestRum(JSON.stringify({ a: 1 }));
-		expect(forwardInit(withoutKey).headers['x-api-key']).toBeUndefined();
 	});
 
 	it('drops an empty, oversized, or malformed body', async () => {

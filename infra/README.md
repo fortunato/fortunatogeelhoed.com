@@ -75,7 +75,7 @@ pulumi config set deploySshPublicKey "ssh-ed25519 AAAA... deploy"
 pulumi config set logLevel info                                # omit for the built-in prod default (info)
 pulumi config set lokiHost https://logs-prod-012.grafana.net   # Loki push endpoint
 pulumi config set lokiUser <grafana cloud loki instance id>    # numeric user id
-pulumi config set faroCollectorUrl <grafana cloud faro receiver url>
+pulumi config set faroCollectorUrl <faro receiver url, e.g. https://faro-collector-prod-eu-west-2.grafana.net/collect/KEY>
 
 # secrets
 pulumi config set --secret tailscaleAuthKey <tailscale auth key>
@@ -83,7 +83,6 @@ pulumi config set --secret ahasendApiKey <AhaSend api key>
 pulumi config set --secret ahasendAccountId <AhaSend account id>
 pulumi config set --secret ahasendToEmail <destination inbox>
 pulumi config set --secret lokiToken <grafana cloud access-policy token, logs:write>
-pulumi config set --secret faroAppKey <grafana cloud faro app key>
 
 # Private image only — leave both unset for a public GHCR package (recommended):
 # pulumi config set ghcrUser <github-user>
@@ -142,9 +141,9 @@ itself are never affected.
   conventional production baseline); set it (e.g. `warn`) only to deviate.
 - **Frontend RUM** — the browser posts errors and Web Vitals to the first-party `/api/rum` proxy,
   which forwards to the Grafana Cloud **Faro** receiver using `FARO_COLLECTOR_URL` (the receiver URL
-  from Frontend Observability → Settings → Web SDK) and `FARO_APP_KEY` (sent as `x-api-key`). The
-  key is kept server-side and never reaches the browser. Without the collector URL the proxy drops
-  payloads and answers 204.
+  from Frontend Observability → Settings → Web SDK). That URL embeds the write key in its path
+  (`.../collect/<key>`), so it is the whole credential; kept server-side, it never reaches the
+  browser. Without the collector URL the proxy drops payloads and answers 204.
 
 These map 1:1 to the `loki*` / `faro*` Pulumi config above; set them with the rest of the stack
 config and `pulumi up` carries them into the server's `app.env`. Confirm logs are flowing in Grafana

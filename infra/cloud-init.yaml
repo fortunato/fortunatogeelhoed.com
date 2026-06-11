@@ -40,10 +40,10 @@ write_files:
       LOKI_HOST=__LOKI_HOST__
       LOKI_USER=__LOKI_USER__
       LOKI_TOKEN=__LOKI_TOKEN__
-      # Frontend RUM (Grafana Faro) forwarding target for the first-party /api/rum proxy. Optional:
-      # without a collector URL the proxy drops payloads and answers 204, so the site is unaffected.
+      # Frontend RUM (Grafana Faro) forwarding target for the first-party /api/rum proxy. The URL
+      # embeds the write key in its path, so it is the whole credential. Optional: without it the
+      # proxy drops payloads and answers 204, so the site is unaffected.
       FARO_COLLECTOR_URL=__FARO_COLLECTOR_URL__
-      FARO_APP_KEY=__FARO_APP_KEY__
 
   - path: /etc/fg/Caddyfile
     permissions: '0644'

@@ -163,7 +163,8 @@ plugin.
 All collector endpoints and credentials are server-side environment variables and
 are never logged:
 
-- Frontend RUM: `FARO_COLLECTOR_URL`, `FARO_APP_KEY`.
+- Frontend RUM: `FARO_COLLECTOR_URL` (the Grafana Faro receiver URL, which embeds the
+  write key in its path, so the URL is the whole credential — kept server-side).
 - Backend logs: `LOKI_HOST`, `LOKI_USER`, `LOKI_TOKEN`.
 
 Absent these, the site runs normally; telemetry simply isn't shipped.
