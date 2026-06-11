@@ -194,6 +194,9 @@
 	font-size: 1.3rem;
 	font-weight: 700;
 	margin-bottom: var(--jb-space-sm);
+	/* Narrow enough that every title wraps to two lines, so the row reads as four two-line
+	   headings rather than three one-liners beside one wrapped one. */
+	max-width: 14ch;
 }
 
 .service-desc {
