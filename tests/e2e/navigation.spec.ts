@@ -9,6 +9,7 @@ const NAV = [
 	{ label: 'Home', path: '/' },
 	{ label: 'About', path: '/about' },
 	{ label: 'Career', path: '/career' },
+	{ label: 'Writing', path: '/writing' },
 	{ label: 'Contact', path: '/contact' },
 ];
 
@@ -59,10 +60,15 @@ test.describe('primary navigation', () => {
 		await expect(cta).toHaveAttribute('href', '/contact');
 		expect((await page.goto('/contact'))?.ok()).toBe(true);
 
-		// The writing teasers point at the blog placeholder — present, not a 404.
+		// The writing teasers point at real articles — present and not a 404.
 		await page.goto('/');
-		const teaser = page.locator('a[href="/blog"]').first();
+		const teaser = page.locator('a[href^="/writing/"]').first();
 		await expect(teaser).toBeVisible();
+		const href = await teaser.getAttribute('href');
+		expect((await page.goto(href ?? '/writing'))?.ok()).toBe(true);
+
+		// The old /blog path still resolves (it redirects to /writing), so prior links never dead-end.
 		expect((await page.goto('/blog'))?.ok()).toBe(true);
+		expect(new URL(page.url()).pathname).toBe('/writing');
 	});
 });
