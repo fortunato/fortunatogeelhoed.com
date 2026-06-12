@@ -7,7 +7,8 @@ import { dirname, resolve } from 'node:path';
 import type { ApplicationConfig, Type } from '@angular/core';
 import { type BootstrapContext, bootstrapApplication } from '@angular/platform-browser';
 import { CommonEngine } from '@angular/ssr/node';
-import { routes as routeDefs } from '@fg/shared';
+import { articlePathsFromPosts, routes as routeDefs } from '@fg/shared';
+import postsData from '../content/posts.json';
 
 const distDir = resolve(import.meta.dirname, '../../dist/angular');
 const engine = new CommonEngine({ allowedHosts: ['localhost'] });
@@ -44,7 +45,27 @@ async function prerender() {
 		console.log(`  ✓ ${route.path} → ${filePath}`);
 	}
 
-	console.log(`\nPre-rendered ${routeDefs.length} routes to ${distDir}`);
+	// Each published article gets its own static page under /writing/<slug>; the dynamic
+	// :slug route is not reachable from the route list above, so enumerate the paths here.
+	const articlePaths = articlePathsFromPosts(
+		(postsData as { published: { slug: string }[] }).published,
+	);
+
+	for (const path of articlePaths) {
+		const html = await engine.render({
+			bootstrap,
+			url: `http://localhost${path}`,
+			document,
+		});
+
+		const filePath = resolve(distDir, `${path.slice(1)}/index.html`);
+		await mkdir(dirname(filePath), { recursive: true });
+		await writeFile(filePath, html);
+		console.log(`  ✓ ${path} → ${filePath}`);
+	}
+
+	const total = routeDefs.length + articlePaths.length;
+	console.log(`\nPre-rendered ${total} routes to ${distDir}`);
 }
 
 prerender();

@@ -59,6 +59,14 @@
 	line-height: 1.6;
 }
 
+/* Publish date and reading time on the writing index cards. A small muted mono line that sits
+   between the blurb and the "Read more" link, matching the kicker's typographic family. */
+.writing-meta {
+	font-family: var(--jb-font-mono);
+	font-size: 0.75rem;
+	color: var(--jb-text-tertiary);
+}
+
 /* The same arrow-link affordance used for "see the full timeline" (the shared `.link--arrow`
    primitive): a masked horizontal arrow, accent colour, underline on hover, no arrow motion.
    margin-top:auto pins it to the card bottom so cards of unequal title length stay aligned. */

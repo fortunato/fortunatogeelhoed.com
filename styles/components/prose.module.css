@@ -1,0 +1,130 @@
+/* Long-form article body. Scoped under a single .prose wrapper, element selectors only, semantic
+   --jb-* tokens only (so light/dark theming is automatic). Unlayered like every other component
+   module, so it out-specifies the global element rules without !important. The wrapper and the
+   injected HTML must live in the same component (Angular encapsulation parity). */
+
+.prose {
+	max-width: var(--jb-measure);
+	color: var(--jb-text-primary);
+	font-family: var(--jb-font-body);
+	line-height: 1.7;
+
+	/* Flow spacing: every element gets top margin except the first. */
+	& > * + * {
+		margin-block-start: var(--jb-space-md);
+	}
+
+	& h2,
+	& h3,
+	& h4 {
+		font-family: var(--jb-font-body);
+		font-weight: 700;
+		line-height: 1.25;
+		text-wrap: balance;
+	}
+
+	& h2 {
+		margin-block-start: var(--jb-space-xl);
+		font-size: clamp(1.5rem, 3vw, 2rem);
+	}
+
+	& h3 {
+		margin-block-start: var(--jb-space-lg);
+		font-size: 1.25rem;
+	}
+
+	& h4 {
+		margin-block-start: var(--jb-space-lg);
+		font-size: 1.05rem;
+	}
+
+	/* A heading should sit close to the text it introduces. */
+	& :is(h2, h3, h4) + * {
+		margin-block-start: var(--jb-space-sm);
+	}
+
+	& p {
+		text-wrap: pretty;
+	}
+
+	& a {
+		color: var(--jb-accent-text);
+		text-decoration: underline;
+		text-underline-offset: 0.15em;
+		text-decoration-thickness: from-font;
+
+		&:hover {
+			color: var(--jb-accent-hover);
+		}
+	}
+
+	/* The global reset strips list markers; restore them for article prose. */
+	& ul {
+		padding-inline-start: 1.4em;
+		list-style: disc;
+	}
+
+	& ol {
+		padding-inline-start: 1.4em;
+		list-style: decimal;
+	}
+
+	& li + li {
+		margin-block-start: var(--jb-space-xs);
+	}
+
+	& li::marker {
+		color: var(--jb-text-tertiary);
+	}
+
+	& blockquote {
+		margin-inline: 0;
+		padding-inline-start: var(--jb-space-md);
+		border-inline-start: 3px solid var(--jb-accent-soft);
+		color: var(--jb-text-secondary);
+		font-style: italic;
+	}
+
+	& code {
+		font-family: var(--jb-font-mono);
+		font-size: 0.875em;
+		background: var(--jb-accent-soft);
+		color: var(--jb-accent-on-soft);
+		padding: 0.1em 0.35em;
+		border-radius: var(--jb-radius-sm);
+	}
+
+	& pre {
+		overflow-x: auto;
+		padding: var(--jb-space-md);
+		background: var(--jb-bg-secondary);
+		border: 1px solid var(--jb-color-border);
+		border-radius: var(--jb-radius-md);
+
+		& code {
+			background: none;
+			color: inherit;
+			padding: 0;
+			font-size: 0.85rem;
+			line-height: 1.6;
+		}
+	}
+
+	& figure {
+		margin-block: var(--jb-space-lg);
+		margin-inline: 0;
+	}
+
+	& img {
+		max-width: 100%;
+		height: auto;
+		border-radius: var(--jb-radius-md);
+	}
+
+	& figcaption {
+		margin-block-start: var(--jb-space-xs);
+		color: var(--jb-text-tertiary);
+		font-size: 0.85rem;
+		text-align: center;
+	}
+}

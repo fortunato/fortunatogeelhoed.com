@@ -12,6 +12,8 @@ Thumbs.db
 .idea/
 .vscode/
 storybook-static/
+# Generated per-article social images (rebuilt before content on every build)
+static/og/
 .angular/
 test-results/
 playwright-report/

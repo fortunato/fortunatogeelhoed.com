@@ -114,7 +114,7 @@ repo/
 │   ├── vue/          # Vue app (Vue Router, vite-ssg)
 │   ├── angular/      # Angular app (standalone components, AnalogJS)
 │   ├── shared/       # TypeScript types (ContentItem, RouteDefinition)
-│   └── content/      # Gray-matter content parser + markdown pages
+│   └── content/      # Gray-matter content parser, markdown pages and articles
 ├── styles/           # Shared CSS (reset, design tokens, base styles)
 ├── static/fonts/     # Self-hosted variable fonts (Rubik, Space Grotesk, JetBrains Mono)
 ├── scripts/          # Build utilities (CSS hashing)
@@ -160,6 +160,8 @@ Body content here (rendered as text in page components).
 ```
 
 The content library exports `getPage(slug)` and `listByType(type)` — consumed at build time by each framework's SSG process.
+
+Articles live in `packages/content/src/posts/` (one Markdown file per article, with a `tag` and a `date` in the frontmatter). At build time their bodies are rendered to HTML once, surfaced at `/writing` (the index) and `/writing/<slug>` (each article), and the newest ones feed the homepage. See [`docs/writing-area.md`](docs/writing-area.md) for how the pipeline fits together.
 
 ## License
 

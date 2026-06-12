@@ -87,16 +87,16 @@
 	],
 	"writing": [
 		{
-			"tag": "Career",
-			"title": "Specialization Is Overrated",
-			"blurb": "I don't know Python. So I published a library on PyPI.",
-			"href": "/blog"
-		},
-		{
 			"tag": "Build",
 			"title": "Too React",
-			"blurb": "A recruiter told me I was \"too React\" for an Angular role. So I built this site in all three.",
-			"href": "/blog"
+			"blurb": "A recruiter said I was \"too React\" for an Angular role. I might have overreacted a bit as a result, this site is built in React, Vue, and Angular. I believe that senior frontend fundamentals transfer.",
+			"href": "/writing/too-react"
+		},
+		{
+			"tag": "Career",
+			"title": "Specialization Is Overrated",
+			"blurb": "I shipped a Python library to PyPI with almost no prior Python. With AI in the loop, a senior can now get productive in an unfamiliar ecosystem in hours, not months.",
+			"href": "/writing/specialization-is-overrated"
 		}
 	],
 	"cta": {

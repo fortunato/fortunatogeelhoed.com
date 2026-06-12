@@ -1,4 +1,5 @@
-import { buildRobotsTxt, buildSitemap } from '@fg/shared';
+import postsData from '@fg/content-data/posts.json';
+import { articlePathsFromPosts, buildRobotsTxt, buildSitemap } from '@fg/shared';
 import { Scalar } from '@scalar/hono-api-reference';
 import { Hono } from 'hono';
 import { openAPIRouteHandler } from 'hono-openapi';
@@ -171,10 +172,19 @@ app.get('/robots.txt', (c) => {
 	return c.body(buildRobotsTxt());
 });
 
+// The writing index plus every published article, derived from the built content so the sitemap
+// tracks what the site actually serves.
+const writingSitemapPaths = ['/writing', ...articlePathsFromPosts(postsData.published)];
+
 app.get('/sitemap.xml', (c) => {
 	c.header('Content-Type', 'application/xml; charset=utf-8');
-	return c.body(buildSitemap());
+	return c.body(buildSitemap(writingSitemapPaths));
 });
+
+// The writing section used to live under /blog. Preserve any old inbound links with permanent
+// redirects: the bare section and any deeper path map straight onto their /writing equivalents.
+app.get('/blog', (c) => c.redirect('/writing', 301));
+app.get('/blog/:rest{.*}', (c) => c.redirect(`/writing/${c.req.param('rest')}`, 301));
 
 // Browsers, crawlers and link unfurlers fetch /favicon.ico at the root with no markup hint.
 // That path never matches /assets/*, so serve the icon here instead of letting it fall through

@@ -2,9 +2,17 @@
 import { resolve } from 'node:path';
 import vue from '@vitejs/plugin-vue';
 import { defineConfig } from 'vite';
+import postsData from '../../packages/content/posts.json';
+import { articlePathsFromPosts } from '../../packages/shared/src/articles';
 import { cssTargets } from '../../scripts/css-targets';
 import { faroSourcemapMode, faroSourcemaps } from '../../scripts/faro-sourcemaps';
 import { serveCssDev } from '../../scripts/vite-css-dev';
+
+// Dynamic article routes (/writing/:slug) are not reachable by the SSG link crawler from a
+// static path, so enumerate them explicitly for prerender from the published article list.
+const articleRoutes = articlePathsFromPosts(
+	(postsData as { published: { slug: string }[] }).published,
+);
 
 // Function form so the Faro plugin can be skipped on vite-ssg's server pass.
 export default defineConfig(({ isSsrBuild }) => ({
@@ -48,5 +56,8 @@ export default defineConfig(({ isSsrBuild }) => ({
 	ssgOptions: {
 		script: 'async',
 		dirStyle: 'nested',
+		includedRoutes(paths) {
+			return [...paths, ...articleRoutes];
+		},
 	},
 }));

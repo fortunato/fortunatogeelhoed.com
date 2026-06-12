@@ -742,7 +742,7 @@
 				"E-commerce",
 				"Hospitality"
 			],
-			"highlight": "Two clients in parallel: an e-commerce store in .NET and an event-planning site on the Seagull PHP framework",
+			"highlight": "An e-commerce store in .NET and an event-planning site on the Seagull PHP framework",
 			"tech": {
 				"frontend": [
 					"jQuery",

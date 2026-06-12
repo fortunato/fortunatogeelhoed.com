@@ -1,6 +1,7 @@
-export type { ContentMeta, ContentItem } from './types/content';
+export type { ContentMeta, ContentItem, Article } from './types/content';
 export type { RouteDefinition } from './types/routes';
 export { routes } from './types/routes';
+export { WRITING_BASE, articlePath, articlePathsFromPosts } from './articles';
 export type {
 	Lane,
 	EmploymentType,
@@ -33,6 +34,7 @@ export {
 	SITE_URL,
 	SITE_NAME,
 	OG_IMAGE_PATH,
+	OG_DEFAULT_IMAGE_PATH,
 	GITHUB_PROFILE_URL,
 	GITHUB_REPO_URL,
 	LINKEDIN_URL,
@@ -40,9 +42,11 @@ export {
 	isIndexedPath,
 	resolvePageSeo,
 	renderSeoHead,
+	renderArticleSeoHead,
 	buildRobotsTxt,
 	buildSitemap,
 } from './seo';
+export type { ArticleSeoInput } from './seo';
 export type { TechVisual } from './tech';
 export { TECH_REGISTRY, techVisual } from './tech';
 export {

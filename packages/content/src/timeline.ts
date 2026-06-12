@@ -497,7 +497,7 @@ const timeline: TimelineData = {
 			type: 'independent',
 			domains: ['E-commerce', 'Hospitality'],
 			highlight:
-				'Two clients in parallel: an e-commerce store in .NET and an event-planning site on the Seagull PHP framework',
+				'An e-commerce store in .NET and an event-planning site on the Seagull PHP framework',
 			tech: {
 				frontend: ['jQuery', 'JavaScript', 'HTML', 'CSS2'],
 				backend: ['PHP', 'Seagull', 'MySQL', 'ASP.NET', 'SQL Server'],

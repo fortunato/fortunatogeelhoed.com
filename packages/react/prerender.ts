@@ -1,7 +1,16 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import { type ContentItem, renderSeoHead, resolvePageSeo, routes } from '@fg/shared';
+import {
+	type Article,
+	type ContentItem,
+	articlePathsFromPosts,
+	renderArticleSeoHead,
+	renderSeoHead,
+	resolvePageSeo,
+	routes,
+} from '@fg/shared';
 import contentData from '../content/data.json';
+import postsData from '../content/posts.json';
 
 // Anchor in the Vite-built shell that we swap for the per-route SEO head block.
 const TITLE_ANCHOR = '<title>FORTUNATO.GEELHOED</title>';
@@ -46,7 +55,39 @@ async function prerender() {
 		console.log(`  ✓ ${route.path} → ${filePath}`);
 	}
 
-	console.log(`\nPre-rendered ${routes.length} routes to ${distDir}`);
+	// Each published article gets its own static page under /writing/<slug>, with the full
+	// article head (canonical, Open Graph article tags with the per-article image, BlogPosting
+	// JSON-LD). React is the canonical indexed render, so this is where the rich head lives.
+	const published = (postsData as { published: Article[] }).published;
+	const articleBySlug = new Map(published.map((post) => [post.slug, post]));
+
+	for (const path of articlePathsFromPosts(published)) {
+		const slug = path.slice(path.lastIndexOf('/') + 1);
+		const article = articleBySlug.get(slug);
+		const appHtml = await render(path, content);
+		const head = article
+			? renderArticleSeoHead({
+					slug: article.slug,
+					title: article.title,
+					description: article.description ?? '',
+					date: article.date ?? '',
+					ogImage: article.ogImage,
+				})
+			: // An article path with no matching record should not occur (the loop iterates the
+				// published list), but fall back to the route head rather than emit a broken page.
+				renderSeoHead(path, resolvePageSeo(path));
+		const html = template
+			.replace(TITLE_ANCHOR, head)
+			.replace('<div id="app"></div>', `<div id="app">${appHtml}</div>`);
+
+		const filePath = resolve(distDir, `${path.slice(1)}/index.html`);
+		await mkdir(dirname(filePath), { recursive: true });
+		await writeFile(filePath, html);
+		console.log(`  ✓ ${path} → ${filePath}`);
+	}
+
+	const total = routes.length + published.length;
+	console.log(`\nPre-rendered ${total} routes to ${distDir}`);
 }
 
 prerender();

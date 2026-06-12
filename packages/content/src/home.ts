@@ -1,8 +1,9 @@
 import type { HomeContent } from '@fg/shared';
 
-/** Homepage content. Real and factual — sourced from the CV and positioning
- *  material. The writing teaser links to the blog route (a placeholder until
- *  the blog ships). */
+/** Homepage content. Real and factual, sourced from the CV and positioning
+ *  material. The `writing` teasers below are placeholders: the build overrides
+ *  them with the newest published articles (see scripts/build-content.ts), so
+ *  the homepage stays in sync with what is actually published. */
 const home: HomeContent = {
 	hero: {
 		name: 'Fortunato Geelhoed',
@@ -77,16 +78,16 @@ const home: HomeContent = {
 	],
 	writing: [
 		{
-			tag: 'Career',
-			title: 'Specialization Is Overrated',
-			blurb: "I don't know Python. So I published a library on PyPI.",
-			href: '/blog',
-		},
-		{
 			tag: 'Build',
 			title: 'Too React',
 			blurb: 'A recruiter told me I was "too React" for an Angular role. So I built this site in all three.',
-			href: '/blog',
+			href: '/writing/too-react',
+		},
+		{
+			tag: 'Career',
+			title: 'Specialization Is Overrated',
+			blurb: "I don't know Python. So I published a library on PyPI.",
+			href: '/writing/specialization-is-overrated',
 		},
 	],
 	cta: {

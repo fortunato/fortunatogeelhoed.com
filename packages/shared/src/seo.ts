@@ -1,3 +1,5 @@
+import { WRITING_BASE, articlePath } from './articles';
+
 // Canonical, indexed origin. The React build is the only variant a crawler ever sees: a request
 // with no `framework` cookie is served React by default, and the Vue/Angular variants live behind
 // the same URLs (switched only by an explicit cookie), so they are never separately crawled.
@@ -5,13 +7,22 @@ export const SITE_URL = 'https://fortunatogeelhoed.com';
 export const SITE_NAME = 'Fortunato Geelhoed';
 export const OG_IMAGE_PATH = '/assets/images/fortunato.webp';
 
+// The branded identity card used as the site-wide social preview and as the per-article fallback,
+// so every shared link reads as one set. It is the generated default card, not a photo: schema.org
+// Person.image (below) intentionally stays OG_IMAGE_PATH, which must be a portrait of the person.
+export const OG_DEFAULT_IMAGE_PATH = '/assets/og/default.png';
+
 // The pages worth surfacing to search engines. The remaining scaffolded routes
 // (/services, /work, /blog) are deferred placeholders, so they are kept out of the sitemap
 // and marked noindex rather than competing for crawl budget with thin content.
 export const INDEXED_PATHS = ['/', '/about', '/career', '/contact'];
 
+// The writing section and every article under it are indexed: the section index at /writing and
+// each /writing/<slug>. They are not in INDEXED_PATHS because that list also drives the static
+// sitemap of fixed routes, whereas the article set is data-driven (it grows with posts.json).
 export function isIndexedPath(path: string): boolean {
-	return INDEXED_PATHS.includes(path);
+	if (INDEXED_PATHS.includes(path)) return true;
+	return path === WRITING_BASE || path.startsWith(`${WRITING_BASE}/`);
 }
 
 export const GITHUB_PROFILE_URL = 'https://github.com/fortunato';
@@ -48,6 +59,11 @@ const SEO_BY_PATH: Record<string, PageSeo> = {
 		title: 'Contact | Hire Fortunato Geelhoed, Freelance TypeScript Developer',
 		description:
 			'Get in touch to work with a freelance senior full-stack and TypeScript engineer (React, Vue, Angular), available remotely from the Costa Blanca, Spain.',
+	},
+	'/writing': {
+		title: 'Writing | Fortunato Geelhoed on Frontend, TypeScript, and Engineering',
+		description:
+			'Essays on frontend architecture, TypeScript, and what actually transfers between React, Vue, and Angular, from a freelance senior engineer on the Costa Blanca, Spain.',
 	},
 };
 
@@ -127,7 +143,7 @@ export function renderSeoHead(path: string, seo: PageSeo): string {
 	}
 
 	const canonical = `${SITE_URL}${path === '/' ? '/' : path}`;
-	const image = `${SITE_URL}${OG_IMAGE_PATH}`;
+	const image = `${SITE_URL}${OG_DEFAULT_IMAGE_PATH}`;
 	// Guard the JSON-LD against premature </script> termination.
 	const jsonLd = JSON.stringify(PERSON_JSONLD).replace(/</g, '\\u003c');
 
@@ -149,16 +165,79 @@ export function renderSeoHead(path: string, seo: PageSeo): string {
 	].join('\n\t');
 }
 
+export interface ArticleSeoInput {
+	slug: string;
+	title: string;
+	description: string;
+	/** Publish date as an ISO calendar date (YYYY-MM-DD). */
+	date: string;
+	/** Site-relative path to the social image (e.g. /assets/og/<slug>.png). */
+	ogImage: string;
+}
+
+/** The full <head> SEO block for a single article: title, description, canonical, Open Graph
+ *  (article type, with the per-article image), Twitter card, and a BlogPosting JSON-LD whose
+ *  author points at the same Person described site-wide. Returned as an HTML string for the
+ *  prerender step to inject in place of the shell's title anchor. */
+export function renderArticleSeoHead(input: ArticleSeoInput): string {
+	const title = escapeHtml(input.title);
+	const description = escapeHtml(input.description);
+	const canonical = `${SITE_URL}${articlePath(input.slug)}`;
+	const image = `${SITE_URL}${input.ogImage}`;
+
+	const blogPosting = {
+		'@context': 'https://schema.org',
+		'@type': 'BlogPosting',
+		headline: input.title,
+		description: input.description,
+		datePublished: input.date,
+		image,
+		author: PERSON_JSONLD,
+		publisher: PERSON_JSONLD,
+		mainEntityOfPage: canonical,
+	};
+	// Guard the JSON-LD against premature </script> termination.
+	const jsonLd = JSON.stringify(blogPosting).replace(/</g, '\\u003c');
+
+	return [
+		`<title>${title}</title>`,
+		`<meta name="description" content="${description}">`,
+		`<link rel="canonical" href="${canonical}">`,
+		`<meta property="og:type" content="article">`,
+		`<meta property="og:site_name" content="${escapeHtml(SITE_NAME)}">`,
+		`<meta property="og:title" content="${title}">`,
+		`<meta property="og:description" content="${description}">`,
+		`<meta property="og:url" content="${canonical}">`,
+		`<meta property="og:image" content="${escapeHtml(image)}">`,
+		`<meta name="twitter:card" content="summary_large_image">`,
+		`<meta name="twitter:title" content="${title}">`,
+		`<meta name="twitter:description" content="${description}">`,
+		`<meta name="twitter:image" content="${escapeHtml(image)}">`,
+		`<script type="application/ld+json">${jsonLd}</script>`,
+	].join('\n\t');
+}
+
 /** robots.txt allowing indexing and pointing crawlers at the sitemap. */
 export function buildRobotsTxt(): string {
 	return `User-agent: *\nAllow: /\nSitemap: ${SITE_URL}/sitemap.xml\n`;
 }
 
-/** sitemap.xml of the indexed routes, as absolute canonical URLs. */
-export function buildSitemap(): string {
-	const urls = INDEXED_PATHS.map((path) => {
-		const loc = `${SITE_URL}${path === '/' ? '/' : path}`;
-		return `\t<url><loc>${loc}</loc></url>`;
-	}).join('\n');
+/** sitemap.xml of the indexed routes as absolute canonical URLs. `extraPaths` (e.g. the writing
+ *  index and each published article) are appended after the fixed routes, deduplicated. Kept free
+ *  of any content import: the caller that holds the published list passes the paths in. */
+export function buildSitemap(extraPaths: string[] = []): string {
+	const paths = [...INDEXED_PATHS, ...extraPaths];
+	const seen = new Set<string>();
+	const urls = paths
+		.filter((path) => {
+			if (seen.has(path)) return false;
+			seen.add(path);
+			return true;
+		})
+		.map((path) => {
+			const loc = `${SITE_URL}${path === '/' ? '/' : path}`;
+			return `\t<url><loc>${loc}</loc></url>`;
+		})
+		.join('\n');
 	return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }

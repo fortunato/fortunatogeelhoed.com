@@ -18,8 +18,12 @@ export const routes: Routes = [
 		loadComponent: () => import('./pages/work.component').then((m) => m.WorkComponent),
 	},
 	{
-		path: 'blog',
-		loadComponent: () => import('./pages/blog.component').then((m) => m.BlogComponent),
+		path: 'writing',
+		loadComponent: () => import('./pages/writing.component').then((m) => m.WritingComponent),
+	},
+	{
+		path: 'writing/:slug',
+		loadComponent: () => import('./pages/article.component').then((m) => m.ArticleComponent),
 	},
 	{
 		path: 'career',

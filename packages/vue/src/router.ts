@@ -3,7 +3,8 @@ export const routes = [
 	{ path: '/about', name: 'About', component: () => import('./pages/About.vue') },
 	{ path: '/services', name: 'Services', component: () => import('./pages/Services.vue') },
 	{ path: '/work', name: 'Work', component: () => import('./pages/Work.vue') },
-	{ path: '/blog', name: 'Blog', component: () => import('./pages/Blog.vue') },
+	{ path: '/writing', name: 'Writing', component: () => import('./pages/Writing.vue') },
+	{ path: '/writing/:slug', name: 'Article', component: () => import('./pages/Article.vue') },
 	{ path: '/career', name: 'Timeline', component: () => import('./pages/Timeline.vue') },
 	{ path: '/contact', name: 'Contact', component: () => import('./pages/Contact.vue') },
 ];

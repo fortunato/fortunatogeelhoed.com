@@ -27,12 +27,12 @@
 		"description": "Selected projects demonstrating expertise in modern web development.",
 		"body": "A curated collection of projects showcasing frontend architecture, performance engineering, and full-stack development."
 	},
-	"blog": {
-		"title": "Blog",
-		"slug": "blog",
+	"writing": {
+		"title": "Writing",
+		"slug": "writing",
 		"type": "page",
-		"description": "Writing about TypeScript, frontend architecture, and web performance.",
-		"body": "Thoughts on frontend engineering, TypeScript patterns, and building for the modern web."
+		"description": "Writing about TypeScript, frontend architecture, AI-augmented engineering, and building for the modern web.",
+		"body": "Notes on frontend engineering, TypeScript, AI-augmented development, and the craft that carries across whichever framework is in fashion."
 	},
 	"contact": {
 		"title": "What are you building or fixing?",

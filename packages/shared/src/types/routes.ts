@@ -10,7 +10,7 @@ export const routes: RouteDefinition[] = [
 	{ path: '/about', name: 'About', contentSlug: 'about', contentType: 'page' },
 	{ path: '/services', name: 'Services', contentSlug: 'services', contentType: 'page' },
 	{ path: '/work', name: 'Work', contentSlug: 'work', contentType: 'page' },
-	{ path: '/blog', name: 'Blog', contentSlug: 'blog', contentType: 'page' },
+	{ path: '/writing', name: 'Writing', contentSlug: 'writing', contentType: 'page' },
 	{ path: '/contact', name: 'Contact', contentSlug: 'contact', contentType: 'page' },
 	{ path: '/career', name: 'Timeline' },
 ];
