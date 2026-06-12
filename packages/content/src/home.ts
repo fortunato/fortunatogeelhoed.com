@@ -49,7 +49,7 @@ const home: HomeContent = {
 		{
 			title: 'Work it out before building it',
 			description:
-				'I figure out how the parts fit together first, so the design holds when the requirements move.',
+				'Ask the right questions early. Get the requirements straight, understand what people actually need, and save yourself the rework later.',
 		},
 		{
 			title: 'Leave the team stronger',
