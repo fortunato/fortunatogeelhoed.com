@@ -48,6 +48,22 @@ const COMPONENTS = [
 		mask: [] as string[],
 		reducedMotion: true,
 	},
+	{
+		name: 'Writing',
+		story: 'writing',
+		baseline: 'writing.png',
+		locator: '#storybook-root',
+		mask: [] as string[],
+		reducedMotion: true,
+	},
+	{
+		name: 'Article',
+		story: 'article',
+		baseline: 'article.png',
+		locator: '#storybook-root',
+		mask: [] as string[],
+		reducedMotion: true,
+	},
 ];
 
 for (const component of COMPONENTS) {

@@ -1,7 +1,15 @@
 import { setTimeout as sleep } from 'node:timers/promises';
+import { articlePathsFromPosts } from '@fg/shared';
 import { routes } from '@fg/shared/types/routes';
 import { getViolations, injectAxe } from 'axe-playwright';
 import { chromium } from 'playwright';
+import postsData from '../packages/content/posts.json';
+
+// Every page a visitor can reach: the static routes plus one detail page per published article.
+const scanPaths = [
+	...routes.map((route) => route.path),
+	...articlePathsFromPosts((postsData as { published: { slug: string }[] }).published),
+];
 
 // Live-site accessibility gate. Boots the production server over the built output and, for
 // each framework variant, drives the real cookie-routing path to every route and runs axe
@@ -50,24 +58,22 @@ async function main() {
 			const context = await browser.newContext({ reducedMotion: 'reduce' });
 			await context.addCookies([{ name: 'framework', value: framework, url: ORIGIN }]);
 			const page = await context.newPage();
-			for (const route of routes) {
-				await page.goto(`${ORIGIN}${route.path}`, { waitUntil: 'networkidle' });
+			for (const path of scanPaths) {
+				await page.goto(`${ORIGIN}${path}`, { waitUntil: 'networkidle' });
 				await injectAxe(page);
 				const violations = await getViolations(page, undefined, {
 					runOnly: { type: 'tag', values: AXE_TAGS },
 				});
 				if (violations.length > 0) {
 					failures += violations.length;
-					console.error(
-						`\n✗ ${framework} ${route.path} — ${violations.length} violation(s):`,
-					);
+					console.error(`\n✗ ${framework} ${path} — ${violations.length} violation(s):`);
 					for (const v of violations) {
 						console.error(
 							`    [${v.impact}] ${v.id}: ${v.help} (${v.nodes.length} node(s))`,
 						);
 					}
 				} else {
-					console.log(`✓ ${framework} ${route.path}`);
+					console.log(`✓ ${framework} ${path}`);
 				}
 			}
 			await context.close();
@@ -84,7 +90,7 @@ async function main() {
 		process.exit(1);
 	}
 	console.log(
-		`\nNo WCAG 2.1 AA / best-practice violations across ${routes.length} routes × ${FRAMEWORKS.length} variants.`,
+		`\nNo WCAG 2.1 AA / best-practice violations across ${scanPaths.length} paths × ${FRAMEWORKS.length} variants.`,
 	);
 }
 

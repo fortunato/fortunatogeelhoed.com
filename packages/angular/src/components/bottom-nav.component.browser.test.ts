@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { type Route, provideRouter } from '@angular/router';
+import { NAV_ITEMS } from '@fg/shared';
 import { registerElements } from '@fg/shared/elements';
 import { render, screen } from '@testing-library/angular';
 import { beforeAll, describe, expect, it } from 'vitest';
@@ -12,23 +13,18 @@ beforeAll(() => registerElements());
 @Component({ standalone: true, template: '' })
 class BlankComponent {}
 
-const ROUTES = [
-	{ path: '', component: BlankComponent },
-	{ path: 'career', component: BlankComponent },
-	{ path: 'contact', component: BlankComponent },
-];
-
-const DESTINATIONS: [string, string][] = [
-	['Home', '/'],
-	['Career', '/career'],
-	['Contact', '/contact'],
-];
+const ROUTES: Route[] = NAV_ITEMS.map((item) => ({
+	path: item.path === '/' ? '' : item.path.replace(/^\//, ''),
+	component: BlankComponent,
+}));
 
 describe('BottomNavComponent (Angular)', () => {
-	it('exposes the three primary destinations', async () => {
+	it('exposes every primary destination', async () => {
 		await render(BottomNavComponent, { providers: [provideRouter(ROUTES)] });
-		for (const [label, path] of DESTINATIONS) {
-			expect(screen.getByRole('link', { name: label }).getAttribute('href')).toBe(path);
+		for (const item of NAV_ITEMS) {
+			expect(screen.getByRole('link', { name: item.label }).getAttribute('href')).toBe(
+				item.path,
+			);
 		}
 	});
 

@@ -1,3 +1,4 @@
+import { NAV_ITEMS } from '@fg/shared';
 import { registerElements } from '@fg/shared/elements';
 import { cleanup, render, screen } from '@testing-library/vue';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
@@ -12,11 +13,7 @@ afterEach(cleanup);
 const blank = { template: '<div />' };
 const router = createRouter({
 	history: createMemoryHistory(),
-	routes: [
-		{ path: '/', component: blank },
-		{ path: '/career', component: blank },
-		{ path: '/contact', component: blank },
-	],
+	routes: NAV_ITEMS.map((item) => ({ path: item.path, component: blank })),
 });
 
 async function renderNav(path = '/') {
@@ -25,17 +22,13 @@ async function renderNav(path = '/') {
 	return render(BottomNav, { global: { plugins: [router] } });
 }
 
-const DESTINATIONS: [string, string][] = [
-	['Home', '/'],
-	['Career', '/career'],
-	['Contact', '/contact'],
-];
-
 describe('BottomNav (Vue)', () => {
-	it('exposes the three primary destinations', async () => {
+	it('exposes every primary destination', async () => {
 		await renderNav();
-		for (const [label, path] of DESTINATIONS) {
-			expect(screen.getByRole('link', { name: label }).getAttribute('href')).toBe(path);
+		for (const item of NAV_ITEMS) {
+			expect(screen.getByRole('link', { name: item.label }).getAttribute('href')).toBe(
+				item.path,
+			);
 		}
 	});
 

@@ -1,3 +1,4 @@
+import { NAV_ITEMS } from '@fg/shared';
 import { registerElements } from '@fg/shared/elements';
 import { cleanup, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
@@ -9,21 +10,17 @@ import { BottomNav } from './BottomNav';
 beforeAll(() => registerElements());
 afterEach(cleanup);
 
-const DESTINATIONS: [string, string][] = [
-	['Home', '/'],
-	['Career', '/career'],
-	['Contact', '/contact'],
-];
-
 describe('BottomNav (React)', () => {
-	it('exposes the three primary destinations', () => {
+	it('exposes every primary destination', () => {
 		render(
 			<MemoryRouter>
 				<BottomNav />
 			</MemoryRouter>,
 		);
-		for (const [label, path] of DESTINATIONS) {
-			expect(screen.getByRole('link', { name: label }).getAttribute('href')).toBe(path);
+		for (const item of NAV_ITEMS) {
+			expect(screen.getByRole('link', { name: item.label }).getAttribute('href')).toBe(
+				item.path,
+			);
 		}
 	});
 
