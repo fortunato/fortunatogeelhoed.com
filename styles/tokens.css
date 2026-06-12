@@ -69,6 +69,10 @@
 
 		/* Status (theme-independent) */
 		--jb-color-danger: var(--jb-color-danger-500);
+		/* Danger used as plain text (validation errors). The vivid danger red clears AA on the
+		   dark surfaces but only reaches ~3.8:1 as small text on the near-white light surfaces,
+		   so the light theme darkens it below. Borders/accents keep the vivid --jb-color-danger. */
+		--jb-danger-text: var(--jb-color-danger);
 
 		/* Typography */
 		--jb-font-display: "Rubik", sans-serif;
@@ -186,6 +190,9 @@
 		--jb-color-border: var(--jb-color-neutral-200);
 		/* Darken accent-on-soft so small tech-tag (.tag--tech) text clears AA on the pale soft tint. */
 		--jb-accent-on-soft: color-mix(in srgb, var(--jb-accent) 80%, black);
+		/* Darken danger text so small validation-error copy clears AA on the near-white page and
+		   card surfaces (the vivid red only reaches ~3.8:1 here). */
+		--jb-danger-text: color-mix(in srgb, var(--jb-color-danger) 80%, black);
 		/* Darken accent text so links/labels clear AA on the secondary surface. */
 		--jb-accent-text: color-mix(in srgb, var(--jb-accent) 82%, black);
 		/* Timeline entry-type text inks darkened for AA: the vivid identity colours only reach

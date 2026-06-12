@@ -407,7 +407,7 @@
 	}
 
 	.field-error {
-		color: var(--jb-color-danger);
+		color: var(--jb-danger-text);
 		font-size: 0.85rem;
 	}
 
@@ -420,7 +420,7 @@
 	/* Shown when a valid submission could not be delivered (a 502 or network failure). */
 	.contact-error {
 		margin-top: var(--jb-space-sm);
-		color: var(--jb-color-danger);
+		color: var(--jb-danger-text);
 		font-weight: 600;
 	}
 
