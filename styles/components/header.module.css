@@ -18,6 +18,11 @@
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	/* A floor gap between the logo and the right cluster: justify-content alone can collapse to a
+	   negative gap once the cluster is wide (five nav items + switcher + two icon buttons), letting
+	   them overlap. Pairing this with flex-shrink: 0 on both children guarantees they always keep at
+	   least this much air between them at every viewport width. */
+	gap: var(--jb-space-md);
 	/* Mobile-first: the smallest phone is the baseline; padding and the cluster open up at the
 	   tiers below. */
 	padding: 0 var(--jb-space-sm);
@@ -33,6 +38,9 @@
 	text-decoration: none;
 	user-select: none;
 	text-transform: uppercase;
+	/* Never let the wordmark wrap or get crushed by the right cluster. */
+	flex-shrink: 0;
+	white-space: nowrap;
 }
 
 .dot {
@@ -44,6 +52,10 @@
 	display: flex;
 	align-items: center;
 	gap: 0;
+	/* The cluster holds its intrinsic width — shrinking it would crush the switcher buttons and
+	   overlap the logo. The wide-tier nav only appears once there is genuinely room for it (see the
+	   breakpoint below, kept in lockstep with bottom-nav.module.css). */
+	flex-shrink: 0;
 }
 
 .sep {
@@ -60,7 +72,9 @@
 	   top-bar nav appears at the wide tier below (in step with bottom-nav.module.css). */
 	display: none;
 	align-items: center;
-	gap: var(--jb-space-lg);
+	/* Tighter than the page's --jb-space-lg rhythm: with five items the larger gap pushed the
+	   cluster wide enough to crowd the logo. md keeps the links legible while reclaiming room. */
+	gap: var(--jb-space-md);
 
 	& a {
 		font-size: 0.7rem;
@@ -102,8 +116,8 @@
 }
 
 .switcher-label {
-	/* The "Built with" label only fits once the top-bar nav is shown; hidden in the
-	   mobile cluster so the logo and switcher don't crowd each other. */
+	/* Hidden only at the narrowest widths, where the header cluster genuinely cannot fit it;
+	   it reappears at its own lower breakpoint (see below), decoupled from the 1080px nav tier. */
 	display: none;
 	font-family: var(--jb-font-mono);
 	font-size: 0.65rem;
@@ -198,20 +212,38 @@
 	}
 }
 
+/* "Built with" label tier — decoupled from the 1080px nav breakpoint. Below 1080 the primary
+   nav is the bottom tab bar, so the header's right side is just logo + switcher + GitHub + theme
+   toggle, with room for the label far below 1080. Measuring that below-1080 cluster (real header
+   DOM, real fonts, nav hidden) the logo + "Built with" label + switcher buttons + the two icon
+   buttons first fit inside the bar's padding above the --jb-space-md floor gap at ~538px. 560px
+   sits just above that with a comfortable ~22px margin, so the label is shown wherever it
+   reasonably fits and dropped only at the genuinely width-constrained widths below it. */
+@media (width >= 560px) {
+	.switcher-label {
+		display: inline;
+	}
+}
+
 /* Wide viewports: the top-bar nav takes over primary navigation (the bottom tab bar hides at
-   this same width — see bottom-nav.module.css), so the nav, the separator and the "Built with"
-   label appear and the switcher relaxes to its full size. */
-@media (width >= 1025px) {
+   this same width — see bottom-nav.module.css), so the nav and the separator appear and the
+   switcher relaxes to its full size. The "Built with" label is decoupled and appears at its own
+   lower breakpoint above.
+
+   Breakpoint is 1080px: measuring the real header DOM (logo + five-item nav + separator + the
+   "Built with" switcher + GitHub and theme-toggle icon buttons) with the actual fonts, the wide
+   cluster and the logo first fit inside the bar's padding with a gap at or above the --jb-space-md
+   floor at ~1030px. 1080px sits just above that, keeping a comfortable ~65px gap at the switch
+   while not dropping to the bottom tab bar a moment before the top nav genuinely fits. Below this
+   the bottom tab bar is the primary nav, so there is never a width where neither nav shows. Must
+   stay in lockstep with bottom-nav.module.css. */
+@media (width >= 1080px) {
 	.nav {
 		display: flex;
 	}
 
 	.sep {
 		display: block;
-	}
-
-	.switcher-label {
-		display: inline;
 	}
 
 	.switcher-buttons {
