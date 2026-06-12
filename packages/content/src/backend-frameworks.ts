@@ -11,7 +11,7 @@ const backendFrameworks: FrameworkExposureSpan[] = [
 	{ framework: 'Wordpress', startYear: 2008, endYear: 2015, intensity: 'occasional' },
 	{ framework: 'SnappCMS', startYear: 2010, endYear: 2012, intensity: 'occasional' },
 	{ framework: 'Kohana', startYear: 2012, endYear: 2013, intensity: 'occasional' },
-	{ framework: 'Sitecore', startYear: 2013, endYear: 2017, intensity: 'professional' },
+	{ framework: 'Sitecore', startYear: 2013, endYear: 2017, intensity: 'occasional' },
 	{ framework: 'AEM', startYear: 2013, endYear: 2017, intensity: 'occasional' },
 	{ framework: 'Magento 2', startYear: 2016, endYear: 2019, intensity: 'occasional' },
 	{ framework: 'Express', startYear: 2016, endYear: 'present', intensity: 'professional' },
