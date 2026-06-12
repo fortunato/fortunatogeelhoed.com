@@ -48,6 +48,25 @@ jobs:
       - name: Component tests
         run: bun run test:component
 
+  # Coverage report: runs the logic projects plus the shared web components in one instrumented pass
+  # so Vitest merges node, jsdom, and real-browser coverage into a single lcov for Codecov. Needs the
+  # browser (the components only run there), which is why it is separate from the fast unit job.
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          playwright: 'true'
+      - name: Tests with coverage
+        run: bun run test:coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          fail_ci_if_error: false
+
   # Built-site tier: accessibility and end-to-end run against one site build. Pinned to Linux so
   # committed visual baselines match.
   site:
@@ -84,7 +103,7 @@ jobs:
   # renaming or adding a job never silently drops it from the required set.
   ci-success:
     if: always()
-    needs: [static, unit, component, site, showcase]
+    needs: [static, unit, coverage, component, site, showcase]
     runs-on: ubuntu-latest
     steps:
       - name: Verify all jobs passed

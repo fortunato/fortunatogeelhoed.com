@@ -34,6 +34,7 @@
 		"serve-storybook": "PORT=6006 bun run scripts/serve-storybook-static.ts",
 		"test": "bun run test:unit && bun run test:component && bun run test:a11y && bun run test:e2e && bun run test:visual && bun run test:storybook",
 		"test:unit": "vitest run --project node --project dom",
+		"test:coverage": "vitest run --project node --project dom --project browser-shared --coverage",
 		"test:component": "vitest run --project browser-shared --project browser-react --project browser-vue --project browser-angular",
 		"test:a11y": "bun run scripts/a11y-scan.ts",
 		"test:e2e": "playwright test --config tests/e2e/playwright.config.ts",

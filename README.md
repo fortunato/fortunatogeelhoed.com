@@ -1,5 +1,27 @@
 # fortunatogeelhoed.com
 
+<!-- Live / earned -->
+[![CI](https://img.shields.io/github/actions/workflow/status/fortunato/fortunatogeelhoed.com/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI)](https://github.com/fortunato/fortunatogeelhoed.com/actions/workflows/ci.yml)
+[![Coverage](https://img.shields.io/codecov/c/github/fortunato/fortunatogeelhoed.com?style=for-the-badge&logo=codecov&logoColor=white)](https://codecov.io/gh/fortunato/fortunatogeelhoed.com)
+[![Storybook](https://img.shields.io/badge/Storybook-live-FF4785?style=for-the-badge&logo=storybook&logoColor=white)](https://components.fortunatogeelhoed.com)
+[![License: MIT](https://img.shields.io/github/license/fortunato/fortunatogeelhoed.com?style=for-the-badge&color=blue)](./LICENSE)
+
+<!-- Stack -->
+![React 19](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Vue 3.5](https://img.shields.io/badge/Vue-3.5-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white)
+![Angular 21](https://img.shields.io/badge/Angular-21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![Bun](https://img.shields.io/badge/Bun-1.3-000000?style=for-the-badge&logo=bun&logoColor=white)
+![Nx](https://img.shields.io/badge/Nx-monorepo-143055?style=for-the-badge&logo=nx&logoColor=white)
+![Hono](https://img.shields.io/badge/Hono-4.7-E36002?style=for-the-badge&logo=hono&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-6-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+
+<!-- Quality -->
+![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![code style: biome](https://img.shields.io/badge/code_style-biome-60A5FA?style=for-the-badge&logo=biome&logoColor=white)
+![WCAG 2.1 AA](https://img.shields.io/badge/WCAG_2.1-AA-2EAD33?style=for-the-badge)
+![Vitest](https://img.shields.io/badge/tested_with-Vitest-6E9F18?style=for-the-badge&logo=vitest&logoColor=white)
+![Playwright](https://img.shields.io/badge/e2e-Playwright-2EAD33?style=for-the-badge&logo=playwright&logoColor=white)
+
 A portfolio site built three times — in React, Vue, and Angular — served from a single Bun/Hono backend. The same content, the same design, three different framework implementations.
 
 ## Architecture

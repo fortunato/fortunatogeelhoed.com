@@ -2,7 +2,7 @@ import { resolve } from 'node:path';
 import angular from '@analogjs/vite-plugin-angular';
 import react from '@vitejs/plugin-react';
 import vue from '@vitejs/plugin-vue';
-import { defineConfig } from 'vitest/config';
+import { coverageConfigDefaults, defineConfig } from 'vitest/config';
 
 // One runner, several projects — tests live where the behaviour lives:
 //   node    → browser-independent pure logic (fast, no DOM)
@@ -101,13 +101,21 @@ export default defineConfig({
 		],
 		coverage: {
 			provider: 'v8',
-			reporter: ['text', 'html'],
+			reporter: ['text', 'html', 'lcov'],
+			// Scope coverage to code that unit tests actually exercise: the logic packages,
+			// plus the two build scripts that have their own tests. The remaining build
+			// scripts are integration tooling, not unit-tested, so counting them would
+			// report a misleadingly low number for the genuinely covered code.
 			include: [
 				'packages/shared/src/**/*.ts',
 				'packages/content/src/**/*.ts',
 				'packages/api/src/**/*.ts',
-				'scripts/**/*.ts',
+				'scripts/css-targets.ts',
+				'scripts/rewrite-asset-urls.ts',
 			],
+			// Storybook stories are showcase artifacts covered by the per-story Storybook checks,
+			// not the unit run — keep the built-in excludes (test files, etc.) and drop stories too.
+			exclude: [...coverageConfigDefaults.exclude, '**/*.stories.ts'],
 		},
 	},
 });
