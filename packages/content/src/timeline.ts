@@ -29,7 +29,7 @@ const timeline: TimelineData = {
 			type: 'independent',
 			domains: ['Developer Tooling'],
 			links: [
-				{ label: 'Read the write-up', href: '/blog' },
+				{ label: 'Read the write-up', href: '/writing/too-react' },
 				{
 					label: 'GitHub',
 					href: 'https://github.com/fortunato/fortunatogeelhoed.com',
@@ -101,7 +101,7 @@ const timeline: TimelineData = {
 			type: 'side-project',
 			domains: ['Fintech & Trading', 'Developer Tooling'],
 			links: [
-				{ label: 'Read the write-up', href: '/blog' },
+				{ label: 'Read the write-up', href: '/writing/specialization-is-overrated' },
 				{
 					label: 'GitHub',
 					href: 'https://github.com/fortunato/pymarket-structure',
@@ -484,6 +484,24 @@ const timeline: TimelineData = {
 				frontend: ['jQuery', 'JavaScript', 'CSS3'],
 				backend: ['PHP', 'MySQL', 'i18n'],
 				cicd: ['Capistrano'],
+			},
+		},
+		{
+			id: 'freelance-2007',
+			era: ERAS.brisbane,
+			years: '2007–09',
+			startYear: 2007,
+			endYear: 2009,
+			client: 'Freelance',
+			role: 'Web Developer',
+			type: 'independent',
+			domains: ['E-commerce', 'Hospitality'],
+			highlight:
+				'Two clients in parallel: an e-commerce store in .NET and an event-planning site on the Seagull PHP framework',
+			tech: {
+				frontend: ['jQuery', 'JavaScript', 'HTML', 'CSS2'],
+				backend: ['PHP', 'Seagull', 'MySQL', 'ASP.NET', 'SQL Server'],
+				cicd: ['SFTP'],
 			},
 		},
 		{
