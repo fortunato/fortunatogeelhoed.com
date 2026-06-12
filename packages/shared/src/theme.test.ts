@@ -12,8 +12,8 @@ afterEach(() => {
 });
 
 describe('theme persistence', () => {
-	it('defaults to dark when no theme attribute is set', () => {
-		expect(getCurrentTheme()).toBe('dark');
+	it('defaults to light when no theme attribute is set', () => {
+		expect(getCurrentTheme()).toBe('light');
 	});
 
 	it('reflects and persists a theme across attribute, cookie, and storage', () => {

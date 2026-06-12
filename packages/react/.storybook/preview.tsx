@@ -9,7 +9,7 @@ import {
 const preview: Preview = {
 	parameters: sharedParameters,
 	globalTypes: themeGlobalTypes,
-	initialGlobals: { theme: 'dark' },
+	initialGlobals: { theme: 'light' },
 	decorators: [
 		(Story, ctx) => {
 			applyTheme(ctx.globals.theme);

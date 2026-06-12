@@ -14,7 +14,7 @@ const preview: Preview = {
 		options: { storySort: { order: ['Web Components', 'React', 'Vue', 'Angular'] } },
 	},
 	globalTypes: themeGlobalTypes,
-	initialGlobals: { theme: 'dark' },
+	initialGlobals: { theme: 'light' },
 	decorators: [
 		(story, ctx) => {
 			applyTheme(ctx.globals.theme);

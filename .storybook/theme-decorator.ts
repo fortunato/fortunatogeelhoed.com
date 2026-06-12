@@ -13,7 +13,7 @@ export type FrameworkAccent = 'react' | 'vue' | 'angular' | 'neutral';
 export const themeGlobalTypes = {
 	theme: {
 		description: 'Color theme',
-		defaultValue: 'dark',
+		defaultValue: 'light',
 		toolbar: {
 			title: 'Theme',
 			items: [
@@ -27,7 +27,7 @@ export const themeGlobalTypes = {
 
 /** Apply the selected theme exactly as the live site does (attribute + cookie + storage). */
 export function applyTheme(theme: string | undefined): void {
-	setTheme(theme === 'light' ? 'light' : 'dark');
+	setTheme(theme === 'dark' ? 'dark' : 'light');
 }
 
 /**

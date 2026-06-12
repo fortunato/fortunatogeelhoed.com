@@ -8,9 +8,9 @@ const COOKIE = 'theme';
 const STORAGE_KEY = 'theme';
 const MAX_AGE = 60 * 60 * 24 * 365; // 1 year, mirrors the `framework` cookie
 
-/** Current theme as reflected on <html data-theme>. Defaults to dark. */
+/** Current theme as reflected on <html data-theme>. Defaults to light. */
 export function getCurrentTheme(): Theme {
-	return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+	return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
 }
 
 /** Apply a theme everywhere it must persist: attribute (paint), cookie (server), localStorage. */

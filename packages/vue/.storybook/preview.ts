@@ -20,7 +20,7 @@ setup((app) => {
 const preview: Preview = {
 	parameters: sharedParameters,
 	globalTypes: themeGlobalTypes,
-	initialGlobals: { theme: 'dark' },
+	initialGlobals: { theme: 'light' },
 	decorators: [
 		(story, ctx) => {
 			applyTheme(ctx.globals.theme);

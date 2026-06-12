@@ -21,8 +21,8 @@ describe('renderShell', () => {
 		expect(html).toContain('data-theme="light"');
 	});
 
-	it('defaults the theme to dark', () => {
-		expect(renderShell({ framework: 'react' })).toContain('data-theme="dark"');
+	it('defaults the theme to light', () => {
+		expect(renderShell({ framework: 'react' })).toContain('data-theme="light"');
 	});
 
 	it('uses the default title when none is given, and the supplied one otherwise', () => {

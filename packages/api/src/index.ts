@@ -210,7 +210,7 @@ if (isDev) {
 			return c.html(
 				renderShell({
 					framework,
-					theme: getCookie(c, 'theme') === 'light' ? 'light' : 'dark',
+					theme: getCookie(c, 'theme') === 'dark' ? 'dark' : 'light',
 					bodyHtml: `<div style="padding:4rem;text-align:center;color:var(--jb-text-secondary)">
 					<h1 style="font-family:var(--jb-font-display);margin-bottom:1rem">${framework}</h1>
 					<p>Dev server not running on port ${port}.</p>
@@ -224,7 +224,7 @@ if (isDev) {
 	// Production: serve pre-rendered static HTML from dist/
 	app.get('*', async (c) => {
 		const framework = c.get('framework');
-		const theme = getCookie(c, 'theme') === 'light' ? 'light' : 'dark';
+		const theme = getCookie(c, 'theme') === 'dark' ? 'dark' : 'light';
 		const path = c.req.path === '/' ? '/index.html' : `${c.req.path}/index.html`;
 		const filePath = `./dist/${framework}${path}`;
 

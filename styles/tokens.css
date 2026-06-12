@@ -139,7 +139,7 @@
 		initial-value: #e86a1a;
 	}
 
-	/* Theme: dark (default) */
+	/* Theme: dark */
 	[data-theme="dark"] {
 		color-scheme: dark;
 		--jb-bg-primary: var(--jb-color-neutral-950);
