@@ -249,6 +249,24 @@
 		   only reach ~1.9–2.3:1 as text here); match the timeline's light-theme inks. */
 		--jb-accent-2-text: #1b649f;
 		--jb-accent-3-text: #6f5300;
+		/* Light mode keeps the neutral surface, so without this the hero shows almost none of the
+		   palette. A soft wash of the vivid blue/orange/yellow tints the near-white hero so the
+		   colour carries in light too — same hues as the dark glow, tuned for the lighter ground. */
+		--jb-hero-glow: radial-gradient(
+				42rem 32rem at 78% 22%,
+				color-mix(in srgb, var(--jb-accent-2) 18%, transparent),
+				transparent 70%
+			),
+			radial-gradient(
+				38rem 30rem at 12% 82%,
+				color-mix(in srgb, var(--jb-accent) 15%, transparent),
+				transparent 70%
+			),
+			radial-gradient(
+				26rem 22rem at 60% 90%,
+				color-mix(in srgb, var(--jb-accent-3) 16%, transparent),
+				transparent 70%
+			);
 		/* Timeline entry-type text inks darkened for AA: the vivid identity colours only reach
 		   ~1.4–2.3:1 as small spine date / badge text on this near-white surface. The node dot
 		   keeps the vivid colour; independent reuses the AA-tuned accent-text. */
