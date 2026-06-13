@@ -11,7 +11,7 @@
 						name="name"
 						label="Name"
 						:value="field.state.value"
-						:disabled="disabled"
+						:disabled="disabled || undefined"
 						:error-id="field.state.meta.isTouched && field.state.meta.errors.length ? 'error-name' : undefined"
 						@input="field.handleChange(($event.target as HTMLInputElement).value)"
 						@blur="field.handleBlur"
@@ -34,7 +34,7 @@
 						label="Email"
 						autocomplete="email"
 						:value="field.state.value"
-						:disabled="disabled"
+						:disabled="disabled || undefined"
 						:error-id="field.state.meta.isTouched && field.state.meta.errors.length ? 'error-email' : undefined"
 						@input="field.handleChange(($event.target as HTMLInputElement).value)"
 						@blur="field.handleBlur"
@@ -55,7 +55,7 @@
 						name="message"
 						label="Message"
 						:value="field.state.value"
-						:disabled="disabled"
+						:disabled="disabled || undefined"
 						:error-id="field.state.meta.isTouched && field.state.meta.errors.length ? 'error-message' : undefined"
 						@input="field.handleChange(($event.target as HTMLTextAreaElement).value)"
 						@blur="field.handleBlur"
@@ -96,7 +96,10 @@ import { type ContactFormData, contactSchema } from '@fg/shared/validation/conta
 import { useForm } from '@tanstack/vue-form';
 import { ref } from 'vue';
 
-// Disables every control — used while a submission is in flight and by the showcase.
+// Disables every control while a submission is in flight and in the showcase. Bound through the
+// template as `disabled || undefined`: the jb-input/jb-textarea hosts expose `disabled` as a boolean
+// attribute (presence is truth), and Vue serializes a literal `false` to `disabled="false"`, which
+// the elements would then read as disabled. Collapsing false to undefined omits the attribute.
 withDefaults(defineProps<{ disabled?: boolean }>(), { disabled: false });
 
 const sent = ref(false);
