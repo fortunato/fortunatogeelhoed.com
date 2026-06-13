@@ -19,6 +19,12 @@
 }
 
 .writing-card {
+	/* Each card leans on a palette member (echoing the services index): `--card-accent` is the
+	   vivid fill the hover edge mixes from, `--card-ink` the AA-safe theme-aware ink for the topic
+	   kicker. Defaults are the framework accent; the cards below take yellow and blue so the tag
+	   colour and the hover border always match. */
+	--card-accent: var(--jb-accent);
+	--card-ink: var(--jb-accent-text);
 	display: flex;
 	flex-direction: column;
 	gap: var(--jb-space-sm);
@@ -33,10 +39,22 @@
 
 	&:hover {
 		color: inherit;
-		border-color: color-mix(in srgb, var(--jb-accent) 45%, var(--jb-color-border));
+		border-color: color-mix(in srgb, var(--card-accent) 45%, var(--jb-color-border));
 		transform: translateY(-3px);
 		box-shadow: var(--jb-shadow-md);
 	}
+}
+
+/* The first teaser takes the yellow accent; the second the secondary blue, so the two cards
+   aren't both accent-orange. Setting the locals lets the kicker and the hover edge follow. */
+.writing-grid > li:nth-child(1) .writing-card {
+	--card-accent: var(--jb-accent-3);
+	--card-ink: var(--jb-accent-3-text);
+}
+
+.writing-grid > li:nth-child(2) .writing-card {
+	--card-accent: var(--jb-accent-2);
+	--card-ink: var(--jb-accent-2-text);
 }
 
 .writing-tag {
@@ -45,13 +63,7 @@
 	font-weight: 600;
 	letter-spacing: 0.1em;
 	text-transform: uppercase;
-	color: var(--jb-accent-text);
-}
-
-/* The second teaser's topic kicker takes the secondary blue (theme-aware ink) so the two cards
-   aren't both accent-orange. */
-.writing-grid > li:nth-child(2) .writing-tag {
-	color: var(--jb-accent-2-text);
+	color: var(--card-ink);
 }
 
 .writing-title {
