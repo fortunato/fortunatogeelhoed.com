@@ -39,8 +39,8 @@ const timeline: TimelineData = {
 			],
 			highlight: '3 frameworks, 1 site: you’re looking at it',
 			tech: {
-				frontend: ['React', 'Angular', 'Vue', 'Vite', 'CSS Modules'],
-				backend: ['Bun', 'Hono'],
+				frontend: ['TypeScript', 'React', 'Angular', 'Vue', 'Vite', 'CSS Modules'],
+				backend: ['TypeScript', 'Bun', 'Hono'],
 				cicd: [
 					'Nx',
 					'GitHub Actions',
@@ -65,7 +65,7 @@ const timeline: TimelineData = {
 			type: 'independent',
 			domains: ['Healthcare'],
 			tech: {
-				frontend: ['React', 'SCSS Modules'],
+				frontend: ['TypeScript', 'React', 'SCSS Modules'],
 				backend: ['Java', 'Spring Boot', 'PostgreSQL'],
 				cicd: ['Docker'],
 				ai: ['Claude Code', 'Ollama'],
@@ -84,8 +84,16 @@ const timeline: TimelineData = {
 			highlight:
 				'Live WebSocket ingestion into a real-time market-breadth and regime dashboard, with multi-timeframe confluence',
 			tech: {
-				frontend: ['React', 'Mantine UI', 'Vite', 'Recharts', 'CSS Modules'],
-				backend: ['Node.js', 'NestJS', 'PostgreSQL', 'TimescaleDB', 'Prisma', 'WebSockets'],
+				frontend: ['TypeScript', 'React', 'Mantine UI', 'Vite', 'Recharts', 'CSS Modules'],
+				backend: [
+					'TypeScript',
+					'Node.js',
+					'NestJS',
+					'PostgreSQL',
+					'TimescaleDB',
+					'Prisma',
+					'WebSockets',
+				],
 				cicd: ['Nx', 'Gitea Actions', 'Docker'],
 				ai: ['Claude Code', 'MCP'],
 			},
@@ -112,7 +120,7 @@ const timeline: TimelineData = {
 			highlight:
 				'Published to PyPI with almost zero prior Python experience, built from domain knowledge using Claude Code',
 			tech: {
-				frontend: ['Angular', 'RxJS', 'lightweight-charts', 'SCSS Modules'],
+				frontend: ['TypeScript', 'Angular', 'RxJS', 'lightweight-charts', 'SCSS Modules'],
 				backend: ['Python', 'PyPI', 'Freqtrade'],
 				cicd: ['GitHub Actions'],
 				ai: ['Claude Code'],
@@ -131,9 +139,9 @@ const timeline: TimelineData = {
 			highlight: 'Led frontend across multiple teams; monorepo + feature-sliced architecture',
 			tech: {
 				frontend: [
+					'TypeScript',
 					'React',
 					'Redux',
-					'TypeScript',
 					'GraphQL',
 					'Storybook',
 					'Webpack',
@@ -142,6 +150,7 @@ const timeline: TimelineData = {
 					'CSS Modules',
 				],
 				backend: [
+					'TypeScript',
 					'Node.js',
 					'Express',
 					'NestJS',
@@ -198,6 +207,7 @@ const timeline: TimelineData = {
 			],
 			tech: {
 				frontend: [
+					'TypeScript',
 					'React',
 					'Zustand',
 					'Next.js',
@@ -208,6 +218,7 @@ const timeline: TimelineData = {
 					'SCSS Modules',
 				],
 				backend: [
+					'TypeScript',
 					'Node.js',
 					'Express',
 					'NestJS',
@@ -277,17 +288,25 @@ const timeline: TimelineData = {
 			],
 			tech: {
 				frontend: [
+					'TypeScript',
+					'Flow',
 					'React',
 					'Redux',
-					'Flow',
-					'TypeScript',
 					'SSR',
 					'Storybook',
 					'Webpack',
 					'SCSS Modules',
 					'Styled Components',
 				],
-				backend: ['Node.js', 'Express', 'PHP', 'Salesforce', 'MySQL', 'Redis'],
+				backend: [
+					'TypeScript',
+					'Node.js',
+					'Express',
+					'PHP',
+					'Salesforce',
+					'MySQL',
+					'Redis',
+				],
 				cicd: ['Jenkins', 'Docker'],
 			},
 		},

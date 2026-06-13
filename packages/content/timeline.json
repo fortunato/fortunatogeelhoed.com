@@ -27,6 +27,7 @@
 			"highlight": "3 frameworks, 1 site: you’re looking at it",
 			"tech": {
 				"frontend": [
+					"TypeScript",
 					"React",
 					"Angular",
 					"Vue",
@@ -34,6 +35,7 @@
 					"CSS Modules"
 				],
 				"backend": [
+					"TypeScript",
 					"Bun",
 					"Hono"
 				],
@@ -66,6 +68,7 @@
 			],
 			"tech": {
 				"frontend": [
+					"TypeScript",
 					"React",
 					"SCSS Modules"
 				],
@@ -98,6 +101,7 @@
 			"highlight": "Live WebSocket ingestion into a real-time market-breadth and regime dashboard, with multi-timeframe confluence",
 			"tech": {
 				"frontend": [
+					"TypeScript",
 					"React",
 					"Mantine UI",
 					"Vite",
@@ -105,6 +109,7 @@
 					"CSS Modules"
 				],
 				"backend": [
+					"TypeScript",
 					"Node.js",
 					"NestJS",
 					"PostgreSQL",
@@ -151,6 +156,7 @@
 			"highlight": "Published to PyPI with almost zero prior Python experience, built from domain knowledge using Claude Code",
 			"tech": {
 				"frontend": [
+					"TypeScript",
 					"Angular",
 					"RxJS",
 					"lightweight-charts",
@@ -184,9 +190,9 @@
 			"highlight": "Led frontend across multiple teams; monorepo + feature-sliced architecture",
 			"tech": {
 				"frontend": [
+					"TypeScript",
 					"React",
 					"Redux",
-					"TypeScript",
 					"GraphQL",
 					"Storybook",
 					"Webpack",
@@ -195,6 +201,7 @@
 					"CSS Modules"
 				],
 				"backend": [
+					"TypeScript",
 					"Node.js",
 					"Express",
 					"NestJS",
@@ -264,6 +271,7 @@
 			],
 			"tech": {
 				"frontend": [
+					"TypeScript",
 					"React",
 					"Zustand",
 					"Next.js",
@@ -274,6 +282,7 @@
 					"SCSS Modules"
 				],
 				"backend": [
+					"TypeScript",
 					"Node.js",
 					"Express",
 					"NestJS",
@@ -359,10 +368,10 @@
 			],
 			"tech": {
 				"frontend": [
+					"TypeScript",
+					"Flow",
 					"React",
 					"Redux",
-					"Flow",
-					"TypeScript",
 					"SSR",
 					"Storybook",
 					"Webpack",
@@ -370,6 +379,7 @@
 					"Styled Components"
 				],
 				"backend": [
+					"TypeScript",
 					"Node.js",
 					"Express",
 					"PHP",
