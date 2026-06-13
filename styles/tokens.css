@@ -116,7 +116,11 @@
 		--jb-space-2xl: 8rem;
 
 		/* Layout / size. Nav height is the mobile baseline; it grows on wider viewports below. */
-		--jb-size-container: min(1320px, 90vw);
+		/* Container width: fill the parent (sections already carry the 2rem horizontal rail) and
+		   cap at the max so the block stays centred. Using 100% rather than a vw fraction keeps the
+		   container inside the section's padding instead of overflowing it on narrow viewports,
+		   which would otherwise pin the content to the left rail and push it off-centre. */
+		--jb-size-container: min(var(--jb-size-container-max), 100%);
 		--jb-size-container-max: 1320px;
 		/* Optimal reading measure for running body copy (~60-70ch). */
 		--jb-measure: 65ch;
