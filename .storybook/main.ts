@@ -7,7 +7,7 @@ import type { StorybookConfig } from '@storybook/web-components-vite';
 // section's local dev server.
 const config: StorybookConfig = {
 	stories: ['./*.mdx'],
-	addons: ['@storybook/addon-docs'],
+	addons: ['@storybook/addon-docs', '@storybook/addon-a11y'],
 	framework: { name: '@storybook/web-components-vite', options: {} },
 	refs: (_config, { configType }) => {
 		if (configType === 'DEVELOPMENT') {
