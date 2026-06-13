@@ -361,11 +361,13 @@
 				"frontend": [
 					"React",
 					"Redux",
-					"TypeScript/Flow",
+					"Flow",
+					"TypeScript",
 					"SSR",
 					"Storybook",
 					"Webpack",
-					"SCSS Modules"
+					"SCSS Modules",
+					"Styled Components"
 				],
 				"backend": [
 					"Node.js",
