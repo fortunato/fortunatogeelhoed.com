@@ -140,6 +140,11 @@
 	--node-left: 0.9rem;
 	min-height: 4.5rem;
 	position: relative;
+	/* Contain the node dot's z-index (it sits above the spine line at z-index 2) inside the row.
+	   Without a stacking context here the dot escapes into the timeline's context at z-index 2,
+	   level with the sticky filter bar and above the sticky lane headers, and, being later in the
+	   DOM, paints over both as rows scroll under them. */
+	isolation: isolate;
 	align-items: start;
 	border-bottom: 1px solid color-mix(in srgb, var(--jb-color-border) 55%, transparent);
 	--node-color: var(--jb-accent);
