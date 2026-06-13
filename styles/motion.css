@@ -7,13 +7,13 @@
    read; Lightning CSS (the actual stylesheet build) handles it fine. Drop the override
    once Biome's parser catches up.
 
-   The headline framework-switch "disintegration" is JS-driven (an SVG
-   displacement-map shred — see packages/shared/src/disintegrate.ts). This file
-   provides the no-JS / Safari / reduced-motion baseline: a gentle cross-fade on the
-   cross-document navigation. */
+   The framework switch is JS-driven on the way out: an SVG displacement-map shreds the OUTGOING
+   page before the cross-document navigation (see packages/shared/src/disintegrate.ts). The INCOMING
+   page's entrance is the cross-document cross-fade below — the primary transition, not a fallback
+   (there is no JS "reassemble"; a rAF-driven filter raced Angular's bootstrap and was dropped). */
 
-/* Opt into cross-document view transitions for the framework switch when it falls
-   back to a plain link navigation. Unsupported browsers switch instantly. */
+/* Opt into cross-document view transitions for the framework switch. Unsupported browsers switch
+   instantly. */
 @view-transition {
 	/* biome-ignore lint/correctness/noUnknownProperty: valid @view-transition descriptor */
 	navigation: auto;
@@ -26,14 +26,11 @@
 @layer base {
 	@media (prefers-reduced-motion: no-preference) {
 		@supports (view-transition-name: none) {
-			/* Scoped to the framework switch, and only when we did NOT arrive via the JS
-			   disintegration path. On that path the incoming root carries [data-switched] and the
-			   JS reassemble (disintegrate.ts) is the sole entrance; this cross-fade would otherwise
-			   race it — revealing the page ~0.4s before the ~0.7s reassemble finishes, read as
-			   flicker. The fallback path (Safari, JS off, reduced motion/data) never sets the flag,
-			   so it keeps this cross-fade. Same-document page navigation carries no type, so its root
-			   falls back to the UA's gentle default cross-fade and the chrome is left alone. */
-			:root:active-view-transition-type(jb-switch):not([data-switched]) {
+			/* The framework switch is a cross-document navigation tagged jb-switch: the outgoing root
+			   (already shredded by the JS on the way out) fades out and the incoming root fades in —
+			   this cross-fade IS the incoming page's entrance. Same-document page navigation carries no
+			   type, so it falls back to the UA's gentle default cross-fade and the chrome is untouched. */
+			:root:active-view-transition-type(jb-switch) {
 				&::view-transition-old(root) {
 					animation: jb-switch-out var(--jb-dur-slow) var(--jb-ease-standard) both;
 				}
@@ -41,14 +38,6 @@
 				&::view-transition-new(root) {
 					animation: jb-switch-in var(--jb-dur-slow) var(--jb-ease-standard) both;
 				}
-			}
-
-			/* JS disintegration path: suppress the cross-document view transition outright so the
-			   JS reassemble is the only thing animating the incoming page — no competing cross-fade. */
-			:root[data-switched]::view-transition-group(root),
-			:root[data-switched]::view-transition-old(root),
-			:root[data-switched]::view-transition-new(root) {
-				animation: none;
 			}
 		}
 	}
@@ -87,19 +76,6 @@
 		}
 	}
 
-	/* The framework-switch reassemble is the page's entrance: rows already on screen when it
-	   plays should arrive at rest, not assemble on top of it. timeline-motion marks those rows
-	   [data-instant] for one frame while it snaps them to their revealed state, which kills the
-	   per-row transition (and the node-dot ::before) for that frame only. Rows scrolled into
-	   view afterwards never get the marker, so the normal assemble choreography is untouched.
-	   !important because those reveal transitions live in framework-scoped component styles
-	   this global sheet cannot outrank by specificity (or layering) alone. */
-	[data-reveal][data-instant],
-	[data-reveal][data-instant] *,
-	[data-reveal][data-instant]::before {
-		transition: none !important;
-	}
-
 	/* Signature hero entrance on load (the hero sits above the fold, so a scroll
 	   reveal would never fire). Staggered; suppressed under reduced motion. */
 	@media (prefers-reduced-motion: no-preference) {
@@ -117,14 +93,6 @@
 		}
 		[data-enter="4"] {
 			animation-delay: 0.35s;
-		}
-
-		/* Arrived via a framework switch: the reassemble already brings the page in, so
-		   it is the hero's entrance — don't play the staggered fade-in on top of it. The
-		   marker is set by the inline <head> script before first paint, so the entrance
-		   never starts (nothing to cancel). Fresh / direct loads still get the stagger. */
-		:root[data-switched] [data-enter] {
-			animation: none;
 		}
 	}
 

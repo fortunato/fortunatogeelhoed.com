@@ -25,7 +25,7 @@ interface ShellOptions {
 
 // Resolve theme before first paint (no FOUC): stored choice → system → light.
 const THEME_SCRIPT =
-	"(() => { try { const m = document.cookie.match(/(?:^|;\\s*)theme=(dark|light)/); let t = m ? m[1] : localStorage.getItem('theme'); if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.setAttribute('data-theme', t); } catch (e) {} try { if (sessionStorage.getItem('jb-reassemble')) { const r = document.documentElement; r.style.opacity = '0'; r.setAttribute('data-switched', ''); setTimeout(() => { r.style.opacity = ''; }, 3000); } } catch (e) {} })();";
+	"(() => { try { const m = document.cookie.match(/(?:^|;\\s*)theme=(dark|light)/); let t = m ? m[1] : localStorage.getItem('theme'); if (t !== 'dark' && t !== 'light') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'; document.documentElement.setAttribute('data-theme', t); } catch (e) {} })();";
 
 export function renderShell({
 	framework,

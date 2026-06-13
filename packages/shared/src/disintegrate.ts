@@ -1,31 +1,22 @@
-// GPU-driven "disintegration" for the framework switch: an SVG turbulence +
-// displacement-map filter shreds the outgoing page into particles, and the
-// incoming page reassembles from them (reverse displacement). Driven by
-// requestAnimationFrame because feDisplacementMap's `scale` is an SVG attribute,
-// not a CSS property, so it can't be animated with CSS/WAAPI.
+// "Disintegration" for the framework switch: an SVG turbulence + displacement-map filter shreds
+// the OUTGOING page into particles before the cross-document navigation. The INCOMING page's
+// entrance is the browser's cross-document view transition (a gentle cross-fade — see
+// styles/motion.css); there is deliberately no JS "reassemble". A rAF-driven filter animation on
+// the incoming page froze against Angular's heavy synchronous bootstrap (the main thread is blocked
+// during hydration, so requestAnimationFrame stalls then jumps) and raced the GPU filter apply,
+// flashing the constructed page — a timing/compositing race we can't reliably win. The cross-fade
+// is GPU-composited and immune to it.
 //
-// Coordination across the (cross-document) navigation: the shred sets a
-// sessionStorage flag before navigating; the inline <head> script hides the next
-// document before first paint (no flash of the assembled page); this module then
-// reassembles it on load. Progressive enhancement: the switcher entries are plain
-// links, so with JS off — or on Safari (whose feDisplacementMap is unreliable), or
-// under reduced motion/data — the click just navigates and the CSS cross-fade
-// baseline handles the transition.
+// Driven by requestAnimationFrame because feDisplacementMap's `scale` is an SVG attribute, not a
+// CSS property, so it can't be animated with CSS/WAAPI. Progressive enhancement: the switcher
+// entries are plain links, so with JS off — or on Safari (whose feDisplacementMap is unreliable),
+// or under reduced motion/data — the click just navigates and the CSS cross-fade handles it.
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
-const FLAG = 'jb-reassemble';
-// Scroll offset saved on the outgoing page so the destination framework can restore it across
-// the cross-document switch (React's router persists scroll itself; Vue/Angular read this).
+// Scroll offset saved on the outgoing page so the destination framework can restore it across the
+// cross-document switch (React's router persists scroll itself; Vue/Angular read this).
 const SCROLL_KEY = 'jb-switch-scroll';
 const MAX_SCALE = 600;
-
-// Announce that the incoming page's reassemble is done (or was skipped). Page-entrance
-// choreography that would otherwise race the reassemble (e.g. the timeline row assemble) waits
-// for this. A durable attribute covers listeners that mount *after* the event has already fired.
-function signalReassembled(): void {
-	document.documentElement.setAttribute('data-reassembled', '');
-	document.dispatchEvent(new CustomEvent('jb:reassembled'));
-}
 
 /** Scroll offset saved by the last switch click, consumed once on the incoming page. Returns
     null when there's nothing to restore (no switch, or already consumed). */
@@ -88,57 +79,13 @@ function playShred(durationMs = 700): Promise<void> {
 	});
 }
 
-// Reassemble the incoming page from particles, then remove the filter so the page
-// is left clean and interactive.
-function playReassemble(durationMs = 700): void {
-	const [svg, disp] = injectFilter();
-	const root = document.documentElement;
-	root.style.filter = 'url(#jb-shred)';
-	root.style.willChange = 'filter, opacity';
-	disp?.setAttribute('scale', String(MAX_SCALE));
-	root.style.opacity = '0';
-	const start = performance.now();
-	const step = (now: number) => {
-		const t = Math.min(1, (now - start) / durationMs);
-		const e = 1 - (1 - t) * (1 - t); // ease-out: rush together, then settle
-		disp?.setAttribute('scale', String((1 - e) * MAX_SCALE));
-		root.style.opacity = String(e);
-		if (t < 1) {
-			requestAnimationFrame(step);
-		} else {
-			root.style.filter = '';
-			root.style.willChange = '';
-			root.style.opacity = '';
-			svg.remove();
-			signalReassembled();
-		}
-	};
-	requestAnimationFrame(step);
-}
-
 let wired = false;
 
-/** Reassemble the incoming page (if we arrived via a switch) and intercept switch
-    links to shred the outgoing page before navigating. */
+/** Intercept switch links to shred the outgoing page (and save scroll) before navigating. The
+    incoming page's entrance is the cross-document CSS cross-fade, so there's nothing to do on load. */
 export function initSwitchTransition(): void {
 	if (typeof document === 'undefined' || wired) return;
 	wired = true;
-
-	// The inline <head> script has already hidden this document (opacity 0) if we
-	// arrived via a switch, so there's no flash of the assembled page to undo.
-	try {
-		if (sessionStorage.getItem(FLAG)) {
-			sessionStorage.removeItem(FLAG);
-			if (shouldSkip()) {
-				document.documentElement.style.opacity = '';
-				signalReassembled();
-			} else {
-				playReassemble();
-			}
-		}
-	} catch {
-		document.documentElement.style.opacity = '';
-	}
 
 	document.addEventListener('click', (e) => {
 		if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
@@ -155,11 +102,6 @@ export function initSwitchTransition(): void {
 		}
 		if (shouldSkip()) return; // plain navigation + CSS cross-fade fallback
 		e.preventDefault();
-		try {
-			sessionStorage.setItem(FLAG, '1');
-		} catch {
-			// sessionStorage unavailable — the incoming page just won't reassemble.
-		}
 		void playShred().then(() => {
 			window.location.href = link.href;
 		});

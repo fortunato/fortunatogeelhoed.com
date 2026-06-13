@@ -19,7 +19,6 @@ let lenis: LenisLike | null = null;
 let frame = 0;
 let observer: IntersectionObserver | null = null;
 let onScroll: (() => void) | null = null;
-let releaseReveal: (() => void) | null = null;
 
 export async function initTimelineMotion(root: HTMLElement): Promise<void> {
 	if (typeof window === 'undefined') return;
@@ -42,45 +41,6 @@ export async function initTimelineMotion(root: HTMLElement): Promise<void> {
 			{ rootMargin: '-12% 0px -12% 0px' },
 		);
 		for (const el of targets) observer.observe(el);
-
-		// Arrived via a framework switch: the disintegration reassemble is the page's own
-		// entrance, so the rows already on screen should come in *with* it, at rest, rather
-		// than assembling on top of it. Snap just those to their revealed state with their
-		// transitions suppressed for one frame ([data-instant], cleared below); rows further
-		// down are left untouched and assemble normally when scrolled into view. Keyed on the
-		// persistent marker, not the reassemble's clock, so it holds regardless of when each
-		// framework hydrates this list.
-		if (document.documentElement.hasAttribute('data-switched')) {
-			const viewportH = window.innerHeight;
-			const onscreen: HTMLElement[] = [];
-			for (const el of targets) {
-				const rect = el.getBoundingClientRect();
-				if (rect.top < viewportH && rect.bottom > 0) {
-					el.setAttribute('data-instant', '');
-					el.setAttribute('data-in', '');
-					onscreen.push(el);
-				}
-			}
-			if (onscreen.length > 0) {
-				// Hold these rows at rest (transitions suppressed) for the WHOLE reassemble — it is
-				// their entrance — then release so rows scrolled in afterwards animate normally. Tie
-				// the release to the reassemble actually finishing (the `jb:reassembled` event), not a
-				// fixed frame count, so it holds regardless of when this framework hydrated the list.
-				// If the reassemble already finished before we mounted, release on the next frame.
-				const release = () => {
-					releaseReveal = null;
-					requestAnimationFrame(() => {
-						for (const el of onscreen) el.removeAttribute('data-instant');
-					});
-				};
-				if (document.documentElement.hasAttribute('data-reassembled')) {
-					release();
-				} else {
-					releaseReveal = release;
-					document.addEventListener('jb:reassembled', release, { once: true });
-				}
-			}
-		}
 	}
 
 	// Direction: publish the scroll direction so the reveal mirrors itself. One --dir
@@ -130,8 +90,6 @@ export function destroyTimelineMotion(): void {
 	observer = null;
 	if (onScroll) window.removeEventListener('scroll', onScroll);
 	onScroll = null;
-	if (releaseReveal) document.removeEventListener('jb:reassembled', releaseReveal);
-	releaseReveal = null;
 	if (frame) cancelAnimationFrame(frame);
 	frame = 0;
 	lenis?.destroy();
