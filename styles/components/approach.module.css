@@ -30,6 +30,16 @@
 	border-left: 2px solid color-mix(in srgb, var(--jb-accent) 55%, transparent);
 }
 
+/* Cycle the accent rule through the palette so the column reads as more than four orange ticks.
+   A decorative border, so the vivid blue/yellow are used directly. */
+.principle:nth-child(2) {
+	border-left-color: color-mix(in srgb, var(--jb-accent-2) 60%, transparent);
+}
+
+.principle:nth-child(3) {
+	border-left-color: color-mix(in srgb, var(--jb-accent-3) 60%, transparent);
+}
+
 .principle-title {
 	font-family: var(--jb-font-display);
 	font-size: 1.2rem;

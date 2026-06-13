@@ -28,6 +28,18 @@
 		--jb-color-neutral-900: #111111;
 		--jb-color-neutral-950: #0a0a0a;
 
+		/* Cool-slate ramp — a blue-tinted parallel to the neutral ramp, used only by the dark
+		   theme so its surfaces read as deep slate rather than flat near-black. The light theme
+		   stays on the neutral ramp. Higher number = darker. */
+		--jb-color-slate-950: #14171e;
+		--jb-color-slate-900: #1b1f28;
+		--jb-color-slate-850: #232834;
+		--jb-color-slate-800: #2d3340;
+		--jb-color-slate-700: #39404e;
+		--jb-color-slate-500: #858ea0;
+		--jb-color-slate-400: #a3acbb;
+		--jb-color-slate-150: #eef1f6;
+
 		/* Brand accent sources (one per framework variant). Darkened so white text on an
 		   accent background (e.g. .btn) and accent-colored text on white both clear WCAG AA
 		   contrast (≥ 4.5:1). */
@@ -66,6 +78,21 @@
 		   already clears AA; on light it lands just under 4.5:1 on the secondary surface, so
 		   the light theme darkens it below. */
 		--jb-accent-text: var(--jb-accent);
+
+		/* Secondary palette — a fixed blue + yellow counterpoint to the per-framework orange,
+		   reused from the employment-status identity fills so the homepage and timeline share one
+		   set of colours. The vivid fills are for decorative use (hero dots/glow, card meshes,
+		   border rules); the theme-aware `*-text` inks below are AA-tuned for coloured text and
+		   match the timeline's spine inks. */
+		--jb-accent-2: var(--jb-status-employee);
+		--jb-accent-3: var(--jb-status-side);
+		--jb-accent-2-text: var(--jb-accent-2);
+		--jb-accent-3-text: var(--jb-accent-3);
+
+		/* Ambient hero glow — a soft wash of the palette behind the hero. Driven by a token (not a
+		   component `[data-theme]` selector) so the dark-only swap survives Angular's emulated
+		   encapsulation. Off by default; the dark theme supplies the gradients. */
+		--jb-hero-glow: none;
 
 		/* Status (theme-independent) */
 		--jb-color-danger: var(--jb-color-danger-500);
@@ -146,18 +173,41 @@
 	/* Theme: dark */
 	[data-theme="dark"] {
 		color-scheme: dark;
-		--jb-bg-primary: var(--jb-color-neutral-950);
-		--jb-bg-secondary: var(--jb-color-neutral-880);
-		--jb-bg-card: var(--jb-color-neutral-860);
-		--jb-bg-card-hover: var(--jb-color-neutral-840);
-		--jb-text-primary: var(--jb-color-neutral-150);
-		--jb-text-secondary: var(--jb-color-neutral-500);
-		/* tertiary lifted from #555 (≈2.6:1, failed AA) to #808080 for normal-size text. */
-		--jb-text-tertiary: var(--jb-color-neutral-550);
-		--jb-color-border: var(--jb-color-neutral-800);
+		/* Dark surfaces ride the cool-slate ramp (blue-tinted) rather than flat near-black, so the
+		   theme reads as deep slate with perceptible layering. Light theme keeps the neutral ramp. */
+		--jb-bg-primary: var(--jb-color-slate-950);
+		--jb-bg-secondary: var(--jb-color-slate-900);
+		--jb-bg-card: var(--jb-color-slate-850);
+		--jb-bg-card-hover: var(--jb-color-slate-800);
+		--jb-text-primary: var(--jb-color-slate-150);
+		--jb-text-secondary: var(--jb-color-slate-400);
+		/* tertiary tuned to clear AA (≥4.5:1) on the banded slate-900 surface. */
+		--jb-text-tertiary: var(--jb-color-slate-500);
+		--jb-color-border: var(--jb-color-slate-700);
 		/* The brand accent is dark enough that, as small text, it lands just under 4.5:1 on
 		   the dark surfaces — lighten it for text use so links/labels clear AA. */
 		--jb-accent-text: color-mix(in srgb, var(--jb-accent) 80%, white);
+		/* Secondary palette inks — vivid blue already clears AA as text on the dark surface; the
+		   yellow is darkened to a gold for small-text use (matches the timeline side-badge ink). */
+		--jb-accent-2-text: #5ba8ff;
+		--jb-accent-3-text: #b88a06;
+		/* Hero glow: orange (framework) + blue + yellow, low-alpha so it tints the slate without
+		   competing with the wallpaper or the headline. */
+		--jb-hero-glow: radial-gradient(
+				42rem 32rem at 78% 22%,
+				color-mix(in srgb, var(--jb-accent-2) 14%, transparent),
+				transparent 70%
+			),
+			radial-gradient(
+				38rem 30rem at 12% 82%,
+				color-mix(in srgb, var(--jb-accent) 14%, transparent),
+				transparent 70%
+			),
+			radial-gradient(
+				26rem 22rem at 60% 90%,
+				color-mix(in srgb, var(--jb-accent-3) 7%, transparent),
+				transparent 70%
+			);
 		/* Floor for per-tech brand lightness on the dark surface: near-black brands (Angular,
 		   Bun, socket.io…) are lifted to at least this so timeline pills keep a visible edge.
 		   Consumed via relative-colour syntax in the timeline styles; light theme leaves it 0. */
@@ -195,6 +245,10 @@
 		--jb-danger-text: color-mix(in srgb, var(--jb-color-danger) 80%, black);
 		/* Darken accent text so links/labels clear AA on the secondary surface. */
 		--jb-accent-text: color-mix(in srgb, var(--jb-accent) 82%, black);
+		/* Secondary palette inks darkened for AA on the near-white surfaces (the vivid blue/yellow
+		   only reach ~1.9–2.3:1 as text here); match the timeline's light-theme inks. */
+		--jb-accent-2-text: #1b649f;
+		--jb-accent-3-text: #6f5300;
 		/* Timeline entry-type text inks darkened for AA: the vivid identity colours only reach
 		   ~1.4–2.3:1 as small spine date / badge text on this near-white surface. The node dot
 		   keeps the vivid colour; independent reuses the AA-tuned accent-text. */

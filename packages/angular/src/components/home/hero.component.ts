@@ -12,10 +12,14 @@ import type { HomeContent } from '@fg/shared';
 					<div class="hero-wallpaper-line">{{ wallpaperLine }}</div>
 				}
 			</div>
+			<div class="hero-glow" aria-hidden="true"></div>
 			<div class="hero-content container">
 				<p class="section-label" data-enter="1">{{ hero().tagline }}</p>
 				<h1 class="hero-name" data-enter="2">{{ hero().name }}</h1>
-				<p class="hero-statement" data-enter="3">{{ hero().statement }}</p>
+				<div class="hero-dots" data-enter="3" aria-hidden="true">
+					<span></span><span></span><span></span>
+				</div>
+				<p class="hero-statement" data-enter="4">{{ hero().statement }}</p>
 			</div>
 		</section>
 	`,

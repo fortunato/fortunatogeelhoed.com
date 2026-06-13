@@ -5,10 +5,14 @@
 				{{ wallpaperLine }}
 			</div>
 		</div>
+		<div :class="styles['hero-glow']" aria-hidden="true" />
 		<div :class="[styles['hero-content'], 'container']">
 			<p class="section-label" data-enter="1">{{ hero.tagline }}</p>
 			<h1 :class="styles['hero-name']" data-enter="2">{{ hero.name }}</h1>
-			<p :class="styles['hero-statement']" data-enter="3">{{ hero.statement }}</p>
+			<div :class="styles['hero-dots']" data-enter="3" aria-hidden="true">
+				<span /><span /><span />
+			</div>
+			<p :class="styles['hero-statement']" data-enter="4">{{ hero.statement }}</p>
 		</div>
 	</section>
 </template>

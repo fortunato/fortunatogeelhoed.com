@@ -14,6 +14,17 @@
 	border-bottom: 1px solid var(--jb-color-border);
 }
 
+/* Ambient palette wash behind the hero — a soft tint of the accent + blue + yellow that warms
+   the slate surface (decorative; dark-theme only, supplied by the --jb-hero-glow token). Sits
+   beneath the wallpaper and the content. */
+.hero-glow {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	background: var(--jb-hero-glow);
+}
+
 /* Diagonal repeating-name wallpaper behind the hero (decorative). Theme-adaptive via
    a faint tint of the text color, so it needs no dedicated token. It drifts slowly;
    the global reduced-motion rule freezes it. */
@@ -35,19 +46,22 @@
 .hero-wallpaper-line {
 	font-family: var(--jb-font-display);
 	font-weight: 800;
-	font-size: 4.5vw;
+	/* vw alone shrinks the pattern to ~17px on a phone, so it reads tiny and the rotated band
+	   no longer fills the tall hero. A rem floor via max() keeps the lettering large on narrow
+	   viewports while the vw term still scales it up on wider screens. */
+	font-size: max(2.4rem, 4.5vw);
 	line-height: 1.15;
 	white-space: nowrap;
 	text-transform: uppercase;
 	color: color-mix(in srgb, var(--jb-text-primary) 6%, transparent);
 
 	&:nth-child(even) {
-		font-size: 3.5vw;
+		font-size: max(1.9rem, 3.5vw);
 		color: color-mix(in srgb, var(--jb-text-primary) 4%, transparent);
 	}
 
 	&:nth-child(3n) {
-		font-size: 5.5vw;
+		font-size: max(2.9rem, 5.5vw);
 		color: color-mix(in srgb, var(--jb-text-primary) 3%, transparent);
 	}
 }
@@ -73,8 +87,16 @@
 	line-height: 0.9;
 	letter-spacing: -0.03em;
 	text-transform: uppercase;
-	margin-bottom: var(--jb-space-md);
-	background: linear-gradient(135deg, var(--jb-text-primary) 30%, var(--jb-accent));
+	margin-bottom: var(--jb-space-sm);
+	/* The gradient runs from the text colour through the framework accent into the secondary
+	   blue. The blue tail uses the theme-aware ink (not the vivid fill) so the last letters stay
+	   legible in light mode; large display text only needs 3:1 either way. */
+	background: linear-gradient(
+		135deg,
+		var(--jb-text-primary) 25%,
+		var(--jb-accent) 70%,
+		var(--jb-accent-2-text)
+	);
 	-webkit-background-clip: text;
 	background-clip: text;
 	color: transparent;
@@ -87,6 +109,35 @@
 		color: CanvasText;
 		-webkit-text-fill-color: CanvasText;
 	}
+}
+
+/* Static three-dot separator between the name and the statement — a mini palette
+   (framework accent / blue / yellow) that shows the range at rest. Decorative: aria-hidden in
+   the markup, and deliberately not animated (a pulse reads as a loading state). */
+.hero-dots {
+	display: inline-flex;
+	gap: 8px;
+	margin: var(--jb-space-xs) 0;
+}
+
+.hero-dots span {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--jb-accent);
+}
+
+.hero-dots span:nth-child(2) {
+	background: var(--jb-accent-2);
+}
+
+.hero-dots span:nth-child(3) {
+	background: var(--jb-accent-3);
+}
+
+/* Tighten the statement's inherited top margin so the dots sit snug as a separator. */
+.hero-dots + .hero-statement {
+	margin-top: var(--jb-space-sm);
 }
 
 .hero-tagline {

@@ -42,19 +42,25 @@
    hue-shifts; light mode stays tonal (accent-only — the multi-hue read muddy on white). Text
    sits above both layers; frozen under reduced motion / no JS. */
 .service-card {
+	/* Each card leans on a different palette member so the row reads as the full palette, not
+	   four identical accent cards. `--card-accent` is the vivid fill for the decorative mesh and
+	   hover edge; `--card-ink` is the AA-safe, theme-aware ink for the index text. Defaults are
+	   the framework accent; cards 2 and 3 take the blue and yellow below. */
+	--card-accent: var(--jb-accent);
+	--card-ink: var(--jb-accent-text);
 	--card-gradient: radial-gradient(
 			42% 55% at 25% 30%,
-			color-mix(in srgb, var(--jb-accent) 55%, transparent),
+			color-mix(in srgb, var(--card-accent) 55%, transparent),
 			transparent 62%
 		),
 		radial-gradient(
 			46% 52% at 78% 32%,
-			color-mix(in srgb, var(--jb-accent) 32%, transparent),
+			color-mix(in srgb, var(--card-accent) 32%, transparent),
 			transparent 60%
 		),
 		radial-gradient(
 			52% 56% at 50% 82%,
-			color-mix(in srgb, var(--jb-accent) 50%, transparent),
+			color-mix(in srgb, var(--card-accent) 50%, transparent),
 			transparent 62%
 		);
 	position: relative;
@@ -101,7 +107,7 @@
 	}
 
 	&:hover {
-		border-color: color-mix(in srgb, var(--jb-accent) 45%, var(--jb-color-border));
+		border-color: color-mix(in srgb, var(--card-accent) 45%, var(--jb-color-border));
 	}
 
 	&:hover::after {
@@ -115,42 +121,54 @@
 	}
 }
 
-/* Dark mode: warm multi-hue spread across the accent's neighbours (looks great on the dark
+/* Cards 2 and 3 take the secondary palette (blue, yellow); cards 1 and 4 keep the framework
+   accent. Setting only --card-accent / --card-ink lets the mesh, hover edge and index follow. */
+.service-card:nth-child(2) {
+	--card-accent: var(--jb-accent-2);
+	--card-ink: var(--jb-accent-2-text);
+}
+
+.service-card:nth-child(3) {
+	--card-accent: var(--jb-accent-3);
+	--card-ink: var(--jb-accent-3-text);
+}
+
+/* Dark mode: warm multi-hue spread across the card accent's neighbours (looks great on the dark
    surface). Light mode keeps the tonal accent mesh above. */
 @supports (color: oklch(from white l c h)) {
 	[data-theme="dark"] .service-card {
 		--card-gradient: radial-gradient(
 				42% 55% at 25% 30%,
-				color-mix(in srgb, oklch(from var(--jb-accent) l c calc(h - 38)) 68%, transparent),
+				color-mix(in srgb, oklch(from var(--card-accent) l c calc(h - 38)) 68%, transparent),
 				transparent 62%
 			),
 			radial-gradient(
 				46% 52% at 78% 32%,
-				color-mix(in srgb, var(--jb-accent) 46%, transparent),
+				color-mix(in srgb, var(--card-accent) 46%, transparent),
 				transparent 60%
 			),
 			radial-gradient(
 				52% 56% at 50% 82%,
-				color-mix(in srgb, oklch(from var(--jb-accent) l c calc(h + 48)) 68%, transparent),
+				color-mix(in srgb, oklch(from var(--card-accent) l c calc(h + 48)) 68%, transparent),
 				transparent 62%
 			);
 	}
 
-	/* Light mode: a gentler warm spread (the wide rainbow read muddy on white). */
+	/* Light mode: a gentler spread (the wide rainbow read muddy on white). */
 	[data-theme="light"] .service-card {
 		--card-gradient: radial-gradient(
 				42% 55% at 25% 30%,
-				color-mix(in srgb, oklch(from var(--jb-accent) l c calc(h - 22)) 62%, transparent),
+				color-mix(in srgb, oklch(from var(--card-accent) l c calc(h - 22)) 62%, transparent),
 				transparent 62%
 			),
 			radial-gradient(
 				46% 52% at 78% 32%,
-				color-mix(in srgb, var(--jb-accent) 42%, transparent),
+				color-mix(in srgb, var(--card-accent) 42%, transparent),
 				transparent 60%
 			),
 			radial-gradient(
 				52% 56% at 50% 82%,
-				color-mix(in srgb, oklch(from var(--jb-accent) l c calc(h + 26)) 62%, transparent),
+				color-mix(in srgb, oklch(from var(--card-accent) l c calc(h + 26)) 62%, transparent),
 				transparent 62%
 			);
 	}
@@ -185,7 +203,7 @@
 	font-size: 0.8rem;
 	font-weight: 600;
 	letter-spacing: 0.1em;
-	color: var(--jb-accent-text);
+	color: var(--card-ink);
 	margin-bottom: var(--jb-space-sm);
 }
 

@@ -16,6 +16,7 @@ export function Hero({ hero }: { hero: HomeContent['hero'] }) {
 					</div>
 				))}
 			</div>
+			<div className={styles['hero-glow']} aria-hidden="true" />
 			<div className={`${styles['hero-content']} container`}>
 				<p className="section-label" data-enter="1">
 					{hero.tagline}
@@ -23,7 +24,12 @@ export function Hero({ hero }: { hero: HomeContent['hero'] }) {
 				<h1 className={styles['hero-name']} data-enter="2">
 					{hero.name}
 				</h1>
-				<p className={styles['hero-statement']} data-enter="3">
+				<div className={styles['hero-dots']} data-enter="3" aria-hidden="true">
+					<span />
+					<span />
+					<span />
+				</div>
+				<p className={styles['hero-statement']} data-enter="4">
 					{hero.statement}
 				</p>
 			</div>

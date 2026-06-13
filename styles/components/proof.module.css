@@ -94,6 +94,28 @@
 	}
 }
 
+/* The four metrics span the palette — orange (framework) / blue / yellow / orange — so the strip
+   isn't monochrome. Override only the gradient image (the base background-size, text clip and
+   scroll-driven sheen carry over). The blue/yellow use the theme-aware inks so the big numbers
+   clear contrast in light mode too. */
+.proof-item:nth-child(2) .proof-metric {
+	background-image: linear-gradient(
+		100deg,
+		var(--jb-accent-2-text) 42%,
+		color-mix(in srgb, var(--jb-accent-2-text) 68%, white) 50%,
+		var(--jb-accent-2-text) 58%
+	);
+}
+
+.proof-item:nth-child(3) .proof-metric {
+	background-image: linear-gradient(
+		100deg,
+		var(--jb-accent-3-text) 42%,
+		color-mix(in srgb, var(--jb-accent-3-text) 68%, white) 50%,
+		var(--jb-accent-3-text) 58%
+	);
+}
+
 .proof-label {
 	margin-top: var(--jb-space-sm);
 	color: var(--jb-text-secondary);
