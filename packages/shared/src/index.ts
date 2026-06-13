@@ -72,7 +72,7 @@ export type {
 } from './types/home';
 export type { Theme } from './theme';
 export { getCurrentTheme, setTheme, toggleTheme } from './theme';
-export { initSwitchTransition } from './disintegrate';
+export { consumeSwitchScroll, initSwitchTransition } from './disintegrate';
 export { initSmoothScroll, destroySmoothScroll } from './smooth-scroll';
 export { initTimelineMotion, destroyTimelineMotion } from './timeline-motion';
 export { initCardSpotlight } from './card-spotlight';

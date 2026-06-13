@@ -19,6 +19,7 @@ let lenis: LenisLike | null = null;
 let frame = 0;
 let observer: IntersectionObserver | null = null;
 let onScroll: (() => void) | null = null;
+let releaseReveal: (() => void) | null = null;
 
 export async function initTimelineMotion(root: HTMLElement): Promise<void> {
 	if (typeof window === 'undefined') return;
@@ -61,11 +62,23 @@ export async function initTimelineMotion(root: HTMLElement): Promise<void> {
 				}
 			}
 			if (onscreen.length > 0) {
-				requestAnimationFrame(() =>
+				// Hold these rows at rest (transitions suppressed) for the WHOLE reassemble — it is
+				// their entrance — then release so rows scrolled in afterwards animate normally. Tie
+				// the release to the reassemble actually finishing (the `jb:reassembled` event), not a
+				// fixed frame count, so it holds regardless of when this framework hydrated the list.
+				// If the reassemble already finished before we mounted, release on the next frame.
+				const release = () => {
+					releaseReveal = null;
 					requestAnimationFrame(() => {
 						for (const el of onscreen) el.removeAttribute('data-instant');
-					}),
-				);
+					});
+				};
+				if (document.documentElement.hasAttribute('data-reassembled')) {
+					release();
+				} else {
+					releaseReveal = release;
+					document.addEventListener('jb:reassembled', release, { once: true });
+				}
 			}
 		}
 	}
@@ -117,6 +130,8 @@ export function destroyTimelineMotion(): void {
 	observer = null;
 	if (onScroll) window.removeEventListener('scroll', onScroll);
 	onScroll = null;
+	if (releaseReveal) document.removeEventListener('jb:reassembled', releaseReveal);
+	releaseReveal = null;
 	if (frame) cancelAnimationFrame(frame);
 	frame = 0;
 	lenis?.destroy();

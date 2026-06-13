@@ -9,7 +9,13 @@ import { appConfig } from './app.config';
 // prerender (that uses entry-server.ts via CommonEngine).
 registerElements();
 
+// Start the switch transition BEFORE bootstrapping, so the reassemble plays on the already-painted
+// (hidden) prerendered DOM concurrently with hydration — matching React/Vue. Calling it inside the
+// post-bootstrap .then() delayed the reassemble until after Angular fully hydrated, holding the page
+// hidden through bootstrap and making the switch *to* Angular look broken. initSwitchTransition only
+// touches sessionStorage, the document root, and a click listener, so it needs nothing from Angular.
+initSwitchTransition();
+
 bootstrapApplication(AppComponent, appConfig).then(() => {
-	initSwitchTransition();
 	startRum('angular');
 });

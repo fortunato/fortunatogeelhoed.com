@@ -15,14 +15,25 @@ export const appConfig: ApplicationConfig = {
 		// Fetch-based HttpClient backs the signal-native httpResource() used for live
 		// availability; withFetch keeps it consistent across server and browser.
 		provideHttpClient(withFetch()),
-		// Reset scroll to the top on navigation. withInMemoryScrolling covers instant
-		// navigation and back/forward restore; onViewTransitionCreated resets eagerly —
-		// synchronously after startViewTransition, before the new snapshot is captured — so
-		// the slide animates from the old offset to the top with no jump afterwards.
+		// Scroll handling lives in AppComponent (a NavigationEnd subscriber): top on navigation,
+		// but the saved offset restored on a framework-switch arrival. The router's own
+		// scrollPositionRestoration is therefore 'disabled' — left as 'top' it fired *after* our
+		// restore and clobbered it back to the top (the switch scroll was lost on → Angular).
+		// onViewTransitionCreated still resets eagerly before the snapshot so the SPA slide animates
+		// from the old offset to the top with no jump.
 		provideRouter(
 			routes,
-			withInMemoryScrolling({ scrollPositionRestoration: 'top', anchorScrolling: 'enabled' }),
+			withInMemoryScrolling({
+				scrollPositionRestoration: 'disabled',
+				anchorScrolling: 'enabled',
+			}),
 			withViewTransitions({
+				// Skip the view transition on the initial navigation. On a framework-switch arrival
+				// Angular was the only framework auto-running a VT on first load; its new-root snapshot
+				// painted the fully constructed page over the JS reassemble for a frame — the "flash of
+				// the constructed page before the assembly". React has no VT hook and Vue's initial nav
+				// is already guarded, so this brings Angular in line: the reassemble is the sole entrance.
+				skipInitialTransition: true,
 				onViewTransitionCreated: ({ from, to }) => {
 					if (from.routeConfig !== to.routeConfig) window.scrollTo(0, 0);
 				},

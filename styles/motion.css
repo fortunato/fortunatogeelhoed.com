@@ -26,10 +26,14 @@
 @layer base {
 	@media (prefers-reduced-motion: no-preference) {
 		@supports (view-transition-name: none) {
-			/* Scoped to the framework switch only. Same-document page navigation carries no
-			   type, so its root group falls back to the UA's gentle default cross-fade and the
-			   page chrome is left alone. */
-			:root:active-view-transition-type(jb-switch) {
+			/* Scoped to the framework switch, and only when we did NOT arrive via the JS
+			   disintegration path. On that path the incoming root carries [data-switched] and the
+			   JS reassemble (disintegrate.ts) is the sole entrance; this cross-fade would otherwise
+			   race it — revealing the page ~0.4s before the ~0.7s reassemble finishes, read as
+			   flicker. The fallback path (Safari, JS off, reduced motion/data) never sets the flag,
+			   so it keeps this cross-fade. Same-document page navigation carries no type, so its root
+			   falls back to the UA's gentle default cross-fade and the chrome is left alone. */
+			:root:active-view-transition-type(jb-switch):not([data-switched]) {
 				&::view-transition-old(root) {
 					animation: jb-switch-out var(--jb-dur-slow) var(--jb-ease-standard) both;
 				}
@@ -37,6 +41,14 @@
 				&::view-transition-new(root) {
 					animation: jb-switch-in var(--jb-dur-slow) var(--jb-ease-standard) both;
 				}
+			}
+
+			/* JS disintegration path: suppress the cross-document view transition outright so the
+			   JS reassemble is the only thing animating the incoming page — no competing cross-fade. */
+			:root[data-switched]::view-transition-group(root),
+			:root[data-switched]::view-transition-old(root),
+			:root[data-switched]::view-transition-new(root) {
+				animation: none;
 			}
 		}
 	}

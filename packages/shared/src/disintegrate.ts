@@ -14,7 +14,32 @@
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 const FLAG = 'jb-reassemble';
+// Scroll offset saved on the outgoing page so the destination framework can restore it across
+// the cross-document switch (React's router persists scroll itself; Vue/Angular read this).
+const SCROLL_KEY = 'jb-switch-scroll';
 const MAX_SCALE = 600;
+
+// Announce that the incoming page's reassemble is done (or was skipped). Page-entrance
+// choreography that would otherwise race the reassemble (e.g. the timeline row assemble) waits
+// for this. A durable attribute covers listeners that mount *after* the event has already fired.
+function signalReassembled(): void {
+	document.documentElement.setAttribute('data-reassembled', '');
+	document.dispatchEvent(new CustomEvent('jb:reassembled'));
+}
+
+/** Scroll offset saved by the last switch click, consumed once on the incoming page. Returns
+    null when there's nothing to restore (no switch, or already consumed). */
+export function consumeSwitchScroll(): number | null {
+	try {
+		const v = sessionStorage.getItem(SCROLL_KEY);
+		if (v === null) return null;
+		sessionStorage.removeItem(SCROLL_KEY);
+		const n = Number(v);
+		return Number.isFinite(n) ? n : null;
+	} catch {
+		return null;
+	}
+}
 
 function shouldSkip(): boolean {
 	if (matchMedia('(prefers-reduced-motion: reduce)').matches) return true;
@@ -85,6 +110,7 @@ function playReassemble(durationMs = 700): void {
 			root.style.willChange = '';
 			root.style.opacity = '';
 			svg.remove();
+			signalReassembled();
 		}
 	};
 	requestAnimationFrame(step);
@@ -105,6 +131,7 @@ export function initSwitchTransition(): void {
 			sessionStorage.removeItem(FLAG);
 			if (shouldSkip()) {
 				document.documentElement.style.opacity = '';
+				signalReassembled();
 			} else {
 				playReassemble();
 			}
@@ -119,6 +146,13 @@ export function initSwitchTransition(): void {
 			'a[href^="/__switch"]',
 		) as HTMLAnchorElement | null;
 		if (!link) return;
+		// Save scroll before leaving so the destination can restore it across the cross-document
+		// load. Saved even on the fallback path below, so scroll survives there too.
+		try {
+			sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
+		} catch {
+			// sessionStorage unavailable — scroll just won't be restored.
+		}
 		if (shouldSkip()) return; // plain navigation + CSS cross-fade fallback
 		e.preventDefault();
 		try {
