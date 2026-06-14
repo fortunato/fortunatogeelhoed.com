@@ -40,6 +40,11 @@ const faroCollectorUrl = cfg.get('faroCollectorUrl') ?? ''; // Grafana Cloud Far
 // so a re-pushed tag can never silently change what we deploy. When bumping a tag, fetch the new
 // digest too (see infra/README.md → "Updating Umami / Postgres").
 const statsSubdomain = cfg.get('statsSubdomain') ?? `stats.${domain}`;
+// The stats subdomain publishes only the cookieless collection paths (/script.js, /api/send);
+// everything else, including the dashboard, sits behind Caddy basic auth so Umami's well-known
+// default login is never reachable from the internet. The username is not secret; default to a
+// neutral value. (These credentials are Caddy's own gate, independent of the Umami app login.)
+const statsBasicAuthUser = cfg.get('statsBasicAuthUser') ?? 'fg-admin';
 const umamiImage =
 	cfg.get('umamiImage') ??
 	'ghcr.io/umami-software/umami:postgresql-v2.19.0@sha256:77264ce6951c6b131a91d99f1cfd720d9efac1eaaa12e104f21cf49408dd77e0';
@@ -75,10 +80,16 @@ const lokiToken = cfg.getSecret('lokiToken'); // Grafana Cloud access-policy tok
 // never committed.
 const umamiAppSecret = cfg.requireSecret('umamiAppSecret');
 const umamiDbPassword = cfg.requireSecret('umamiDbPassword');
+// bcrypt hash of the dashboard basic-auth password, the credential Caddy checks before proxying any
+// non-collection path on the stats subdomain. A hash (not the plaintext) is stored: Caddy's
+// basic_auth compares against it, and even the rendered cloud-init never carries the password. Mint
+// it with `caddy hash-password` (or any bcrypt tool) and set it as a secret; see infra/README.md.
+const statsBasicAuthHash = cfg.requireSecret('statsBasicAuthHash');
 
 // Off-site backup secrets. All optional: unset leaves the daily job disabled. The restic passphrase
-// protects (and is required to restore) the off-site copy; the S3 credentials should be scoped
-// append/write-only at the provider so a compromised host cannot purge backup history.
+// protects (and is required to restore) the off-site copy. The daily job runs `restic forget
+// --prune`, which deletes objects, so the S3 token needs read+write+delete on the bucket; it is not
+// append-only. For immutability use R2 object-versioning / a bucket lifecycle policy instead.
 const backupResticPassword = cfg.getSecret('backupResticPassword');
 const backupS3AccessKeyId = cfg.getSecret('backupS3AccessKeyId');
 const backupS3SecretAccessKey = cfg.getSecret('backupS3SecretAccessKey');
@@ -123,6 +134,7 @@ const userData = pulumi
 		lokiToken,
 		umamiAppSecret,
 		umamiDbPassword,
+		statsBasicAuthHash,
 		backupResticPassword,
 		backupS3AccessKeyId,
 		backupS3SecretAccessKey,
@@ -138,6 +150,7 @@ const userData = pulumi
 			lToken,
 			appSecret,
 			dbPassword,
+			statsAuthHash,
 			resticPassword,
 			s3Key,
 			s3Secret,
@@ -161,6 +174,8 @@ const userData = pulumi
 				.replaceAll('__LOKI_TOKEN__', lToken ?? '')
 				.replaceAll('__FARO_COLLECTOR_URL__', faroCollectorUrl)
 				.replaceAll('__STATS_DOMAIN__', statsSubdomain)
+				.replaceAll('__STATS_BASIC_AUTH_USER__', statsBasicAuthUser)
+				.replaceAll('__STATS_BASIC_AUTH_HASH__', statsAuthHash)
 				.replaceAll('__UMAMI_IMAGE__', umamiImage)
 				.replaceAll('__POSTGRES_IMAGE__', postgresImage)
 				.replaceAll('__UMAMI_HOST__', umamiWebsiteId ? statsSubdomain : '')

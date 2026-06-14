@@ -83,8 +83,15 @@ pulumi config set faroCollectorUrl <faro receiver url, e.g. https://faro-collect
 pulumi config set umamiWebsiteId <id from the Umami dashboard, set after first boot>
 pulumi config set --secret umamiAppSecret <random 32+ char string>
 pulumi config set --secret umamiDbPassword <random db password>
+# Dashboard gate: Caddy basic auth fronts everything on stats.<domain> except the public collection
+# paths, so the Umami admin UI is never reachable on its default login. Username is non-secret
+# (default fg-admin); the secret is a bcrypt HASH of the password, minted with `caddy hash-password`:
+#   docker run --rm caddy:2 caddy hash-password --plaintext '<choose a strong password>'
+# pulumi config set statsBasicAuthUser fg-admin                  # optional, this is the default
+pulumi config set --secret statsBasicAuthHash '<bcrypt hash from caddy hash-password>'
 # off-site backup (optional — omit to leave daily backups disabled). Provider: Cloudflare R2.
-# Use an EU-jurisdiction bucket and a bucket-scoped (append/write-only) R2 API token.
+# Use an EU-jurisdiction bucket and a bucket-scoped R2 API token. The job prunes old snapshots, so
+# the token needs read+write+delete (not append-only); enable R2 versioning/lifecycle for immutability.
 pulumi config set backupResticRepository s3:https://<account-id>.r2.cloudflarestorage.com/<bucket>/umami
 pulumi config set --secret backupResticPassword <restic repo passphrase>
 pulumi config set --secret backupS3AccessKeyId <R2 bucket-scoped token id>
@@ -199,14 +206,35 @@ Neither container is published — only Caddy faces the internet. `APP_SECRET` a
 password come from Pulumi config secrets (`umamiAppSecret`, `umamiDbPassword`) and are templated into
 the host's env files at provision time; they are never committed.
 
+### Dashboard access (it is not open to the internet)
+
+Umami ships with a well-known default login (`admin` / `umami`), and this origin is trusted by the
+main site's CSP for `script-src`, so an openly reachable dashboard would be a takeover and XSS-pivot
+risk. Caddy therefore publishes **only the two paths analytics collection needs** on `stats.<domain>`
+and gates everything else behind HTTP **basic auth**:
+
+- **Public, unauthenticated** — `GET /script.js` (the cookieless tracker the site loads) and
+  `POST /api/send` (the event beacon). These are all that page-view collection requires.
+- **Everything else** (the dashboard, `/login`, the admin `/api/*`) requires the Caddy basic-auth
+  credentials. These are an independent gate in front of Umami; they are **not** the Umami app login,
+  so the default `admin` / `umami` is unreachable from the internet regardless of whether it was
+  changed inside the app.
+
+So **to reach the dashboard**, browse to `https://stats.<domain>` and authenticate with the basic-auth
+credentials (`statsBasicAuthUser` and the password whose bcrypt hash you set as `statsBasicAuthHash`);
+the browser then shows Umami's own login. Still change Umami's default app password on first login as
+defence in depth. If you would rather restrict the dashboard to the tailnet instead of basic auth,
+replace the gated `handle` block's `basic_auth` with a `remote_ip` matcher for your Tailscale CGNAT
+range (`100.64.0.0/10`) — the host already runs Tailscale.
+
 ### First-boot wiring (the website id)
 
 The tracking tag is injected into the served HTML **only once a website id exists**, which is minted
 in the dashboard after the first boot. So the order is:
 
-1. `pulumi up` with `umamiAppSecret` / `umamiDbPassword` set (and DNS for `stats.<domain>` pointed at
-   the host). The dashboard comes up at `https://stats.<domain>` (default login `admin` / `umami` —
-   change it immediately).
+1. `pulumi up` with `umamiAppSecret` / `umamiDbPassword` / `statsBasicAuthHash` set (and DNS for
+   `stats.<domain>` pointed at the host). Browse to `https://stats.<domain>`, pass the Caddy
+   basic-auth prompt, then log in to Umami and change its default app password immediately.
 2. In the dashboard, add the website `fortunatogeelhoed.com` and copy its **Website ID**.
 3. `pulumi config set umamiWebsiteId <id>` and `pulumi up` again. The app now injects the cookieless
    `script.js` tag with `data-domains="fortunatogeelhoed.com"`, so it records on production only —
@@ -264,13 +292,18 @@ and the timer runs but no-ops cleanly. When configured:
 
 - **Provider is not hardcoded** — the `backupResticRepository` URL selects it. For R2 the repository
   is `s3:https://<account-id>.r2.cloudflarestorage.com/<bucket>/umami`.
-- **Credentials** (`backupS3AccessKeyId` / `backupS3SecretAccessKey`) should be a **bucket-scoped,
-  append/write-only** token (on R2, scope the API token to the single backup bucket) so a compromised
-  host cannot purge backup history.
-- **Retention** is 7 daily + 4 weekly, pruned after each successful run.
+- **Credentials** (`backupS3AccessKeyId` / `backupS3SecretAccessKey`) should be a **bucket-scoped**
+  token (on R2, scope the API token to the single backup bucket). Note this is **not** append-only:
+  the daily job runs `restic forget --prune`, which deletes objects, so the token needs
+  read+write+**delete** on the bucket and a compromised host could purge backup history. To get
+  immutability back, enable **R2 object-versioning and/or a bucket lifecycle policy** so deleted
+  objects are recoverable out-of-band; relying on token scope alone does not protect history here.
+- **Retention** is 7 daily + 4 weekly, pruned after each successful backup.
 - **Observability**: every run logs to journald (shipped to Loki) and ends with a structured line
-  `{"job":"umami-backup",...,"result":"ok|failed|disabled"}`. Alert on a **missing** `ok` (no green
-  run in N hours), not only on explicit failures.
+  `{"job":"umami-backup",...,"result":"ok|degraded|failed|disabled"}`. `degraded` means the backup
+  was written but `forget --prune` (retention) failed, so it is not counted as a healthy `ok` run.
+  Alert on a **missing** `ok` (no green run in N hours) and on `degraded`/`failed`, not only on
+  explicit failures.
 - **Restore drill**: exercise the restore at least once (and after any major change) so the off-site
   copy is known-good, not assumed.
 

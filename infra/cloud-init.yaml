@@ -91,8 +91,10 @@ write_files:
       # Encryption passphrase for the restic repo. Without it the off-site copy cannot be restored,
       # so store it somewhere durable and separate from the host.
       RESTIC_PASSWORD=__BACKUP_RESTIC_PASSWORD__
-      # S3-compatible credentials, scoped append/write-only at the provider where possible so a
-      # compromised host cannot purge backup history.
+      # S3-compatible credentials. This job runs `restic forget --prune`, which deletes objects, so
+      # the token needs read+write+delete on the bucket; it is NOT append-only and a compromised host
+      # could purge history. For immutability, enable R2 object-versioning / a bucket lifecycle policy
+      # (recover deleted versions out-of-band) rather than relying on token scope.
       AWS_ACCESS_KEY_ID=__BACKUP_S3_ACCESS_KEY_ID__
       AWS_SECRET_ACCESS_KEY=__BACKUP_S3_SECRET_ACCESS_KEY__
       # Retention, pruned after each successful run.
@@ -107,11 +109,34 @@ write_files:
         reverse_proxy app:3000
       }
 
-      # Self-hosted analytics dashboard. Only Caddy faces the internet; Umami and Postgres stay on
-      # the private docker network and are never published. Automatic HTTPS, same as the apex.
+      # Self-hosted analytics. Only Caddy faces the internet; Umami and Postgres stay on the private
+      # docker network and are never published. Automatic HTTPS, same as the apex.
+      #
+      # Umami ships with a well-known default login (admin/umami) and this origin is trusted by the
+      # main site's CSP for script-src, so an exposed dashboard would be an XSS pivot. We therefore
+      # publish only the two paths collection actually needs and gate everything else (dashboard,
+      # /login, admin /api/*) behind HTTP basic auth.
+      #   - /script.js  the cookieless tracking script the site loads
+      #   - /api/send   the event beacon the script POSTs page views to
+      # Everything outside @public requires the operator's dashboard credentials.
       __STATS_DOMAIN__ {
         encode zstd gzip
-        reverse_proxy umami:3000
+
+        # Public collection surface: exact paths only, so the admin UI and admin API stay gated.
+        @public path /script.js /api/send
+        handle @public {
+          reverse_proxy umami:3000
+        }
+
+        # Dashboard and everything else: operator-only. Credentials come from Pulumi config secrets
+        # (basicAuthUser + a bcrypt hash of the password); they are never the Umami app login, so the
+        # default admin/umami is unreachable from the internet regardless of whether it was changed.
+        handle {
+          basic_auth {
+            __STATS_BASIC_AUTH_USER__ __STATS_BASIC_AUTH_HASH__
+          }
+          reverse_proxy umami:3000
+        }
       }
 
   - path: /opt/fg/deploy.sh
@@ -156,8 +181,9 @@ write_files:
       # Daily off-site Postgres backup for Umami. Streams a logical pg_dump out of the running
       # database container, hands it to restic (encryption + dedup + retention built in), and prunes
       # to the retention policy. Every line goes to stdout/journald so it ships to Loki via the
-      # docker/journal pipeline; the closing JSON line carries result=ok|failed|disabled so a
+      # docker/journal pipeline; the closing JSON line carries result=ok|degraded|failed|disabled so a
       # *missing* success can be alerted on (no ok line in N hours), not just explicit failures.
+      # degraded means the backup was written but retention/prune did not complete.
       set -uo pipefail
       # shellcheck disable=SC1091
       set -a; . /etc/fg/backup.env; set +a
@@ -174,7 +200,8 @@ write_files:
         finish disabled "no restic repository configured" 0
       fi
 
-      echo "umami-backup: starting at $(stamp) repo=${RESTIC_REPOSITORY}"
+      # Do not echo RESTIC_REPOSITORY: it embeds the R2 account id and bucket and would ship to Loki.
+      echo "umami-backup: starting at $(stamp)"
       # Initialise the repository on first run; ignore the "already initialized" case.
       restic snapshots >/dev/null 2>&1 || restic init || finish failed "restic init failed" 1
 
@@ -183,10 +210,15 @@ write_files:
       if docker exec umami-db pg_dump -U umami -d umami \
         | gzip \
         | restic backup --stdin --stdin-filename umami.sql.gz --tag umami --host fg-app; then
-        restic forget --tag umami \
+        # The fresh snapshot is safe at this point. Retention/prune deletes old snapshots on the
+        # bucket and can fail independently (e.g. a transient bucket error); when it does the run is
+        # degraded, not healthy, so retention can be alerted on without masking the good backup.
+        if restic forget --tag umami \
           --keep-daily "${BACKUP_KEEP_DAILY:-7}" --keep-weekly "${BACKUP_KEEP_WEEKLY:-4}" \
-          --prune || echo "umami-backup: prune failed (backup itself succeeded)" >&2
-        finish ok "" 0
+          --prune; then
+          finish ok "" 0
+        fi
+        finish degraded "backup ok but forget/prune failed" 1
       fi
       finish failed "pg_dump or restic backup failed" 1
 
