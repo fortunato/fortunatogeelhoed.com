@@ -7,4 +7,5 @@ export const routes = [
 	{ path: '/writing/:slug', name: 'Article', component: () => import('./pages/Article.vue') },
 	{ path: '/career', name: 'Timeline', component: () => import('./pages/Timeline.vue') },
 	{ path: '/contact', name: 'Contact', component: () => import('./pages/Contact.vue') },
+	{ path: '/privacy', name: 'Privacy', component: () => import('./pages/Privacy.vue') },
 ];

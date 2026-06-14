@@ -113,7 +113,9 @@ describe('sitemap and robots', () => {
 			const loc = `${SITE_URL}${path === '/' ? '/' : path}`;
 			expect(xml).toContain(`<loc>${loc}</loc>`);
 		}
-		expect(xml).not.toContain('/services');
+		expect(xml).toContain(`<loc>${SITE_URL}/services</loc>`);
+		expect(xml).toContain(`<loc>${SITE_URL}/privacy</loc>`);
+		expect(xml).not.toContain('/work');
 		expect(xml).not.toContain('/blog');
 	});
 

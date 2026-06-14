@@ -13,9 +13,9 @@ export const OG_IMAGE_PATH = '/assets/images/fortunato.webp';
 export const OG_DEFAULT_IMAGE_PATH = '/assets/og/default.png';
 
 // The pages worth surfacing to search engines. The remaining scaffolded routes
-// (/services, /work, /blog) are deferred placeholders, so they are kept out of the sitemap
+// (/work, /blog) are deferred placeholders, so they are kept out of the sitemap
 // and marked noindex rather than competing for crawl budget with thin content.
-export const INDEXED_PATHS = ['/', '/about', '/career', '/contact'];
+export const INDEXED_PATHS = ['/', '/about', '/services', '/career', '/contact', '/privacy'];
 
 // The writing section and every article under it are indexed: the section index at /writing and
 // each /writing/<slug>. They are not in INDEXED_PATHS because that list also drives the static
@@ -55,10 +55,20 @@ const SEO_BY_PATH: Record<string, PageSeo> = {
 		description:
 			'A 25-year career building for the web: frontend, backend, CI/CD, databases, and AI/LLM work across React, Angular, Vue, Node.js, and more.',
 	},
+	'/services': {
+		title: 'Services | Hire a Freelance Senior Frontend & Full-Stack Engineer',
+		description:
+			'Freelance senior frontend and full-stack engineering and technical leadership (React, Vue, Angular, TypeScript) for EU, NL, and remote teams: architecture, performance, AI integration, and tech-debt strategy.',
+	},
 	'/contact': {
 		title: 'Contact | Hire Fortunato Geelhoed, Freelance TypeScript Developer',
 		description:
 			'Get in touch to work with a freelance senior full-stack and TypeScript engineer (React, Vue, Angular), available remotely from the Costa Blanca, Spain.',
+	},
+	'/privacy': {
+		title: 'Privacy | Fortunato Geelhoed',
+		description:
+			'How this site handles data: cookieless analytics, anonymous performance metrics, limited server logs, and contact details used only to reply. No advertising, no data sold.',
 	},
 	'/writing': {
 		title: 'Writing | Fortunato Geelhoed on Frontend, TypeScript, and Engineering',

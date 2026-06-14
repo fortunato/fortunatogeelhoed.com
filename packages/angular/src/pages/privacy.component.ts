@@ -3,11 +3,11 @@ import { ContentPageComponent } from '../components/content-page.component';
 import { ContentService } from '../content.service';
 
 @Component({
-	selector: 'app-services',
+	selector: 'app-privacy',
 	standalone: true,
 	imports: [ContentPageComponent],
-	template: `<app-content-page label="Services" [content]="content" />`,
+	template: `<app-content-page label="Privacy" [content]="content" />`,
 })
-export class ServicesComponent {
-	protected readonly content = inject(ContentService).getContent('services');
+export class PrivacyComponent {
+	protected readonly content = inject(ContentService).getContent('privacy');
 }

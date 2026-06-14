@@ -9,6 +9,10 @@ export interface ContentMeta {
 
 export interface ContentItem extends ContentMeta {
 	body: string;
+	/** Rendered HTML of the markdown body, produced once at build time. Present for content
+	 *  pages whose copy uses markdown structure (headings, lists, links) and is injected through
+	 *  each framework's trusted-HTML seam under the shared prose styles. */
+	html?: string;
 }
 
 /** A blog article. Extends a post-type content item with the single authored

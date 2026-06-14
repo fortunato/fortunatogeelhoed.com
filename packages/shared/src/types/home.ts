@@ -29,7 +29,7 @@ export interface WritingTeaserItem {
  *  Kept with the content rather than inline in components so all three framework
  *  variants render the same words from one source. */
 export interface HomeSectionsCopy {
-	services: { label: string; title: string };
+	services: { label: string; title: string; link: { label: string; href: string } };
 	approach: { label: string; title: string };
 	proof: { label: string };
 	frameworks: {

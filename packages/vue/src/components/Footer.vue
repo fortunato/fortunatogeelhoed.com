@@ -18,15 +18,19 @@
 					GitHub
 				</a>
 			</nav>
-			<p :class="styles['footer-legal']">
-				© {{ year }} JiggyBit S.L., built in React, Vue and Angular on one backend.
-			</p>
+			<div :class="styles['footer-legal']">
+				<span>© {{ year }} JiggyBit S.L., built in React, Vue and Angular on one backend.</span>
+				<nav :class="styles['footer-meta']" aria-label="Legal">
+					<RouterLink to="/privacy">Privacy</RouterLink>
+				</nav>
+			</div>
 		</div>
 	</footer>
 </template>
 
 <script setup lang="ts">
 import styles from '@styles/components/footer.module.css';
+import { RouterLink } from 'vue-router';
 
 const year = new Date().getFullYear();
 </script>

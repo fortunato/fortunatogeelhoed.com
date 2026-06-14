@@ -1,4 +1,5 @@
 import styles from '@styles/components/footer.module.css';
+import { Link } from 'react-router';
 
 export function Footer() {
 	return (
@@ -25,10 +26,17 @@ export function Footer() {
 						GitHub
 					</a>
 				</nav>
-				<p className={styles['footer-legal']}>
-					© {new Date().getFullYear()} JiggyBit S.L., built in React, Vue and Angular on
-					one backend.
-				</p>
+				<div className={styles['footer-legal']}>
+					<span>
+						© {new Date().getFullYear()} JiggyBit S.L., built in React, Vue and Angular
+						on one backend.
+					</span>
+					<nav className={styles['footer-meta']} aria-label="Legal">
+						<Link to="/privacy">
+							Privacy
+						</Link>
+					</nav>
+				</div>
 			</div>
 		</footer>
 	);

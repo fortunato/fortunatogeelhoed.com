@@ -6,12 +6,15 @@ import {
 	input,
 	viewChild,
 } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import type { HomeContent, ServiceOffering } from '@fg/shared';
 import { initCardSpotlight } from '@fg/shared';
+import { LinkDirective } from '../ui/link.directive';
 
 @Component({
 	selector: 'app-services',
 	standalone: true,
+	imports: [RouterLink, LinkDirective],
 	styleUrl: '../../../../../styles/components/services.module.css',
 	template: `
 		<section aria-labelledby="services-title">
@@ -27,6 +30,7 @@ import { initCardSpotlight } from '@fg/shared';
 						</li>
 					}
 				</ul>
+				<a jbLink variant="arrow" [routerLink]="copy().link.href" class="services-link">{{ copy().link.label }}</a>
 			</div>
 		</section>
 	`,

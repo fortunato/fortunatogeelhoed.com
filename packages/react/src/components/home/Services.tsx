@@ -2,6 +2,7 @@ import type { HomeContent, ServiceOffering } from '@fg/shared';
 import { initCardSpotlight } from '@fg/shared';
 import styles from '@styles/components/services.module.css';
 import { useEffect, useRef } from 'react';
+import { TextLink } from '../ui/Link';
 
 export function Services({
 	services,
@@ -39,6 +40,9 @@ export function Services({
 						</li>
 					))}
 				</ul>
+				<TextLink to={copy.link.href} variant="arrow" className={styles['services-link']}>
+					{copy.link.label}
+				</TextLink>
 			</div>
 		</section>
 	);

@@ -12,6 +12,7 @@ function toDateString(value: unknown): string | undefined {
 
 export function parseContent(raw: string): ContentItem {
 	const { data, content } = matter(raw);
+	const body = content.trim();
 	return {
 		title: data.title ?? '',
 		slug: data.slug ?? '',
@@ -19,7 +20,10 @@ export function parseContent(raw: string): ContentItem {
 		date: toDateString(data.date),
 		description: data.description,
 		draft: data.draft,
-		body: content.trim(),
+		body,
+		// Pre-render the markdown so pages whose copy uses headings, lists, or links render the
+		// same structured HTML in all three frameworks (the same path articles take).
+		html: renderMarkdown(body).html,
 	};
 }
 

@@ -7,7 +7,11 @@
 	"sections": {
 		"services": {
 			"label": "What I do",
-			"title": "What I can do for you"
+			"title": "What I can do for you",
+			"link": {
+				"label": "See how I can help",
+				"href": "/services"
+			}
 		},
 		"approach": {
 			"label": "How I work",

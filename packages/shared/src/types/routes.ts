@@ -13,4 +13,5 @@ export const routes: RouteDefinition[] = [
 	{ path: '/writing', name: 'Writing', contentSlug: 'writing', contentType: 'page' },
 	{ path: '/contact', name: 'Contact', contentSlug: 'contact', contentType: 'page' },
 	{ path: '/career', name: 'Timeline' },
+	{ path: '/privacy', name: 'Privacy', contentSlug: 'privacy', contentType: 'page' },
 ];

@@ -1,8 +1,10 @@
 import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
 	selector: 'app-footer',
 	standalone: true,
+	imports: [RouterLink],
 	// Allow the <jb-icon> custom element in this template.
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	styleUrl: '../../../../styles/components/footer.module.css',
@@ -26,9 +28,12 @@ import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
 						GitHub
 					</a>
 				</nav>
-				<p class="footer-legal">
-					© {{ year }} JiggyBit S.L., built in React, Vue and Angular on one backend.
-				</p>
+				<div class="footer-legal"><span>
+					© {{ year }} JiggyBit S.L., built in React, Vue and Angular on one backend.</span>
+					<nav class="footer-meta" aria-label="Legal">
+						<a routerLink="/privacy">Privacy</a>
+					</nav>
+				</div>
 			</div>
 		</footer>
 	`,

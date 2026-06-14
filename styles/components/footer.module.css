@@ -89,8 +89,54 @@
 	}
 }
 
+/* Internal site links (e.g. Privacy). Same accent-underline hover idiom as the social links,
+   but no external-link arrow: these stay on-site. Sits alongside the copyright (see .footer-legal),
+   led by a quiet middot so the link is anchored to that line rather than stranded. */
+.footer-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--jb-space-md);
+
+	&::before {
+		content: "·";
+		color: var(--jb-text-tertiary);
+	}
+
+	& a {
+		position: relative;
+		color: var(--jb-text-secondary);
+		font-size: 0.85rem;
+		transition: color var(--jb-dur-fast) var(--jb-ease-standard);
+
+		&::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			bottom: -5px;
+			width: 0;
+			height: 1.5px;
+			background: var(--jb-accent);
+			transition: width var(--jb-dur-base) var(--jb-ease-standard);
+		}
+
+		&:hover {
+			color: var(--jb-text-primary);
+
+			&::before {
+				width: 100%;
+			}
+		}
+	}
+}
+
 .footer-legal {
 	width: 100%;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-start;
+	align-items: center;
+	gap: var(--jb-space-md);
 	color: var(--jb-text-tertiary);
 	font-size: 0.8rem;
 }

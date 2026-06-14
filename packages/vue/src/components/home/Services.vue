@@ -16,6 +16,7 @@
 					<p :class="styles['service-desc']">{{ service.description }}</p>
 				</li>
 			</ul>
+			<Link :to="copy.link.href" variant="arrow" :class="styles['services-link']">{{ copy.link.label }}</Link>
 		</div>
 	</section>
 </template>
@@ -25,6 +26,7 @@ import type { HomeContent, ServiceOffering } from '@fg/shared';
 import { initCardSpotlight } from '@fg/shared';
 import styles from '@styles/components/services.module.css';
 import { onMounted, onUnmounted, ref } from 'vue';
+import Link from '../ui/Link.vue';
 
 defineProps<{ services: ServiceOffering[]; copy: HomeContent['sections']['services'] }>();
 

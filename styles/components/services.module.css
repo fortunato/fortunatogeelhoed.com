@@ -221,3 +221,9 @@
 	color: var(--jb-text-secondary);
 	line-height: 1.6;
 }
+
+/* The section's route to the full Services page, below the cards. Matches the framework
+   section's link placement so the two read-more affordances sit consistently. */
+.services-link {
+	margin-top: var(--jb-space-lg);
+}

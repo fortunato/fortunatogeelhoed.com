@@ -12,7 +12,11 @@ const home: HomeContent = {
 			'I build, fix, and lead TypeScript platforms end to end. This site is built three times, in React, Vue, and Angular, to illustrate that the fundamentals carry across all of them.',
 	},
 	sections: {
-		services: { label: 'What I do', title: 'What I can do for you' },
+		services: {
+			label: 'What I do',
+			title: 'What I can do for you',
+			link: { label: 'See how I can help', href: '/services' },
+		},
 		approach: { label: 'How I work', title: "A few things I've learned to do." },
 		proof: { label: 'Proof' },
 		frameworks: {

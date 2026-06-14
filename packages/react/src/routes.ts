@@ -4,6 +4,7 @@ import { About } from './pages/About';
 import { Article } from './pages/Article';
 import { Contact } from './pages/Contact';
 import { Home } from './pages/Home';
+import { Privacy } from './pages/Privacy';
 import { Services } from './pages/Services';
 import { Timeline } from './pages/Timeline';
 import { Work } from './pages/Work';
@@ -21,6 +22,7 @@ export const routes: RouteObject[] = [
 			{ path: '/writing/:slug', Component: Article },
 			{ path: '/career', Component: Timeline },
 			{ path: '/contact', Component: Contact },
+			{ path: '/privacy', Component: Privacy },
 		],
 	},
 ];

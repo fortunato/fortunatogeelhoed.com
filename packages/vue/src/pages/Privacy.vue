@@ -1,10 +1,10 @@
 <template>
-	<ContentPage label="Services" :content="content" />
+	<ContentPage label="Privacy" :content="content" />
 </template>
 
 <script setup lang="ts">
 import ContentPage from '../components/ContentPage.vue';
 import { useContent } from '../composables/useContent';
 
-const { content } = useContent('services');
+const { content } = useContent('privacy');
 </script>
