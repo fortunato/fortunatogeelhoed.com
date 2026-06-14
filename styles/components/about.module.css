@@ -1,5 +1,6 @@
-/* About page: a narrative bio beside a portrait. Semantic --jb-* tokens only. Photo and prose
-   sit side by side on wide viewports and stack (photo first) on mobile. */
+/* About page: a narrative bio that wraps around a landscape workspace photo. Semantic --jb-*
+   tokens only. The photo floats top-right on wide viewports so the text flows beside it and then
+   fills the full width underneath; on mobile it stacks (photo first). */
 
 .about {
 	/* Top padding left to the global `section` clamp so the accent kicker lines up with the other
@@ -7,19 +8,20 @@
 	padding-bottom: var(--jb-space-xl);
 }
 
-.about-inner {
-	display: grid;
-	gap: var(--jb-space-xl);
-	align-items: start;
+/* The photo lives inside the prose (after the heading); flow-root contains the float so the
+   section's bottom padding and the next section never collapse into it, even when the bio is
+   shorter than the image. */
+.about-prose {
+	display: flow-root;
 }
 
-/* Fixed aspect box so layout is stable before the image loads (no shift), and the portrait is
-   cropped consistently whatever the source dimensions. */
+/* The landscape workspace photo defines its own height: the image fills the box width and the
+   intrinsic ratio (carried by the img width/height attributes) keeps layout stable before it
+   loads, so the frame shows in full with no crop. Stacked default: a full-width band between the
+   heading and the bio; the desktop rule below floats it so the text wraps around. */
 .about-photo {
-	margin: 0;
+	margin: var(--jb-space-md) 0 var(--jb-space-lg);
 	width: 100%;
-	max-width: 22rem;
-	aspect-ratio: 4 / 5;
 	overflow: hidden;
 	border: 1px solid var(--jb-color-border);
 	border-radius: var(--jb-radius-sm);
@@ -29,8 +31,7 @@
 .about-photo img {
 	display: block;
 	width: 100%;
-	height: 100%;
-	object-fit: cover;
+	height: auto;
 }
 
 .about-prose p {
@@ -61,14 +62,12 @@
 }
 
 @media (width >= 769px) {
-	/* Prose (with the kicker + heading) on the left so the About heading lines up with the other
-	   pages' headings; the portrait moves to the right via `order` so both stay in the same row.
-	   DOM order stays photo-first, so the mobile stack (photo above the bio) and the reading order
-	   are unchanged. */
-	.about-inner {
-		grid-template-columns: 1fr minmax(16rem, 22rem);
-	}
+	/* Float the photo to the top-right so the bio wraps beside it and then reclaims the full width
+	   underneath, leaving no dead column. Capped at 45% so the text column keeps a readable width on
+	   narrower desktops. DOM order stays photo-first, so the mobile stack and reading order hold. */
 	.about-photo {
-		order: 1;
+		float: right;
+		width: min(30rem, 45%);
+		margin: 0 0 var(--jb-space-lg) var(--jb-space-xl);
 	}
 }

@@ -1,14 +1,14 @@
 <template>
 	<section :class="styles.about">
 		<article :class="[styles['about-inner'], 'container']">
-			<div :class="styles['about-photo']">
-				<!-- Bound src (not a static attribute) so Vue's SFC compiler treats it as a runtime
-				     URL served by the API, not a build-time module import to resolve. -->
-				<img :src="photoSrc" :alt="photoAlt" width="480" height="600" decoding="async" />
-			</div>
 			<div :class="styles['about-prose']">
 				<span class="section-label">About</span>
 				<h1 class="section-title">Fortunato Geelhoed</h1>
+				<div :class="styles['about-photo']">
+					<!-- Bound src (not a static attribute) so Vue's SFC compiler treats it as a runtime
+					     URL served by the API, not a build-time module import to resolve. -->
+					<img :src="photoSrc" :alt="photoAlt" width="872" height="594" decoding="async" />
+				</div>
 				<p
 					v-for="(paragraph, index) in paragraphs"
 					:key="paragraph.slice(0, 32)"

@@ -13,18 +13,18 @@ export function About() {
 	return (
 		<section className={styles.about}>
 			<article className={`${styles['about-inner']} container`}>
-				<div className={styles['about-photo']}>
-					<img
-						src="/assets/images/fortunato.webp"
-						alt={PHOTO_ALT}
-						width={480}
-						height={600}
-						decoding="async"
-					/>
-				</div>
 				<div className={styles['about-prose']}>
 					<span className="section-label">About</span>
 					<h1 className="section-title">Fortunato Geelhoed</h1>
+					<div className={styles['about-photo']}>
+						<img
+							src="/assets/images/fortunato.webp"
+							alt={PHOTO_ALT}
+							width={872}
+							height={594}
+							decoding="async"
+						/>
+					</div>
 					{paragraphs.map((paragraph, index) => (
 						<p
 							key={paragraph.slice(0, 32)}

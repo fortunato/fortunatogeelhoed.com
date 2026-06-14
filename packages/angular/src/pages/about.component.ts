@@ -14,18 +14,18 @@ import { ContentService } from '../content.service';
 	template: `
 		<section class="about">
 			<article class="about-inner container">
-				<div class="about-photo">
-					<img
-						src="/assets/images/fortunato.webp"
-						[alt]="photoAlt"
-						width="480"
-						height="600"
-						decoding="async"
-					/>
-				</div>
 				<div class="about-prose">
 					<span class="section-label">About</span>
 					<h1 class="section-title">Fortunato Geelhoed</h1>
+					<div class="about-photo">
+						<img
+							src="/assets/images/fortunato.webp"
+							[alt]="photoAlt"
+							width="872"
+							height="594"
+							decoding="async"
+						/>
+					</div>
 					@for (paragraph of paragraphs; track paragraph; let first = $first) {
 						<p [class.about-lead]="first">{{ paragraph }}</p>
 					}
