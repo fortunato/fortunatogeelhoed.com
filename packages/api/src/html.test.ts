@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applyAvailability } from './html';
+import { type AnalyticsConfig, applyAnalytics, applyAvailability } from './html';
 
 // A trimmed prerendered contact page, shaped like the framework output (marker attributes,
 // optimistic "available" baked in, a <head> to receive the seed).
@@ -62,5 +62,32 @@ describe('applyAvailability', () => {
 
 		expect(out).toContain('data-state="booked"');
 		expect(out).toContain('>Currently booked</span>');
+	});
+});
+
+const ANALYTICS: AnalyticsConfig = {
+	scriptUrl: 'https://stats.fortunatogeelhoed.com/script.js',
+	websiteId: 'abc-123',
+	domain: 'fortunatogeelhoed.com',
+};
+
+describe('applyAnalytics', () => {
+	it('injects the cookieless tag with website id and domain into the head', () => {
+		const out = applyAnalytics(PAGE, ANALYTICS);
+		expect(out).toContain('src="https://stats.fortunatogeelhoed.com/script.js"');
+		expect(out).toContain('data-website-id="abc-123"');
+		expect(out).toContain('data-domains="fortunatogeelhoed.com"');
+		// Lands inside the head, before it closes.
+		expect(out.indexOf('data-website-id')).toBeLessThan(out.indexOf('</head>'));
+	});
+
+	it('returns the html unchanged when analytics is not configured', () => {
+		expect(applyAnalytics(PAGE, null)).toBe(PAGE);
+	});
+
+	it('escapes attribute values so the tag cannot break out', () => {
+		const out = applyAnalytics(PAGE, { ...ANALYTICS, websiteId: '"><script>x' });
+		expect(out).not.toContain('"><script>x');
+		expect(out).toContain('&quot;&gt;&lt;script&gt;x');
 	});
 });

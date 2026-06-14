@@ -50,3 +50,49 @@ export function applyAvailability(html: string, a: Availability): string {
 		`<script type="application/json" id="jb-availability">${seed}</script></head>`,
 	);
 }
+
+// Self-hosted analytics (Umami) configuration, read from the environment once. The website id is
+// minted in the Umami dashboard after first boot and supplied as config; the script host is the
+// stats subdomain Caddy fronts. Both empty in development and previews, which keeps the tag off
+// localhost entirely.
+export interface AnalyticsConfig {
+	scriptUrl: string;
+	websiteId: string;
+	// The single host the script is allowed to record on, so previews and localhost never report
+	// into production analytics even if they somehow served the tag.
+	domain: string;
+}
+
+// Build the analytics config from the environment, or null when it is not fully configured. Like
+// the optional Loki/Faro pipelines, a missing value simply turns the feature off rather than
+// breaking the page.
+export function analyticsConfigFromEnv(): AnalyticsConfig | null {
+	const host = process.env.UMAMI_HOST?.trim();
+	const websiteId = process.env.UMAMI_WEBSITE_ID?.trim();
+	if (!host || !websiteId) return null;
+	const domain = process.env.UMAMI_DOMAIN?.trim() || 'fortunatogeelhoed.com';
+	return { scriptUrl: `https://${host}/script.js`, websiteId, domain };
+}
+
+// Escape a value for use inside a double-quoted HTML attribute. The host and id come from operator
+// config, but escaping keeps the injected tag well-formed regardless of what is supplied.
+function escapeAttr(s: string): string {
+	return s
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;');
+}
+
+// Inject the cookieless Umami tracking tag into the document head. `data-domains` pins recording to
+// the production host, and the script is `defer` + `async` so it never blocks render. It is
+// cookieless and stores no per-device identifier, so it runs without a consent banner. Returns the
+// HTML unchanged when analytics is not configured.
+export function applyAnalytics(html: string, config: AnalyticsConfig | null): string {
+	if (!config) return html;
+	const tag =
+		`<script defer src="${escapeAttr(config.scriptUrl)}"` +
+		` data-website-id="${escapeAttr(config.websiteId)}"` +
+		` data-domains="${escapeAttr(config.domain)}"></script>`;
+	return html.replace('</head>', `${tag}</head>`);
+}

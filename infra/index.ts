@@ -33,6 +33,33 @@ const lokiUser = cfg.get('lokiUser') ?? ''; // Grafana Cloud Loki instance/user 
 // credential; kept off the client by living here and being forwarded server-side.
 const faroCollectorUrl = cfg.get('faroCollectorUrl') ?? ''; // Grafana Cloud Faro receiver URL
 
+// Self-hosted, cookieless analytics (Umami) running as two extra containers on this host behind
+// Caddy. The dashboard lives on its own subdomain; the app injects the tracking tag only when the
+// website id is set (minted in the Umami dashboard after first boot). The container images are
+// pinned by tag AND digest: the tag stays human-readable while the @sha256 makes the pull immutable,
+// so a re-pushed tag can never silently change what we deploy. When bumping a tag, fetch the new
+// digest too (see infra/README.md → "Updating Umami / Postgres").
+const statsSubdomain = cfg.get('statsSubdomain') ?? `stats.${domain}`;
+const umamiImage =
+	cfg.get('umamiImage') ??
+	'ghcr.io/umami-software/umami:postgresql-v2.19.0@sha256:77264ce6951c6b131a91d99f1cfd720d9efac1eaaa12e104f21cf49408dd77e0';
+const postgresImage =
+	cfg.get('postgresImage') ??
+	'postgres:16.4-alpine@sha256:5660c2cbfea50c7a9127d17dc4e48543eedd3d7a41a595a2dfa572471e37e64c';
+// The volume's data lives on a dedicated Hetzner Volume (provisioned below). Default size is the
+// provider minimum; analytics for a portfolio site stays comfortably inside it.
+const umamiVolumeSize = cfg.getNumber('umamiVolumeSize') ?? 10;
+// The website id is created in the Umami UI on first boot, so it is unknown at first provision.
+// Leave it unset initially; set it and re-run once the dashboard exists, and the tag goes live.
+const umamiWebsiteId = cfg.get('umamiWebsiteId') ?? '';
+// The host the tracking tag is allowed to record on; pins analytics to production only.
+const umamiTrackingDomain = cfg.get('umamiTrackingDomain') ?? domain;
+
+// Off-site Postgres backup to S3-compatible object storage via restic. All optional and off by
+// default, like the Loki/Faro pipelines: leave the repository unset and the daily job no-ops.
+// Provider is not hardcoded — the repository URL selects Backblaze B2, Cloudflare R2, etc.
+const backupResticRepository = cfg.get('backupResticRepository') ?? '';
+
 // Secrets — set with: pulumi config set --secret <key> <value>
 // ghcrToken is the toggle for a private image: set it (with ghcrUser) and the server logs in to
 // GHCR; leave it unset and a public image is pulled anonymously.
@@ -42,6 +69,19 @@ const ahasendApiKey = cfg.requireSecret('ahasendApiKey');
 const ahasendAccountId = cfg.requireSecret('ahasendAccountId');
 const ahasendToEmail = cfg.requireSecret('ahasendToEmail');
 const lokiToken = cfg.getSecret('lokiToken'); // Grafana Cloud access-policy token (logs:write)
+
+// Umami secrets. APP_SECRET signs Umami sessions and must stay stable; the DB password is shared
+// between the Postgres container and the Umami connection string. Both templated into cloud-init,
+// never committed.
+const umamiAppSecret = cfg.requireSecret('umamiAppSecret');
+const umamiDbPassword = cfg.requireSecret('umamiDbPassword');
+
+// Off-site backup secrets. All optional: unset leaves the daily job disabled. The restic passphrase
+// protects (and is required to restore) the off-site copy; the S3 credentials should be scoped
+// append/write-only at the provider so a compromised host cannot purge backup history.
+const backupResticPassword = cfg.getSecret('backupResticPassword');
+const backupS3AccessKeyId = cfg.getSecret('backupS3AccessKeyId');
+const backupS3SecretAccessKey = cfg.getSecret('backupS3SecretAccessKey');
 
 // Admin key gives root access over the private tailnet and suppresses the emailed root password.
 const sshKey = new hcloud.SshKey('admin', { name: 'fg-admin', publicKey: adminSshKey });
@@ -57,29 +97,82 @@ const firewall = new hcloud.Firewall('web', {
 	],
 });
 
+// Dedicated persistent volume for the Postgres data directory only. The Umami app is stateless and
+// mounts nothing; this volume has one writer (this Postgres) and one purpose (analytics), so it is
+// never co-mingled with other data. It survives host rebuilds and is snapshot-able for backups. Its
+// id is templated into cloud-init, which finds it at the stable /dev/disk/by-id path and mounts it
+// for the Postgres data dir.
+const umamiVolume = new hcloud.Volume('umami-db', {
+	name: 'fg-umami-db',
+	size: umamiVolumeSize,
+	location,
+	format: 'ext4',
+	labels: { app: 'fortunatogeelhoed', role: 'umami-postgres' },
+});
+
 // Render cloud-init with config and secrets templated in. The rendered document contains secrets
 // and lives only transiently inside Pulumi state — keep that state private; never commit it.
 const template = readFileSync(new URL('./cloud-init.yaml', import.meta.url), 'utf8');
 const userData = pulumi
-	.all([ghcrToken, tailscaleAuthKey, ahasendApiKey, ahasendAccountId, ahasendToEmail, lokiToken])
-	.apply(([token, ts, apiKey, accountId, toEmail, lToken]) =>
-		template
-			.replaceAll('__GHCR_USER__', ghcrUser)
-			.replaceAll('__GHCR_TOKEN__', token ?? '')
-			.replaceAll('__IMAGE_REPO__', imageRepo)
-			.replaceAll('__DOMAIN__', domain)
-			.replaceAll('__DEPLOY_PUBKEY__', deploySshKey)
-			.replaceAll('__TAILSCALE_AUTHKEY__', ts)
-			.replaceAll('__AHASEND_API_KEY__', apiKey)
-			.replaceAll('__AHASEND_ACCOUNT_ID__', accountId)
-			.replaceAll('__AHASEND_FROM_EMAIL__', fromEmail)
-			.replaceAll('__AHASEND_FROM_NAME__', fromName)
-			.replaceAll('__AHASEND_TO_EMAIL__', toEmail)
-			.replaceAll('__LOG_LEVEL__', logLevel)
-			.replaceAll('__LOKI_HOST__', lokiHost)
-			.replaceAll('__LOKI_USER__', lokiUser)
-			.replaceAll('__LOKI_TOKEN__', lToken ?? '')
-			.replaceAll('__FARO_COLLECTOR_URL__', faroCollectorUrl),
+	.all([
+		ghcrToken,
+		tailscaleAuthKey,
+		ahasendApiKey,
+		ahasendAccountId,
+		ahasendToEmail,
+		lokiToken,
+		umamiAppSecret,
+		umamiDbPassword,
+		backupResticPassword,
+		backupS3AccessKeyId,
+		backupS3SecretAccessKey,
+		umamiVolume.id,
+	])
+	.apply(
+		([
+			token,
+			ts,
+			apiKey,
+			accountId,
+			toEmail,
+			lToken,
+			appSecret,
+			dbPassword,
+			resticPassword,
+			s3Key,
+			s3Secret,
+			volumeId,
+		]) =>
+			template
+				.replaceAll('__GHCR_USER__', ghcrUser)
+				.replaceAll('__GHCR_TOKEN__', token ?? '')
+				.replaceAll('__IMAGE_REPO__', imageRepo)
+				.replaceAll('__DOMAIN__', domain)
+				.replaceAll('__DEPLOY_PUBKEY__', deploySshKey)
+				.replaceAll('__TAILSCALE_AUTHKEY__', ts)
+				.replaceAll('__AHASEND_API_KEY__', apiKey)
+				.replaceAll('__AHASEND_ACCOUNT_ID__', accountId)
+				.replaceAll('__AHASEND_FROM_EMAIL__', fromEmail)
+				.replaceAll('__AHASEND_FROM_NAME__', fromName)
+				.replaceAll('__AHASEND_TO_EMAIL__', toEmail)
+				.replaceAll('__LOG_LEVEL__', logLevel)
+				.replaceAll('__LOKI_HOST__', lokiHost)
+				.replaceAll('__LOKI_USER__', lokiUser)
+				.replaceAll('__LOKI_TOKEN__', lToken ?? '')
+				.replaceAll('__FARO_COLLECTOR_URL__', faroCollectorUrl)
+				.replaceAll('__STATS_DOMAIN__', statsSubdomain)
+				.replaceAll('__UMAMI_IMAGE__', umamiImage)
+				.replaceAll('__POSTGRES_IMAGE__', postgresImage)
+				.replaceAll('__UMAMI_HOST__', umamiWebsiteId ? statsSubdomain : '')
+				.replaceAll('__UMAMI_WEBSITE_ID__', umamiWebsiteId)
+				.replaceAll('__UMAMI_DOMAIN__', umamiTrackingDomain)
+				.replaceAll('__UMAMI_APP_SECRET__', appSecret)
+				.replaceAll('__UMAMI_DB_PASSWORD__', dbPassword)
+				.replaceAll('__UMAMI_VOLUME_ID__', volumeId)
+				.replaceAll('__BACKUP_RESTIC_REPOSITORY__', backupResticRepository)
+				.replaceAll('__BACKUP_RESTIC_PASSWORD__', resticPassword ?? '')
+				.replaceAll('__BACKUP_S3_ACCESS_KEY_ID__', s3Key ?? '')
+				.replaceAll('__BACKUP_S3_SECRET_ACCESS_KEY__', s3Secret ?? ''),
 	);
 
 const server = new hcloud.Server('app', {
@@ -93,5 +186,17 @@ const server = new hcloud.Server('app', {
 	labels: { app: 'fortunatogeelhoed' },
 });
 
+// Attach the Postgres volume to the host. cloud-init formats it on first use only and mounts it for
+// the Postgres data dir; `automount: false` leaves mounting to cloud-init so the path is controlled
+// here rather than by the provider's default mount location.
+new hcloud.VolumeAttachment('umami-db', {
+	volumeId: umamiVolume.id.apply((id) => Number.parseInt(id, 10)),
+	serverId: server.id.apply((id) => Number.parseInt(id, 10)),
+	automount: false,
+});
+
 export const ipv4 = server.ipv4Address;
 export const ipv6 = server.ipv6Address;
+// The analytics dashboard host. Point a DNS A/AAAA record for this name at the ipv4/ipv6 outputs so
+// Caddy can obtain its certificate.
+export const statsHost = statsSubdomain;

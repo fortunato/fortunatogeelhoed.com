@@ -5,6 +5,8 @@
 package_update: true
 packages:
   - docker.io
+  # restic drives the off-site, encrypted Postgres backup (see umami-backup.sh).
+  - restic
 
 write_files:
   # Cap container logs so they can never fill the disk and take the whole host down with them.
@@ -44,6 +46,58 @@ write_files:
       # embeds the write key in its path, so it is the whole credential. Optional: without it the
       # proxy drops payloads and answers 204, so the site is unaffected.
       FARO_COLLECTOR_URL=__FARO_COLLECTOR_URL__
+      # Self-hosted, cookieless analytics (Umami). The app injects the tracking tag into the served
+      # HTML only when both the stats host and the website id are set; the website id is minted in
+      # the Umami dashboard after first boot. data-domains pins recording to the production host, so
+      # localhost and previews never report in. All optional: leave blank and no tag is injected.
+      UMAMI_HOST=__UMAMI_HOST__
+      UMAMI_WEBSITE_ID=__UMAMI_WEBSITE_ID__
+      UMAMI_DOMAIN=__UMAMI_DOMAIN__
+
+  # Postgres for Umami. The only stateful piece: its data dir lives on a dedicated Hetzner Volume
+  # (mounted below), and this database backs nothing else.
+  - path: /etc/fg/postgres.env
+    permissions: '0600'
+    owner: root:root
+    content: |
+      POSTGRES_DB=umami
+      POSTGRES_USER=umami
+      POSTGRES_PASSWORD=__UMAMI_DB_PASSWORD__
+      # Keep the data in a subdirectory of the mount so the volume's lost+found does not collide with
+      # Postgres' empty-dir check on first init.
+      PGDATA=/var/lib/postgresql/data/pgdata
+
+  # Umami app. Stateless: it holds no data on disk, runs its migrations on startup, and keeps all
+  # state in Postgres. APP_SECRET signs sessions and must stay stable across restarts.
+  - path: /etc/fg/umami.env
+    permissions: '0600'
+    owner: root:root
+    content: |
+      DATABASE_TYPE=postgresql
+      DATABASE_URL=postgresql://umami:__UMAMI_DB_PASSWORD__@umami-db:5432/umami
+      APP_SECRET=__UMAMI_APP_SECRET__
+
+  # Off-site, encrypted Postgres backup. Runs daily via the systemd timer below: pg_dump from the
+  # running container, encrypted and deduplicated by restic, pushed to off-Hetzner S3-compatible
+  # object storage. All values optional: with no repository configured the job logs that backups are
+  # disabled and exits cleanly, the same opt-in pattern as the Loki/Faro pipelines.
+  - path: /etc/fg/backup.env
+    permissions: '0600'
+    owner: root:root
+    content: |
+      # restic repository, e.g. s3:https://s3.us-west-002.backblazeb2.com/<bucket>/umami or
+      # s3:https://<account>.r2.cloudflarestorage.com/<bucket>/umami. Blank disables backups.
+      RESTIC_REPOSITORY=__BACKUP_RESTIC_REPOSITORY__
+      # Encryption passphrase for the restic repo. Without it the off-site copy cannot be restored,
+      # so store it somewhere durable and separate from the host.
+      RESTIC_PASSWORD=__BACKUP_RESTIC_PASSWORD__
+      # S3-compatible credentials, scoped append/write-only at the provider where possible so a
+      # compromised host cannot purge backup history.
+      AWS_ACCESS_KEY_ID=__BACKUP_S3_ACCESS_KEY_ID__
+      AWS_SECRET_ACCESS_KEY=__BACKUP_S3_SECRET_ACCESS_KEY__
+      # Retention, pruned after each successful run.
+      BACKUP_KEEP_DAILY=7
+      BACKUP_KEEP_WEEKLY=4
 
   - path: /etc/fg/Caddyfile
     permissions: '0644'
@@ -51,6 +105,13 @@ write_files:
       __DOMAIN__ {
         encode zstd gzip
         reverse_proxy app:3000
+      }
+
+      # Self-hosted analytics dashboard. Only Caddy faces the internet; Umami and Postgres stay on
+      # the private docker network and are never published. Automatic HTTPS, same as the apex.
+      __STATS_DOMAIN__ {
+        encode zstd gzip
+        reverse_proxy umami:3000
       }
 
   - path: /opt/fg/deploy.sh
@@ -87,6 +148,73 @@ write_files:
       docker rm -f app 2>/dev/null || true
       [ -n "$PREV" ] && { run_app "$PREV"; echo "rolled back to $PREV" >&2; }
       exit 1
+
+  - path: /opt/fg/umami-backup.sh
+    permissions: '0755'
+    content: |
+      #!/usr/bin/env bash
+      # Daily off-site Postgres backup for Umami. Streams a logical pg_dump out of the running
+      # database container, hands it to restic (encryption + dedup + retention built in), and prunes
+      # to the retention policy. Every line goes to stdout/journald so it ships to Loki via the
+      # docker/journal pipeline; the closing JSON line carries result=ok|failed|disabled so a
+      # *missing* success can be alerted on (no ok line in N hours), not just explicit failures.
+      set -uo pipefail
+      # shellcheck disable=SC1091
+      set -a; . /etc/fg/backup.env; set +a
+
+      stamp() { date -u +%Y-%m-%dT%H:%M:%SZ; }
+      finish() {
+        # One structured line per run for the alerting rule to match on.
+        echo "{\"job\":\"umami-backup\",\"ts\":\"$(stamp)\",\"result\":\"$1\"${2:+,\"detail\":\"$2\"}}"
+        exit "$3"
+      }
+
+      # Opt-in, like the other optional pipelines: no repo configured means backups are off.
+      if [ -z "${RESTIC_REPOSITORY:-}" ] || [ -z "${RESTIC_PASSWORD:-}" ]; then
+        finish disabled "no restic repository configured" 0
+      fi
+
+      echo "umami-backup: starting at $(stamp) repo=${RESTIC_REPOSITORY}"
+      # Initialise the repository on first run; ignore the "already initialized" case.
+      restic snapshots >/dev/null 2>&1 || restic init || finish failed "restic init failed" 1
+
+      # Dump straight from the container and pipe into restic under a stable logical path, so restic
+      # dedupes day over day. pipefail makes a failing pg_dump fail the whole pipe.
+      if docker exec umami-db pg_dump -U umami -d umami \
+        | gzip \
+        | restic backup --stdin --stdin-filename umami.sql.gz --tag umami --host fg-app; then
+        restic forget --tag umami \
+          --keep-daily "${BACKUP_KEEP_DAILY:-7}" --keep-weekly "${BACKUP_KEEP_WEEKLY:-4}" \
+          --prune || echo "umami-backup: prune failed (backup itself succeeded)" >&2
+        finish ok "" 0
+      fi
+      finish failed "pg_dump or restic backup failed" 1
+
+  - path: /etc/systemd/system/umami-backup.service
+    permissions: '0644'
+    content: |
+      [Unit]
+      Description=Off-site encrypted Postgres backup for Umami
+      After=docker.service
+      Requires=docker.service
+
+      [Service]
+      Type=oneshot
+      ExecStart=/opt/fg/umami-backup.sh
+
+  - path: /etc/systemd/system/umami-backup.timer
+    permissions: '0644'
+    content: |
+      [Unit]
+      Description=Run the Umami Postgres backup daily
+
+      [Timer]
+      OnCalendar=*-*-* 03:30:00 UTC
+      RandomizedDelaySec=600
+      Persistent=true
+
+      [Install]
+      WantedBy=timers.target
 
   - path: /root/.ssh/fg_deploy.pub
     permissions: '0644'
@@ -125,3 +253,33 @@ runcmd:
     -v /etc/fg/Caddyfile:/etc/caddy/Caddyfile:ro
     -v caddy_data:/data -v caddy_config:/config
     caddy:2
+
+  # --- Self-hosted analytics (Umami + Postgres) ---------------------------------------------------
+  # The dedicated Hetzner Volume holds only the Postgres data dir. Hetzner exposes an attached volume
+  # at a stable by-id path keyed on its numeric id. Format on first use only (never reformat a volume
+  # that already carries data), then mount it and persist the mount so it survives reboots.
+  - VOL_ID=__UMAMI_VOLUME_ID__
+  - DEV="/dev/disk/by-id/scsi-0HC_Volume_${VOL_ID}"
+  - mkdir -p /mnt/umami-db
+  - if ! blkid "$DEV" >/dev/null 2>&1; then mkfs.ext4 -F "$DEV"; fi
+  - grep -q "$DEV" /etc/fstab || printf '%s /mnt/umami-db ext4 discard,nofail,defaults 0 0\n' "$DEV" >> /etc/fstab
+  - mount /mnt/umami-db
+  # Postgres runs as uid/gid 999 in the official image; own the data dir so it can write.
+  - mkdir -p /mnt/umami-db/data && chown -R 999:999 /mnt/umami-db/data
+  # Postgres for Umami: not published (no -p), reachable only by Umami on the private network under
+  # the alias umami-db. Pinned to an explicit major tag (never latest); patch upgrades bump the tag.
+  - >
+    docker run -d --name umami-db --restart unless-stopped --network web
+    --network-alias umami-db
+    --env-file /etc/fg/postgres.env
+    -v /mnt/umami-db/data:/var/lib/postgresql/data
+    __POSTGRES_IMAGE__
+  # Umami app: stateless, fronted by Caddy on the stats subdomain. Pinned to an explicit version tag.
+  - >
+    docker run -d --name umami --restart unless-stopped --network web
+    --env-file /etc/fg/umami.env
+    __UMAMI_IMAGE__
+  # Daily off-site encrypted backup of the Umami database. Enable the timer; the job itself no-ops
+  # cleanly when no off-site repository is configured.
+  - systemctl daemon-reload
+  - systemctl enable --now umami-backup.timer

@@ -7,7 +7,7 @@ import { bodyLimit } from 'hono/body-limit';
 import { getCookie, setCookie } from 'hono/cookie';
 import { csrf } from 'hono/csrf';
 import { cssSourceFiles } from '../../../scripts/css-sources';
-import { applyAvailability } from './html';
+import { analyticsConfigFromEnv, applyAnalytics, applyAvailability } from './html';
 import { requestLogger } from './logger';
 import { type AppEnv, frameworkMiddleware } from './middleware/framework';
 import { availabilityRateLimit, contactRateLimit, rumRateLimit } from './middleware/rate-limit';
@@ -22,6 +22,10 @@ import { RUM_MAX_BYTES } from './services/rum';
 import { renderShell } from './shell';
 
 const isDev = process.env.NODE_ENV !== 'production';
+
+// Self-hosted analytics tag, resolved once at startup. Null in dev/previews (no env set), so the
+// cookieless tracking script is only ever injected into the production-served HTML.
+const analytics = analyticsConfigFromEnv();
 
 // Server-side theme: rewrite the prerendered <html data-theme> from the `theme`
 // cookie so the correct theme paints with no flash, even with JS disabled.
@@ -246,13 +250,17 @@ if (isDev) {
 			if (c.req.path === '/contact') {
 				html = applyAvailability(html, await getAvailability());
 			}
+			html = applyAnalytics(html, analytics);
 			return serveHtml(c, html);
 		}
 
 		// Fallback to root index
 		const fallback = Bun.file(`./dist/${framework}/index.html`);
 		if (await fallback.exists()) {
-			return serveHtml(c, applyTheme(await fallback.text(), theme));
+			return serveHtml(
+				c,
+				applyAnalytics(applyTheme(await fallback.text(), theme), analytics),
+			);
 		}
 
 		return serveHtml(

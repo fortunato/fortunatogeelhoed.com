@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import {
 	DOCS_CSP,
 	generateNonce,
@@ -40,6 +40,10 @@ describe('withNonce', () => {
 });
 
 describe('strictCsp', () => {
+	afterEach(() => {
+		process.env.UMAMI_HOST = undefined;
+	});
+
 	it('pins script execution to self plus the request nonce and locks down the rest', () => {
 		const csp = strictCsp('ABC123');
 		expect(csp).toContain("script-src 'self' 'nonce-ABC123'");
@@ -50,6 +54,21 @@ describe('strictCsp', () => {
 		expect(csp).toContain("style-src 'self' 'unsafe-inline'");
 		// No 'unsafe-inline' for scripts.
 		expect(csp).not.toContain("script-src 'self' 'unsafe-inline'");
+	});
+
+	it('keeps script-src and connect-src first-party when analytics is unset', () => {
+		const csp = strictCsp('ABC123');
+		expect(csp).toContain("connect-src 'self'");
+		expect(csp).not.toContain('https://stats.');
+	});
+
+	it('allows the analytics origin in script-src and connect-src when configured', () => {
+		process.env.UMAMI_HOST = 'stats.fortunatogeelhoed.com';
+		const csp = strictCsp('ABC123');
+		expect(csp).toContain(
+			"script-src 'self' 'nonce-ABC123' https://stats.fortunatogeelhoed.com",
+		);
+		expect(csp).toContain("connect-src 'self' https://stats.fortunatogeelhoed.com");
 	});
 });
 

@@ -35,20 +35,35 @@ export function withNonce(html: string, nonce: string): string {
 	return html.replaceAll('<script>', `<script nonce="${nonce}">`);
 }
 
+// The self-hosted analytics origin (the stats subdomain Caddy fronts), derived from the same env
+// that drives the tracking tag. When set it is the one cross-origin host the strict CSP allows, for
+// loading the Umami script and for its same-host beacon. Empty turns the allowance off, so the
+// policy stays first-party-only on localhost and previews.
+function analyticsOrigin(): string {
+	const host = process.env.UMAMI_HOST?.trim();
+	return host ? `https://${host}` : '';
+}
+
 // Strict, first-party-only policy for the site's own HTML (production). style-src must allow inline
 // styles: the frameworks emit inline <style> blocks (Vue/Angular component CSS) and inline style=""
 // attributes (timeline ticks) that cannot be nonced or hashed without rebuild-fragile machinery.
-// Script execution stays locked to same-origin bundles plus the per-request nonce.
+// Script execution stays locked to same-origin bundles plus the per-request nonce, with the lone
+// exception of the self-hosted analytics origin (its loader script and beacon) when configured.
 export function strictCsp(nonce: string): string {
+	const analytics = analyticsOrigin();
+	const scriptSrc = analytics
+		? `script-src 'self' 'nonce-${nonce}' ${analytics}`
+		: `script-src 'self' 'nonce-${nonce}'`;
+	const connectSrc = analytics ? `connect-src 'self' ${analytics}` : "connect-src 'self'";
 	return [
 		"default-src 'self'",
 		"base-uri 'self'",
 		"object-src 'none'",
-		`script-src 'self' 'nonce-${nonce}'`,
+		scriptSrc,
 		"style-src 'self' 'unsafe-inline'",
 		"img-src 'self' data:",
 		"font-src 'self'",
-		"connect-src 'self'",
+		connectSrc,
 		"form-action 'self'",
 		"frame-ancestors 'none'",
 		'upgrade-insecure-requests',

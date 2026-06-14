@@ -77,6 +77,19 @@ pulumi config set lokiHost https://logs-prod-012.grafana.net   # Loki push endpo
 pulumi config set lokiUser <grafana cloud loki instance id>    # numeric user id
 pulumi config set faroCollectorUrl <faro receiver url, e.g. https://faro-collector-prod-eu-west-2.grafana.net/collect/KEY>
 
+# analytics (self-hosted Umami — see "Analytics" below)
+# statsSubdomain / umamiTrackingDomain default to stats.<domain> / <domain>
+# umamiImage / postgresImage / umamiVolumeSize have sane pinned defaults
+pulumi config set umamiWebsiteId <id from the Umami dashboard, set after first boot>
+pulumi config set --secret umamiAppSecret <random 32+ char string>
+pulumi config set --secret umamiDbPassword <random db password>
+# off-site backup (optional — omit to leave daily backups disabled). Provider: Cloudflare R2.
+# Use an EU-jurisdiction bucket and a bucket-scoped (append/write-only) R2 API token.
+pulumi config set backupResticRepository s3:https://<account-id>.r2.cloudflarestorage.com/<bucket>/umami
+pulumi config set --secret backupResticPassword <restic repo passphrase>
+pulumi config set --secret backupS3AccessKeyId <R2 bucket-scoped token id>
+pulumi config set --secret backupS3SecretAccessKey <R2 bucket-scoped token secret>
+
 # secrets
 pulumi config set --secret tailscaleAuthKey <tailscale auth key>
 pulumi config set --secret ahasendApiKey <AhaSend api key>
@@ -110,7 +123,9 @@ Validate on a throwaway stack first (`pulumi up` then `pulumi destroy`) with a t
 ## After provisioning
 
 1. **DNS** (at your registrar): point the apex `A` record at the `ipv4` output and `AAAA` at
-   `ipv6`. Caddy can only obtain a certificate once DNS resolves to the server.
+   `ipv6`. Caddy can only obtain a certificate once DNS resolves to the server. Add the **same
+   `A`/`AAAA` pair for the stats subdomain** (`stats.<domain>`, the `statsHost` output) so the
+   analytics dashboard gets its own certificate.
 2. **GitHub Actions secrets** (repo → Settings → Secrets): `DEPLOY_SSH_KEY` (the deploy private
    key), `TS_OAUTH_CLIENT_ID`, `TS_OAUTH_SECRET` (the OAuth client that joins CI as `tag:fg-deploy`).
    Image push uses the built-in `GITHUB_TOKEN`. Optional: `FARO_SOURCEMAP_API_KEY` (frontend sourcemap
@@ -148,6 +163,155 @@ itself are never affected.
 These map 1:1 to the `loki*` / `faro*` Pulumi config above; set them with the rest of the stack
 config and `pulumi up` carries them into the server's `app.env`. Confirm logs are flowing in Grafana
 with `{app="fortunatogeelhoed"}` (the labels pino attaches).
+
+### Why managed, not self-hosted
+
+Telemetry goes to Grafana Cloud rather than a self-hosted Loki/Grafana stack on this box, and that
+stays true even though we already run a self-hosted Postgres for Umami — the two are not comparable:
+
+- **Failure-domain isolation.** Observability exists to explain why the host is unhealthy, often while
+  it is unhealthy. Self-hosting it on the single host it observes means the logs die with the box, at
+  the exact moment you need them. Off-box telemetry gives out-of-band sight.
+- **The Umami Postgres doesn't lower the cost.** Loki/Faro don't use Postgres; a self-hosted stack is
+  a separate, heavier set of always-ingesting services (Loki + Grafana + a receiver, likely
+  Prometheus/Tempo) that would contend with the actual site for memory on a ~4 GB host.
+- **Toil vs. value.** Umami is "daily backup, occasional bump." An observability platform is ongoing
+  retention/disk/upgrade care for no user-facing gain here.
+- **The free tier covers a portfolio's volume**, with an EU region available, so the usual
+  self-hosting motives (cost, residency) barely apply; the data is low-sensitivity anyway.
+
+The code stays self-hostable in principle. Revisit only for a deliberate "run my own observability"
+showcase (on a *separate* host, to preserve the isolation above) or at real multi-host scale.
+
+## Analytics (self-hosted Umami)
+
+Visitor analytics are self-hosted and **cookieless**, so there is no consent banner and no
+per-device identifier — name it on the `/privacy` page. It runs as two extra containers on this same
+host alongside the app, fronted by Caddy on `stats.<domain>`:
+
+- **`umami`** — the dashboard and collector. Stateless: it holds no data on disk, runs its own DB
+  migrations on startup, and keeps all state in Postgres.
+- **`umami-db`** — PostgreSQL, the only stateful piece. Its data directory lives on a **dedicated
+  Hetzner Volume** (`fg-umami-db`) mounted at `/mnt/umami-db`, so it survives host rebuilds and is
+  snapshot-able. That volume has one writer and one purpose; nothing else is stored on it.
+
+Neither container is published — only Caddy faces the internet. `APP_SECRET` and the Postgres
+password come from Pulumi config secrets (`umamiAppSecret`, `umamiDbPassword`) and are templated into
+the host's env files at provision time; they are never committed.
+
+### First-boot wiring (the website id)
+
+The tracking tag is injected into the served HTML **only once a website id exists**, which is minted
+in the dashboard after the first boot. So the order is:
+
+1. `pulumi up` with `umamiAppSecret` / `umamiDbPassword` set (and DNS for `stats.<domain>` pointed at
+   the host). The dashboard comes up at `https://stats.<domain>` (default login `admin` / `umami` —
+   change it immediately).
+2. In the dashboard, add the website `fortunatogeelhoed.com` and copy its **Website ID**.
+3. `pulumi config set umamiWebsiteId <id>` and `pulumi up` again. The app now injects the cookieless
+   `script.js` tag with `data-domains="fortunatogeelhoed.com"`, so it records on production only —
+   never on localhost or previews. (The CSP automatically allows the stats origin for the script and
+   its beacon once the host is configured.)
+
+### Pinned versions and updates
+
+Both images are pinned by **tag _and_ digest** (`name:tag@sha256:…`) — never `latest` — so deploys
+are reproducible and a re-pushed tag can never silently change what runs. These containers are
+separate from the site app, so updating them is a container swap on the host, independent of routine
+app releases.
+
+When you bump a tag you **must also refresh its digest**. Fetch the new one with:
+
+```sh
+docker buildx imagetools inspect ghcr.io/umami-software/umami:postgresql-v2.19.0   # shows the digest
+# or, no Docker needed:
+skopeo inspect docker://postgres:16.4-alpine --format '{{.Digest}}'
+```
+
+Then set both, e.g. `pulumi config set umamiImage 'ghcr.io/umami-software/umami:<tag>@sha256:<digest>'`.
+Leaving the config unset uses the digest-pinned defaults baked into `index.ts`.
+
+- **Umami**: bump `umamiImage` (tag + digest) and re-provision (or re-pull/restart the container).
+  Umami applies its own DB migrations on startup. Read the release notes; on a **major** bump
+  (v2 → v3) snapshot the volume and take a `pg_dump` first.
+- **Postgres — patch/minor** (e.g. `16.4 → 16.5`): safe in-place. Bump `postgresImage` (tag + digest)
+  to a newer patch of the **same major** and restart. Apply promptly for security fixes.
+- **Postgres — major** (e.g. `16 → 17`): **not** a simple tag swap — the on-disk format changes.
+  Snapshot the volume, `pg_dump` the database, stand up the new major, and restore. Do not bump the
+  major casually.
+
+Optionally let Renovate/Dependabot watch the two image tags and open update PRs.
+
+### Backups (3-2-1)
+
+Postgres is the only stateful component, so backups protect that one database. Three copies, two
+media, one off-site:
+
+1. **Live volume** — the running Postgres data dir on the Hetzner Volume.
+2. **Hetzner Volume snapshot** — fast provider-level recovery from corruption or a bad version bump.
+   Enable scheduled snapshots in the Hetzner console (same provider/account, so not sufficient
+   alone).
+3. **Off-site encrypted dump (required)** — a daily `systemd` timer (`umami-backup.timer`) runs
+   `pg_dump` → gzip → **restic** (encryption + dedup + retention) → **off-Hetzner** S3-compatible
+   object storage. Chosen provider: **Cloudflare R2** — S3-compatible, egress-free (so restores and
+   restic `check` reads cost nothing), and its free tier is ample for this small, deduplicated
+   workload. Create the bucket with **EU jurisdiction** to keep the off-site copy EU-resident.
+   Backblaze B2 or a Hetzner Storage Box are drop-in alternatives. This is the copy that survives
+   host loss or a destructive deletion.
+
+The off-site job is **opt-in**, like the Loki/Faro pipelines: leave `backupResticRepository` unset
+and the timer runs but no-ops cleanly. When configured:
+
+- **Provider is not hardcoded** — the `backupResticRepository` URL selects it. For R2 the repository
+  is `s3:https://<account-id>.r2.cloudflarestorage.com/<bucket>/umami`.
+- **Credentials** (`backupS3AccessKeyId` / `backupS3SecretAccessKey`) should be a **bucket-scoped,
+  append/write-only** token (on R2, scope the API token to the single backup bucket) so a compromised
+  host cannot purge backup history.
+- **Retention** is 7 daily + 4 weekly, pruned after each successful run.
+- **Observability**: every run logs to journald (shipped to Loki) and ends with a structured line
+  `{"job":"umami-backup",...,"result":"ok|failed|disabled"}`. Alert on a **missing** `ok` (no green
+  run in N hours), not only on explicit failures.
+- **Restore drill**: exercise the restore at least once (and after any major change) so the off-site
+  copy is known-good, not assumed.
+
+Logical dumps (not continuous WAL archiving) are deliberate: for analytics a worst-case RPO of ~1 day
+is acceptable, and dumps stay portable across Postgres majors.
+
+#### Restore procedure
+
+The snapshot holds a single gzipped plain-SQL dump (`umami.sql.gz`, tag `umami`). Restore reads from
+the **same** restic repo, so you need the four backup values from Pulumi config in the environment:
+
+```sh
+export RESTIC_REPOSITORY='s3:https://<account-id>.r2.cloudflarestorage.com/<bucket>/umami'
+export RESTIC_PASSWORD='<restic passphrase>'
+export AWS_ACCESS_KEY_ID='<R2 token id>'        # restic's S3 backend reads the AWS_* names
+export AWS_SECRET_ACCESS_KEY='<R2 token secret>'
+
+restic snapshots --tag umami            # 1. list available backups, pick one (or use `latest`)
+```
+
+**Verify / drill** — stream the dump into a throwaway Postgres and check it, touching nothing live:
+
+```sh
+docker run -d --name pg-restore-check -e POSTGRES_USER=umami -e POSTGRES_PASSWORD=x -e POSTGRES_DB=umami postgres:16-alpine
+restic dump latest umami.sql.gz | gunzip | docker exec -i pg-restore-check psql -U umami -d umami
+docker exec pg-restore-check psql -U umami -d umami -c '\dt'   # tables present?
+docker rm -f pg-restore-check
+```
+
+**Real recovery** — into the live database (the dump is plain SQL with no `DROP`/`CREATE`, so restore
+into an **empty** `umami` db):
+
+```sh
+docker stop umami                                   # stop writes
+docker exec umami-db psql -U umami -d postgres -c 'DROP DATABASE umami; CREATE DATABASE umami;'
+restic dump latest umami.sql.gz | gunzip | docker exec -i umami-db psql -U umami -d umami
+docker start umami
+```
+
+`restic dump <id> umami.sql.gz` streams a specific snapshot instead of `latest`. If restic's cache is
+cold on a fresh host, run `restic snapshots` first to rebuild it.
 
 ## Uptime monitoring
 
