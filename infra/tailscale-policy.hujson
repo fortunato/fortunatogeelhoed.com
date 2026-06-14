@@ -15,10 +15,15 @@
 		"tag:fg-deploy": ["autogroup:admin"],
 	},
 
-	// The only access granted on the tailnet is SSH to the server; everything else is denied.
+	// Tailnet access to the server: SSH for administration, plus HTTPS so the admin can reach the
+	// Umami dashboard, which is published only over the tailnet (Caddy additionally restricts the
+	// dashboard to the tailnet source range). Everything else is denied.
 	"acls": [
 		// Admin (you) may SSH the server for break-glass administration.
 		{ "action": "accept", "src": ["autogroup:admin"], "dst": ["tag:fg-server:22"] },
+		// Admin (you) may reach the analytics dashboard over HTTPS. Without this Tailscale drops :443
+		// before Caddy ever sees it, so the tailnet-only dashboard is unreachable.
+		{ "action": "accept", "src": ["autogroup:admin"], "dst": ["tag:fg-server:443"] },
 		// The CI deploy node may SSH the server, where a forced command limits it to the deploy script.
 		{ "action": "accept", "src": ["tag:fg-deploy"], "dst": ["tag:fg-server:22"] },
 	],

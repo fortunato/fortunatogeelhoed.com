@@ -9,13 +9,18 @@ packages:
   - restic
 
 write_files:
-  # Cap container logs so they can never fill the disk and take the whole host down with them.
+  # Cap container logs so they can never fill the disk and take the whole host down with them. Also
+  # disable Docker's userland proxy: with it on, connections to a published port reach the container
+  # with their source rewritten to the docker bridge gateway, so Caddy (and the app behind it) see a
+  # bogus client IP. Turning it off makes iptables forward the real source, which the dashboard's
+  # remote_ip gate and the app's per-IP rate limiting both depend on.
   - path: /etc/docker/daemon.json
     permissions: '0644'
     content: |
       {
         "log-driver": "json-file",
-        "log-opts": { "max-size": "10m", "max-file": "3" }
+        "log-opts": { "max-size": "10m", "max-file": "3" },
+        "userland-proxy": false
       }
 
   - path: /etc/fg/app.env

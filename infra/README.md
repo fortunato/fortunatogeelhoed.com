@@ -219,17 +219,35 @@ risk. Caddy therefore publishes **only the two paths analytics collection needs*
 and gates everything else by **source IP**:
 
 - **Public, unauthenticated** — `GET /script.js` (the cookieless tracker the site loads) and
-  `POST /api/send` (the event beacon). These are all that page-view collection requires.
+  `POST /api/send` (the event beacon). These are all that page-view collection requires. They are
+  **not rate-limited at the edge** (stock `caddy:2` ships no rate-limit module); for a portfolio the
+  flood risk on the cookieless beacon is low and accepted. Closing it means a custom Caddy build
+  (`xcaddy` + `caddy-ratelimit`).
 - **Everything else** (the dashboard, `/login`, the admin `/api/*`) is restricted to the
   `statsAllowedCidrs` ranges, which default to the Tailscale CGNAT range `100.64.0.0/10`. Off-tailnet
   the whole internet gets `403`, so the dashboard and its default `admin` / `umami` login are simply
   unreachable from the public internet.
+
+> The **load-bearing control is the Tailscale ACL** (`tag:fg-server:443`, admins only), not the
+> Caddy CIDR. `100.64.0.0/10` is shared CGNAT space, so the CIDR alone is not a fence; it only means
+> "arrived over the tailnet," which the ACL already guarantees. Caddy's `remote_ip` is defense in
+> depth behind it. (To make the Caddy layer scope independently, set `statsAllowedCidrs` to your
+> server's specific tailnet IP rather than the whole range.)
 
 **Why source IP and not HTTP basic auth.** Basic auth cannot front Umami: the Umami SPA sets its own
 `Authorization: Bearer <token>` header on every API call, and HTTP basic auth uses that same
 `Authorization` header. Umami's header overwrites the basic credential on every `/api/*` request, so
 Caddy 401s and the browser re-prompts in an unbreakable loop. An IP gate doesn't touch the
 `Authorization` header, so Umami's own auth flows untouched.
+
+**The IP gate depends on `userland-proxy: false`.** Caddy runs in a container with its ports
+published by Docker. With Docker's default userland proxy enabled, inbound connections reach Caddy
+with their source rewritten to the docker bridge gateway, so `remote_ip` matches *nobody* and the
+dashboard `403`s everyone, tailnet included. `daemon.json` therefore sets `"userland-proxy": false`
+(see `cloud-init.yaml`), which makes Docker preserve the real client IP. This is load-bearing for the
+gate, and also why the app behind Caddy sees true client IPs for rate limiting. If you ever see the
+dashboard `403` your own tailnet connection, confirm that setting took effect (`docker info` shows it,
+and a `docker`/host restart is required after changing it).
 
 So **to reach the dashboard**, point `stats.<domain>` at the server's **tailnet IP** on your machine
 (an `/etc/hosts` entry, or Tailscale MagicDNS) and browse `https://stats.<domain>` over Tailscale —
