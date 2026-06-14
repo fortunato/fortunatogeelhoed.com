@@ -64,7 +64,10 @@
 	width: 1px;
 	height: 20px;
 	background: var(--jb-color-border);
-	margin: 0 var(--jb-space-lg);
+	/* A 1px hairline needs little surrounding air; md (not lg) keeps the divider legible while
+	   reclaiming ~32px of cluster width, which lets the top nav clear the wordmark — and so the
+	   wide-nav breakpoint below — fall at a lower viewport. */
+	margin: 0 var(--jb-space-md);
 }
 
 .nav {
@@ -117,7 +120,7 @@
 
 .switcher-label {
 	/* Hidden only at the narrowest widths, where the header cluster genuinely cannot fit it;
-	   it reappears at its own lower breakpoint (see below), decoupled from the 1080px nav tier. */
+	   it reappears at its own lower breakpoint (see below), decoupled from the 1024px nav tier. */
 	display: none;
 	font-family: var(--jb-font-mono);
 	font-size: 0.65rem;
@@ -212,9 +215,9 @@
 	}
 }
 
-/* "Built with" label tier — decoupled from the 1080px nav breakpoint. Below 1080 the primary
+/* "Built with" label tier — decoupled from the 1024px nav breakpoint. Below 1024 the primary
    nav is the bottom tab bar, so the header's right side is just logo + switcher + GitHub + theme
-   toggle, with room for the label far below 1080. Measuring that below-1080 cluster (real header
+   toggle, with room for the label far below 1024. Measuring that below-1024 cluster (real header
    DOM, real fonts, nav hidden) the logo + "Built with" label + switcher buttons + the two icon
    buttons first fit inside the bar's padding above the --jb-space-md floor gap at ~538px. 560px
    sits just above that with a comfortable ~22px margin, so the label is shown wherever it
@@ -230,14 +233,21 @@
    switcher relaxes to its full size. The "Built with" label is decoupled and appears at its own
    lower breakpoint above.
 
-   Breakpoint is 1080px: measuring the real header DOM (logo + five-item nav + separator + the
-   "Built with" switcher + GitHub and theme-toggle icon buttons) with the actual fonts, the wide
-   cluster and the logo first fit inside the bar's padding with a gap at or above the --jb-space-md
-   floor at ~1030px. 1080px sits just above that, keeping a comfortable ~65px gap at the switch
-   while not dropping to the bottom tab bar a moment before the top nav genuinely fits. Below this
-   the bottom tab bar is the primary nav, so there is never a width where neither nav shows. Must
-   stay in lockstep with bottom-nav.module.css. */
-@media (width >= 1080px) {
+   The top nav is shown across two tiers so it can reach narrower viewports without crowding the
+   wordmark, instead of cutting straight to the bottom tab bar (measured on the real header DOM
+   with the actual fonts, logo↔nav gap grows ~1px per px of viewport):
+
+   - >= 1024px (here): the nav appears, but HOME is dropped (see the range query below) — the
+     logo already links home, so it is the one item we can shed under width pressure. The leaner
+     five-item nav clears the wordmark by ~44px at 1024px, the conventional landscape-tablet /
+     small-laptop width where a top nav is expected.
+   - >= 1080px: there is room for the full six items, so HOME returns; the gap resets to ~44px
+     and widens from there.
+
+   Below 1024px the bottom tab bar is the primary nav (and carries HOME as a tab, where a tab bar
+   conventionally does), so exactly one nav shows at every width. The 1024px tier must stay in
+   lockstep with bottom-nav.module.css and the body's bottom-padding tier in base.css. */
+@media (width >= 1024px) {
 	.nav {
 		display: flex;
 	}
@@ -257,5 +267,15 @@
 	.switcher-btn {
 		padding: 4px 12px;
 		font-size: 0.7rem;
+	}
+}
+
+/* The squeeze tier: between the nav first appearing and there being room for all six items, drop
+   HOME. It is the only link the logo fully duplicates, so it is the safe one to shed when the
+   six-item nav would otherwise crowd the wordmark. display:none also drops it from the a11y tree,
+   which is fine — the logo remains the accessible route home. */
+@media (1024px <= width < 1080px) {
+	.nav a:first-child {
+		display: none;
 	}
 }

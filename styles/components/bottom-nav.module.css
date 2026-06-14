@@ -46,10 +46,11 @@
 }
 
 /* Wide viewports: the top-bar nav in the header is the primary nav instead. Kept in step
-   with the header breakpoint that shows the top nav (1080px — the measured width at which the
-   five-item nav and the switcher cluster first fit alongside the logo with comfortable air), so
-   exactly one nav is shown at any width. Must stay in lockstep with header.module.css. */
-@media (width >= 1080px) {
+   with the header breakpoint where the top nav first appears (1024px — the conventional
+   landscape-tablet / small-laptop width; at that tier the header drops HOME so the leaner nav
+   still clears the wordmark, see header.module.css), so exactly one nav is shown at any width.
+   Must stay in lockstep with header.module.css and the body bottom-padding tier in base.css. */
+@media (width >= 1024px) {
 	.bottom-nav {
 		display: none;
 	}

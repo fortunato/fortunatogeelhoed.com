@@ -3,7 +3,8 @@
 
 @layer base {
 	/* Body defaults. Mobile-first: reserve space for the fixed bottom tab bar by default so
-	   content isn't hidden behind it; the bar gives way to the top bar on wider viewports below. */
+	   content (and the footer) isn't hidden behind it; the reservation is lifted at the exact
+	   width the bar gives way to the top-bar nav (see the media query below). */
 	body {
 		font-family: var(--jb-font-body);
 		background: var(--jb-bg-primary);
@@ -34,7 +35,11 @@
 		flex: 1;
 	}
 
-	@media (width >= 769px) {
+	/* Drop the reserved bottom space only once the bottom tab bar is actually hidden. This width
+	   must stay in lockstep with the bar's hide breakpoint in bottom-nav.module.css (1024px) and
+	   the width where the top nav first appears in header.module.css; any lower and the bar would
+	   still be on screen with no reserved space, letting the footer slide under it. */
+	@media (width >= 1024px) {
 		body {
 			padding-bottom: 0;
 		}
