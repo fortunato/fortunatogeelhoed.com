@@ -174,6 +174,58 @@ write_files:
       [ -n "$PREV" ] && { run_app "$PREV"; echo "rolled back to $PREV" >&2; }
       exit 1
 
+  - path: /opt/fg/mount-umami-volume.sh
+    permissions: '0755'
+    content: |
+      #!/usr/bin/env bash
+      # Prepare the dedicated Hetzner Volume for Postgres before the database container starts. The
+      # volume is attached as a separate provisioning step that can finish just after this first boot
+      # begins, so the device may not exist yet when cloud-init reaches the analytics section. Wait
+      # for it, mount it, and only exit 0 once it is genuinely mounted, so the caller can refuse to
+      # start Postgres otherwise: an unmounted /mnt/umami-db would let Postgres initialise a blank
+      # database on the root disk while the real data sits untouched on the volume. Formats only an
+      # unformatted volume; it never reformats one that already carries data.
+      set -euo pipefail
+
+      VOL_ID="__UMAMI_VOLUME_ID__"
+      DEV="/dev/disk/by-id/scsi-0HC_Volume_${VOL_ID}"
+      MNT=/mnt/umami-db
+
+      mkdir -p "$MNT"
+
+      # The attach races first boot: wait up to ~120s for the device node to appear.
+      for _ in $(seq 1 60); do
+        if [ -e "$DEV" ]; then break; fi
+        sleep 2
+      done
+      if [ ! -e "$DEV" ]; then
+        echo "umami-volume: $DEV never appeared; refusing to start Postgres" >&2
+        exit 1
+      fi
+
+      # First use only: format an unformatted volume, never one that already carries data.
+      if ! blkid "$DEV" >/dev/null 2>&1; then
+        mkfs.ext4 -F "$DEV"
+      fi
+
+      # Persist the mount across reboots. nofail: never block boot if the volume is ever absent.
+      grep -q "$DEV" /etc/fstab || \
+        printf '%s %s ext4 discard,nofail,defaults 0 0\n' "$DEV" "$MNT" >> /etc/fstab
+
+      if ! mountpoint -q "$MNT"; then
+        mount "$MNT" || true
+      fi
+      # Hard guard: do not report success unless the volume is actually mounted.
+      if ! mountpoint -q "$MNT"; then
+        echo "umami-volume: $MNT failed to mount; refusing to start Postgres" >&2
+        exit 1
+      fi
+
+      # Postgres runs as uid/gid 999 in the official image; own the data dir so it can write.
+      mkdir -p "$MNT/data"
+      chown -R 999:999 "$MNT/data"
+      echo "umami-volume: $MNT ready on $DEV"
+
   - path: /opt/fg/umami-backup.sh
     permissions: '0755'
     content: |
@@ -287,25 +339,20 @@ runcmd:
     caddy:2
 
   # --- Self-hosted analytics (Umami + Postgres) ---------------------------------------------------
-  # The dedicated Hetzner Volume holds only the Postgres data dir. Hetzner exposes an attached volume
-  # at a stable by-id path keyed on its numeric id. Format on first use only (never reformat a volume
-  # that already carries data), then mount it and persist the mount so it survives reboots.
-  - VOL_ID=__UMAMI_VOLUME_ID__
-  - DEV="/dev/disk/by-id/scsi-0HC_Volume_${VOL_ID}"
-  - mkdir -p /mnt/umami-db
-  - if ! blkid "$DEV" >/dev/null 2>&1; then mkfs.ext4 -F "$DEV"; fi
-  - grep -q "$DEV" /etc/fstab || printf '%s /mnt/umami-db ext4 discard,nofail,defaults 0 0\n' "$DEV" >> /etc/fstab
-  - mount /mnt/umami-db
-  # Postgres runs as uid/gid 999 in the official image; own the data dir so it can write.
-  - mkdir -p /mnt/umami-db/data && chown -R 999:999 /mnt/umami-db/data
-  # Postgres for Umami: not published (no -p), reachable only by Umami on the private network under
-  # the alias umami-db. Pinned to an explicit major tag (never latest); patch upgrades bump the tag.
+  # Prepare the dedicated Postgres volume: wait for the attach (it can land just after first boot),
+  # format on first use only, mount it, and guard against the unmounted root-disk fallback. Start
+  # Postgres only if that succeeded — otherwise it would initialise a blank database on the root disk
+  # while the real data sits unmounted on the volume. Pinned by tag and digest (never latest); patch
+  # upgrades bump both. Not published (no -p): reachable only by Umami on the private network under
+  # the alias umami-db.
   - >
-    docker run -d --name umami-db --restart unless-stopped --network web
+    /opt/fg/mount-umami-volume.sh
+    && docker run -d --name umami-db --restart unless-stopped --network web
     --network-alias umami-db
     --env-file /etc/fg/postgres.env
     -v /mnt/umami-db/data:/var/lib/postgresql/data
     __POSTGRES_IMAGE__
+    || echo "umami-db not started: volume not ready (see mount-umami-volume output above)" >&2
   # Umami app: stateless, fronted by Caddy on the stats subdomain. Pinned to an explicit version tag.
   - >
     docker run -d --name umami --restart unless-stopped --network web
