@@ -30,7 +30,7 @@ export function Article() {
 					<p style={{ color: 'var(--jb-text-secondary)' }}>
 						That article does not exist.
 					</p>
-					<Link to={WRITING_BASE} viewTransition className="link link--arrow">
+					<Link to={WRITING_BASE} className="link link--arrow">
 						Back to writing
 					</Link>
 				</div>
@@ -54,7 +54,7 @@ export function Article() {
 				<div className={styles.prose} dangerouslySetInnerHTML={{ __html: article.html }} />
 
 				<p style={{ marginTop: 'var(--jb-space-xl)' }}>
-					<Link to={WRITING_BASE} viewTransition className="link link--arrow">
+					<Link to={WRITING_BASE} className="link link--arrow">
 						Back to writing
 					</Link>
 				</p>

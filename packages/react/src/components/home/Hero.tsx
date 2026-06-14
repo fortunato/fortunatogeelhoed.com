@@ -8,7 +8,10 @@ const WALLPAPER_LINES = Array.from({ length: 40 }, (_, i) => i);
 
 export function Hero({ hero }: { hero: HomeContent['hero'] }) {
 	return (
-		<section className={styles.hero}>
+		// data-hero marks this as the page that owns the staggered entrance; the shared motion
+		// stylesheet suppresses the unified whole-main fade here and runs the [data-enter] stagger
+		// instead. Both are gated on data-nav-enter, so they play after the smooth scroll.
+		<section className={styles.hero} data-hero>
 			<div className={styles['hero-wallpaper']} aria-hidden="true">
 				{WALLPAPER_LINES.map((i) => (
 					<div key={i} className={styles['hero-wallpaper-line']}>
@@ -24,7 +27,7 @@ export function Hero({ hero }: { hero: HomeContent['hero'] }) {
 				<h1 className={styles['hero-name']} data-enter="2">
 					{hero.name}
 				</h1>
-				<div className={styles['hero-dots']} data-enter="3" aria-hidden="true">
+				<div className={styles['hero-dots']} aria-hidden="true" data-enter="3">
 					<span />
 					<span />
 					<span />

@@ -15,7 +15,6 @@ export function Header() {
 							key={item.path}
 							to={item.path}
 							end={item.path === '/'}
-							viewTransition
 						>
 							{item.label}
 						</NavLink>

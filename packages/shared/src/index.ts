@@ -73,6 +73,7 @@ export type {
 export type { Theme } from './theme';
 export { getCurrentTheme, setTheme, toggleTheme } from './theme';
 export { consumeSwitchScroll, initSwitchTransition } from './disintegrate';
+export { initNavMotion, initPopstateMotion, replayEntrance, smoothScrollToTop } from './nav-motion';
 export { initSmoothScroll, destroySmoothScroll } from './smooth-scroll';
 export { initTimelineMotion, destroyTimelineMotion } from './timeline-motion';
 export { initCardSpotlight } from './card-spotlight';

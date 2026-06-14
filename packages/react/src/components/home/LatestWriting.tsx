@@ -21,7 +21,6 @@ export function LatestWriting({
 						<li key={post.title}>
 							<Link
 								to={post.href}
-								viewTransition
 								className={styles['writing-card']}
 								data-reveal
 							>

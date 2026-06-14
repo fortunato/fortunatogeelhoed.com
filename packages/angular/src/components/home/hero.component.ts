@@ -6,7 +6,10 @@ import type { HomeContent } from '@fg/shared';
 	standalone: true,
 	styleUrl: '../../../../../styles/components/hero.module.css',
 	template: `
-		<section class="hero">
+		<!-- data-hero marks this as the page that owns the staggered entrance; the shared motion
+		     stylesheet suppresses the unified whole-main fade here and runs the [data-enter] stagger
+		     instead. Both are gated on data-nav-enter, so they play after the smooth scroll. -->
+		<section class="hero" data-hero>
 			<div class="hero-wallpaper" aria-hidden="true">
 				@for (i of wallpaperLines; track i) {
 					<div class="hero-wallpaper-line">{{ wallpaperLine }}</div>
@@ -16,7 +19,7 @@ import type { HomeContent } from '@fg/shared';
 			<div class="hero-content container">
 				<p class="section-label" data-enter="1">{{ hero().tagline }}</p>
 				<h1 class="hero-name" data-enter="2">{{ hero().name }}</h1>
-				<div class="hero-dots" data-enter="3" aria-hidden="true">
+				<div class="hero-dots" aria-hidden="true" data-enter="3">
 					<span></span><span></span><span></span>
 				</div>
 				<p class="hero-statement" data-enter="4">{{ hero().statement }}</p>

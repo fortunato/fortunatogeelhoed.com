@@ -1,9 +1,10 @@
 import { expect, test } from '@playwright/test';
 
 // The home ↔ timeline page transition and its progressive-enhancement guarantees.
-// The View Transition animation itself is visual; what we assert here is the contract
-// around it: navigation updates the URL and swaps content, and everything still works
-// under reduced motion and with scripting disabled.
+// In-app navigation smooth-scrolls to the top and then plays the destination's entrance;
+// that motion is visual, so what we assert here is the contract around it: navigation
+// updates the URL and swaps content, and everything still works under reduced motion and
+// with scripting disabled.
 
 test.describe('home ↔ timeline transition', () => {
 	test('navigates between home and timeline, updating the URL', async ({ page }) => {

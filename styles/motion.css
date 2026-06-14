@@ -76,22 +76,59 @@
 		}
 	}
 
-	/* Signature hero entrance on load (the hero sits above the fold, so a scroll
-	   reveal would never fire). Staggered; suppressed under reduced motion. */
+	/* Page entrance. On both first load and every in-app navigation the main content fades and
+	   rises in as a single block. On navigation it is sequenced *after* a real smooth scroll to
+	   the top (see packages/shared/src/nav-motion.ts): the router resets nothing instantly — it
+	   smooth-scrolls, swaps the view, then sets data-nav-enter on <main>, so the entrance only
+	   begins once the scroll has settled. The attribute is set by the same shared code in all
+	   three frameworks, so the timing is identical everywhere.
+
+	   The attribute is baked into the prerendered <main>, so the landing entrance plays from
+	   first paint with no flash and settles fully visible even with no JS (the animation fills
+	   `both` and ends at its final, visible state). Suppressed under reduced motion, where the
+	   scroll is an instant jump and content shows immediately with no animation.
+
+	   Home is the one exception: it carries the hero ([data-hero]), which plays a signature
+	   staggered entrance of its four lead elements instead. To avoid double-animating that page
+	   (whole-main fade AND per-element stagger), the unified fade is suppressed when <main>
+	   contains a hero, and the stagger below takes over. Both compositions key off the same
+	   data-nav-enter trigger, so they sequence after the smooth scroll identically. */
 	@media (prefers-reduced-motion: no-preference) {
-		[data-enter] {
+		main[data-nav-enter] {
 			animation: jb-enter var(--jb-dur-slow) var(--jb-ease-emphasized) both;
 		}
-		[data-enter="1"] {
+
+		/* On the page that owns the hero, the four lead elements stagger in instead, so cancel the
+		   whole-main fade to avoid double-animating. This sits in its own rule (not folded into the
+		   selector above as :not(:has(...))) so that browsers without :has() drop only this override
+		   and keep the unified fade — a correct, fully-visible fallback — rather than dropping the
+		   base rule too. */
+		main[data-nav-enter]:has([data-hero]) {
+			animation: none;
+		}
+
+		/* Signature hero entrance: the four lead elements rise in sequence. Gated on the same
+		   data-nav-enter trigger as the unified fade, so it waits for the smooth-scroll-to-top and
+		   replays on navigation back to Home. Baked into the prerendered <main>, so it also plays
+		   on first paint; the animation fills `both` and ends fully visible (never trapped hidden,
+		   even with no JS). */
+		main[data-nav-enter] [data-enter] {
+			animation: jb-enter var(--jb-dur-slow) var(--jb-ease-emphasized) both;
+		}
+
+		main[data-nav-enter] [data-enter="1"] {
 			animation-delay: 0.05s;
 		}
-		[data-enter="2"] {
+
+		main[data-nav-enter] [data-enter="2"] {
 			animation-delay: 0.15s;
 		}
-		[data-enter="3"] {
+
+		main[data-nav-enter] [data-enter="3"] {
 			animation-delay: 0.25s;
 		}
-		[data-enter="4"] {
+
+		main[data-nav-enter] [data-enter="4"] {
 			animation-delay: 0.35s;
 		}
 	}
@@ -103,18 +140,12 @@
 		}
 	}
 
-	/* Same-document page transitions (home ↔ timeline): the main content slides as a
-	   spatial move while the shell cross-fades. The router calls startViewTransition;
-	   browsers without it navigate instantly. Reduced motion opts out. */
+	/* The fixed chrome keeps its own stable view-transition groups so the cross-document
+	   framework switch leaves it frozen — only the root cross-fades. (Same-document page
+	   navigation no longer uses a view transition; it is the JS-sequenced scroll-then-entrance
+	   above.) The footer stays in `root` on purpose. */
 	@media (prefers-reduced-motion: no-preference) {
 		@supports (view-transition-name: none) {
-			main {
-				view-transition-name: jb-main;
-			}
-
-			/* The fixed chrome gets its own stable groups so page navigation leaves it
-			   frozen — only main animates. The footer stays in `root` on purpose (it sits
-			   in normal flow, so naming it would make it slide between pages). */
 			header {
 				view-transition-name: jb-header;
 			}
@@ -122,28 +153,6 @@
 			nav[aria-label="Primary"] {
 				view-transition-name: jb-bottom-nav;
 			}
-
-			::view-transition-old(jb-main) {
-				animation: jb-page-out var(--jb-dur-base) var(--jb-ease-emphasized) both;
-			}
-
-			::view-transition-new(jb-main) {
-				animation: jb-page-in var(--jb-dur-base) var(--jb-ease-emphasized) both;
-			}
-		}
-	}
-
-	@keyframes jb-page-out {
-		to {
-			opacity: 0;
-			transform: translateX(-2rem);
-		}
-	}
-
-	@keyframes jb-page-in {
-		from {
-			opacity: 0;
-			transform: translateX(2rem);
 		}
 	}
 }

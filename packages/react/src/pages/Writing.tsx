@@ -37,7 +37,6 @@ export function Writing() {
 						<li key={post.slug}>
 							<Link
 								to={articlePath(post.slug)}
-								viewTransition
 								className={styles['writing-card']}
 								data-reveal
 							>
