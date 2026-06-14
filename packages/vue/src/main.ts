@@ -48,8 +48,8 @@ export const createApp = ViteSSG(
 			// the route via the router only after the scroll settles; the scrollBehavior above then
 			// no-ops at the already-restored top. Back/forward still restores through scrollBehavior.
 			initNavMotion((path) => {
-					void router.push(path);
-				});
+				void router.push(path);
+			});
 
 			// Back/forward mirror the click sequence: smooth-scroll to the top, then replay the
 			// entrance. Vue Router commits the popstate view synchronously, so the shared window

@@ -32,9 +32,7 @@ export function Footer() {
 						on one backend.
 					</span>
 					<nav className={styles['footer-meta']} aria-label="Legal">
-						<Link to="/privacy">
-							Privacy
-						</Link>
+						<Link to="/privacy">Privacy</Link>
 					</nav>
 				</div>
 			</div>
