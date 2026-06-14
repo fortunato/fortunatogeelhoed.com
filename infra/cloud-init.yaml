@@ -115,10 +115,9 @@ write_files:
       # Umami ships with a well-known default login (admin/umami) and this origin is trusted by the
       # main site's CSP for script-src, so an exposed dashboard would be an XSS pivot. We therefore
       # publish only the two paths collection actually needs and gate everything else (dashboard,
-      # /login, admin /api/*) behind HTTP basic auth.
+      # /login, admin /api/*) to the tailnet.
       #   - /script.js  the cookieless tracking script the site loads
       #   - /api/send   the event beacon the script POSTs page views to
-      # Everything outside @public requires the operator's dashboard credentials.
       __STATS_DOMAIN__ {
         encode zstd gzip
 
@@ -128,13 +127,16 @@ write_files:
           reverse_proxy umami:3000
         }
 
-        # Dashboard and everything else: operator-only. Credentials come from Pulumi config secrets
-        # (basicAuthUser + a bcrypt hash of the password); they are never the Umami app login, so the
-        # default admin/umami is unreachable from the internet regardless of whether it was changed.
+        # Dashboard and everything else: operator-only. Gated by source IP, not HTTP basic auth:
+        # Umami sets its own `Authorization: Bearer <token>` header on every API call, and basic auth
+        # uses the same Authorization header, so the two collide and basic auth can never front the
+        # dashboard. Restrict to the tailnet instead (default 100.64.0.0/10, the Tailscale range; the
+        # host already runs Tailscale). Reach the dashboard by pointing stats.<domain> at the server's
+        # tailnet IP (an /etc/hosts entry or MagicDNS) and browsing over Tailscale; the public TLS
+        # cert still validates because the Host is unchanged. Off-tailnet the whole internet gets 403.
         handle {
-          basic_auth {
-            __STATS_BASIC_AUTH_USER__ __STATS_BASIC_AUTH_HASH__
-          }
+          @denied not remote_ip __STATS_ALLOWED_CIDRS__
+          respond @denied "Forbidden" 403
           reverse_proxy umami:3000
         }
       }

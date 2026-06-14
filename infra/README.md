@@ -83,12 +83,13 @@ pulumi config set faroCollectorUrl <faro receiver url, e.g. https://faro-collect
 pulumi config set umamiWebsiteId <id from the Umami dashboard, set after first boot>
 pulumi config set --secret umamiAppSecret <random 32+ char string>
 pulumi config set --secret umamiDbPassword <random db password>
-# Dashboard gate: Caddy basic auth fronts everything on stats.<domain> except the public collection
-# paths, so the Umami admin UI is never reachable on its default login. Username is non-secret
-# (default fg-admin); the secret is a bcrypt HASH of the password, minted with `caddy hash-password`:
-#   docker run --rm caddy:2 caddy hash-password --plaintext '<choose a strong password>'
-# pulumi config set statsBasicAuthUser fg-admin                  # optional, this is the default
-pulumi config set --secret statsBasicAuthHash '<bcrypt hash from caddy hash-password>'
+# Dashboard gate: Caddy serves only the public collection paths (/script.js, /api/send) to the
+# internet and restricts everything else (dashboard, /login, admin /api/*) by source IP. The default
+# allows only the Tailscale range, so the dashboard is reachable solely over the tailnet (the host
+# already runs Tailscale). Basic auth is deliberately NOT used: Umami sets its own
+# `Authorization: Bearer` header on every API call, which collides with basic auth's Authorization
+# header. Space-separate multiple CIDRs to widen (e.g. add a static office IP).
+# pulumi config set statsAllowedCidrs "100.64.0.0/10"           # optional, this is the default
 # off-site backup (optional — omit to leave daily backups disabled). Provider: Cloudflare R2.
 # Use an EU-jurisdiction bucket and a bucket-scoped R2 API token. The job prunes old snapshots, so
 # the token needs read+write+delete (not append-only); enable R2 versioning/lifecycle for immutability.
@@ -131,8 +132,12 @@ Validate on a throwaway stack first (`pulumi up` then `pulumi destroy`) with a t
 
 1. **DNS** (at your registrar): point the apex `A` record at the `ipv4` output and `AAAA` at
    `ipv6`. Caddy can only obtain a certificate once DNS resolves to the server. Add the **same
-   `A`/`AAAA` pair for the stats subdomain** (`stats.<domain>`, the `statsHost` output) so the
-   analytics dashboard gets its own certificate.
+   `A`/`AAAA` pair for the stats subdomain** (`stats.<domain>`, the `statsHost` output): this public
+   record serves the cookieless collection paths (`/script.js`, `/api/send`) and lets Caddy obtain
+   the subdomain's certificate. The **dashboard** itself is gated to the tailnet, so you reach it by
+   pointing `stats.<domain>` at the server's tailnet IP on your own machine (an `/etc/hosts` entry or
+   MagicDNS) and browsing over Tailscale; the public cert still validates because the Host is
+   unchanged. See "Analytics" below.
 2. **GitHub Actions secrets** (repo → Settings → Secrets): `DEPLOY_SSH_KEY` (the deploy private
    key), `TS_OAUTH_CLIENT_ID`, `TS_OAUTH_SECRET` (the OAuth client that joins CI as `tag:fg-deploy`).
    Image push uses the built-in `GITHUB_TOKEN`. Optional: `FARO_SOURCEMAP_API_KEY` (frontend sourcemap
@@ -211,30 +216,36 @@ the host's env files at provision time; they are never committed.
 Umami ships with a well-known default login (`admin` / `umami`), and this origin is trusted by the
 main site's CSP for `script-src`, so an openly reachable dashboard would be a takeover and XSS-pivot
 risk. Caddy therefore publishes **only the two paths analytics collection needs** on `stats.<domain>`
-and gates everything else behind HTTP **basic auth**:
+and gates everything else by **source IP**:
 
 - **Public, unauthenticated** — `GET /script.js` (the cookieless tracker the site loads) and
   `POST /api/send` (the event beacon). These are all that page-view collection requires.
-- **Everything else** (the dashboard, `/login`, the admin `/api/*`) requires the Caddy basic-auth
-  credentials. These are an independent gate in front of Umami; they are **not** the Umami app login,
-  so the default `admin` / `umami` is unreachable from the internet regardless of whether it was
-  changed inside the app.
+- **Everything else** (the dashboard, `/login`, the admin `/api/*`) is restricted to the
+  `statsAllowedCidrs` ranges, which default to the Tailscale CGNAT range `100.64.0.0/10`. Off-tailnet
+  the whole internet gets `403`, so the dashboard and its default `admin` / `umami` login are simply
+  unreachable from the public internet.
 
-So **to reach the dashboard**, browse to `https://stats.<domain>` and authenticate with the basic-auth
-credentials (`statsBasicAuthUser` and the password whose bcrypt hash you set as `statsBasicAuthHash`);
-the browser then shows Umami's own login. Still change Umami's default app password on first login as
-defence in depth. If you would rather restrict the dashboard to the tailnet instead of basic auth,
-replace the gated `handle` block's `basic_auth` with a `remote_ip` matcher for your Tailscale CGNAT
-range (`100.64.0.0/10`) — the host already runs Tailscale.
+**Why source IP and not HTTP basic auth.** Basic auth cannot front Umami: the Umami SPA sets its own
+`Authorization: Bearer <token>` header on every API call, and HTTP basic auth uses that same
+`Authorization` header. Umami's header overwrites the basic credential on every `/api/*` request, so
+Caddy 401s and the browser re-prompts in an unbreakable loop. An IP gate doesn't touch the
+`Authorization` header, so Umami's own auth flows untouched.
+
+So **to reach the dashboard**, point `stats.<domain>` at the server's **tailnet IP** on your machine
+(an `/etc/hosts` entry, or Tailscale MagicDNS) and browse `https://stats.<domain>` over Tailscale —
+Caddy then sees a `100.x` source and lets you through, and the public TLS certificate still validates
+because the Host is unchanged. The browser then shows Umami's own login (`admin` / `umami` on first
+use); change that password immediately as defence in depth. To allow an additional fixed location
+(e.g. an office egress IP) without the tailnet, space-separate it into `statsAllowedCidrs`.
 
 ### First-boot wiring (the website id)
 
 The tracking tag is injected into the served HTML **only once a website id exists**, which is minted
 in the dashboard after the first boot. So the order is:
 
-1. `pulumi up` with `umamiAppSecret` / `umamiDbPassword` / `statsBasicAuthHash` set (and DNS for
-   `stats.<domain>` pointed at the host). Browse to `https://stats.<domain>`, pass the Caddy
-   basic-auth prompt, then log in to Umami and change its default app password immediately.
+1. `pulumi up` with `umamiAppSecret` / `umamiDbPassword` set (and DNS for `stats.<domain>` pointed at
+   the host). Reach the dashboard over the tailnet (point `stats.<domain>` at the server's tailnet IP,
+   see "Dashboard access" above), then log in to Umami and change its default app password immediately.
 2. In the dashboard, add the website `fortunatogeelhoed.com` and copy its **Website ID**.
 3. `pulumi config set umamiWebsiteId <id>` and `pulumi up` again. The app now injects the cookieless
    `script.js` tag with `data-domains="fortunatogeelhoed.com"`, so it records on production only —
