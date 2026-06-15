@@ -4,6 +4,7 @@
 [![CI](https://img.shields.io/github/actions/workflow/status/fortunato/fortunatogeelhoed.com/ci.yml?branch=main&style=for-the-badge&logo=githubactions&logoColor=white&label=CI)](https://github.com/fortunato/fortunatogeelhoed.com/actions/workflows/ci.yml)
 [![Coverage](https://img.shields.io/codecov/c/github/fortunato/fortunatogeelhoed.com?style=for-the-badge&logo=codecov&logoColor=white)](https://codecov.io/gh/fortunato/fortunatogeelhoed.com)
 [![Storybook](https://img.shields.io/badge/Storybook-live-FF4785?style=for-the-badge&logo=storybook&logoColor=white)](https://components.fortunatogeelhoed.com)
+[![OpenSSF Scorecard](https://img.shields.io/ossf-scorecard/github.com/fortunato/fortunatogeelhoed.com?style=for-the-badge&label=OpenSSF%20Scorecard)](https://scorecard.dev/viewer/?uri=github.com/fortunato/fortunatogeelhoed.com)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue?style=for-the-badge)](./LICENSE)
 
 <!-- Stack -->

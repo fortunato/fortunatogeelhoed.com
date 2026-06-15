@@ -1,0 +1,29 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:best-practices",
+    ":semanticCommits"
+  ],
+  "schedule": ["before 9am on monday"],
+  "labels": ["dependencies"],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 9am on monday"]
+  },
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "minor and patch"
+    },
+    {
+      "matchPackageNames": ["react", "react-dom", "vue", "@vue/**", "@angular/**"],
+      "matchUpdateTypes": ["major"],
+      "groupName": "framework majors"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "github actions",
+      "addLabels": ["ci"]
+    }
+  ]
+}
