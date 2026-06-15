@@ -1,4 +1,4 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ViewEncapsulation } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NAV_ITEMS } from '@fg/shared';
 
@@ -9,6 +9,12 @@ import { NAV_ITEMS } from '@fg/shared';
 	// Allow the <jb-*> custom elements in this template.
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	styleUrl: '../../../../styles/components/header.module.css',
+	// The GitHub glyph is rendered by <jb-icon> into light DOM, so its inner <svg> carries no
+	// _ngcontent attribute and the stylesheet's `.icon-btn svg` sizing rule would never reach it
+	// under emulated encapsulation, leaving the icon collapsed to zero size. React and Vue size it
+	// fine because CSS Modules leave bare tag selectors global. Disable encapsulation so the header
+	// rules apply as authored; the class names here are unique to this stylesheet.
+	encapsulation: ViewEncapsulation.None,
 	template: `
 		<header class="header">
 			<a routerLink="/" class="logo">
