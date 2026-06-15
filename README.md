@@ -74,7 +74,7 @@ flowchart TB
     end
 ```
 
-For the request lifecycle, the dev topology, and the rationale behind the Vite/Nx dev configuration, see [`docs/architecture.md`](docs/architecture.md). For why this stack was chosen and what alternatives were rejected, see [`docs/decisions.md`](docs/decisions.md).
+For the request lifecycle, the dev topology, and the rationale behind the Vite/Nx dev configuration, see [`docs/architecture.md`](docs/architecture.md). For why this stack was chosen and what alternatives were rejected, see [`docs/decisions.md`](docs/decisions.md). For how dependency updates and supply-chain security are handled, see [`docs/dependencies-and-security.md`](docs/dependencies-and-security.md).
 
 **Key decisions:**
 
