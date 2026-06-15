@@ -114,6 +114,13 @@ write_files:
         reverse_proxy app:3000
       }
 
+      # Canonicalise on the bare apex: permanently redirect the www host to it. Caddy obtains the
+      # www certificate automatically, so the subdomain must resolve to this server (a www A/AAAA or
+      # CNAME to the apex) for the ACME challenge to succeed.
+      www.__DOMAIN__ {
+        redir https://__DOMAIN__{uri} permanent
+      }
+
       # Self-hosted analytics. Only Caddy faces the internet; Umami and Postgres stay on the private
       # docker network and are never published. Automatic HTTPS, same as the apex.
       #
