@@ -1,6 +1,7 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, inject } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, Component, ViewEncapsulation, inject } from '@angular/core';
+import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
-import { GITHUB_REPO_URL, LINKEDIN_URL, toParagraphs } from '@fg/shared';
+import { GITHUB_REPO_URL, LINKEDIN_URL } from '@fg/shared';
 import { ButtonDirective } from '../components/ui/button.directive';
 import { ContentService } from '../content.service';
 
@@ -11,6 +12,10 @@ import { ContentService } from '../content.service';
 	// Allow the <jb-icon> custom element in this template.
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	styleUrl: '../../../../styles/components/about.module.css',
+	// The bio is injected as trusted HTML, so it carries no _ngcontent attribute and emulated
+	// encapsulation would never reach it. Disable encapsulation: every rule is scoped under an
+	// .about* class, so the styles only ever apply to this page. Mirrors the content page.
+	encapsulation: ViewEncapsulation.None,
 	template: `
 		<section class="about">
 			<article class="about-inner container">
@@ -26,9 +31,8 @@ import { ContentService } from '../content.service';
 							decoding="async"
 						/>
 					</div>
-					@for (paragraph of paragraphs; track paragraph; let first = $first) {
-						<p [class.about-lead]="first">{{ paragraph }}</p>
-					}
+					<!-- Trusted, build-rendered page HTML: the bio prose with its in-content links. -->
+					<div class="about-body" [innerHTML]="body"></div>
 					<div class="about-cta">
 						<a jbButton routerLink="/career">View the career timeline</a>
 						<a
@@ -59,8 +63,9 @@ import { ContentService } from '../content.service';
 })
 export class AboutComponent {
 	private contentService = inject(ContentService);
-	protected readonly paragraphs = toParagraphs(
-		this.contentService.getContent('about')?.body ?? '',
+	private sanitizer = inject(DomSanitizer);
+	protected readonly body: SafeHtml = this.sanitizer.bypassSecurityTrustHtml(
+		this.contentService.getContent('about')?.html ?? '',
 	);
 	protected readonly photoAlt =
 		'Fortunato Geelhoed, freelance full-stack TypeScript engineer based on the Costa Blanca, Spain';

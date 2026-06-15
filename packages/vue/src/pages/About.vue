@@ -9,13 +9,8 @@
 					     URL served by the API, not a build-time module import to resolve. -->
 					<img :src="photoSrc" :alt="photoAlt" width="872" height="594" decoding="async" />
 				</div>
-				<p
-					v-for="(paragraph, index) in paragraphs"
-					:key="paragraph.slice(0, 32)"
-					:class="index === 0 ? styles['about-lead'] : undefined"
-				>
-					{{ paragraph }}
-				</p>
+				<!-- Trusted, build-rendered page HTML: the bio prose with its in-content links. -->
+				<div :class="styles['about-body']" v-html="bodyHtml" />
 				<div :class="styles['about-cta']">
 					<Button to="/career">View the career timeline</Button>
 					<Button
@@ -43,13 +38,13 @@
 </template>
 
 <script setup lang="ts">
-import { GITHUB_REPO_URL, LINKEDIN_URL, toParagraphs } from '@fg/shared';
+import { GITHUB_REPO_URL, LINKEDIN_URL } from '@fg/shared';
 import styles from '@styles/components/about.module.css';
 import Button from '../components/ui/Button.vue';
 import { useContent } from '../composables/useContent';
 
 const { content } = useContent('about');
-const paragraphs = toParagraphs(content?.body ?? '');
+const bodyHtml = content?.html ?? '';
 const photoSrc = '/assets/images/fortunato.webp';
 const photoAlt =
 	'Fortunato Geelhoed, freelance full-stack TypeScript engineer based on the Costa Blanca, Spain';

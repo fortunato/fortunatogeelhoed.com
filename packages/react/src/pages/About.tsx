@@ -1,4 +1,4 @@
-import { GITHUB_REPO_URL, LINKEDIN_URL, toParagraphs } from '@fg/shared';
+import { GITHUB_REPO_URL, LINKEDIN_URL } from '@fg/shared';
 import styles from '@styles/components/about.module.css';
 import { Button } from '../components/ui/Button';
 import { useContent } from '../content';
@@ -8,7 +8,6 @@ const PHOTO_ALT =
 
 export function About() {
 	const content = useContent('about');
-	const paragraphs = toParagraphs(content?.body ?? '');
 
 	return (
 		<section className={styles.about}>
@@ -25,14 +24,11 @@ export function About() {
 							decoding="async"
 						/>
 					</div>
-					{paragraphs.map((paragraph, index) => (
-						<p
-							key={paragraph.slice(0, 32)}
-							className={index === 0 ? styles['about-lead'] : undefined}
-						>
-							{paragraph}
-						</p>
-					))}
+					<div
+						className={styles['about-body']}
+						// biome-ignore lint/security/noDangerouslySetInnerHtml: trusted, build-rendered page HTML
+						dangerouslySetInnerHTML={{ __html: content?.html ?? '' }}
+					/>
 					<div className={styles['about-cta']}>
 						<Button to="/career">View the career timeline</Button>
 						<Button

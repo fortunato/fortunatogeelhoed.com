@@ -7,7 +7,7 @@ description: Freelance senior full-stack and TypeScript engineer (React, Vue, An
 
 When I started building for the web, "frontend" was where you were put before you'd earned the backend. The reward had a ceiling, so I went full-stack early.
 
-Twenty-five years later the industry has cycled twice. Frontend became a specialism: the people who could build fast, polished single-page apps were suddenly the ones in demand. Then AI tooling shifted the equation again. The cost of going deep on both ends at once dropped, and the generalists who never stopped writing backend code found themselves with an edge. This site is one piece of that: I built it to the same standard in React, Vue, and Angular, on one backend I wrote to serve all three. The deeper backend, data, and infrastructure work is on the timeline.
+Twenty-five years later the industry has cycled twice. Frontend became a specialism: the people who could build fast, polished single-page apps were suddenly the ones in demand. Then AI tooling shifted the equation again. The cost of going deep on both ends at once dropped, and the generalists who never stopped writing backend code found themselves with an edge. This site is part of how I show that: I built it to the same standard in React, Vue, and Angular, on one backend I wrote to serve all three. The deeper backend, data, and infrastructure work is on the [career timeline](/career).
 
 In all those years I've never been handed a problem I couldn't ship my way through. Different stacks, different eras, the same habit: get the shape of the problem right, then build the simplest thing that meets the requirements.
 

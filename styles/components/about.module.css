@@ -44,11 +44,23 @@
 	margin-top: var(--jb-space-md);
 }
 
-/* The opening paragraph reads as a lead: brighter and a touch larger. Selector matches the
-   specificity of `.about-prose p` (and adds a class) so the brighter colour actually wins. */
-.about-prose p.about-lead {
+/* The opening paragraph reads as a lead: brighter and a touch larger. The bio is injected as
+   build-rendered HTML, so the lead is the body's first paragraph rather than a tagged class. */
+.about-prose .about-body > p:first-of-type {
 	color: var(--jb-text-primary);
 	font-size: 1.15rem;
+}
+
+/* In-content links in the bio, matching the article prose treatment. */
+.about-body a {
+	color: var(--jb-accent-text);
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+	text-decoration-thickness: from-font;
+}
+
+.about-body a:hover {
+	color: var(--jb-accent-hover);
 }
 
 /* Layout only: the action row. The actions themselves are the shared Button primitive at its

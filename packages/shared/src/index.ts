@@ -27,7 +27,7 @@ export {
 } from './timeline-layout';
 export type { NavItem } from './nav';
 export { NAV_ITEMS } from './nav';
-export { toParagraphs, timelineDatetime } from './text';
+export { timelineDatetime } from './text';
 export { isExternalHref } from './url';
 export type { PageSeo } from './seo';
 export {
