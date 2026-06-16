@@ -291,3 +291,53 @@ requested image and swaps the container, so a release can deploy and nothing mor
 arbitrary commands, and no way to change the infrastructure, which stays a hand-run Pulumi task. One
 requirement comes with this model: the server's Tailscale node key must be set not to expire, or the
 server leaves the private network and deploys stop reaching it.
+
+## Dependency updates and supply chain
+
+Dependencies are kept current automatically, and the parts of the supply chain that are easy to
+ignore are pinned and scanned rather than trusted by default.
+
+### Renovate over Dependabot
+
+Routine dependency updates run through Renovate, not Dependabot. The two solve the same problem, so
+only one should open update pull requests; running both produces duplicate noise. Renovate wins here
+for concrete reasons rather than preference. It has first-class support for the Bun lockfile, which
+Dependabot has been slow to handle; it understands the Bun workspaces this repository uses without
+per-package configuration; and it maintains a single dependency dashboard issue that lists every
+pending update in one place. Renovate also keeps the digest-pinned GitHub Actions current, so the
+pinning below does not turn into staleness.
+
+Dependabot is not switched off entirely. Its passive vulnerability alerts stay on as a backstop, and
+its alert-driven and version update pull requests are disabled so they do not compete with Renovate.
+
+### What merges itself, and what does not
+
+Low-risk updates merge without review: patch and minor bumps, lockfile maintenance, and GitHub
+Actions. This is only safe because every merge is gated on the full continuous integration suite, so
+an update that breaks the build never lands. Framework major upgrades for React, Vue, and Angular are
+deliberately left for manual review. A green build does not prove a major framework upgrade is free
+of visual or behavioral regressions, and the major bump is exactly where a human should look.
+
+### Actions and images pinned by digest
+
+Every third-party GitHub Action and container base image is pinned to a full commit digest, not a
+floating tag, with the human-readable version kept in a trailing comment. A moving tag can be
+repointed at malicious code after it has been reviewed; a digest cannot. Renovate updates the digests
+on a schedule, so pinning does not mean falling behind on security fixes. Static analysis runs
+through CodeQL, and the repository's overall supply-chain posture is scored by OpenSSF Scorecard.
+Security issues can be reported privately through the process in SECURITY.md.
+
+## Branching: protected main, trunk-based
+
+Development stays trunk-based: small changes integrated frequently through short-lived branches,
+never long-running feature branches. What changed is that main is protected rather than pushed to
+directly. Every change now lands through a pull request that must pass the aggregate continuous
+integration check before it can merge. Required reviews are set to zero, because a single maintainer
+cannot approve their own pull request and a non-zero requirement would only block all work; the real
+guard is the build, not a second pair of eyes.
+
+This costs a little ceremony per change, and on a private side project it would not be worth it. It
+is worth it here because the repository is itself a portfolio piece: a main branch that is always
+green and a visible record of changes gated by checks say more about how the author works than any
+claim could. Auto-merge keeps the loop fast. A branch is pushed, a pull request is opened, and it
+merges itself the moment the build passes, then deletes its own branch.
