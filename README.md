@@ -83,7 +83,7 @@ For the request lifecycle, the dev topology, and the rationale behind the Vite/N
 - **React is canonical.** Vue and Angular variants carry `<meta name="robots" content="noindex">` to avoid duplicate content.
 - **CDN-ready assets.** CSS is content-hashed (`styles-[hash].css`), static assets served with `Cache-Control: immutable`, HTML served with `no-cache`.
 - **Shared content pipeline.** Gray-matter parses Markdown frontmatter at build time; all frameworks consume the same content.
-- **Single runtime.** Bun handles everything — dev server, builds, SSG scripts, production serving.
+- **Bun at runtime.** The production server and the SSG/prerender scripts run on Bun; nothing Node-based serves the site. The framework bundlers (Vite, and Angular's `@angular/build`) still run on Node at build time.
 
 ## Tech Stack
 
