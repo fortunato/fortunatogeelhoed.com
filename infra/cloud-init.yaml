@@ -329,8 +329,14 @@ runcmd:
   # tagged key: it makes the tag (which the deploy ACL keys on, and which disables node-key expiry)
   # visible in the infrastructure, and fails the join loudly if the tag cannot be applied instead of
   # silently joining untagged and unreachable.
+  # --snat-subnet-routes=false stops Tailscale masquerading traffic it forwards. A tailnet request to
+  # a published Docker port is DNATed to the container, which makes it forwarded (not locally
+  # delivered) traffic; with SNAT on, Tailscale rewrites its source to the bridge gateway, so the
+  # container sees 172.x instead of the real 100.x client. The stats dashboard gate keys on the
+  # client's tailnet IP, so it must see the true source. The node advertises no subnet routes, so
+  # disabling this has no other effect.
   - curl -fsSL https://tailscale.com/install.sh | sh
-  - tailscale up --authkey=__TAILSCALE_AUTHKEY__ --hostname=fg-app --advertise-tags=tag:fg-server
+  - tailscale up --authkey=__TAILSCALE_AUTHKEY__ --hostname=fg-app --advertise-tags=tag:fg-server --snat-subnet-routes=false
   # Restrict the CI deploy key to the deploy script only (forced command, no shell, no forwarding).
   - install -d -m 0700 /root/.ssh
   - >
