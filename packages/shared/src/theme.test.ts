@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { getCurrentTheme, setTheme, toggleTheme } from './theme';
 
 // theme.ts touches document, cookie, and localStorage but is not a component, so it runs
-// in jsdom. We assert the three persistence channels stay in sync and that a blocked
+// in happy-dom. We assert the three persistence channels stay in sync and that a blocked
 // localStorage (private mode) degrades gracefully to the cookie.
 afterEach(() => {
 	document.documentElement.removeAttribute('data-theme');

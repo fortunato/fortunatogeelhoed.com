@@ -49,7 +49,7 @@ jobs:
         run: bun run test:component
 
   # Coverage report: runs the logic projects plus the shared web components in one instrumented pass
-  # so Vitest merges node, jsdom, and real-browser coverage into a single lcov for Codecov. Needs the
+  # so Vitest merges node, happy-dom, and real-browser coverage into a single lcov for Codecov. Needs the
   # browser (the components only run there), which is why it is separate from the fast unit job.
   coverage:
     runs-on: ubuntu-latest
