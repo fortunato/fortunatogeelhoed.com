@@ -6,10 +6,10 @@ import { coverageConfigDefaults, defineConfig } from 'vitest/config';
 
 // One runner, several projects — tests live where the behaviour lives:
 //   node    → browser-independent pure logic (fast, no DOM)
-//   jsdom   → logic that touches browser APIs but is not a component (theme persistence)
+//   happy-dom → logic that touches browser APIs but is not a component (theme persistence)
 //   browser-* → component behaviour in a real browser (Playwright provider, headless Chromium):
 //               custom elements + shadow/light DOM, real events, real layout
-// Component tests are named *.browser.test.* so the node/jsdom projects never pick them up.
+// Component tests are named *.browser.test.* so the node/happy-dom projects never pick them up.
 const root = import.meta.dirname;
 const alias = {
 	'@fg/shared': resolve(root, 'packages/shared/src'),
@@ -43,7 +43,7 @@ export default defineConfig({
 						'packages/api/src/**/*.test.ts',
 						'scripts/**/*.test.ts',
 					],
-					// theme.test.ts needs browser APIs (jsdom project); components run in the browser.
+					// theme.test.ts needs browser APIs (happy-dom project); components run in the browser.
 					exclude: ['**/*.browser.test.*', '**/theme.test.ts'],
 				},
 			},
