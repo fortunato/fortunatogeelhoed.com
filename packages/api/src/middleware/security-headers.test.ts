@@ -1,7 +1,8 @@
 import { Hono } from 'hono';
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
 	DOCS_CSP,
+	anatomyCsp,
 	generateNonce,
 	securityHeaders,
 	serveHtml,
@@ -76,6 +77,38 @@ describe('DOCS_CSP', () => {
 	it('permits the Scalar CDN for the docs page only', () => {
 		expect(DOCS_CSP).toContain('https://cdn.jsdelivr.net');
 		expect(DOCS_CSP).toContain("script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net");
+	});
+});
+
+describe('anatomyCsp', () => {
+	// Start each case from a genuinely-unset host. `process.env.X = undefined` coerces to the string
+	// "undefined", so a sibling block's cleanup could otherwise leak `https://undefined` in here;
+	// Reflect.deleteProperty removes the key outright (and avoids the lint-flagged `delete` operator).
+	beforeEach(() => {
+		Reflect.deleteProperty(process.env, 'UMAMI_HOST');
+	});
+	afterEach(() => {
+		Reflect.deleteProperty(process.env, 'UMAMI_HOST');
+	});
+
+	it('allows the essay its inline styles and scripts but stays fully first-party', () => {
+		const csp = anatomyCsp();
+		expect(csp).toContain("script-src 'self' 'unsafe-inline'");
+		expect(csp).toContain("style-src 'self' 'unsafe-inline'");
+		// Fonts are self-hosted, so no external origins of any kind leak in.
+		expect(csp).toContain("font-src 'self'");
+		expect(csp).not.toContain('https://');
+		expect(csp).toContain("object-src 'none'");
+		expect(csp).toContain("frame-ancestors 'none'");
+	});
+
+	it('extends only to the analytics origin when configured', () => {
+		process.env.UMAMI_HOST = 'stats.fortunatogeelhoed.com';
+		const csp = anatomyCsp();
+		expect(csp).toContain(
+			"script-src 'self' 'unsafe-inline' https://stats.fortunatogeelhoed.com",
+		);
+		expect(csp).toContain("connect-src 'self' https://stats.fortunatogeelhoed.com");
 	});
 });
 

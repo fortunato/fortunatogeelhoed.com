@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Coding got solved. Web development didn't. (A git log, measured)</title>
+<meta name="description" content="Coding got compressed this year, not solved. Measured from one portfolio's 209 commits: about half the work is the visible surface, the other half is the production engineering a prompt can't supply. Same tool, different operator." />
+<script>
+/* Resolve the theme before first paint to avoid a flash: an explicit stored choice wins, otherwise
+   follow the OS preference. The <html> attribute defaults to dark, so dark stays the fallback. */
+(function(){try{var s=localStorage.getItem("anatomy-theme");var t=(s==="light"||s==="dark")?s:(window.matchMedia&&window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark");document.documentElement.setAttribute("data-theme",t);}catch(e){}})();
+</script>
+<style>
+/* Self-hosted variable fonts (same woff2 files the main site ships in static/fonts). Keeps the page
+   first-party with no cross-origin request, so its CSP needs no external font/style origins. */
+@font-face{font-family:"Rubik";src:url("/assets/fonts/rubik-variable.woff2") format("woff2");font-weight:300 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Space Grotesk";src:url("/assets/fonts/space-grotesk-variable.woff2") format("woff2");font-weight:300 700;font-style:normal;font-display:swap}
+@font-face{font-family:"JetBrains Mono";src:url("/assets/fonts/jetbrains-mono-variable.woff2") format("woff2");font-weight:100 800;font-style:normal;font-display:swap}
+</style>
+<style>
+:root{
+  --bg:#14171e; --bg-2:#1b1f28; --card:#232834; --card-2:#2d3340; --border:#39404e;
+  --tx:#eef1f6; --tx-2:#a3acbb; --tx-3:#858ea0;
+  /* tier hues: T1 = the visible surface (pale slate), T2 = craft (blue), T3 = production engineering (warm orange) */
+  --c1:#aab3c2; --c1-dim:#7d8696;
+  --c2:#5ba8ff; --c2-dim:#3f7fc9;
+  --c3:#f2913f; --c3-dim:#c66f27;
+  --gold:#facc15; --gold-dim:#b88a06;
+  --react:#bb5615;
+  --font-d:"Rubik",sans-serif; --font-b:"Space Grotesk",sans-serif; --font-m:"JetBrains Mono",monospace;
+  --container:min(1180px,92vw);
+  --r-sm:4px; --r-md:8px; --r-lg:14px;
+  --sh-md:0 8px 24px rgb(0 0 0 / .28); --sh-lg:0 16px 48px rgb(0 0 0 / .35);
+  --ease:cubic-bezier(.2,0,0,1);
+  --glow:radial-gradient(42rem 32rem at 82% 8%, color-mix(in srgb,var(--c2) 13%,transparent), transparent 70%),
+         radial-gradient(40rem 30rem at 6% 30%, color-mix(in srgb,var(--c3) 12%,transparent), transparent 70%),
+         radial-gradient(28rem 24rem at 60% 0%, color-mix(in srgb,var(--gold) 6%,transparent), transparent 70%);
+}
+/* Light theme: override only the surface/text/border tokens, the three tier hues (darkened for
+   contrast on a light ground) and the shadows. The accent chips that carry dark text on a coloured
+   fill (.fw-seg, .tag, the .thesis CTA) read correctly in both themes, so they are left alone. */
+html[data-theme="light"]{
+  --bg:#f6f7f9; --bg-2:#eceef2; --card:#ffffff; --card-2:#eef1f5; --border:#dce0e8;
+  --tx:#1b1e26; --tx-2:#515a6b; --tx-3:#727a8a;
+  --c1:#6b7384; --c1-dim:#535a68;
+  --c2:#2f7fd1; --c2-dim:#245f9c;
+  --c3:#d9781d; --c3-dim:#b35f12;
+  --gold:#b8860b; --gold-dim:#8a6608;
+  --sh-md:0 8px 24px rgb(0 0 0 / .10); --sh-lg:0 16px 48px rgb(0 0 0 / .14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg); color:var(--tx);
+  font-family:var(--font-b); line-height:1.6; font-size:1.02rem;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+.wrap{width:var(--container);margin-inline:auto}
+a{color:inherit}
+::selection{background:color-mix(in srgb,var(--c3) 40%,transparent)}
+
+/* header */
+.site-header{
+  position:sticky;top:0;z-index:100;height:3.5rem;
+  display:flex;align-items:center;
+  background:color-mix(in srgb,var(--bg) 82%,transparent);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+/* Full-bleed like the main site header: brand pinned to the left edge, controls to the right, with
+   a small responsive side padding rather than the centred content container. */
+.site-header .wrap{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:none;margin:0;padding-inline:clamp(1rem,4vw,2.5rem)}
+.brand{font-family:var(--font-d);font-weight:800;letter-spacing:-.02em;font-size:1.05rem;text-decoration:none;flex-shrink:0;white-space:nowrap}
+.brand b{color:var(--c3)}
+.eyebrow{font-family:var(--font-m);font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.22em;color:var(--tx-3)}
+.header-right{display:flex;align-items:center;gap:.45rem;flex-shrink:0}
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:2rem;height:2rem;border-radius:var(--r-sm);color:var(--tx-2);background:none;border:0;cursor:pointer;text-decoration:none;transition:color .15s var(--ease),background .15s var(--ease)}
+.icon-btn:hover{color:var(--tx);background:color-mix(in srgb,var(--tx) 9%,transparent)}
+.icon-btn svg{display:block;width:18px;height:18px}
+[data-theme="dark"] .icon-sun{display:none}
+[data-theme="light"] .icon-moon{display:none}
+@media(max-width:640px){.header-right .eyebrow{display:none}}
+
+/* hero */
+.hero{position:relative;padding:clamp(4rem,9vw,8rem) 0 clamp(2.5rem,5vw,4rem)}
+.hero::before{content:"";position:absolute;inset:-20% 0 auto 0;height:120%;background:var(--glow);z-index:-1;pointer-events:none}
+.kicker{font-family:var(--font-m);font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.24em;color:var(--c3);margin-bottom:1.4rem}
+h1{
+  font-family:var(--font-d);font-weight:800;line-height:.96;letter-spacing:-.03em;
+  font-size:clamp(2.7rem,7.5vw,5.6rem);text-wrap:balance;
+}
+h1 .sub-line{display:block;background:linear-gradient(135deg,var(--tx) 30%,var(--c3) 72%,var(--c2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{max-width:60ch;color:var(--tx-2);font-size:clamp(1.05rem,2vw,1.3rem);margin-top:1.6rem;text-wrap:pretty}
+.lede b{color:var(--tx);font-weight:600}
+
+/* hero stat trio */
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:clamp(2.5rem,5vw,3.5rem)}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.6rem 1.5rem;position:relative;overflow:hidden}
+.stat::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent,var(--c3))}
+.stat .num{font-family:var(--font-d);font-weight:800;font-size:clamp(2.4rem,5vw,3.4rem);line-height:1;letter-spacing:-.02em;color:var(--accent,var(--c3))}
+.stat .num .small{font-size:.5em;color:var(--tx-3);font-weight:600}
+.stat .cap{margin-top:.7rem;font-weight:600;color:var(--tx);font-size:.98rem}
+.stat .sub{margin-top:.25rem;color:var(--tx-3);font-size:.82rem;line-height:1.45}
+
+/* sections */
+section.block{padding:clamp(3rem,7vw,6rem) 0;border-top:1px solid var(--border)}
+.sec-label{font-family:var(--font-m);font-size:.66rem;font-weight:600;text-transform:uppercase;letter-spacing:.2em;color:var(--c3);margin-bottom:1rem}
+h2{font-family:var(--font-d);font-weight:700;font-size:clamp(1.7rem,3.6vw,2.6rem);letter-spacing:-.02em;line-height:1.05;text-wrap:balance}
+.sec-intro{max-width:62ch;color:var(--tx-2);margin-top:1rem;font-size:1.05rem;text-wrap:pretty}
+
+/* donut + legend */
+.split-grid{display:grid;grid-template-columns:minmax(0,300px) 1fr;gap:clamp(2rem,5vw,4rem);align-items:center;margin-top:2.5rem}
+.donut-wrap{position:relative;display:grid;place-items:center}
+.donut{
+  --p1:46.0;--p2:71.3; /* cumulative stops */
+  width:min(280px,72vw);aspect-ratio:1;border-radius:50%;
+  background:conic-gradient(var(--c1) 0 calc(var(--p1)*1%),var(--c2) 0 calc(var(--p2)*1%),var(--c3) 0 100%);
+  -webkit-mask:radial-gradient(circle,transparent 57%,#000 57.6%);mask:radial-gradient(circle,transparent 57%,#000 57.6%);
+  position:relative;transform:rotate(-2deg);
+}
+.donut-center{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.donut-center .big{font-family:var(--font-d);font-weight:800;font-size:1.9rem;line-height:1}
+.donut-center .lbl{font-family:var(--font-m);font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--tx-3);margin-top:.35rem}
+.legend{display:flex;flex-direction:column;gap:1rem}
+.leg{display:grid;grid-template-columns:auto 1fr auto;gap:.9rem;align-items:baseline;padding-bottom:1rem;border-bottom:1px solid var(--border)}
+.leg:last-child{border-bottom:0}
+.leg .dot{width:14px;height:14px;border-radius:4px;align-self:center}
+.leg .t{font-family:var(--font-d);font-weight:700;font-size:1.05rem}
+.leg .d{grid-column:2;color:var(--tx-3);font-size:.86rem;margin-top:.15rem}
+.leg .pct{font-family:var(--font-m);font-weight:600;font-size:1.25rem}
+.leg .cm{grid-column:3;color:var(--tx-3);font-size:.76rem;font-family:var(--font-m);text-align:right}
+
+/* bar chart */
+.bars{margin-top:2.5rem;display:flex;flex-direction:column;gap:.1rem}
+.tier-head{display:flex;align-items:center;gap:.7rem;margin:1.6rem 0 .8rem;font-family:var(--font-m);font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.14em;color:var(--tx-2)}
+.tier-head:first-child{margin-top:0}
+.tier-head .swatch{width:10px;height:10px;border-radius:3px}
+.tier-head .ttot{margin-left:auto;color:var(--tx-3)}
+.bar-row{display:grid;grid-template-columns:190px 1fr auto;gap:1rem;align-items:center;padding:.32rem 0}
+.bar-row .name{font-size:.9rem;color:var(--tx);display:flex;flex-direction:column}
+.bar-row .name small{color:var(--tx-3);font-family:var(--font-m);font-size:.68rem}
+.bar-track{position:relative;height:26px;background:color-mix(in srgb,var(--border) 45%,transparent);border-radius:var(--r-sm);overflow:hidden}
+.bar-fill{position:absolute;inset:0 auto 0 0;width:0;border-radius:var(--r-sm);transition:width 1.1s var(--ease)}
+.bar-val{font-family:var(--font-m);font-size:.8rem;font-weight:600;color:var(--tx-2);white-space:nowrap;opacity:0;transition:opacity .45s ease .5s;justify-self:end}
+.bar-row.show .bar-val{opacity:1}
+.flag{font-size:.72rem;font-family:var(--font-m);font-weight:500;color:var(--gold);margin-left:.5rem}
+
+/* area chart */
+.area-card{margin-top:2.5rem;background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:clamp(1.2rem,3vw,2rem)}
+.area-legend{display:flex;gap:1.4rem;flex-wrap:wrap;margin-bottom:1rem;font-size:.82rem;color:var(--tx-2)}
+.area-legend span{display:inline-flex;align-items:center;gap:.45rem}
+.area-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+svg.area{width:100%;height:auto;display:block;overflow:visible}
+.area .grid line{stroke:var(--border);stroke-width:1;opacity:.5}
+.area .axis{fill:var(--tx-3);font-family:var(--font-m);font-size:11px}
+.area .annot{fill:var(--tx);font-family:var(--font-b);font-size:13px;font-weight:600}
+.area .annot-sub{fill:var(--tx-3);font-family:var(--font-m);font-size:10px;letter-spacing:.05em}
+.area-note{margin-top:1.2rem;color:var(--tx-2);font-size:.95rem;max-width:64ch}
+.area-note b{color:var(--tx)}
+
+/* framework split (single-framework counterfactual) */
+.fw-bar{display:flex;height:48px;border-radius:var(--r-sm);overflow:hidden;margin-top:2rem;border:1px solid var(--border)}
+.fw-seg{display:flex;align-items:center;justify-content:center;font-family:var(--font-m);font-size:.72rem;font-weight:600;color:#0d0f14;white-space:nowrap;min-width:0;overflow:hidden;padding:0 .4rem}
+.fw-key{display:flex;gap:1.3rem;flex-wrap:wrap;margin-top:1rem;font-size:.82rem;color:var(--tx-2)}
+.fw-key span{display:inline-flex;align-items:center;gap:.45rem}
+.fw-key i{width:12px;height:12px;border-radius:3px}
+.fw-call{margin-top:1.5rem;font-size:1.05rem;color:var(--tx-2);max-width:62ch}
+.fw-call b{color:var(--gold)}
+.shift{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:2.2rem}
+.card-s{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.4rem}
+.card-s.model{border-color:color-mix(in srgb,var(--c3) 50%,var(--border))}
+.card-s .lab{font-family:var(--font-m);font-size:.66rem;text-transform:uppercase;letter-spacing:.14em;color:var(--tx-3);margin-bottom:.9rem}
+.seg2{display:flex;height:32px;border-radius:var(--r-sm);overflow:hidden;margin-bottom:.7rem}
+.seg2 .v{display:flex;align-items:center;justify-content:center;font-family:var(--font-m);font-size:.76rem;font-weight:700;color:#0d0f14}
+.leg2{display:flex;justify-content:space-between;font-size:.8rem;color:var(--tx-2)}
+
+/* decision cards */
+.dcard.dec h3{font-size:1.12rem;margin:.5rem 0 1rem}
+.dec .instead{font-size:.84rem;color:var(--tx-3);margin-bottom:1rem}
+.dec .instead .chip{font-family:var(--font-m);font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--tx-3);border:1px solid var(--border);border-radius:3px;padding:.1rem .45rem;margin-right:.55rem;white-space:nowrap}
+/* No margin-top:auto here: cards in a row stretch to equal height (flush bottoms), and pinning the
+   footer down would open a gap mid-card on the shorter ones. Let the slack fall below instead. */
+.dec .because{font-size:.88rem;color:var(--tx-2);padding-top:1rem;border-top:1px solid var(--border)}
+.dec .because .lbl{font-family:var(--font-m);font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:var(--c2);display:block;margin-bottom:.35rem}
+.dec .because code{font-family:var(--font-m);font-size:.82em;color:var(--c3)}
+
+/* inventory cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.1rem;margin-top:2.5rem}
+.dcard{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:1.5rem;display:flex;flex-direction:column;transition:transform .3s var(--ease),border-color .3s var(--ease),box-shadow .3s var(--ease)}
+.dcard:hover{transform:translateY(-4px);border-color:var(--c3);box-shadow:var(--sh-lg)}
+.dcard .ix{font-family:var(--font-m);font-size:.7rem;color:var(--c3);font-weight:600;letter-spacing:.1em}
+.dcard h3{font-family:var(--font-d);font-weight:700;font-size:1.22rem;margin:.5rem 0 .8rem;letter-spacing:-.01em}
+.dcard ul{list-style:none;display:flex;flex-direction:column;gap:.45rem;margin-bottom:1.1rem}
+.dcard li{position:relative;padding-left:1.1rem;font-size:.86rem;color:var(--tx-2)}
+.dcard li::before{content:"";position:absolute;left:0;top:.55em;width:6px;height:6px;border-radius:2px;background:var(--c3);opacity:.7}
+/* Same as .because: equal-height stretch with flush bottoms, no margin-top:auto, so a longer card
+   in the row never floats a shorter card's "Implies" footer away from the text above it. */
+.dcard .implies{padding-top:1rem;border-top:1px solid var(--border);font-size:.82rem;color:var(--tx-3)}
+.dcard .implies b{color:var(--c2);font-weight:600;display:block;font-family:var(--font-m);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.35rem}
+
+/* details inventory */
+.deep{margin-top:2.5rem;display:flex;flex-direction:column;gap:.7rem}
+details.acc{background:var(--bg-2);border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden}
+details.acc summary{cursor:pointer;list-style:none;padding:1.1rem 1.3rem;display:flex;align-items:center;gap:.8rem;font-family:var(--font-d);font-weight:600;font-size:1.05rem}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary .chev{margin-left:auto;color:var(--tx-3);transition:transform .3s var(--ease)}
+details.acc[open] summary .chev{transform:rotate(90deg)}
+details.acc summary .tag{font-family:var(--font-m);font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:#0d0f14;background:var(--c3);padding:.15rem .5rem;border-radius:3px}
+.acc-body{padding:0 1.3rem 1.3rem;color:var(--tx-2);font-size:.92rem}
+.acc-body p{margin-bottom:.8rem}
+.acc-body code{font-family:var(--font-m);font-size:.82em;background:var(--card);padding:.1rem .4rem;border-radius:3px;color:var(--c2)}
+.acc-body ul{margin:.4rem 0 .8rem 1.1rem;display:flex;flex-direction:column;gap:.35rem}
+
+/* vs contrast */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-top:2.5rem}
+.vs .dcard .implies b{color:var(--c3)}
+.vs .dcard.easy .implies b{color:var(--c1)}
+
+/* saas ledger */
+.saas-grid{display:flex;flex-direction:column;gap:.6rem;margin-top:2.5rem}
+.map-row{display:grid;grid-template-columns:1fr 2rem 1fr;gap:1rem;align-items:center;background:var(--card);border:1px solid var(--border);border-radius:var(--r-md);padding:1rem 1.3rem;transition:border-color .3s var(--ease)}
+.map-row:hover{border-color:color-mix(in srgb,var(--c3) 42%,var(--border))}
+.map-row .k{font-family:var(--font-m);font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;display:block;margin-bottom:.25rem}
+.map-row .skipped{color:var(--tx-3);font-size:.9rem}
+.map-row .skipped .k{color:var(--tx-3)}
+.map-row .arrow{justify-self:center;color:var(--c3);font-size:1.15rem}
+.map-row .owns{color:var(--tx);font-size:.93rem}
+.map-row .owns .k{color:var(--c3)}
+@media(max-width:720px){
+  .map-row{grid-template-columns:1fr;gap:.55rem}
+  .map-row .arrow{display:none}
+}
+
+/* the turn: pull statement */
+.turn{font-family:var(--font-d);font-weight:800;font-size:clamp(1.7rem,4.2vw,2.9rem);letter-spacing:-.02em;line-height:1.12;color:var(--tx);margin:2.4rem 0;padding:.8rem 0 .8rem 1.5rem;border-left:4px solid var(--c3);background:linear-gradient(90deg,color-mix(in srgb,var(--c3) 13%,transparent),transparent 62%);text-wrap:balance}
+.turn b{background:linear-gradient(120deg,var(--c3),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* thesis cta */
+.thesis{background:linear-gradient(135deg,var(--c3),color-mix(in srgb,var(--c3) 50%,#000));border-radius:var(--r-lg);padding:clamp(2.5rem,5vw,4.5rem);position:relative;overflow:hidden;margin-top:1rem;box-shadow:var(--sh-lg)}
+.thesis::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 120% at 50% -10%,rgba(255,255,255,.18),transparent 65%);pointer-events:none}
+.thesis h2{color:#fff;max-width:20ch}
+.thesis p{color:rgba(255,255,255,.92);max-width:60ch;margin-top:1.2rem;font-size:1.1rem;text-wrap:pretty}
+.thesis p b{color:#fff}
+
+/* finale */
+.finale{font-family:var(--font-d);font-weight:800;font-size:clamp(1.6rem,3.8vw,2.7rem);letter-spacing:-.02em;line-height:1.16;text-wrap:balance;margin-top:2.4rem;max-width:30ch}
+.finale b{background:linear-gradient(120deg,var(--c3),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* footer */
+footer{border-top:1px solid var(--border);padding:2.5rem 0 4rem;color:var(--tx-3);font-size:.84rem}
+footer .meth{max-width:74ch;line-height:1.7}
+footer .meth b{color:var(--tx-2)}
+footer .fine{margin-top:1.4rem;font-family:var(--font-m);font-size:.72rem;letter-spacing:.04em}
+footer .fine a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+footer .fine a:hover{color:var(--tx-2)}
+footer .seealso{margin-top:1.4rem;max-width:74ch;line-height:1.7;color:var(--tx-2)}
+footer .seealso a{color:var(--c3);text-decoration:underline;text-underline-offset:3px}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+.reveal.show{opacity:1;transform:none}
+
+@media (max-width:820px){
+  .trio{grid-template-columns:1fr}
+  .split-grid{grid-template-columns:1fr}
+  .bar-row{grid-template-columns:120px 1fr auto}
+  .vs{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;scroll-behavior:auto!important}
+  .reveal{opacity:1;transform:none;transition:none}
+  .bar-fill{transition:none}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">FORTUNATO<b>.</b>GEELHOED</a>
+    <div class="header-right">
+      <span class="eyebrow">Field note · from the git log</span>
+      <a class="icon-btn" href="https://github.com/fortunato/fortunatogeelhoed.com" target="_blank" rel="noopener noreferrer" aria-label="View the source on GitHub (opens in a new tab)">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.65 7.65 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      </a>
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle light and dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <p class="kicker reveal">Anatomy of "Done" · a field note from the git log</p>
+      <h1 class="reveal">Coding got solved.<br /><span class="sub-line">Web development didn't.</span></h1>
+      <p class="lede reveal">At least, that's the headline going around. Closer to the truth: <b>typing</b> got cheap. <b>Judgment</b> didn't. This portfolio took <b>209 commits</b> over sixteen days, every one of them written by an AI agent. Roughly half never touched anything you can see. Here is what the git history actually shows about the gap between a build that <b>looks</b> done and one that <b>is</b>, counted commit by commit.</p>
+
+      <div class="trio">
+        <div class="stat reveal" style="--accent:var(--c2)">
+          <div class="num" data-count="54" data-suffix="%">0%</div>
+          <div class="cap">of the code is work you can't see</div>
+          <div class="sub">Craft and production engineering: everything past the visible surface.</div>
+        </div>
+        <div class="stat reveal" style="--accent:var(--c3)">
+          <div class="num"><span data-count="107">0</span><span class="small"> / 209</span></div>
+          <div class="cap">commits add no visible feature</div>
+          <div class="sub">Testing, infrastructure, security, observability, accessibility, polish.</div>
+        </div>
+        <div class="stat reveal" style="--accent:var(--gold)">
+          <div class="num" data-count="10">0</div>
+          <div class="cap">engineering &amp; craft disciplines on top</div>
+          <div class="sub">Each one needs enough prior experience to steer the prompt and catch where it's wrong.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIER SPLIT -->
+  <section class="block">
+    <div class="wrap">
+      <p class="sec-label reveal">The shape of the work</p>
+      <h2 class="reveal">Less than half the codebase is the part you can look at.</h2>
+      <p class="sec-intro reveal">Every commit was sorted into one of three tiers. The first makes the site exist. The second makes it feel polished. The third makes it survive contact with the internet. The part that "got solved" reaches the first tier convincingly, then tends to stop there. The other two are the job that's left.</p>
+
+      <div class="split-grid">
+        <div class="donut-wrap reveal">
+          <div class="donut" role="img" aria-label="46 percent renders, 25 percent craft, 29 percent production engineering"></div>
+          <div class="donut-center"><span class="big">43,524</span><span class="lbl">lines of change</span></div>
+        </div>
+        <div class="legend reveal">
+          <div class="leg">
+            <span class="dot" style="background:var(--c1)"></span>
+            <span class="t">It renders</span>
+            <span class="pct" style="color:var(--c1)">46%</span>
+            <span class="d">Scaffolding, components, layout, content. The pages exist and look right. <em>This is usually where vibe-coding stops.</em></span>
+            <span class="cm">102 commits</span>
+          </div>
+          <div class="leg">
+            <span class="dot" style="background:var(--c2)"></span>
+            <span class="t">It feels right</span>
+            <span class="pct" style="color:var(--c2)">25%</span>
+            <span class="d">Motion engineering, cross-framework parity, accessibility, SEO. The craft that separates "renders" from "polished."</span>
+            <span class="cm">39 commits</span>
+          </div>
+          <div class="leg">
+            <span class="dot" style="background:var(--c3)"></span>
+            <span class="t">It survives production</span>
+            <span class="pct" style="color:var(--c3)">29%</span>
+            <span class="d">Testing, CI/CD, infrastructure, security, observability. None of it visible; all of it load-bearing.</span>
+            <span class="cm">68 commits</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BAR CHART -->
+  <section class="block">
+    <div class="wrap">
+      <p class="sec-label reveal">Where the lines went</p>
+      <h2 class="reveal">Thirteen kinds of work. Two of them are what a prompt produces.</h2>
+      <p class="sec-intro reveal">Share of all code change by category, grouped by tier. The thing people mean by "building the site" (components, layout, content) is the top band. Notice that <b>motion is its own discipline</b>: in this repo it's scroll-driven reveals, view transitions, a framework-switch disintegrate/reassemble, and layout-shift-safe transforms. Engineered, not prompted.</p>
+      <div class="bars" id="bars"></div>
+    </div>
+  </section>
+
+  <!-- AREA / TIME -->
+  <section class="block">
+    <div class="wrap">
+      <p class="sec-label reveal">It was never just the website</p>
+      <h2 class="reveal">The invisible half accrues in parallel, every working day.</h2>
+      <p class="sec-intro reveal">Cumulative commits across the sixteen days, stacked by tier. There's no cliff where features stop and engineering starts. From the first week on, <b>the visible site hovers around half the stack and never pulls ahead.</b> The craft and the production work aren't a phase you bolt on at the end. They grow right alongside the pages the whole way.</p>
+
+      <div class="area-card reveal">
+        <div class="area-legend">
+          <span><i style="background:var(--c1)"></i>It renders</span>
+          <span><i style="background:var(--c2)"></i>It feels right</span>
+          <span><i style="background:var(--c3)"></i>It survives production</span>
+        </div>
+        <svg class="area" id="areaChart" viewBox="0 0 920 340" preserveAspectRatio="xMidYMid meet" aria-label="Stacked cumulative commits by tier over sixteen days"></svg>
+        <p class="area-note"><b>Read it this way:</b> the "coding got solved" timeline would be only the bottom band. Here even that keeps growing, but it never rises above roughly half the stack. The two bands above it are everything a visitor never sees.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SINGLE FRAMEWORK -->
+  <section class="block">
+    <div class="wrap">
+      <p class="sec-label reveal">A twist on the visible half</p>
+      <h2 class="reveal">And even that 46% is inflated. It's the same site, built three times.</h2>
+      <p class="sec-intro reveal">This portfolio renders in React, Vue <em>and</em> Angular to prove the same interface in each. A normal site picks one. So a fifth of the entire codebase is the second and third copies of work the first framework already did, and most of it sits in the visible tier.</p>
+
+      <div class="fw-bar reveal">
+        <div class="fw-seg" style="width:11.6%;background:#61dafb">React 11.6%</div>
+        <div class="fw-seg" style="width:9.6%;background:#42b883">Vue 9.6%</div>
+        <div class="fw-seg" style="width:11.0%;background:#dd0031;color:#fff">Angular 11%</div>
+        <div class="fw-seg" style="width:67.8%;background:var(--card-2);color:var(--tx-2)">Shared design system, content &amp; all the engineering · 67.8%</div>
+      </div>
+      <div class="fw-key reveal">
+        <span><i style="background:#61dafb"></i>React, the kept one</span>
+        <span><i style="background:#42b883"></i>Vue, a rebuild</span>
+        <span><i style="background:#dd0031"></i>Angular, a rebuild</span>
+      </div>
+      <p class="fw-call reveal">The Vue and Angular implementations alone are <b>20.6% of all the code in the repo</b>: the same screens, built twice more.</p>
+
+      <div class="shift reveal">
+        <div class="card-s">
+          <div class="lab">As built · three frameworks</div>
+          <div class="seg2"><div class="v" style="width:46%;background:var(--c1)">46%</div><div class="v" style="width:54%;background:var(--c3)">54%</div></div>
+          <div class="leg2"><span>Surface</span><span>Engineering &amp; craft</span></div>
+        </div>
+        <div class="card-s model">
+          <div class="lab">Modelled · one framework</div>
+          <div class="seg2"><div class="v" style="width:40%;background:var(--c1)">~40%</div><div class="v" style="width:60%;background:var(--c3)">~60%</div></div>
+          <div class="leg2"><span>Surface</span><span>Engineering &amp; craft</span></div>
+        </div>
+      </div>
+      <p class="sec-intro reveal" style="margin-top:2rem">Strip it to one framework and the surface drops from 46% to about <b>40%</b>. The invisible half still grows, just less than a clean subtraction implies, because going single-framework also sheds real craft: cross-framework parity exists only because there are three, and a slice of the visual-regression gate and the per-framework motion goes with it. What it leaves untouched is the genuinely <b>fixed cost</b>, the server, the infrastructure, the security, most of the CI. Fewer frameworks doesn't shrink those; it just makes them a bigger share of what's left.</p>
+    </div>
+  </section>
+
+  <!-- CURATED INVENTORY -->
+  <section class="block">
+    <div class="wrap">
+      <p class="sec-label reveal">What a professional layers on top</p>
+      <h2 class="reveal">Ten disciplines hiding under a page that "just looks like a portfolio."</h2>
+      <p class="sec-intro reveal">Each is real and present in this repository. What matters for anyone trying to reproduce this, with a team or with agents, isn't the artifacts themselves but what each one implies: the questions you have to ask, the agent profiles you'd brief, and the test suites and pipelines you'd stand up. That's the knowledge a generated draft can't infer for you.</p>
+
+      <div class="cards" id="cards"></div>
+    </div>
+  </section>
+
+  <!-- DEEP INVENTORY -->
+  <section class="block">
+    <div class="wrap">
+      <p class="sec-label reveal">The long version</p>
+      <h2 class="reveal">For the reader who wants the whole iceberg.</h2>
+      <p class="sec-intro reveal">The same disciplines, opened up: concrete artifacts found in the repo and the prior knowledge each one assumes.</p>
+      <div class="deep" id="deep"></div>
+    </div>
+  </section>
+
+  <!-- DECISIONS -->
+  <section class="block">
+    <div class="wrap">
+      <p class="sec-label reveal">Where the craft actually lives</p>
+      <h2 class="reveal">The forks where knowing mattered.</h2>
+      <p class="sec-intro reveal">Underneath the code sits a trail of decisions. Each one is a place where the obvious default was the wrong answer, and you only know that if you've been bitten before. A generated draft will pick <em>a</em> path at every fork without pausing, and more than once here the path it first picked had to be overruled. These are a few, straight from the repository's own decision log, where the right call took prior knowledge the model couldn't supply on its own.</p>
+      <div class="cards" id="decisions"></div>
+    </div>
+  </section>
+
+  <!-- CAVEAT -->
+  <section class="block">
+    <div class="wrap">
+      <p class="sec-label reveal">One honest caveat</p>
+      <h2 class="reveal">This is only a portfolio, which is the kindest possible case for "coding got solved."</h2>
+      <p class="sec-intro reveal">Two things are true at once, and both are worth saying plainly. Some of the invisible work here is showmanship: a brochure site doesn't strictly need shipped logs, real-user monitoring, or the same screen built three times. But a portfolio is also the <b>easiest</b> thing to generate, because it has almost no domain logic. The pages more or less <em>are</em> the product. There is nothing underneath them to get wrong.</p>
+
+      <div class="vs">
+        <div class="dcard easy reveal" style="border-top:2px solid var(--c1)">
+          <span class="ix" style="color:var(--c1)">This build</span>
+          <h3>Almost all surface</h3>
+          <ul>
+            <li>The only real logic is a contact form and some content</li>
+            <li>No business rules, transactions, or money to get wrong</li>
+            <li>Nothing to corrupt, reconcile, or migrate</li>
+            <li>The 46% you can see is genuinely most of what it does</li>
+          </ul>
+          <div class="implies"><b>So</b>the visible tier flatters the generated half. Get it looking right and you really are most of the way there.</div>
+        </div>
+        <div class="dcard reveal" style="border-top:2px solid var(--c3)">
+          <span class="ix">A real application</span>
+          <h3>Surface is the tip</h3>
+          <ul>
+            <li>Domain models, invariants, and business rules</li>
+            <li>Workflows and state machines whose edge cases must hold</li>
+            <li>Data integrity, consistency, migrations, integrations</li>
+            <li>Authorisation, auditability, and mistakes that cost money</li>
+          </ul>
+          <div class="implies"><b>So</b>the part you can see shrinks, and the unforgiving part underneath grows. That's exactly where a generated draft degrades fastest.</div>
+        </div>
+      </div>
+
+      <p class="sec-intro reveal" style="margin-top:2.2rem">In other words, this is the <b>generous</b> reading. Hold the surface constant and add real domain complexity, and the visible slice only gets thinner. The disciplines in this list don't go away. They multiply, and a new one joins them at the very top: <b>knowing the domain well enough to be certain the logic is right.</b> Sometimes that's you; a founder in their own field already has it. A model can teach you a documented domain, but it can't make you certain the logic is right: that takes either prior grounding or contact with the real rules, users and money it can't see. The same model that writes a broken auth check, and presents it as finished, will just as cheerfully teach you an invariant that is wrong.</p>
+    </div>
+  </section>
+
+  <!-- SAAS -->
+  <section class="block">
+    <div class="wrap">
+      <p class="sec-label reveal">Scaling the argument up</p>
+      <h2 class="reveal">Now make it a product.</h2>
+      <p class="sec-intro reveal">This has all been measured on a portfolio site build. A portfolio has almost no data, no users, nothing being billed, hardly any business logic that can break. Compare this build to a typical SaaS, broken down row by row in the table below. Most of this work could be omitted to get to the "works on my machine" stage.</p>
+
+      <div class="saas-grid reveal">
+        <div class="map-row"><div class="skipped"><span class="k">This build skipped</span>No database; Git is the CMS</div><div class="arrow">&rarr;</div><div class="owns"><span class="k">A SaaS owns</span>A database to model, migrate, transact, back up and restore-test</div></div>
+        <div class="map-row"><div class="skipped"><span class="k">This build skipped</span>A public site, no accounts</div><div class="arrow">&rarr;</div><div class="owns"><span class="k">A SaaS owns</span>Auth, sessions, roles, and tenant isolation that must never leak</div></div>
+        <div class="map-row"><div class="skipped"><span class="k">This build skipped</span>A trivial domain: show content</div><div class="arrow">&rarr;</div><div class="owns"><span class="k">A SaaS owns</span>Business rules, invariants and workflows that have to be <em>correct</em></div></div>
+        <div class="map-row"><div class="skipped"><span class="k">This build skipped</span>One container, replicas a non-goal</div><div class="arrow">&rarr;</div><div class="owns"><span class="k">A SaaS owns</span>Horizontal scale: shared state, distributed limits, cache invalidation</div></div>
+        <div class="map-row"><div class="skipped"><span class="k">This build skipped</span>No payments</div><div class="arrow">&rarr;</div><div class="owns"><span class="k">A SaaS owns</span>Billing, metering, proration, dunning and idempotent webhooks</div></div>
+        <div class="map-row"><div class="skipped"><span class="k">This build skipped</span>Nothing stored, relayed and gone</div><div class="arrow">&rarr;</div><div class="owns"><span class="k">A SaaS owns</span>PII at rest: encryption, retention, audit logs, deletion on request</div></div>
+        <div class="map-row"><div class="skipped"><span class="k">This build skipped</span>One server, provisioned by hand</div><div class="arrow">&rarr;</div><div class="owns"><span class="k">A SaaS owns</span>Zero-downtime migrations, staging, and disaster recovery you have tested</div></div>
+        <div class="map-row"><div class="skipped"><span class="k">This build skipped</span>A contact form as the whole attack surface</div><div class="arrow">&rarr;</div><div class="owns"><span class="k">A SaaS owns</span>An API and a tenant boundary that carry the whole company's risk</div></div>
+      </div>
+
+      <p class="sec-intro reveal" style="margin-top:2.2rem">Every item on the right is invisible engineering wrapped around real domain logic. The visible UI, already under half here, becomes a thinner slice of something much larger. But by now the ratio isn't even the point.</p>
+      <p class="turn reveal">The blast radius of a confident wrong answer.</p>
+      <p class="sec-intro reveal">Here, a bad default is embarrassing: a missing header, a janky transition. There, that same default, wrong but looking right, is one tenant reading another's data, a migration with no way back, or a card charged twice. Same tool. Same speed. The difference is the blast radius, and the only thing standing between the model's first plausible default and a very expensive mistake is an operator who already knows where the mistakes live.</p>
+    </div>
+  </section>
+
+  <!-- THE TURN -->
+  <section class="block">
+    <div class="wrap">
+      <p class="sec-label reveal">The part that never shows up in the git log</p>
+      <h2 class="reveal">Every commit here was written by an AI agent too.</h2>
+      <p class="sec-intro reveal">Here's where "coding got solved" earns its asterisk. By the popular definition, this whole repository is vibe-coded: I drove <b>Claude Code</b> through all 209 commits and typed almost none of it by hand. So the question that matters isn't whether the machine can write code. It clearly can. The question is why <em>this</em> output has a content-security policy, infrastructure as code, shipped telemetry, and the same screen built three ways, when a weekend build from the very same tool has none of that. Same model. Same prompt box.</p>
+
+      <p class="turn reveal">Same tool. Different operator.</p>
+
+      <p class="sec-intro reveal">It moved fast because it was pointed at problems I had already solved before, in some shape or form. I knew the disciplines existed. I knew which questions to ask, and in what order. I knew what "done" actually means here, and I could tell when an answer was confidently wrong. The model will just as cheerfully generate a version with no CSP, no rate limit, no observability, no parity, and it looks <em>identical</em> to the good one right up until production finds the difference.</p>
+      <p class="sec-intro reveal">And a good part of that judgment went in <em>before</em> the model wrote a line. Much of this build was <b>spec-driven</b>: the constraints, the taste, and the decisions I had already settled were written down first, as a specification the model then built against. Those requirements were prior experience I'd already settled, written down clearly enough for the model to follow.</p>
+
+      <p class="sec-intro reveal">What couldn't be settled up front got caught in the act. More than once the model's first answer was the wrong one, and it took knowing better to overrule it: the rate limiter that trusted a forged <b>X-Forwarded-For</b> header, the filter state that reached for a store it hadn't earned, the Angular toolchain default that broke the Bun-only constraint. None of that back-and-forth is in the git history. The log counts the code that <em>survived</em>, not the research, the prompts, or the approaches proposed and thrown away.</p>
+
+      <p class="turn reveal">The steering leaves no commit behind.</p>
+
+      <p class="sec-intro reveal">Which makes every split on this page <b>conservative</b>. The corrections clustered on exactly the hard calls (security, state, infrastructure) and never on the visible layout, so the time that actually went into judgment tilts the real ratio even further from the part you can see than any chart here can show.</p>
+
+      <p class="sec-intro reveal">So what this page really measures is whether the operator already knows where the work is. How much of the code got typed by hand barely matters. That knowledge is what tells you which agents to brief and which tests and pipelines to stand up: the <em>Implies</em> column, a few sections up. <b>Knowing what to ask for is the skill now, and experience is what gives you that.</b></p>
+    </div>
+  </section>
+
+  <!-- FRONTEND CRAFT -->
+  <section class="block">
+    <div class="wrap">
+      <p class="sec-label reveal">The skill that never shows up in an audit</p>
+      <h2 class="reveal">Cohesion doesn't come out of the box.</h2>
+      <p class="sec-intro reveal">There's a layer of frontend work that no checklist captures and no model reliably reaches: making a thing feel like <em>one</em> thing. A spacing rhythm that holds from the first section to the last, a type hierarchy that never wavers, motion that's purposeful rather than sprinkled on, the hundred small decisions that make an interface feel authored instead of assembled. It's the quality you register in the first half-second and can't quite put a name to.</p>
+      <p class="sec-intro reveal">Take this page. It was put together fast to make a point, and if you have the eye, it shows: the spacing doesn't sit on a strict scale, the rhythm drifts from one section to the next, it's competent but not <em>composed</em>. That's the honest ceiling of vibe-coded design: generic, a little off, fine. Then look at the site this page is about. The cohesion you feel there didn't come from a prompt; it came from someone who sweats the half-pixels until the whole thing reads as deliberate.</p>
+      <p class="sec-intro reveal"><b>That gap, between a page that just renders and one that actually feels composed, is the whole job of a frontend engineer. It's also the one thing this page doesn't have.</b></p>
+    </div>
+  </section>
+
+  <!-- THESIS -->
+  <section class="block" style="border-top:0">
+    <div class="wrap">
+      <div class="thesis reveal">
+        <h2>So no, coding didn't get solved. It got compressed.</h2>
+        <p>What compressed is the visible surface, roughly the <b>46%</b> you can see, and it now arrives fast. But the other half is where the domain knowledge lives: caching and CSP and rate limits and Web Vitals budgets and cross-framework parity and a deploy that can roll itself back. It's the part you can't fake, can't skip, and can't prompt your way through without knowing it exists.</p>
+        <p>Anyone with a good model gets the visible half fast now. A generated UI renders, but it lands generic and a little off, and closing the gap to something that actually feels composed is frontend work a prompt doesn't do. The invisible half I can move fast on too, because I know it's there: I point the same agents at the caching and the parity and the rollback and brief the tests before the internet finds out I skipped them. So I'm fast across the whole thing, and I know to handle the parts a prompt botches or skips.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINALE -->
+  <section class="block">
+    <div class="wrap">
+      <p class="sec-label reveal">One last thing, about you</p>
+      <h2 class="reveal">Vibe coding moved the developer.</h2>
+      <p class="sec-intro reveal">The part that compressed was the typing. What's left, and what now decides whether a build survives, is the judgment: which question to ask, which default is a trap, which corner is safe to cut and which one ends in a 3&nbsp;a.m. incident. The developer is still needed, now as the part you can't generate.</p>
+      <p class="sec-intro reveal">Which makes the honest version of this a little uncomfortable. If you're a founder, a product owner, a sharp person with an idea, the tools will genuinely let you build something that runs, and for a prototype, an internal tool, or a thing you're learning on, that's a gift worth taking. But shipping it to production, to real users and real data, is a different act. You'll be making engineering decisions whether you know it or not, and the ones you get wrong don't announce themselves. They settle in as debt. Most of the time it shows up slowly: changes that used to take an afternoon start taking a week, every new feature has to work around the last shortcut, and the team spends more of its time untangling the codebase than adding to it. Sometimes it shows up all at once, as a breach, an outage, or a rewrite.</p>
+      <p class="sec-intro reveal">A developer takes that debt on with eyes open. This build even writes its shortcuts down as deliberate non-goals. The difference between a deliberate non-goal and a latent disaster is whether someone knew they were choosing. The code looks the same either way.</p>
+      <p class="sec-intro reveal">None of this is gatekeeping. Use the tools: prototype, explore, understand your own product better than you could before. Just don't mistake a believable surface for a finished system, or speed for safety.</p>
+      <p class="finale reveal">The person best placed to vibe-code their way to production is the one who could have built it without the vibes. <b>Everyone else needs them in the room.</b></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="meth"><b>Method.</b> Built from the public git history of the project repository: <b>209 commits</b> by a single author between <b>31 May and 15 June 2026</b> (the figures here are a launch snapshot), totalling about <b>42,000 lines added</b>. Each commit was read and sorted into one of thirteen categories of work; line counts measure churn (additions plus deletions) and exclude lockfiles. Category attribution is approximate, since a single commit often spans concerns, so individual rows can wobble by a point or two, but the proportions are stable across reasonable re-classifications. Commit totals and dates are exact. The single-framework figures are a directional estimate, not a clean subtraction. They start from the measured frontend duplication (Vue and Angular are about 9,000 lines, a fifth of the repo) and also shed the work that exists only because there are three: cross-framework parity in full, plus a per-framework slice of motion, accessibility, testing and CI. The backend, infrastructure and security stay fixed. Under reasonable assumptions the one-framework surface lands near 40%, not a third. The decisions shown are drawn from the repository's own design-decision log. And the whole thing measures only what landed in the history, not the steering that produced it: the specs written up front, the research, the overruled defaults, all of which fall entirely on the engineering side of the ledger.</p>
+    <p class="seealso">This page is only fine. The real thing is built three times over, in React, Vue and Angular: see <a href="/services">what I do</a> or <a href="/contact">start a conversation</a>.</p>
+    <p class="fine">© 2026 JiggyBit S.L. · The anatomy of done, generated from the git log. · <a href="/privacy">Privacy</a></p>
+  </div>
+</footer>
+
+<script>
+const DATA = {
+  total: 43524,
+  cats: [
+    {key:'features',   label:'Components & layout', sub:'core UI',          tier:1, commits:51, churn:11094, flag:"← what 'done' usually means"},
+    {key:'content',    label:'Content authoring',   sub:'copy, timeline',   tier:1, commits:31, churn:5862},
+    {key:'scaffolding',label:'Scaffolding & tooling',sub:'monorepo, SSG',   tier:1, commits:20, churn:3058},
+    {key:'motion',     label:'Motion engineering',  sub:'reveals, transitions',tier:2, commits:16, churn:5404, flag:'← engineered, not prompted'},
+    {key:'a11y',       label:'Accessibility',       sub:'WCAG AA gate',     tier:2, commits:11, churn:1517},
+    {key:'seo',        label:'SEO & metadata',      sub:'JSON-LD, OG',      tier:2, commits:4,  churn:2328},
+    {key:'parity',     label:'Cross-framework parity',sub:'React/Vue/Angular',tier:2, commits:4, churn:908},
+    {key:'refactor',   label:'Refactor, fixes & docs',sub:'',               tier:2, commits:4,  churn:856},
+    {key:'testing',    label:'Testing & visual reg.',sub:'60+ test files',   tier:3, commits:34, churn:3713},
+    {key:'observability',label:'Observability',     sub:'logs, RUM, traces',tier:3, commits:6,  churn:2896},
+    {key:'cicd',       label:'CI/CD pipelines',     sub:'7-job matrix',     tier:3, commits:17, churn:2657},
+    {key:'security',   label:'Security',            sub:'CSP, CSRF, limits',tier:3, commits:4,  churn:1819},
+    {key:'infra',      label:'Infrastructure (IaC)',sub:'Pulumi, Hetzner',  tier:3, commits:7,  churn:1412},
+  ],
+  tiers: {
+    1:{name:'It renders',        color:'var(--c1)', total:20014, pct:46.0},
+    2:{name:'It feels right',    color:'var(--c2)', total:11013, pct:25.3},
+    3:{name:'It survives production',color:'var(--c3)', total:12497, pct:28.7},
+  },
+  // [date label, cum t1, cum t2, cum t3]
+  timeline: [
+    ['31 May',2,1,2],['2 Jun',15,2,4],['3 Jun',22,6,12],['4 Jun',38,16,24],
+    ['5 Jun',48,20,25],['6 Jun',56,24,28],['7 Jun',64,26,31],['8 Jun',66,26,35],
+    ['9 Jun',66,27,38],['10 Jun',75,29,46],['11 Jun',83,32,51],['12 Jun',89,34,55],
+    ['13 Jun',96,37,58],['14 Jun',99,39,64],['15 Jun',102,39,68],
+  ],
+};
+
+const TIER_COLOR = {1:'var(--c1)',2:'var(--c2)',3:'var(--c3)'};
+const TIER_DIM   = {1:'var(--c1-dim)',2:'var(--c2-dim)',3:'var(--c3-dim)'};
+const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---- bar chart ---- */
+(function(){
+  const root = document.getElementById('bars');
+  let html = '';
+  for (const t of [1,2,3]){
+    const ti = DATA.tiers[t];
+    html += `<div class="tier-head"><span class="swatch" style="background:${TIER_COLOR[t]}"></span>${ti.name}<span class="ttot">${ti.pct.toFixed(0)}% of all change · ${Object.values(DATA.cats).filter(c=>c.tier===t).reduce((a,c)=>a+c.commits,0)} commits</span></div>`;
+    for (const c of DATA.cats.filter(c=>c.tier===t)){
+      const pct = (c.churn/DATA.total*100);
+      html += `<div class="bar-row" data-w="${pct.toFixed(1)}">
+        <div class="name">${c.label}${c.sub?`<small>${c.sub}</small>`:''}</div>
+        <div class="bar-track"><div class="bar-fill" style="background:linear-gradient(90deg,${TIER_DIM[t]},${TIER_COLOR[t]})"></div></div>
+        <span class="bar-val">${pct.toFixed(1)}%${c.flag?`<span class="flag">${c.flag}</span>`:''}</span>
+      </div>`;
+    }
+  }
+  root.innerHTML = html;
+})();
+
+/* ---- stacked area ---- */
+(function(){
+  const svg = document.getElementById('areaChart');
+  const W=920,H=340, padL=42, padR=14, padT=18, padB=34;
+  const ix=W-padL-padR, iy=H-padT-padB;
+  const n=DATA.timeline.length, maxY=210;
+  const X=i=> padL + ix*i/(n-1);
+  const Y=v=> padT + iy*(1 - v/maxY);
+  const tot=DATA.timeline.map(d=>d[1]+d[2]+d[3]);
+  const t12=DATA.timeline.map(d=>d[1]+d[2]);
+  const t1=DATA.timeline.map(d=>d[1]);
+  const band=(top,bot)=>{
+    let p='M'+X(0)+' '+Y(top[0]);
+    for(let i=1;i<n;i++) p+=' L'+X(i)+' '+Y(top[i]);
+    for(let i=n-1;i>=0;i--) p+=' L'+X(i)+' '+Y(bot[i]);
+    return p+'Z';
+  };
+  const zero=new Array(n).fill(0);
+  let s='';
+  // gridlines
+  for(let g=0;g<=200;g+=50){ s+=`<g class="grid"><line x1="${padL}" y1="${Y(g)}" x2="${W-padR}" y2="${Y(g)}"/></g><text class="axis" x="${padL-8}" y="${Y(g)+4}" text-anchor="end">${g}</text>`; }
+  // bands (paint engineering first behind? order: draw t3 full, then t2, then t1 on top)
+  s+=`<path d="${band(tot,t12)}" fill="var(--c3)" opacity=".9"/>`;
+  s+=`<path d="${band(t12,t1)}" fill="var(--c2)" opacity=".9"/>`;
+  s+=`<path d="${band(t1,zero)}" fill="var(--c1)" opacity=".85"/>`;
+  // top line
+  let tl='M'+X(0)+' '+Y(tot[0]); for(let i=1;i<n;i++) tl+=' L'+X(i)+' '+Y(tot[i]);
+  s+=`<path d="${tl}" fill="none" stroke="var(--tx)" stroke-width="1.5" opacity=".5"/>`;
+  // x labels (every other)
+  DATA.timeline.forEach((d,i)=>{ if(i%2===0||i===n-1) s+=`<text class="axis" x="${X(i)}" y="${H-12}" text-anchor="middle">${d[0]}</text>`; });
+  // annotation at day 6 (index 5): "looked finished here"
+  const ai=5;
+  s+=`<line x1="${X(ai)}" y1="${padT}" x2="${X(ai)}" y2="${H-padB}" stroke="var(--gold)" stroke-width="1.2" stroke-dasharray="4 4" opacity=".8"/>`;
+  s+=`<circle cx="${X(ai)}" cy="${Y(DATA.timeline[ai][1])}" r="4" fill="var(--gold)"/>`;
+  s+=`<text class="annot" x="${X(ai)+10}" y="${Y(190)}">A vibe build would call it done here</text>`;
+  s+=`<text class="annot-sub" x="${X(ai)+10}" y="${Y(190)+16}">day 6 of 16, yet 101 of 209 commits are still ahead</text>`;
+  svg.innerHTML = s;
+})();
+
+/* ---- curated cards ---- */
+const DISCIPLINES = [
+  {n:'01',t:'Infrastructure as Code',items:['Pulumi program provisioning a Hetzner host','cloud-init bootstrap: Docker, Caddy, volumes','Dedicated Postgres volume with mount guards','Off-site, encrypted restic backups'],implies:'A cloud-provisioning agent, a deploy-and-rollback pipeline, and a "rebuild the host from code" smoke test.'},
+  {n:'02',t:'Networking, CDN & Caching',items:['Immutable hashed-asset cache, no-cache HTML','Caddy zstd + gzip, www→apex redirect','Sec-Fetch-Site same-origin guard','Trusted-proxy client-IP resolution'],implies:'Questions about cache invalidation and proxy hops; a headers-and-caching test suite.'},
+  {n:'03',t:'Security',items:['Nonce-based CSP, per request','CSRF protection on the contact endpoint','Per-IP rate limiting + honeypot','One shared validation schema, client and server'],implies:'A threat model, an appsec reviewer profile, and abuse/penetration test cases.'},
+  {n:'04',t:'CI/CD & Supply Chain',items:['Seven-job CI matrix with one success gate','CodeQL + OSSF Scorecard + Renovate','GitHub Actions pinned to commit SHAs','Release → GHCR → deploy over Tailscale'],implies:'Pipeline design, supply-chain questions, and required-check gating before merge.'},
+  {n:'05',t:'Testing & Visual Regression',items:['Vitest across node, happy-dom and real browser','Playwright e2e against the built site','One visual baseline enforced on all 3 frameworks','axe accessibility gate on every route'],implies:'A test strategy, a QA agent, and shared parity baselines that fail loudly.'},
+  {n:'06',t:'Observability',items:['Structured Pino logs shipped to Loki','Faro RUM via a same-origin telemetry proxy','Source maps uploaded per release','Self-hosted, cookieless analytics'],implies:'SLOs worth alerting on, an SRE profile, and dashboards that answer a question.'},
+  {n:'07',t:'Accessibility',items:['WCAG 2.1 AA axe gate, build-failing','prefers-reduced-motion honoured throughout','Semantic landmarks and one h1 per page','Contrast-tuned tokens for light and dark'],implies:'Acceptance criteria, an a11y reviewer, and keyboard / assistive-tech passes.'},
+  {n:'08',t:'Performance',items:['Core Web Vitals budgets as build gates','LCP / CLS / INP measured in CI','Prerendered HTML, hashed immutable assets','Self-hosted variable fonts, no FOUT'],implies:'Explicit perf budgets, a performance agent, and CWV checks wired into CI.'},
+  {n:'09',t:'Cross-framework Parity',items:['Same UI in React 19, Vue 3, Angular 21','Shared Lit web components underneath','One Zod schema drives all three forms','Drift caught by a single visual baseline'],implies:'Parity questions, three framework agents, and a gate that compares them.'},
+  {n:'10',t:'SEO & Metadata',items:['Per-route titles, descriptions, canonicals','Person + Article JSON-LD structured data','Generated sitemap and robots','OG cards rendered at build time'],implies:'An SEO checklist, a content/structured-data agent, and schema validation.'},
+];
+(function(){
+  document.getElementById('cards').innerHTML = DISCIPLINES.map(d=>`
+    <div class="dcard reveal">
+      <span class="ix">${d.n}</span>
+      <h3>${d.t}</h3>
+      <ul>${d.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+      <div class="implies"><b>Implies</b>${d.implies}</div>
+    </div>`).join('');
+})();
+
+/* ---- deep accordions ---- */
+const DEEP = [
+  {tag:'Infra',t:'Infrastructure & deployment',body:`<p>The host doesn't exist by hand. A <code>Pulumi</code> program plus a <code>cloud-init.yaml</code> describe a Hetzner server from scratch: the Docker daemon (log rotation, userland-proxy disabled so the app sees real client IPs), a Caddy reverse proxy with automatic HTTPS, a dedicated volume formatted and mounted for Postgres before the database is allowed to start, and encrypted off-site backups on a timer.</p><p><b>Assumes you know:</b> the Pulumi model and secret handling, the Hetzner API, cloud-init's lifecycle, Docker networking, Caddy + ACME, systemd timers, and enough shell discipline to make a deploy script reject a tag like <code>$(rm -rf)</code>.</p>`},
+  {tag:'Security',t:"The contact form is the whole attack surface, and it's hardened",body:`<p>One public form, treated seriously: a per-request nonce CSP, CSRF checked against a first-party allow-list, body-size caps, a honeypot, and per-IP rate limits (5 / 10 min on contact, tighter on the telemetry proxy). Validation is a single <code>zod</code> schema imported by all three frontends <em>and</em> the server, so client and server can never disagree. Secrets live only in the environment and are never logged.</p><p><b>Assumes you know:</b> CSP and nonce generation, the Sec-Fetch-Site guarantee, HSTS preload, SSRF risks in a forwarding proxy, and why a honeypot checks for presence, not visibility.</p>`},
+  {tag:'Testing',t:'Over sixty test files, and a gate three frameworks share',body:`<p>Unit logic runs in node and happy-dom; component tests run in a real Chromium; end-to-end tests run against the actually-built server. The sharpest piece is the visual parity gate: React, Vue and Angular are each diffed against <em>one</em> shared baseline, so a style change that drifts a single framework fails the build. Web Vitals have hard budgets (LCP 2.5s, CLS 0.1, INP 200ms) checked in CI, and every route is scanned with axe at WCAG 2.1 AA.</p><p><b>Assumes you know:</b> multi-environment Vitest, Playwright's browser provider, PerformanceObserver, and screenshot-diff thresholds that tolerate anti-aliasing but catch regressions.</p>`},
+  {tag:'Observability',t:'You can see what the site is doing in production',body:`<p>Backend requests are structured <code>pino</code> logs batched to Loki; the browser ships errors and Web Vitals to Grafana Faro through a first-party <code>/api/rum</code> proxy that hides the collector key and is rate-limited against flooding. Source maps are uploaded per release so production stack traces de-obfuscate. Analytics are self-hosted Umami: cookieless, with the dashboard gated to a Tailscale tailnet by source IP rather than a password.</p><p><b>Assumes you know:</b> structured logging pipelines, the difference between RUM and synthetic monitoring, source-map upload, and how to keep telemetry best-effort so it never takes the page down.</p>`},
+  {tag:'Frontend',t:'Motion engineering, and three frameworks kept identical',body:`<p>The motion here isn't decoration bolted on: scroll-driven reveals, page-entrance choreography, a framework-switch disintegrate-and-reassemble, Lenis-driven smooth scroll on the timeline, all built on transform and opacity so they never cost a layout shift, and all switched off under <code>prefers-reduced-motion</code>. Underneath, the same interface is implemented in React 19, Vue 3 and Angular 21 over shared Lit components, with parity enforced by tests rather than hoped for.</p><p><b>Assumes you know:</b> the paint/layout/composite pipeline, view transitions, three routers and their SSR quirks, Shadow DOM, and how to make a CLS budget of 0.1 actually hold while things move.</p>`},
+];
+(function(){
+  document.getElementById('deep').innerHTML = DEEP.map(d=>`
+    <details class="acc">
+      <summary><span class="tag">${d.tag}</span>${d.t}<span class="chev">›</span></summary>
+      <div class="acc-body">${d.body}</div>
+    </details>`).join('');
+})();
+
+/* ---- decision cards ---- */
+const DECISIONS = [
+  {tag:'Rendering',call:'Pre-render to static HTML, not server-render per request',instead:'A live SSR server rendering every visit',because:'A small, author-controlled content set should be static files: trivially cacheable, no warm runtime to keep alive, and the cleanest thing for a search engine to crawl.'},
+  {tag:'Security',call:"Don't believe X-Forwarded-For by default",instead:'Reading the client IP straight from the header, like most tutorials',because:'A forged header from a direct caller walks right past a per-IP rate limit. Trust it only for as many proxy hops as you have actually declared.'},
+  {tag:'Frontend state',call:'No store for a single ephemeral Set',instead:'Reaching for Redux, Pinia or NgRx to hold the filter state',because:"A selection scoped to one view doesn't earn a store, and real <code>&lt;button aria-pressed&gt;</code> toggles keep it keyboard- and screen-reader-correct for free."},
+  {tag:'Platform',call:'replaceState to mirror filters to the URL, not a router navigation',instead:'Calling the router on every filter toggle',because:'Routing a state change would re-run guards and view transitions and jerk the page to the top through scroll restoration. A history rewrite does none of that.'},
+  {tag:'Knowing what not to build',call:'Send mail through a hosted API, not our own server',instead:'Running a mail server on the box',because:'Mail means owning deliverability (SPF, DKIM, blocklists, reputation) and a lost message is the worst outcome for the one thing the form exists to do.'},
+  {tag:'Control vs convenience',call:'Self-host on a VPS, not a managed platform',instead:'Deploying to Vercel or Netlify',because:"A managed platform doesn't delete the infra, security and observability work, it rents you a team that already did it. Often the right trade. But it abstracts the work, it doesn't make the knowledge unnecessary, and the moment a constraint falls outside the happy path (EU data residency, a real backup-and-restore story, a hard cost ceiling) you're back to needing to know what the platform was doing for you."},
+  {tag:'Ops & access',call:'No public SSH; a deploy key bound to one forced command',instead:'An admin SSH port open to the internet',because:'Deploys travel a private Tailscale mesh, and the key can ship a release and nothing else: no shell, no way to reach the infrastructure.'},
+  {tag:'Supply chain',call:'Pin every Action and image by commit digest',instead:'A floating @v4 tag',because:'A moving tag can be repointed at malicious code after you reviewed it. A digest cannot. Renovate keeps the digests current, so pinning never means falling behind.'},
+  {tag:'API',call:'Generate the OpenAPI spec from the same Zod schemas',instead:'Hand-writing and maintaining a spec file',because:"A hand-kept spec drifts from what the server actually accepts. Generate it from the route contracts and it can't."},
+];
+(function(){
+  const el = document.getElementById('decisions');
+  if(!el) return;
+  el.innerHTML = DECISIONS.map(d=>`
+    <div class="dcard dec reveal">
+      <span class="ix">${d.tag}</span>
+      <h3>${d.call}</h3>
+      <p class="instead"><span class="chip">Default</span>${d.instead}</p>
+      <p class="because"><span class="lbl">Because</span>${d.because}</p>
+    </div>`).join('');
+})();
+
+/* ---- count-up + reveal ---- */
+function countUp(el){
+  const target = +el.dataset.count;
+  const suffix = el.dataset.suffix || '';
+  if (reduce){ el.textContent = target + suffix; return; }
+  const dur = 1100; const start = performance.now();
+  function step(now){
+    const p = Math.min(1,(now-start)/dur);
+    const e = 1-Math.pow(1-p,3);
+    el.textContent = Math.round(target*e) + suffix;
+    if(p<1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const io = new IntersectionObserver((entries)=>{
+  for (const en of entries){
+    if(!en.isIntersecting) continue;
+    const el = en.target;
+    el.classList.add('show');
+    el.querySelectorAll && el.querySelectorAll('[data-count]').forEach(countUp);
+    if (el.matches('[data-count]')) countUp(el);
+    io.unobserve(el);
+  }
+},{threshold:.2});
+document.querySelectorAll('.reveal,[data-count]').forEach(el=>io.observe(el));
+
+// animate bars when chart enters
+const barIO = new IntersectionObserver((entries)=>{
+  for (const en of entries){
+    if(!en.isIntersecting) continue;
+    document.querySelectorAll('.bar-row').forEach((row,i)=>{
+      const w = row.dataset.w + '%';
+      const fill = row.querySelector('.bar-fill');
+      if (reduce){ fill.style.width=w; row.classList.add('show'); return; }
+      setTimeout(()=>{ fill.style.width=w; row.classList.add('show'); }, i*70);
+    });
+    barIO.disconnect();
+  }
+},{threshold:.15});
+const barsEl = document.getElementById('bars');
+if (barsEl) barIO.observe(barsEl);
+</script>
+<script>
+// Theme toggle: flip the <html data-theme> and remember the explicit choice. The pre-paint script in
+// the head applies it on load, so there is no flash on the next visit.
+(function(){
+  var btn = document.getElementById("theme-toggle");
+  if (!btn) return;
+  btn.addEventListener("click", function(){
+    var next = document.documentElement.getAttribute("data-theme") === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("anatomy-theme", next); } catch (e) {}
+  });
+})();
+</script>
+</body>
+</html>
