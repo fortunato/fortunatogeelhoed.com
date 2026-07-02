@@ -12,7 +12,7 @@ import { requestLogger } from './logger';
 import { type AppEnv, frameworkMiddleware } from './middleware/framework';
 import { availabilityRateLimit, contactRateLimit, rumRateLimit } from './middleware/rate-limit';
 import { isFirstPartyOrigin, sameOrigin } from './middleware/same-origin';
-import { DOCS_CSP, securityHeaders, serveHtml } from './middleware/security-headers';
+import { DOCS_CSP, anatomyCsp, securityHeaders, serveHtml } from './middleware/security-headers';
 import { apiDocumentation } from './openapi';
 import { availabilityRoute } from './routes/availability';
 import { contactRoute } from './routes/contact';
@@ -200,6 +200,23 @@ app.get('/favicon.ico', async (c) => {
 	c.header('Cache-Control', isDev ? 'no-cache' : 'public, max-age=31536000, immutable');
 	return c.body(await file.arrayBuffer());
 });
+
+// The standalone "Anatomy of Done" essay: one self-contained HTML file served straight from static/,
+// deliberately outside the framework prerenders and the design system. It is a campaign landing page
+// reached from LinkedIn, so it is intentionally kept out of the sitemap, robots.txt and nav. It
+// inlines its own styles and scripts, so it carries its own relaxed first-party policy (anatomyCsp)
+// rather than the site's nonce CSP, and a short cache rather than the immutable asset stamp. The
+// cookieless analytics tag is injected the same way as on the rest of the site (a no-op in dev).
+app.get('/anatomy', async (c) => {
+	const file = Bun.file('./static/anatomy-of-done.html');
+	if (!(await file.exists())) return c.notFound();
+	c.header('Content-Security-Policy', anatomyCsp());
+	c.header('Cache-Control', isDev ? 'no-cache' : 'public, max-age=3600');
+	return c.html(applyAnalytics(await file.text(), analytics));
+});
+// A trailing slash would otherwise fall through to the catch-all and serve the framework homepage,
+// since the essay is not part of the prerendered route tree. Normalise it to the canonical path.
+app.get('/anatomy/', (c) => c.redirect('/anatomy', 301));
 
 if (isDev) {
 	const PORTS: Record<string, number> = { react: 5173, vue: 5174, angular: 5175 };

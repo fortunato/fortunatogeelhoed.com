@@ -80,6 +80,32 @@ export function serveHtml(c: Context, html: string, status: 200 | 404 = 200): Re
 	return c.html(withNonce(html, nonce), status);
 }
 
+// The standalone "Anatomy of Done" essay (/anatomy) is a single self-contained HTML file that inlines
+// its own <style> and <script>, so it cannot run under the site's nonce-based strict policy. It gets
+// its own relaxed but fully first-party CSP: inline styles and scripts are allowed, everything else
+// stays same-origin (fonts are self-hosted), with the lone cross-origin exception of the self-hosted
+// analytics origin (its loader and beacon) when configured, exactly as the strict policy allows it.
+export function anatomyCsp(): string {
+	const analytics = analyticsOrigin();
+	const scriptSrc = analytics
+		? `script-src 'self' 'unsafe-inline' ${analytics}`
+		: "script-src 'self' 'unsafe-inline'";
+	const connectSrc = analytics ? `connect-src 'self' ${analytics}` : "connect-src 'self'";
+	return [
+		"default-src 'self'",
+		"base-uri 'self'",
+		"object-src 'none'",
+		scriptSrc,
+		"style-src 'self' 'unsafe-inline'",
+		"img-src 'self' data:",
+		"font-src 'self'",
+		connectSrc,
+		"form-action 'self'",
+		"frame-ancestors 'none'",
+		'upgrade-insecure-requests',
+	].join('; ');
+}
+
 // The Scalar API reference (/api/docs) loads its bundle from jsdelivr and injects an inline init
 // script plus inline styles, so it gets its own relaxed policy rather than the site's strict one.
 export const DOCS_CSP = [
