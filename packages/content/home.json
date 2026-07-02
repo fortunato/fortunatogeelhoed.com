@@ -92,15 +92,15 @@
 	"writing": [
 		{
 			"tag": "Build",
+			"title": "Reading My Own Git Log",
+			"blurb": "I drove Claude Code through all 209 commits of this site and typed almost none of it by hand. Then I read every commit and sorted it, to see what the AI actually built and what I still had to know.",
+			"href": "/writing/reading-my-own-git-log"
+		},
+		{
+			"tag": "Build",
 			"title": "Too React",
 			"blurb": "A recruiter said I was \"too React\" for an Angular role. I might have overreacted a bit as a result, this site is built in React, Vue, and Angular. I believe that senior frontend fundamentals transfer.",
 			"href": "/writing/too-react"
-		},
-		{
-			"tag": "Career",
-			"title": "Specialization Is Overrated",
-			"blurb": "I shipped a Python library to PyPI with almost no prior Python. With AI in the loop, a senior can now get productive in an unfamiliar ecosystem in hours, not months.",
-			"href": "/writing/specialization-is-overrated"
 		}
 	],
 	"cta": {
