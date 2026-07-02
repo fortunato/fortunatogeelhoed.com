@@ -3,14 +3,17 @@
 	"extends": ["config:best-practices", ":semanticCommits"],
 	"schedule": ["before 9am on monday"],
 	"labels": ["dependencies"],
+	"platformAutomerge": true,
 	"lockFileMaintenance": {
 		"enabled": true,
-		"schedule": ["before 9am on monday"]
+		"schedule": ["before 9am on monday"],
+		"automerge": true
 	},
 	"packageRules": [
 		{
 			"matchUpdateTypes": ["minor", "patch"],
-			"groupName": "minor and patch"
+			"groupName": "minor and patch",
+			"automerge": true
 		},
 		{
 			"matchPackageNames": ["react", "react-dom", "vue", "@vue/**", "@angular/**"],
@@ -20,7 +23,8 @@
 		{
 			"matchManagers": ["github-actions"],
 			"groupName": "github actions",
-			"addLabels": ["ci"]
+			"addLabels": ["ci"],
+			"automerge": true
 		}
 	]
 }
