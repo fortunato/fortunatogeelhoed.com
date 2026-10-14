@@ -3,7 +3,7 @@ import { expect, test } from '@playwright/test';
 // Core Web Vitals budget, asserted against the built site over the production server.
 // LCP and CLS are hard limits on both pages; CLS in particular guards the motion layer —
 // reveals and transitions animate transform/opacity only, so they must shift nothing.
-// Interaction latency (an INP proxy from the longest event-processing duration) is held to
+// Interaction latency (an INP proxy from the longest discrete interaction) is held to
 // the "good" 200ms bar on the homepage. The desktop timeline runs Lenis smooth scroll, so
 // it carries a slightly wider allowance — still well inside a responsive feel.
 const ORIGIN = 'http://localhost:3000';
@@ -33,7 +33,10 @@ const COLLECTOR = `
 	}).observe({ type: 'layout-shift', buffered: true });
 	new PerformanceObserver((list) => {
 		for (const e of list.getEntries()) {
-			window.__vitals.inp = Math.max(window.__vitals.inp, e.duration);
+			// Only discrete interactions (click, tap, key press) carry an interactionId, matching
+			// how INP is defined. Hover events fired while the page is still hydrating would
+			// otherwise be counted, measuring startup work rather than responsiveness.
+			if (e.interactionId) window.__vitals.inp = Math.max(window.__vitals.inp, e.duration);
 		}
 	}).observe({ type: 'event', durationThreshold: 16, buffered: true });
 `;
