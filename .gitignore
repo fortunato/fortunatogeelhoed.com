@@ -23,3 +23,7 @@ blob-report/
 packages/**/__screenshots__/
 packages/shared/custom-elements.json
 .npmrc
+
+.claude/worktrees
+.nx/polygraph
+.nx/self-healing
