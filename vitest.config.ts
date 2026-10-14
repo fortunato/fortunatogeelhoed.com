@@ -2,6 +2,7 @@ import { resolve } from 'node:path';
 import angular from '@analogjs/vite-plugin-angular';
 import react from '@vitejs/plugin-react';
 import vue from '@vitejs/plugin-vue';
+import { playwright } from '@vitest/browser-playwright';
 import { coverageConfigDefaults, defineConfig } from 'vitest/config';
 
 // One runner, several projects — tests live where the behaviour lives:
@@ -23,7 +24,7 @@ const alias = {
 const browser = (instance: string) =>
 	({
 		enabled: true,
-		provider: 'playwright' as const,
+		provider: playwright(),
 		headless: true,
 		instances: [{ browser: 'chromium', name: instance }],
 	}) as const;
