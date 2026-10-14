@@ -4,4 +4,9 @@ import { BrowserTestingModule, platformBrowserTesting } from '@angular/platform-
 
 // Initialise the Angular testing environment once for the browser-angular project, so
 // TestBed-backed component tests (via @testing-library/angular) run in a real browser.
-getTestBed().initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
+// Vitest 4 can evaluate this setup file more than once in the same browser page, and Angular
+// throws if the environment is initialised twice, so only do it while TestBed has no platform yet.
+const testBed = getTestBed();
+if (!testBed.platform) {
+	testBed.initTestEnvironment(BrowserTestingModule, platformBrowserTesting());
+}
