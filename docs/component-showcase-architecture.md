@@ -128,10 +128,14 @@ ViewEncapsulation, never via CSS Modules, so component styles should never be mo
 the option Angular omits is one it should arguably set. The patch only affects the webpack build
 path that `@storybook/angular` uses; the live site builds through AnalogJS/Vite and is unaffected.
 
-Maintenance: the patch is pinned to the exact version (`@angular-devkit/build-angular@21.2.13`).
-On a version bump, bun re-applies the diff and fails loudly if it no longer applies cleanly — at
-which point regenerate it with `bun patch @angular-devkit/build-angular`, re-add `modules: false`,
-and `bun patch --commit`. A future `@storybook/angular` esbuild/Vite builder would remove the need
+Maintenance: the patch is pinned to the exact version (`@angular-devkit/build-angular@21.2.13`),
+and the package is listed as a direct devDependency at that same exact version. Without that
+pin it only arrives transitively through `@storybook/angular` and AnalogJS, whose ranges are wide
+enough to resolve a newer major; bun then silently skips the patch, because it is keyed to a
+version that is no longer installed, and the Storybook build fails on the css-loader error above.
+When moving to a new Angular version, bump the pin together with the rest of Angular, regenerate
+the patch with `bun patch @angular-devkit/build-angular`, re-add `modules: false`, and
+`bun patch --commit`. A future `@storybook/angular` esbuild/Vite builder would remove the need
 for the patch entirely.
 
 ## Boundaries
