@@ -61,7 +61,8 @@ bun run cem                  # writes packages/shared/custom-elements.json
 
 ```bash
 bun run test:visual          # cross-framework visual-regression parity (Playwright)
-bun run test:storybook       # per-story accessibility + smoke (point at one section via TARGET_URL)
+bun run test:storybook       # every story: render, play function, axe
+bunx vitest run --project storybook-vue   # the same for one section
 bun run lint                 # Biome
 ```
 

@@ -28,7 +28,7 @@
 		"storybook:web-components": "storybook dev -p 6007 -c packages/shared/.storybook --no-open",
 		"storybook:react": "storybook dev -p 6008 -c packages/react/.storybook --no-open",
 		"storybook:vue": "storybook dev -p 6009 -c packages/vue/.storybook --no-open",
-		"storybook:angular": "ng run angular:storybook",
+		"storybook:angular": "storybook dev -p 6010 -c packages/angular/.storybook --no-open",
 		"prebuild-storybook": "bun run build:css && bun run cem",
 		"build-storybook": "bun run scripts/build-storybook.ts",
 		"serve-storybook": "PORT=6006 bun run scripts/serve-storybook-static.ts",
@@ -39,7 +39,7 @@
 		"test:a11y": "bun run scripts/a11y-scan.ts",
 		"test:e2e": "playwright test --config tests/e2e/playwright.config.ts",
 		"test:visual": "playwright test --config tests/visual/playwright.config.ts",
-		"test:storybook": "bun run scripts/test-storybook.ts",
+		"test:storybook": "vitest run --project \"storybook-*\"",
 		"lint": "biome check .",
 		"lint:fix": "biome check --write .",
 		"typecheck": "nx run-many -t typecheck && bun run typecheck:tooling",
@@ -89,14 +89,12 @@
 		"zone.js": "^0.16.3"
 	},
 	"devDependencies": {
-		"@analogjs/platform": "^1.14.0",
-		"@analogjs/vite-plugin-angular": "^1.14.0",
-		"@analogjs/vitest-angular": "^2.6.0",
-		"@angular-devkit/build-angular": "21.2.13",
+		"@analogjs/storybook-angular": "^2.8.1",
+		"@analogjs/vite-plugin-angular": "^2.8.1",
+		"@analogjs/vitest-angular": "^2.8.1",
 		"@angular/animations": "^21.2.25",
 		"@angular/build": "^21.2.26",
 		"@angular/cdk": "^21.2.14",
-		"@angular/cli": "21.2.26",
 		"@angular/compiler-cli": "^21.2.25",
 		"@biomejs/biome": "^1.9.0",
 		"@custom-elements-manifest/analyzer": "^0.11.0",
@@ -107,9 +105,9 @@
 		"@playwright/test": "^1.60.0",
 		"@storybook/addon-a11y": "^10",
 		"@storybook/addon-docs": "^10",
+		"@storybook/addon-vitest": "^10",
 		"@storybook/angular": "^10",
 		"@storybook/react-vite": "^10",
-		"@storybook/test-runner": "^0.24.4",
 		"@storybook/vue3-vite": "^10",
 		"@storybook/web-components-vite": "^10",
 		"@testing-library/angular": "^19.3.0",
@@ -138,8 +136,5 @@
 		"vitest": "^4.1.11",
 		"vue-tsc": "^3.3.3"
 	},
-	"customElements": "packages/shared/custom-elements.json",
-	"patchedDependencies": {
-		"@angular-devkit/build-angular@21.2.13": "patches/@angular-devkit%2Fbuild-angular@21.2.13.patch"
-	}
+	"customElements": "packages/shared/custom-elements.json"
 }

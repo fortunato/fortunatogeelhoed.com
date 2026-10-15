@@ -1,10 +1,7 @@
-// Browser-only preview wiring reused by the Vite-based instances (web components, React, Vue).
-// It loads the global layered stylesheet in the same order as the production build
-// (see scripts/css-sources.ts) and registers the shared web components so framework
+// Browser-only preview wiring shared by all four section instances (web components, React,
+// Vue, Angular). It loads the global layered stylesheet in the same order as the production
+// build (see scripts/css-sources.ts) and registers the shared web components so framework
 // stories that consume <jb-*> render the real elements.
-//
-// Angular's instance cannot import CSS/JS this way (its builder differs), so it reproduces
-// the equivalent wiring in its own preview — the one deliberate divergence (see research §2).
 import '../styles/layers.css';
 import '../styles/fonts.css';
 import '../styles/reset.css';
@@ -28,5 +25,10 @@ export const sharedParameters = {
 	controls: { expanded: true },
 	options: {
 		storySort: { order: ['Web Components', 'React', 'Vue', 'Angular'] },
+	},
+	// The accessibility gate: under Vitest every story fails on a WCAG 2 A/AA axe violation.
+	a11y: {
+		test: 'error' as const,
+		options: { runOnly: ['wcag2a', 'wcag2aa'] },
 	},
 };

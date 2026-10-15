@@ -1,5 +1,6 @@
 import { resolve } from 'node:path';
 import angular from '@analogjs/vite-plugin-angular';
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import react from '@vitejs/plugin-react';
 import vue from '@vitejs/plugin-vue';
 import { playwright } from '@vitest/browser-playwright';
@@ -28,6 +29,28 @@ const browser = (instance: string) =>
 		headless: true,
 		instances: [{ browser: 'chromium', name: instance }],
 	}) as const;
+
+// prebundle lists dependencies only reached once a story renders (through the app modules it
+// imports). Vite would otherwise discover them mid-run on a cold cache, re-bundle, and reload
+// the page under the running tests, failing whichever stories were in flight (always in CI).
+const STORYBOOK_SECTIONS = [
+	{ name: 'web-components', configDir: 'packages/shared/.storybook', prebundle: [] },
+	{
+		name: 'react',
+		configDir: 'packages/react/.storybook',
+		prebundle: ['@tanstack/react-query', '@grafana/faro-web-sdk'],
+	},
+	{
+		name: 'vue',
+		configDir: 'packages/vue/.storybook',
+		prebundle: ['@tanstack/vue-query', 'vite-ssg'],
+	},
+	{
+		name: 'angular',
+		configDir: 'packages/angular/.storybook',
+		prebundle: ['@angular/common/http', '@grafana/faro-web-sdk'],
+	},
+];
 
 export default defineConfig({
 	resolve: { alias },
@@ -99,6 +122,21 @@ export default defineConfig({
 					browser: browser('angular'),
 				},
 			},
+			// Showcase gate: every story of each Storybook section runs as a test in the browser,
+			// including its play function, and fails on a render error or an axe violation (the
+			// a11y addon runs with test: 'error', see .storybook/preview-shared.ts). The plugin
+			// builds each section with its own .storybook config, so stories render exactly as
+			// they do in the published catalogue.
+			...STORYBOOK_SECTIONS.map((section) => ({
+				plugins: [storybookTest({ configDir: resolve(root, section.configDir) })],
+				optimizeDeps: { include: section.prebundle },
+				test: {
+					// The plugin roots each project at its .storybook parent but resolves story globs from
+					// the repo root; scanning from the repo root keeps the two in agreement.
+					dir: root,
+					browser: browser(`storybook-${section.name}`),
+				},
+			})),
 		],
 		coverage: {
 			provider: 'v8',

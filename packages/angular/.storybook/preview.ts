@@ -1,18 +1,14 @@
-import { registerElements } from '@fg/shared/elements';
-import type { Preview } from '@storybook/angular';
-import { applyFramework, applyTheme, themeGlobalTypes } from '../../../.storybook/theme-decorator';
-
-// Angular's builder cannot consume the Vite-shared preview module (CSS/JS imports differ),
-// so this instance reproduces the equivalent wiring: global styles come from angular.json,
-// and the shared web components are registered here (browser-only).
-registerElements();
+import 'zone.js';
+import type { Preview } from '@analogjs/storybook-angular';
+import {
+	applyFramework,
+	applyTheme,
+	sharedParameters,
+	themeGlobalTypes,
+} from '../../../.storybook/preview-shared';
 
 const preview: Preview = {
-	parameters: {
-		layout: 'centered',
-		controls: { expanded: true },
-		options: { storySort: { order: ['Web Components', 'React', 'Vue', 'Angular'] } },
-	},
+	parameters: sharedParameters,
 	globalTypes: themeGlobalTypes,
 	initialGlobals: { theme: 'light' },
 	decorators: [

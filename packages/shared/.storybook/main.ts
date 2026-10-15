@@ -4,7 +4,7 @@ import type { StorybookConfig } from '@storybook/web-components-vite';
 // This is the parity anchor: the same jb-* elements the framework sections consume.
 const config: StorybookConfig = {
 	stories: ['../src/elements/*.stories.@(ts|mdx)'],
-	addons: ['@storybook/addon-docs', '@storybook/addon-a11y'],
+	addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'],
 	framework: { name: '@storybook/web-components-vite', options: {} },
 };
 

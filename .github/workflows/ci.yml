@@ -83,8 +83,8 @@ jobs:
       - name: End-to-end tests
         run: bun run test:e2e
 
-  # Showcase tier and the long pole: the Storybook build feeds both the cross-framework visual parity
-  # check and the per-story accessibility + smoke pass, so they share one build here.
+  # Showcase tier and the long pole: the Storybook build feeds the cross-framework visual parity
+  # check; the per-story pass (render, play function, axe) runs the stories through Vitest directly.
   showcase:
     runs-on: ubuntu-latest
     steps:

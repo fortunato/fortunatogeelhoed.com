@@ -45,8 +45,17 @@ const steps: [Step, ...Step[]] = [
 		name: 'vue',
 		cmd: ['storybook', 'build', '-c', 'packages/vue/.storybook', '-o', 'dist/storybook/vue'],
 	},
-	// Angular uses its own builder (not Vite); outputDir is set in angular.json.
-	{ name: 'angular', cmd: ['ng', 'run', 'angular:build-storybook'] },
+	{
+		name: 'angular',
+		cmd: [
+			'storybook',
+			'build',
+			'-c',
+			'packages/angular/.storybook',
+			'-o',
+			'dist/storybook/angular',
+		],
+	},
 ];
 
 async function run(step: Step): Promise<void> {
