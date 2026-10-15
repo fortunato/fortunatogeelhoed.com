@@ -8,6 +8,7 @@ import {
 } from '@fg/shared';
 import { VueQueryPlugin } from '@tanstack/vue-query';
 import { ViteSSG } from 'vite-ssg';
+import { START_LOCATION } from 'vue-router';
 import App from './App.vue';
 import { setContent } from './composables/useContent';
 import { routes } from './router';
@@ -22,10 +23,14 @@ export const createApp = ViteSSG(
 		// to leave that scroll to the shared tween, and don't restore a saved offset on push either.
 		// The one offset we do want back is a framework-switch arrival (a fresh cross-document load,
 		// where savedPosition is null) — consumeSwitchScroll returns non-null only once, after a switch.
-		scrollBehavior(_to, _from, savedPosition) {
+		// On any other first load the browser has already placed the prerendered page, and the
+		// initial navigation resolves only after hydration, so returning to the top there would yank
+		// a visitor who started scrolling early. React and Angular leave first-load scroll alone too.
+		scrollBehavior(_to, from, savedPosition) {
 			if (savedPosition) return false;
 			const switchY = consumeSwitchScroll();
 			if (switchY !== null) return { top: switchY };
+			if (from === START_LOCATION) return false;
 			return { top: 0 };
 		},
 	},
