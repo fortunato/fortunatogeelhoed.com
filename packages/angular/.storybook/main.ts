@@ -1,4 +1,4 @@
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
 import type { StorybookConfig } from '@analogjs/storybook-angular';
 import { cssTargets } from '../../../scripts/css-targets.ts';
 
@@ -34,6 +34,21 @@ const config: StorybookConfig = {
 			transformer: 'lightningcss',
 			lightningcss: { targets: cssTargets, cssModules: false },
 		};
+		// Stories compile in JIT mode, which imports each styleUrl as `angular:jit:style:file;<path>`.
+		// AnalogJS resolves that to `<path>?inline` (the stylesheet as a string), but on Vite 8 an
+		// earlier resolver claims it as a plain CSS file first, which has no default export and fails
+		// the build. Resolve it the way AnalogJS intends before anything else sees it.
+		cfg.plugins = [
+			{
+				name: 'jit-style-inline',
+				enforce: 'pre',
+				resolveId(id, importer) {
+					if (!id.startsWith('angular:jit:style:file;') || !importer) return;
+					return `${resolve(dirname(importer), id.slice(id.indexOf(';') + 1))}?inline`;
+				},
+			},
+			...(cfg.plugins ?? []),
+		];
 		return cfg;
 	},
 };
