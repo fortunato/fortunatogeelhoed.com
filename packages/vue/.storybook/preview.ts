@@ -1,5 +1,6 @@
 import { setup } from '@storybook/vue3-vite';
 import type { Preview } from '@storybook/vue3-vite';
+import { createHead } from '@unhead/vue/client';
 import { createMemoryHistory, createRouter } from 'vue-router';
 import {
 	applyFramework,
@@ -13,8 +14,11 @@ const router = createRouter({
 	history: createMemoryHistory(),
 	routes: [{ path: '/:pathMatch(.*)*', component: { template: '<div></div>' } }],
 });
+// The Article page sets its <head> through useHead(), which throws without a head instance (in
+// the app vite-ssg installs one).
 setup((app) => {
 	app.use(router);
+	app.use(createHead());
 });
 
 const preview: Preview = {
