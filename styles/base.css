@@ -52,7 +52,7 @@
 	}
 
 	a:hover {
-		color: var(--jb-accent-hover);
+		color: var(--jb-accent-text-hover);
 	}
 
 	/* Balanced / optimized line wrapping where supported */
@@ -232,7 +232,7 @@
 	}
 
 	.link:hover {
-		color: var(--jb-accent-hover);
+		color: var(--jb-accent-text-hover);
 		text-decoration: underline;
 		text-underline-offset: 0.15em;
 	}

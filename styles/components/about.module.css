@@ -60,7 +60,7 @@
 }
 
 .about-body a:hover {
-	color: var(--jb-accent-hover);
+	color: var(--jb-accent-text-hover);
 }
 
 /* Layout only: the action row. The actions themselves are the shared Button primitive at its

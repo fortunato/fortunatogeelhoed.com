@@ -68,7 +68,9 @@
 		   reassigned per framework by [data-framework]. */
 		--jb-accent: var(--jb-color-accent-react);
 		--jb-accent-soft: color-mix(in srgb, var(--jb-accent) 15%, transparent);
-		--jb-accent-hover: color-mix(in srgb, var(--jb-accent) 85%, white);
+		/* Hover fill behind --jb-text-on-accent (buttons). Darkening keeps white text above AA
+		   (~6:1); lightening dropped it to ~3.6:1. */
+		--jb-accent-hover: color-mix(in srgb, var(--jb-accent) 85%, black);
 		--jb-text-on-accent: var(--jb-color-neutral-0);
 		/* Accent text that sits on the tinted `--jb-accent-soft` background (tech tags).
 		   On the dark theme's dark soft tint the plain accent already clears AA; on the
@@ -78,6 +80,9 @@
 		   already clears AA; on light it lands just under 4.5:1 on the secondary surface, so
 		   the light theme darkens it below. */
 		--jb-accent-text: var(--jb-accent);
+		/* Hovered accent text (links). Moves away from the page surface: lighter on dark,
+		   darker on light (overridden there), so the hover state never loses contrast. */
+		--jb-accent-text-hover: color-mix(in srgb, var(--jb-accent-text) 85%, white);
 
 		/* Secondary palette — a fixed blue + yellow counterpoint to the per-framework orange,
 		   reused from the employment-status identity fills so the homepage and timeline share one
@@ -249,6 +254,7 @@
 		--jb-danger-text: color-mix(in srgb, var(--jb-color-danger) 80%, black);
 		/* Darken accent text so links/labels clear AA on the secondary surface. */
 		--jb-accent-text: color-mix(in srgb, var(--jb-accent) 82%, black);
+		--jb-accent-text-hover: color-mix(in srgb, var(--jb-accent-text) 85%, black);
 		/* Secondary palette inks darkened for AA on the near-white surfaces (the vivid blue/yellow
 		   only reach ~1.9–2.3:1 as text here); match the timeline's light-theme inks. */
 		--jb-accent-2-text: #1b649f;

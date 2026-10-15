@@ -54,7 +54,7 @@
 		text-decoration-thickness: from-font;
 
 		&:hover {
-			color: var(--jb-accent-hover);
+			color: var(--jb-accent-text-hover);
 		}
 	}
 
