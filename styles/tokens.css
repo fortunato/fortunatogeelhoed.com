@@ -72,13 +72,13 @@
 		   (~6:1); lightening dropped it to ~3.6:1. */
 		--jb-accent-hover: color-mix(in srgb, var(--jb-accent) 85%, black);
 		--jb-text-on-accent: var(--jb-color-neutral-0);
-		/* Accent text that sits on the tinted `--jb-accent-soft` background (tech tags).
-		   On the dark theme's dark soft tint the plain accent already clears AA; on the
-		   light theme's pale soft tint it only reaches ~3.7:1, so darken it there. */
+		/* Accent text that sits on the tinted `--jb-accent-soft` background (tech tags, inline
+		   code). The plain accent clears AA on neither tint, so each theme adjusts it below:
+		   darkened on the pale light tint, lightened on the dark tint. */
 		--jb-accent-on-soft: var(--jb-accent);
-		/* Accent used as plain text on the page (links, section labels). On dark the accent
-		   already clears AA; on light it lands just under 4.5:1 on the secondary surface, so
-		   the light theme darkens it below. */
+		/* Accent used as plain text on the page (links, section labels). It lands just under
+		   4.5:1 on some surfaces in both themes, so each theme adjusts it below: darkened on
+		   light, lightened on dark. */
 		--jb-accent-text: var(--jb-accent);
 		/* Hovered accent text (links). Moves away from the page surface: lighter on dark,
 		   darker on light (overridden there), so the hover state never loses contrast. */
@@ -190,16 +190,25 @@
 		--jb-bg-card-hover: var(--jb-color-slate-800);
 		--jb-text-primary: var(--jb-color-slate-150);
 		--jb-text-secondary: var(--jb-color-slate-400);
-		/* tertiary tuned to clear AA (≥4.5:1) on the banded slate-900 surface. */
-		--jb-text-tertiary: var(--jb-color-slate-500);
+		/* tertiary tuned to clear AA (≥4.5:1) on every dark surface, cards (slate-850) included,
+		   where plain slate-500 only reached ~4.47:1. */
+		--jb-text-tertiary: color-mix(
+			in srgb,
+			var(--jb-color-slate-500) 90%,
+			var(--jb-color-slate-400)
+		);
 		--jb-color-border: var(--jb-color-slate-700);
 		/* The brand accent is dark enough that, as small text, it lands just under 4.5:1 on
-		   the dark surfaces — lighten it for text use so links/labels clear AA. */
-		--jb-accent-text: color-mix(in srgb, var(--jb-accent) 80%, white);
+		   the dark surfaces — lighten it for text use so links/labels clear AA, cards included
+		   (at 80% the card "read more" links only reached ~4.2–4.4:1). */
+		--jb-accent-text: color-mix(in srgb, var(--jb-accent) 74%, white);
+		/* Accent text on the tinted `--jb-accent-soft` background (inline code, tech tags): the
+		   plain accent only reaches ~3.3:1 on the dark tint, so lighten it there too. */
+		--jb-accent-on-soft: color-mix(in srgb, var(--jb-accent) 67%, white);
 		/* Secondary palette inks — vivid blue already clears AA as text on the dark surface; the
 		   yellow is darkened to a gold for small-text use (matches the timeline side-badge ink). */
 		--jb-accent-2-text: #5ba8ff;
-		--jb-accent-3-text: #b88a06;
+		--jb-accent-3-text: #d3a50c;
 		/* Hero glow: orange (framework) + blue + yellow, low-alpha so it tints the slate without
 		   competing with the wallpaper or the headline. */
 		--jb-hero-glow: radial-gradient(
@@ -230,7 +239,7 @@
 		   Angular's emulated encapsulation, which mis-scopes a `[data-theme] .scoped` ancestor. */
 		--jb-timeline-ink-employee: #5ba8ff;
 		--jb-timeline-ink-side: #facc15;
-		--jb-timeline-ink-side-badge: #b88a06;
+		--jb-timeline-ink-side-badge: #d3a50c;
 		--jb-timeline-ink-independent: var(--jb-accent-text);
 	}
 
