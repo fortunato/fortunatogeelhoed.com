@@ -318,6 +318,13 @@ an update that breaks the build never lands. Framework major upgrades for React,
 deliberately left for manual review. A green build does not prove a major framework upgrade is free
 of visual or behavioral regressions, and the major bump is exactly where a human should look.
 
+Updates are batched into a weekend window (Amsterdam time). The window is deliberately wide: the
+hosted Renovate app runs on its own cadence, and with a narrow weekday-morning slot the routine
+updates and lockfile maintenance sat in the dashboard as "awaiting schedule" for months without
+ever opening. Security fixes ignore the schedule and open immediately. Major upgrades of any package
+wait on the dependency dashboard until they are ticked there, so they are taken one at a time as a
+deliberate piece of work rather than arriving as a batch of pull requests.
+
 ### Actions and images pinned by digest
 
 Every third-party GitHub Action and container base image is pinned to a full commit digest, not a
