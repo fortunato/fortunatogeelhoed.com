@@ -107,7 +107,7 @@
 }
 
 .writing-card:hover .writing-more {
-	color: var(--jb-accent-hover);
+	color: var(--jb-accent-text-hover);
 	text-decoration: underline;
 	text-underline-offset: 0.15em;
 }
