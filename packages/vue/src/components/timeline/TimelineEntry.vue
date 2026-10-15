@@ -78,9 +78,9 @@ import type { Lane, TimelineEntry } from '@fg/shared';
 import {
 	AGENCY_LABEL,
 	EMPLOYMENT_TYPE_LABELS,
-	LANE_LABELS,
 	entryMatchesTech,
 	isExternalHref,
+	LANE_LABELS,
 	techVisual,
 	timelineDatetime,
 } from '@fg/shared';

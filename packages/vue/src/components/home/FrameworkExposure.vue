@@ -21,7 +21,7 @@
 import backend from '@fg/content-data/backend-frameworks.json';
 import frontend from '@fg/content-data/frontend-frameworks.json';
 import type { FrameworkExposureSpan, HomeContent } from '@fg/shared';
-import { INTENSITY_LEGEND, axisTicks, ribbonRows, spansBounds } from '@fg/shared';
+import { axisTicks, INTENSITY_LEGEND, ribbonRows, spansBounds } from '@fg/shared';
 import styles from '@styles/components/framework-ribbon.module.css';
 import FrameworkRibbon from '../timeline/FrameworkRibbon.vue';
 import Link from '../ui/Link.vue';

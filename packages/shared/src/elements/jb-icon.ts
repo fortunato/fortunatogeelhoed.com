@@ -1,4 +1,4 @@
-import { LitElement, html, svg } from 'lit';
+import { html, LitElement, svg } from 'lit';
 
 // Single source of truth for the brand/UI glyphs used across the three variants — so the
 // SVG paths live here once instead of being copy-pasted into every framework's markup.

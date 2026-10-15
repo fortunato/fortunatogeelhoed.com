@@ -1,4 +1,4 @@
-import { type AnchorHTMLAttributes, type ReactNode, forwardRef } from 'react';
+import { type AnchorHTMLAttributes, forwardRef, type ReactNode } from 'react';
 import { type LinkProps, Link as RouterLink } from 'react-router';
 
 // Text-first link. `inline` is the plain accent link; `arrow` adds the CSS-drawn chevron that

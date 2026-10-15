@@ -148,8 +148,9 @@
 	letter-spacing: 0.03em;
 	cursor: pointer;
 	border-radius: var(--jb-radius-sm);
-	transition: color var(--jb-dur-fast) var(--jb-ease-standard), background-color
-		var(--jb-dur-fast) var(--jb-ease-standard);
+	transition:
+		color var(--jb-dur-fast) var(--jb-ease-standard),
+		background-color var(--jb-dur-fast) var(--jb-ease-standard);
 	text-transform: lowercase;
 
 	&:hover {
@@ -180,8 +181,9 @@
 	border: none;
 	border-radius: var(--jb-radius-sm);
 	text-decoration: none;
-	transition: color var(--jb-dur-fast) var(--jb-ease-standard), background-color
-		var(--jb-dur-fast) var(--jb-ease-standard);
+	transition:
+		color var(--jb-dur-fast) var(--jb-ease-standard),
+		background-color var(--jb-dur-fast) var(--jb-ease-standard);
 
 	&:hover {
 		color: var(--jb-text-primary);

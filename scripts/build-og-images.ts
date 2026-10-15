@@ -13,7 +13,7 @@ import { resolve } from 'node:path';
 import postsData from '@fg/content-data/posts.json';
 import type { Article } from '@fg/shared';
 import { SITE_NAME } from '@fg/shared';
-import { Resvg, initWasm } from '@resvg/resvg-wasm';
+import { initWasm, Resvg } from '@resvg/resvg-wasm';
 import satori from 'satori';
 
 const ogDir = resolve(import.meta.dirname, '../static/og');

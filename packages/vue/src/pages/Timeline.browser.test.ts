@@ -1,5 +1,5 @@
 import timelineData from '@fg/content-data/timeline.json';
-import { type TimelineData, entryMatchesTech } from '@fg/shared';
+import { entryMatchesTech, type TimelineData } from '@fg/shared';
 import { cleanup, render, screen, waitFor } from '@testing-library/vue';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createMemoryHistory, createRouter } from 'vue-router';

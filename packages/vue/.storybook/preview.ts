@@ -1,5 +1,5 @@
-import { setup } from '@storybook/vue3-vite';
 import type { Preview } from '@storybook/vue3-vite';
+import { setup } from '@storybook/vue3-vite';
 import { createHead } from '@unhead/vue/client';
 import { createMemoryHistory, createRouter } from 'vue-router';
 import {

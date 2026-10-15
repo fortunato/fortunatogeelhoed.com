@@ -1,4 +1,4 @@
-import { LitElement, html } from 'lit';
+import { html, LitElement } from 'lit';
 import { toggleTheme } from '../theme';
 
 // Moon/sun theme toggle, shared by all three headers (previously duplicated SVG markup

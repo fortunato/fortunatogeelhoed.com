@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, PLATFORM_ID, inject } from '@angular/core';
+import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { consumeSwitchScroll, initNavMotion, replayEntrance, smoothScrollToTop } from '@fg/shared';
 import { filter } from 'rxjs';

@@ -1,5 +1,5 @@
 import { httpResource } from '@angular/common/http';
-import { Injectable, computed } from '@angular/core';
+import { computed, Injectable } from '@angular/core';
 import { type Availability, availabilitySchema, readAvailabilitySeed } from '@fg/shared';
 
 // Optimistic default, identical to the server-rendered markup, used when no seed is present.

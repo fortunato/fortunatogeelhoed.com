@@ -1,4 +1,4 @@
-import { LitElement, html, nothing } from 'lit';
+import { html, LitElement, nothing } from 'lit';
 
 // Form-associated multi-line input — a thin sibling of jb-input for the contact
 // message field. Same single-channel ElementInternals pattern and light-DOM styling.

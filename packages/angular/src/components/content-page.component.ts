@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
 import type { ContentItem } from '@fg/shared';
 

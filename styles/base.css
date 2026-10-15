@@ -11,8 +11,9 @@
 		color: var(--jb-text-primary);
 		padding-top: var(--jb-size-nav-height);
 		padding-bottom: calc(3.5rem + env(safe-area-inset-bottom, 0));
-		transition: background-color var(--jb-dur-slow) var(--jb-ease-standard), color
-			var(--jb-dur-slow) var(--jb-ease-standard);
+		transition:
+			background-color var(--jb-dur-slow) var(--jb-ease-standard),
+			color var(--jb-dur-slow) var(--jb-ease-standard);
 		/* Sticky-footer shell (see #app/app-root + main below). body already carries
 		   min-height: 100dvh from the reset. */
 		display: flex;
@@ -126,8 +127,9 @@
 	.btn--inverted {
 		background: var(--jb-text-on-accent);
 		color: var(--jb-accent);
-		transition: background-color var(--jb-dur-slow) var(--jb-ease-in-out), color
-			var(--jb-dur-slow) var(--jb-ease-in-out);
+		transition:
+			background-color var(--jb-dur-slow) var(--jb-ease-in-out),
+			color var(--jb-dur-slow) var(--jb-ease-in-out);
 	}
 
 	.btn--inverted:hover {
@@ -141,9 +143,10 @@
 		background: transparent;
 		color: var(--jb-text-primary);
 		border: 1px solid var(--jb-color-border);
-		transition: border-color var(--jb-dur-base) var(--jb-ease-standard), color
-			var(--jb-dur-base) var(--jb-ease-standard), background-color var(--jb-dur-base)
-			var(--jb-ease-standard);
+		transition:
+			border-color var(--jb-dur-base) var(--jb-ease-standard),
+			color var(--jb-dur-base) var(--jb-ease-standard),
+			background-color var(--jb-dur-base) var(--jb-ease-standard);
 	}
 
 	.btn--secondary:hover {
@@ -156,8 +159,9 @@
 	.btn--ghost {
 		background: transparent;
 		color: var(--jb-accent-text);
-		transition: background-color var(--jb-dur-base) var(--jb-ease-standard), color
-			var(--jb-dur-base) var(--jb-ease-standard);
+		transition:
+			background-color var(--jb-dur-base) var(--jb-ease-standard),
+			color var(--jb-dur-base) var(--jb-ease-standard);
 	}
 
 	.btn--ghost:hover {
@@ -189,8 +193,9 @@
 		background: var(--jb-accent-soft);
 		color: var(--jb-accent-text);
 		border: 1px solid color-mix(in srgb, var(--jb-accent) 30%, transparent);
-		transition: background-color var(--jb-dur-base) var(--jb-ease-standard), border-color
-			var(--jb-dur-base) var(--jb-ease-standard);
+		transition:
+			background-color var(--jb-dur-base) var(--jb-ease-standard),
+			border-color var(--jb-dur-base) var(--jb-ease-standard);
 	}
 
 	.btn--sm:hover {
@@ -262,9 +267,10 @@
 		border: 1px solid var(--jb-color-border);
 		border-radius: var(--jb-radius-sm);
 		padding: var(--jb-space-lg);
-		transition: transform var(--jb-dur-base) var(--jb-ease-standard), box-shadow
-			var(--jb-dur-base) var(--jb-ease-standard), border-color var(--jb-dur-base)
-			var(--jb-ease-standard);
+		transition:
+			transform var(--jb-dur-base) var(--jb-ease-standard),
+			box-shadow var(--jb-dur-base) var(--jb-ease-standard),
+			border-color var(--jb-dur-base) var(--jb-ease-standard);
 	}
 
 	.card:hover {
@@ -472,7 +478,6 @@
 
 	/* Full-height utility honoring dynamic mobile chrome */
 	.full-height {
-		min-height: 100vh;
 		min-height: 100dvh;
 	}
 

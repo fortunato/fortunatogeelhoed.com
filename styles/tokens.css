@@ -211,7 +211,8 @@
 		--jb-accent-3-text: #d3a50c;
 		/* Hero glow: orange (framework) + blue + yellow, low-alpha so it tints the slate without
 		   competing with the wallpaper or the headline. */
-		--jb-hero-glow: radial-gradient(
+		--jb-hero-glow:
+			radial-gradient(
 				42rem 32rem at 78% 22%,
 				color-mix(in srgb, var(--jb-accent-2) 14%, transparent),
 				transparent 70%
@@ -271,7 +272,8 @@
 		/* Light mode keeps the neutral surface, so without this the hero shows almost none of the
 		   palette. A soft wash of the vivid blue/orange/yellow tints the near-white hero so the
 		   colour carries in light too — same hues as the dark glow, tuned for the lighter ground. */
-		--jb-hero-glow: radial-gradient(
+		--jb-hero-glow:
+			radial-gradient(
 				42rem 32rem at 78% 22%,
 				color-mix(in srgb, var(--jb-accent-2) 18%, transparent),
 				transparent 70%

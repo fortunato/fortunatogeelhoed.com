@@ -15,8 +15,9 @@
 		border: none;
 		cursor: pointer;
 		border-radius: var(--jb-radius-sm);
-		transition: color var(--jb-dur-fast) var(--jb-ease-standard), background-color
-			var(--jb-dur-fast) var(--jb-ease-standard);
+		transition:
+			color var(--jb-dur-fast) var(--jb-ease-standard),
+			background-color var(--jb-dur-fast) var(--jb-ease-standard);
 
 		&:hover {
 			color: var(--jb-text-primary);

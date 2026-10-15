@@ -1,6 +1,6 @@
 import { provideRouter } from '@angular/router';
 import timelineData from '@fg/content-data/timeline.json';
-import { type TimelineData, entryMatchesTech } from '@fg/shared';
+import { entryMatchesTech, type TimelineData } from '@fg/shared';
 import { registerElements } from '@fg/shared/elements';
 import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';

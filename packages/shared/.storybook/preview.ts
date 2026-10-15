@@ -1,5 +1,5 @@
-import { setCustomElementsManifest } from '@storybook/web-components-vite';
 import type { Preview } from '@storybook/web-components-vite';
+import { setCustomElementsManifest } from '@storybook/web-components-vite';
 import {
 	applyFramework,
 	applyTheme,

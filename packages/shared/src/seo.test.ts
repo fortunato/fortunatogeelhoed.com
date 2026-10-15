@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import {
-	INDEXED_PATHS,
-	OG_DEFAULT_IMAGE_PATH,
-	OG_IMAGE_PATH,
-	SITE_URL,
 	buildRobotsTxt,
 	buildSitemap,
+	INDEXED_PATHS,
 	isIndexedPath,
+	OG_DEFAULT_IMAGE_PATH,
+	OG_IMAGE_PATH,
 	renderArticleSeoHead,
 	renderSeoHead,
 	resolvePageSeo,
+	SITE_URL,
 } from './seo';
 
 describe('resolvePageSeo', () => {

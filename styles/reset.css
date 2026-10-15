@@ -23,8 +23,7 @@
 	body {
 		line-height: 1.6;
 		overflow-x: hidden;
-		min-height: 100vh;
-		/* Account for dynamic mobile browser chrome. vh fallback first. */
+		/* Account for dynamic mobile browser chrome. */
 		min-height: 100dvh;
 	}
 

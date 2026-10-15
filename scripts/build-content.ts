@@ -9,8 +9,8 @@ import {
 	getTimelinePage,
 	listPosts,
 } from '@fg/content';
-import { OG_DEFAULT_IMAGE_PATH, articlePath, routes } from '@fg/shared';
 import type { Article, ContentItem, WritingTeaserItem } from '@fg/shared';
+import { articlePath, OG_DEFAULT_IMAGE_PATH, routes } from '@fg/shared';
 
 const contentDir = resolve(import.meta.dirname, '../packages/content');
 const ogDir = resolve(import.meta.dirname, '../static/og');

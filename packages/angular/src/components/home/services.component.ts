@@ -1,9 +1,9 @@
 import {
+	afterNextRender,
 	Component,
 	type ElementRef,
-	type OnDestroy,
-	afterNextRender,
 	input,
+	type OnDestroy,
 	viewChild,
 } from '@angular/core';
 import { RouterLink } from '@angular/router';

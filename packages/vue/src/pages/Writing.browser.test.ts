@@ -1,6 +1,6 @@
 import contentData from '@fg/content-data/data.json';
 import postsData from '@fg/content-data/posts.json';
-import { type Article, type ContentItem, articlePath } from '@fg/shared';
+import { type Article, articlePath, type ContentItem } from '@fg/shared';
 import { registerElements } from '@fg/shared/elements';
 import { cleanup, render, screen } from '@testing-library/vue';
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';

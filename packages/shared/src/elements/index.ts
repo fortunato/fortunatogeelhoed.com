@@ -26,4 +26,4 @@ export function registerElements(): void {
 	define('jb-icon', JbIcon);
 }
 
-export { JbInput, JbTextarea, JbThemeToggle, JbIcon };
+export { JbIcon, JbInput, JbTextarea, JbThemeToggle };

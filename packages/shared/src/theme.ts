@@ -16,6 +16,7 @@ export function getCurrentTheme(): Theme {
 /** Apply a theme everywhere it must persist: attribute (paint), cookie (server), localStorage. */
 export function setTheme(theme: Theme): void {
 	document.documentElement.setAttribute('data-theme', theme);
+	// biome-ignore lint/suspicious/noDocumentCookie: the server reads this cookie to render the theme, and the Cookie Store API is not in every targeted browser
 	document.cookie = `${COOKIE}=${theme};path=/;max-age=${MAX_AGE};samesite=lax`;
 	try {
 		localStorage.setItem(STORAGE_KEY, theme);

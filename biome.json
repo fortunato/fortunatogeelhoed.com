@@ -1,7 +1,16 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.0/schema.json",
-	"organizeImports": {
-		"enabled": true
+	"$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": "on"
+			}
+		}
 	},
 	"formatter": {
 		"enabled": true,
@@ -12,7 +21,13 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"preset": "recommended",
+			"complexity": {
+				"noImportantStyles": "off"
+			},
+			"style": {
+				"noDescendingSpecificity": "off"
+			}
 		}
 	},
 	"javascript": {
@@ -27,29 +42,51 @@
 		}
 	},
 	"files": {
-		"ignore": [
-			"node_modules",
-			"dist",
-			".nx",
-			".angular",
-			"storybook-static",
-			"**/custom-elements.json",
-			"tests/visual/__snapshots__",
-			"test-results",
-			"playwright-report",
-			"**/*.generated.ts",
-			"packages/content/data.json",
-			"packages/content/home.json",
-			"packages/content/timeline.json",
-			"packages/content/frontend-frameworks.json",
-			"packages/content/backend-frameworks.json"
+		"includes": [
+			"**",
+			"!**/node_modules",
+			"!**/dist",
+			"!**/.nx",
+			"!**/.angular",
+			"!**/storybook-static",
+			"!**/custom-elements.json",
+			"!**/tests/visual/__snapshots__",
+			"!**/test-results",
+			"!**/playwright-report",
+			"!**/*.generated.ts",
+			"!**/packages/content/data.json",
+			"!**/packages/content/home.json",
+			"!**/packages/content/timeline.json",
+			"!**/packages/content/frontend-frameworks.json",
+			"!**/packages/content/backend-frameworks.json",
+			"!**/*.html",
+			"!**/*.svg"
 		]
 	},
 	"overrides": [
 		{
-			"include": ["styles/motion.css"],
-			"linter": { "enabled": false },
-			"formatter": { "enabled": false }
+			"includes": ["**/styles/motion.css"],
+			"linter": {
+				"enabled": false
+			},
+			"formatter": {
+				"enabled": false
+			}
+		},
+		{
+			"includes": ["packages/vue/**"],
+			"linter": {
+				"rules": {
+					"correctness": {
+						"noUnusedVariables": "off",
+						"noUnusedImports": "off",
+						"useHookAtTopLevel": "off"
+					},
+					"style": {
+						"useVueMultiWordComponentNames": "off"
+					}
+				}
+			}
 		}
 	]
 }

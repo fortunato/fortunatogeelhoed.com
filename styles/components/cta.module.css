@@ -22,7 +22,11 @@
 		content: "";
 		position: absolute;
 		inset: 0;
-		background: radial-gradient(70% 120% at 50% -10%, rgba(255, 255, 255, 0.2), transparent 70%);
+		background: radial-gradient(
+			70% 120% at 50% -10%,
+			rgba(255, 255, 255, 0.2),
+			transparent 70%
+		);
 		pointer-events: none;
 	}
 

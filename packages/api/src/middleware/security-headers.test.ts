@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import {
-	DOCS_CSP,
 	anatomyCsp,
+	DOCS_CSP,
 	generateNonce,
 	securityHeaders,
 	serveHtml,
