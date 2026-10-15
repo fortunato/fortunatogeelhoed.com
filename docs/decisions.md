@@ -79,7 +79,7 @@ its options deserve the most detail.
 **Why AnalogJS:**
 
 - **Vite-based — consistent with the other two.** React (Vite SSR API) and Vue
-  (vite-ssg) already run on Vite 6. AnalogJS makes Angular the third Vite
+  (vite-ssg) already run on Vite. AnalogJS makes Angular the third Vite
   toolchain rather than a bespoke one: the same dev-server model, the same
   config shape, and the shared `serveCssDev` plugin work across all three. That
   consistency is worth as much as Bun support — it keeps the monorepo one

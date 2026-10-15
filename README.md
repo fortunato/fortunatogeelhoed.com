@@ -95,7 +95,7 @@ For the request lifecycle, the dev topology, and the rationale behind the Vite/N
 | Vue | Vue 3.5, Vue Router 4, vite-ssg |
 | Angular | Angular 21, AnalogJS (Vite-powered) |
 | Content | gray-matter + Markdown |
-| Build | Vite 6, Nx (integrated monorepo) |
+| Build | Vite 8 (Rolldown), Nx (integrated monorepo) |
 | Lint/Format | Biome (tabs, 4-space width, single quotes) |
 
 ## Getting Started
