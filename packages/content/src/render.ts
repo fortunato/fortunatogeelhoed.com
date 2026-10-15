@@ -23,7 +23,7 @@ const md = new MarkdownIt({
 // safety. Internal links (site-relative paths and in-page anchors) keep default same-tab behavior.
 md.renderer.rules.link_open = (tokens, idx, options, _env, self) => {
 	const token = tokens[idx];
-	if (token && /^https?:\/\//i.test(token.attrGet('href') ?? '')) {
+	if (token && /^https?:\/\//i.test(String(token.attrGet('href') ?? ''))) {
 		token.attrSet('target', '_blank');
 		token.attrSet('rel', 'noopener noreferrer');
 	}
