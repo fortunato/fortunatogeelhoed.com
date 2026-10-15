@@ -30,11 +30,26 @@ const browser = (instance: string) =>
 		instances: [{ browser: 'chromium', name: instance }],
 	}) as const;
 
+// prebundle lists dependencies only reached once a story renders (through the app modules it
+// imports). Vite would otherwise discover them mid-run on a cold cache, re-bundle, and reload
+// the page under the running tests, failing whichever stories were in flight (always in CI).
 const STORYBOOK_SECTIONS = [
-	{ name: 'web-components', configDir: 'packages/shared/.storybook' },
-	{ name: 'react', configDir: 'packages/react/.storybook' },
-	{ name: 'vue', configDir: 'packages/vue/.storybook' },
-	{ name: 'angular', configDir: 'packages/angular/.storybook' },
+	{ name: 'web-components', configDir: 'packages/shared/.storybook', prebundle: [] },
+	{
+		name: 'react',
+		configDir: 'packages/react/.storybook',
+		prebundle: ['@tanstack/react-query', '@grafana/faro-web-sdk'],
+	},
+	{
+		name: 'vue',
+		configDir: 'packages/vue/.storybook',
+		prebundle: ['@tanstack/vue-query', 'vite-ssg'],
+	},
+	{
+		name: 'angular',
+		configDir: 'packages/angular/.storybook',
+		prebundle: ['@angular/common/http', '@grafana/faro-web-sdk'],
+	},
 ];
 
 export default defineConfig({
@@ -114,6 +129,7 @@ export default defineConfig({
 			// they do in the published catalogue.
 			...STORYBOOK_SECTIONS.map((section) => ({
 				plugins: [storybookTest({ configDir: resolve(root, section.configDir) })],
+				optimizeDeps: { include: section.prebundle },
 				test: {
 					// The plugin roots each project at its .storybook parent but resolves story globs from
 					// the repo root; scanning from the repo root keeps the two in agreement.
