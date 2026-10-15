@@ -1,5 +1,5 @@
 import timelineData from '@fg/content-data/timeline.json';
-import { type TimelineData, entryMatchesTech } from '@fg/shared';
+import { entryMatchesTech, type TimelineData } from '@fg/shared';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';

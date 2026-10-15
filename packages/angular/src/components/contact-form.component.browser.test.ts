@@ -29,10 +29,6 @@ async function typeInto(name: string, value: string): Promise<void> {
 	await fireEvent.input(control, { target: { value } });
 }
 
-async function blur(name: string): Promise<void> {
-	await fireEvent.blur(controlFor(name));
-}
-
 async function fillValid(): Promise<void> {
 	await typeInto('name', 'Ada Lovelace');
 	await typeInto('email', 'ada@example.com');

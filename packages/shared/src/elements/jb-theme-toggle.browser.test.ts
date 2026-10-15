@@ -6,6 +6,7 @@ beforeAll(() => registerElements());
 
 afterEach(() => {
 	document.documentElement.removeAttribute('data-theme');
+	// biome-ignore lint/suspicious/noDocumentCookie: clears the cookie the code under test writes
 	document.cookie = 'theme=;path=/;max-age=0';
 	localStorage.clear();
 });

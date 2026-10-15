@@ -27,8 +27,9 @@
 			border: 1px solid var(--jb-color-border);
 			border-radius: var(--jb-radius-sm);
 			resize: vertical;
-			transition: border-color var(--jb-dur-fast) var(--jb-ease-standard), box-shadow
-				var(--jb-dur-fast) var(--jb-ease-standard);
+			transition:
+				border-color var(--jb-dur-fast) var(--jb-ease-standard),
+				box-shadow var(--jb-dur-fast) var(--jb-ease-standard);
 
 			&::placeholder {
 				color: var(--jb-text-tertiary);

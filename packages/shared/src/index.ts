@@ -1,83 +1,82 @@
-export type { ContentMeta, ContentItem, Article } from './types/content';
-export type { RouteDefinition } from './types/routes';
-export { routes } from './types/routes';
-export { WRITING_BASE, articlePath, articlePathsFromPosts } from './articles';
-export type {
-	Lane,
-	EmploymentType,
-	Domain,
-	ExposureIntensity,
-	TimelineYear,
-	TimelineEntry,
-	TimelineLink,
-	FrameworkExposureSpan,
-	TimelineData,
-	TimelinePageCopy,
-} from './types/timeline';
-export { LANES, DOMAINS } from './types/timeline';
-export type { Bounds, RibbonSegment, RibbonRow, AxisTick } from './timeline-layout';
-export {
-	spansBounds,
-	ribbonRows,
-	axisTicks,
-	LANE_LABELS,
-	EMPLOYMENT_TYPE_LABELS,
-	AGENCY_LABEL,
-	INTENSITY_LEGEND,
-} from './timeline-layout';
+export { articlePath, articlePathsFromPosts, WRITING_BASE } from './articles';
+export { fetchAvailability, readAvailabilitySeed } from './availability-client';
+export { availabilityBadge, availabilityBookedLine } from './availability-copy';
+export { initCardSpotlight } from './card-spotlight';
+export { consumeSwitchScroll, initSwitchTransition } from './disintegrate';
 export type { NavItem } from './nav';
 export { NAV_ITEMS } from './nav';
-export { timelineDatetime } from './text';
-export { isExternalHref } from './url';
-export type { PageSeo } from './seo';
+export { initNavMotion, initPopstateMotion, replayEntrance, smoothScrollToTop } from './nav-motion';
+export type { ArticleSeoInput, PageSeo } from './seo';
 export {
-	SITE_URL,
-	SITE_NAME,
-	OG_IMAGE_PATH,
-	OG_DEFAULT_IMAGE_PATH,
-	GITHUB_PROFILE_URL,
-	GITHUB_REPO_URL,
-	LINKEDIN_URL,
-	INDEXED_PATHS,
-	isIndexedPath,
-	resolvePageSeo,
-	renderSeoHead,
-	renderArticleSeoHead,
 	buildRobotsTxt,
 	buildSitemap,
+	GITHUB_PROFILE_URL,
+	GITHUB_REPO_URL,
+	INDEXED_PATHS,
+	isIndexedPath,
+	LINKEDIN_URL,
+	OG_DEFAULT_IMAGE_PATH,
+	OG_IMAGE_PATH,
+	renderArticleSeoHead,
+	renderSeoHead,
+	resolvePageSeo,
+	SITE_NAME,
+	SITE_URL,
 } from './seo';
-export type { ArticleSeoInput } from './seo';
+export { destroySmoothScroll, initSmoothScroll } from './smooth-scroll';
 export type { TechVisual } from './tech';
 export { TECH_REGISTRY, techVisual } from './tech';
 export {
-	techSlug,
-	techNameFromSlug,
-	TECH_SLUG_TO_NAME,
 	entryMatchesTech,
-	parseTechQuery,
 	formatTechQuery,
+	parseTechQuery,
 	readTechFilter,
-	writeTechFilter,
 	readTechFilterUrl,
+	TECH_SLUG_TO_NAME,
+	techNameFromSlug,
+	techSlug,
+	writeTechFilter,
 	writeTechFilterUrl,
 } from './tech-filter';
 export { TECH_SPRITE } from './tech-sprite';
+export { timelineDatetime } from './text';
+export type { Theme } from './theme';
+export { getCurrentTheme, setTheme, toggleTheme } from './theme';
+export type { AxisTick, Bounds, RibbonRow, RibbonSegment } from './timeline-layout';
+export {
+	AGENCY_LABEL,
+	axisTicks,
+	EMPLOYMENT_TYPE_LABELS,
+	INTENSITY_LEGEND,
+	LANE_LABELS,
+	ribbonRows,
+	spansBounds,
+} from './timeline-layout';
+export { destroyTimelineMotion, initTimelineMotion } from './timeline-motion';
+export type { Article, ContentItem, ContentMeta } from './types/content';
 export type {
 	HomeContent,
 	HomeSectionsCopy,
-	ServiceOffering,
 	Principle,
 	ProofPoint,
+	ServiceOffering,
 	WritingTeaserItem,
 } from './types/home';
-export type { Theme } from './theme';
-export { getCurrentTheme, setTheme, toggleTheme } from './theme';
-export { consumeSwitchScroll, initSwitchTransition } from './disintegrate';
-export { initNavMotion, initPopstateMotion, replayEntrance, smoothScrollToTop } from './nav-motion';
-export { initSmoothScroll, destroySmoothScroll } from './smooth-scroll';
-export { initTimelineMotion, destroyTimelineMotion } from './timeline-motion';
-export { initCardSpotlight } from './card-spotlight';
+export type { RouteDefinition } from './types/routes';
+export { routes } from './types/routes';
+export type {
+	Domain,
+	EmploymentType,
+	ExposureIntensity,
+	FrameworkExposureSpan,
+	Lane,
+	TimelineData,
+	TimelineEntry,
+	TimelineLink,
+	TimelinePageCopy,
+	TimelineYear,
+} from './types/timeline';
+export { DOMAINS, LANES } from './types/timeline';
+export { isExternalHref } from './url';
 export type { Availability } from './validation/availability';
 export { availabilitySchema } from './validation/availability';
-export { availabilityBadge, availabilityBookedLine } from './availability-copy';
-export { readAvailabilitySeed, fetchAvailability } from './availability-client';

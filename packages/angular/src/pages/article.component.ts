@@ -1,9 +1,9 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, ViewEncapsulation, inject } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, Meta, type SafeHtml, Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import postsData from '@fg/content-data/posts.json';
-import { type Article, SITE_NAME, SITE_URL, WRITING_BASE, articlePath } from '@fg/shared';
+import { type Article, articlePath, SITE_NAME, SITE_URL, WRITING_BASE } from '@fg/shared';
 
 const published = (postsData as { published: Article[] }).published;
 

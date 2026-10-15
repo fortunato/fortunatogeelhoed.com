@@ -1,12 +1,12 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component, computed, inject, input } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { Lane, TimelineEntry } from '@fg/shared';
 import {
 	AGENCY_LABEL,
 	EMPLOYMENT_TYPE_LABELS,
-	LANE_LABELS,
 	entryMatchesTech,
 	isExternalHref,
+	LANE_LABELS,
 	techVisual,
 	timelineDatetime,
 } from '@fg/shared';

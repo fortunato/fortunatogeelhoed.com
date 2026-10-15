@@ -8,7 +8,10 @@ const ContentContext = createContext<ContentMap>({});
 export function ContentProvider({
 	content,
 	children,
-}: { content: ContentMap; children: React.ReactNode }) {
+}: {
+	content: ContentMap;
+	children: React.ReactNode;
+}) {
 	return <ContentContext value={content}>{children}</ContentContext>;
 }
 

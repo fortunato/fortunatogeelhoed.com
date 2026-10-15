@@ -48,7 +48,8 @@
 	   the framework accent; cards 2 and 3 take the blue and yellow below. */
 	--card-accent: var(--jb-accent);
 	--card-ink: var(--jb-accent-text);
-	--card-gradient: radial-gradient(
+	--card-gradient:
+		radial-gradient(
 			42% 55% at 25% 30%,
 			color-mix(in srgb, var(--card-accent) 55%, transparent),
 			transparent 62%
@@ -137,9 +138,14 @@
    surface). Light mode keeps the tonal accent mesh above. */
 @supports (color: oklch(from white l c h)) {
 	[data-theme="dark"] .service-card {
-		--card-gradient: radial-gradient(
+		--card-gradient:
+			radial-gradient(
 				42% 55% at 25% 30%,
-				color-mix(in srgb, oklch(from var(--card-accent) l c calc(h - 38)) 68%, transparent),
+				color-mix(
+					in srgb,
+					oklch(from var(--card-accent) l c calc(h - 38)) 68%,
+					transparent
+				),
 				transparent 62%
 			),
 			radial-gradient(
@@ -149,16 +155,25 @@
 			),
 			radial-gradient(
 				52% 56% at 50% 82%,
-				color-mix(in srgb, oklch(from var(--card-accent) l c calc(h + 48)) 68%, transparent),
+				color-mix(
+					in srgb,
+					oklch(from var(--card-accent) l c calc(h + 48)) 68%,
+					transparent
+				),
 				transparent 62%
 			);
 	}
 
 	/* Light mode: a gentler spread (the wide rainbow read muddy on white). */
 	[data-theme="light"] .service-card {
-		--card-gradient: radial-gradient(
+		--card-gradient:
+			radial-gradient(
 				42% 55% at 25% 30%,
-				color-mix(in srgb, oklch(from var(--card-accent) l c calc(h - 22)) 62%, transparent),
+				color-mix(
+					in srgb,
+					oklch(from var(--card-accent) l c calc(h - 22)) 62%,
+					transparent
+				),
 				transparent 62%
 			),
 			radial-gradient(
@@ -168,7 +183,11 @@
 			),
 			radial-gradient(
 				52% 56% at 50% 82%,
-				color-mix(in srgb, oklch(from var(--card-accent) l c calc(h + 26)) 62%, transparent),
+				color-mix(
+					in srgb,
+					oklch(from var(--card-accent) l c calc(h + 26)) 62%,
+					transparent
+				),
 				transparent 62%
 			);
 	}

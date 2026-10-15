@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 import backend from '@fg/content-data/backend-frameworks.json';
 import frontend from '@fg/content-data/frontend-frameworks.json';
 import type { FrameworkExposureSpan, HomeContent } from '@fg/shared';
-import { INTENSITY_LEGEND, axisTicks, ribbonRows, spansBounds } from '@fg/shared';
+import { axisTicks, INTENSITY_LEGEND, ribbonRows, spansBounds } from '@fg/shared';
 import { FrameworkRibbonComponent } from '../timeline/framework-ribbon.component';
 import { LinkDirective } from '../ui/link.directive';
 

@@ -1,4 +1,4 @@
-import { LitElement, html, nothing } from 'lit';
+import { html, LitElement, nothing } from 'lit';
 
 // Form-associated text input, shared by all three framework variants.
 //

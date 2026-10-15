@@ -1,26 +1,26 @@
 import {
-	Component,
-	type ElementRef,
-	type OnDestroy,
 	afterNextRender,
+	Component,
 	computed,
+	type ElementRef,
 	effect,
 	inject,
+	type OnDestroy,
 	viewChild,
 } from '@angular/core';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
-import pageData from '@fg/content-data/timeline-page.json';
 import timelineData from '@fg/content-data/timeline.json';
+import pageData from '@fg/content-data/timeline-page.json';
 import type { TimelineData, TimelineEntry, TimelinePageCopy } from '@fg/shared';
 import {
-	LANES,
-	LANE_LABELS,
-	TECH_SPRITE,
 	destroyTimelineMotion,
 	entryMatchesTech,
 	initTimelineMotion,
+	LANE_LABELS,
+	LANES,
 	readTechFilter,
 	readTechFilterUrl,
+	TECH_SPRITE,
 	writeTechFilter,
 	writeTechFilterUrl,
 } from '@fg/shared';

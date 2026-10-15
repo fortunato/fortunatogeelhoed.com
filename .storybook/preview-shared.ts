@@ -17,7 +17,7 @@ import { registerElements } from '../packages/shared/src/elements';
 // (the same reason the app client bootstraps call it). Browser-only: safe in previews.
 registerElements();
 
-export { applyTheme, applyFramework, themeGlobalTypes } from './theme-decorator';
+export { applyFramework, applyTheme, themeGlobalTypes } from './theme-decorator';
 
 // Defaults every section shares; instances spread these into their own preview.
 export const sharedParameters = {

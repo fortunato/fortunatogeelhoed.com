@@ -2,7 +2,7 @@ import type { Availability } from '@fg/shared';
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
 import { cleanup, render, waitFor } from '@testing-library/vue';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { type Ref, defineComponent, h } from 'vue';
+import { defineComponent, h, type Ref } from 'vue';
 import { useAvailability } from './useAvailability';
 
 // Availability data layer (Vue): the optimistic default before any seed, reading the

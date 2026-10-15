@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
 	type AxisTick,
+	axisTicks,
 	type RibbonRow,
 	type RibbonSegment,
-	axisTicks,
 	ribbonRows,
 	spansBounds,
 } from './timeline-layout';

@@ -1,7 +1,7 @@
 import type { ContentItem } from '@fg/shared';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { renderToString } from 'react-dom/server';
-import { StaticRouterProvider, createStaticHandler, createStaticRouter } from 'react-router';
+import { createStaticHandler, createStaticRouter, StaticRouterProvider } from 'react-router';
 import { ContentProvider } from './content';
 import { makeQueryClient } from './query-client';
 import { routes } from './routes';

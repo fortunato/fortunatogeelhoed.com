@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { type Route, provideRouter } from '@angular/router';
+import { provideRouter, type Route } from '@angular/router';
 import { NAV_ITEMS } from '@fg/shared';
 import { registerElements } from '@fg/shared/elements';
 import { render, screen } from '@testing-library/angular';

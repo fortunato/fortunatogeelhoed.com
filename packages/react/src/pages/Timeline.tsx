@@ -1,13 +1,13 @@
-import pageData from '@fg/content-data/timeline-page.json';
 import timelineData from '@fg/content-data/timeline.json';
+import pageData from '@fg/content-data/timeline-page.json';
 import type { TimelineData, TimelinePageCopy } from '@fg/shared';
 import {
-	LANES,
-	LANE_LABELS,
-	TECH_SPRITE,
 	destroyTimelineMotion,
 	entryMatchesTech,
 	initTimelineMotion,
+	LANE_LABELS,
+	LANES,
+	TECH_SPRITE,
 } from '@fg/shared';
 import styles from '@styles/components/timeline.module.css';
 import { Fragment, useEffect, useMemo, useRef } from 'react';

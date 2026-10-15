@@ -4,6 +4,7 @@
 // tables, so a structural type is unnecessary.
 declare module '*custom-elements.json' {
 	import type { Package } from 'custom-elements-manifest';
+
 	const manifest: Package;
 	export default manifest;
 }

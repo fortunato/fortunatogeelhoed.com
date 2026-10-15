@@ -33,9 +33,10 @@
 	border: 1px solid var(--jb-color-border);
 	border-radius: var(--jb-radius-sm);
 	padding: var(--jb-space-lg);
-	transition: border-color var(--jb-dur-base) var(--jb-ease-standard), transform
-		var(--jb-dur-base) var(--jb-ease-standard), box-shadow var(--jb-dur-base)
-		var(--jb-ease-standard);
+	transition:
+		border-color var(--jb-dur-base) var(--jb-ease-standard),
+		transform var(--jb-dur-base) var(--jb-ease-standard),
+		box-shadow var(--jb-dur-base) var(--jb-ease-standard);
 
 	&:hover {
 		color: inherit;

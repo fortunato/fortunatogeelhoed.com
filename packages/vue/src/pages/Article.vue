@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import postsData from '@fg/content-data/posts.json';
-import { type Article, SITE_NAME, SITE_URL, WRITING_BASE, articlePath } from '@fg/shared';
+import { type Article, articlePath, SITE_NAME, SITE_URL, WRITING_BASE } from '@fg/shared';
 import styles from '@styles/components/prose.module.css';
 import { useHead } from '@unhead/vue';
 import { computed } from 'vue';

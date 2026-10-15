@@ -1,4 +1,4 @@
-import { WRITING_BASE, articlePath } from './articles';
+import { articlePath, WRITING_BASE } from './articles';
 
 // Canonical, indexed origin. The React build is the only variant a crawler ever sees: a request
 // with no `framework` cookie is served React by default, and the Vue/Angular variants live behind
