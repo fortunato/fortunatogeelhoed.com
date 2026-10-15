@@ -7,7 +7,6 @@
 FROM oven/bun:1.4@sha256:ec06c3b6cea04192ae6770c434f668ca41d343ad19fa6472216c7b48be39c598 AS build
 WORKDIR /app
 COPY package.json bun.lock .bun-version ./
-COPY patches ./patches
 RUN bun install --frozen-lockfile
 COPY . .
 # Faro sourcemap inputs. Both default empty so a plain build emits no maps and runs no plugin; a
@@ -32,7 +31,6 @@ COPY --from=build /app/maps /
 FROM oven/bun:1.4@sha256:ec06c3b6cea04192ae6770c434f668ca41d343ad19fa6472216c7b48be39c598 AS deps
 WORKDIR /app
 COPY package.json bun.lock .bun-version ./
-COPY patches ./patches
 # Workspace members' manifests must be present for the workspace install to resolve.
 COPY packages ./packages
 COPY scripts ./scripts
