@@ -12,12 +12,15 @@ const scanPaths = [
 ];
 
 // Live-site accessibility gate. Boots the production server over the built output and, for
-// each framework variant, drives the real cookie-routing path to every route and runs axe
+// each framework variant in each theme, drives the real cookie-routing path to every route and runs axe
 // at WCAG 2.1 AA plus axe's best-practice rules (so structural wins like a single <main>
 // landmark and a per-page <h1> stay enforced). Any violation fails the build. This covers
 // the actual pages a visitor receives — complementary to the per-story showcase checks.
 
 const FRAMEWORKS = ['react', 'vue', 'angular'] as const;
+// Both themes ship, and contrast differs between them, so each is scanned. The server renders
+// the theme from the `theme` cookie, the same path a returning visitor takes.
+const THEMES = ['light', 'dark'] as const;
 const ORIGIN = 'http://localhost:3000';
 const AXE_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'];
 
@@ -49,35 +52,44 @@ async function main() {
 	const browser = await chromium.launch();
 	try {
 		await waitForServer();
-		for (const framework of FRAMEWORKS) {
-			// Pin scroll-revealed content to its final, fully-visible state so axe samples the
-			// resolved rendering rather than a mid-animation frame (decorative reveals fade
-			// opacity in, which would otherwise flag transient, non-real contrast failures and
-			// make the gate non-deterministic). This also widens coverage: every section is
-			// present at once instead of only what has scrolled into view.
-			const context = await browser.newContext({ reducedMotion: 'reduce' });
-			await context.addCookies([{ name: 'framework', value: framework, url: ORIGIN }]);
-			const page = await context.newPage();
-			for (const path of scanPaths) {
-				await page.goto(`${ORIGIN}${path}`, { waitUntil: 'networkidle' });
-				await injectAxe(page);
-				const violations = await getViolations(page, undefined, {
-					runOnly: { type: 'tag', values: AXE_TAGS },
+		for (const theme of THEMES)
+			for (const framework of FRAMEWORKS) {
+				// Pin scroll-revealed content to its final, fully-visible state so axe samples the
+				// resolved rendering rather than a mid-animation frame (decorative reveals fade
+				// opacity in, which would otherwise flag transient, non-real contrast failures and
+				// make the gate non-deterministic). This also widens coverage: every section is
+				// present at once instead of only what has scrolled into view.
+				const context = await browser.newContext({
+					reducedMotion: 'reduce',
+					colorScheme: theme,
 				});
-				if (violations.length > 0) {
-					failures += violations.length;
-					console.error(`\n✗ ${framework} ${path} — ${violations.length} violation(s):`);
-					for (const v of violations) {
+				await context.addCookies([
+					{ name: 'framework', value: framework, url: ORIGIN },
+					{ name: 'theme', value: theme, url: ORIGIN },
+				]);
+				const page = await context.newPage();
+				for (const path of scanPaths) {
+					await page.goto(`${ORIGIN}${path}`, { waitUntil: 'networkidle' });
+					await injectAxe(page);
+					const violations = await getViolations(page, undefined, {
+						runOnly: { type: 'tag', values: AXE_TAGS },
+					});
+					if (violations.length > 0) {
+						failures += violations.length;
 						console.error(
-							`    [${v.impact}] ${v.id}: ${v.help} (${v.nodes.length} node(s))`,
+							`\n✗ ${framework} ${theme} ${path} — ${violations.length} violation(s):`,
 						);
+						for (const v of violations) {
+							console.error(
+								`    [${v.impact}] ${v.id}: ${v.help} (${v.nodes.length} node(s))`,
+							);
+						}
+					} else {
+						console.log(`✓ ${framework} ${theme} ${path}`);
 					}
-				} else {
-					console.log(`✓ ${framework} ${path}`);
 				}
+				await context.close();
 			}
-			await context.close();
-		}
 	} finally {
 		await browser.close();
 		server.kill();
@@ -90,7 +102,7 @@ async function main() {
 		process.exit(1);
 	}
 	console.log(
-		`\nNo WCAG 2.1 AA / best-practice violations across ${scanPaths.length} paths × ${FRAMEWORKS.length} variants.`,
+		`\nNo WCAG 2.1 AA / best-practice violations across ${scanPaths.length} paths × ${FRAMEWORKS.length} variants × ${THEMES.length} themes.`,
 	);
 }
 
