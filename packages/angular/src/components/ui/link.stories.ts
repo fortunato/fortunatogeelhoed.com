@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/angular';
-import { moduleMetadata } from '@storybook/angular';
+import type { Meta, StoryObj } from '@analogjs/storybook-angular';
+import { moduleMetadata } from '@analogjs/storybook-angular';
 import { LinkDirective } from './link.directive';
 
 // Text-first link, rendered in Angular's accent. `inline` for prose; `arrow` for the read-more affordance.

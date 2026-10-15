@@ -25,19 +25,24 @@ stays an independent build and assembly is a plain file copy.
 In development the same refs point at each section's local dev server instead, so the portal can
 compose live.
 
-## The Vite three vs. the Angular one
+## One builder for all four sections
 
-React, Vue, and the web components run on Storybook's Vite builder, reusing each package's own
-Vite configuration (aliases, the lightningcss-based CSS pipeline) so the showcase matches the
-site. Vue's SFC composites use `<jb-*>` tags, so the Vue section swaps in a Vue plugin configured
-with `isCustomElement` — exactly as the live app does — so those tags compile to native custom
-elements rather than being mistaken for Vue components.
+Every section runs on Storybook's Vite builder, reusing its package's own Vite configuration
+(aliases, the lightningcss-based CSS pipeline) so the showcase matches the site, and every section
+loads the same global stylesheet and registers the shared web components through
+`.storybook/preview-shared.ts`.
 
-Angular is the one exception: `@storybook/angular` uses Angular's own (webpack-based) builder,
-not the AnalogJS Vite path the site uses. There is no first-party Vite builder for Angular
-Storybook, and forcing a community one is fragile. The cost is accepted — Angular is the heaviest
-build — and its global styles, the `zone.js` polyfill, and its tsconfig come from a Storybook-only
-build target in `angular.json`. This is the reason the build order and tooling differ for Angular.
+Vue's SFC composites use `<jb-*>` tags, so the Vue section swaps in a Vue plugin configured with
+`isCustomElement` — exactly as the live app does — so those tags compile to native custom elements
+rather than being mistaken for Vue components.
+
+The Angular section uses AnalogJS's Storybook framework (`@analogjs/storybook-angular`), which
+compiles Angular through `@analogjs/vite-plugin-angular`: the same compiler path the live site
+builds with. Its config mirrors `packages/angular/vite.config.ts` (aliases, lightningcss with CSS
+Modules off, so a shared `*.module.css` used as a `styleUrl` stays plain CSS that
+ViewEncapsulation scopes), keeps zone.js change detection like the app, and imports `zone.js` in
+its preview. Because all four sections build the same way, the showcase build runs them all with
+the same `storybook build` command, and `@storybook/addon-vitest` can test every section's stories.
 
 ## The shared web components are the integration point
 
@@ -106,37 +111,6 @@ only after every build succeeds; any failure exits non-zero and the deploy step 
 a partial catalogue that misrepresents coverage can never ship. The tree is published to GitHub
 Pages on a sub-domain served from root (a `CNAME`), which removes any base-path handling, with a
 `.nojekyll` marker so Storybook's underscore-prefixed asset folders are served untouched.
-
-## Patched dependencies
-
-One dependency is patched: `@angular-devkit/build-angular` (via bun's `patchedDependencies`, with
-the diff committed under `patches/`). The patch adds a single option — `modules: false` — to the
-css-loader used for Angular **component** styles.
-
-Why it's needed: `@storybook/angular` is webpack-based, and Angular compiles a component's
-`styleUrl` inside its own child compilation, where the css-loader is configured with
-`exportType: 'string'` and `esModule: false` but no `modules` setting. css-loader then falls back
-to its default `modules.auto`, which treats any `*.module.css` file as a CSS Module requiring
-named ES exports — incompatible with the string export, so the build throws. The site header's
-`styleUrl` points at the shared `header.module.css` (named with the React/Vue CSS-Module
-convention), so the Angular header tripped this. The loader lives in Angular's child compilation,
-so it can't be reached from Storybook's `webpackFinal`, and the file can't be renamed without
-breaking the React/Vue variants that import it as a real CSS Module.
-
-Why `modules: false` is correct, not a hack: Angular scopes component styles via
-ViewEncapsulation, never via CSS Modules, so component styles should never be module-processed —
-the option Angular omits is one it should arguably set. The patch only affects the webpack build
-path that `@storybook/angular` uses; the live site builds through AnalogJS/Vite and is unaffected.
-
-Maintenance: the patch is pinned to the exact version (`@angular-devkit/build-angular@21.2.13`),
-and the package is listed as a direct devDependency at that same exact version. Without that
-pin it only arrives transitively through `@storybook/angular` and AnalogJS, whose ranges are wide
-enough to resolve a newer major; bun then silently skips the patch, because it is keyed to a
-version that is no longer installed, and the Storybook build fails on the css-loader error above.
-When moving to a new Angular version, bump the pin together with the rest of Angular, regenerate
-the patch with `bun patch @angular-devkit/build-angular`, re-add `modules: false`, and
-`bun patch --commit`. A future `@storybook/angular` esbuild/Vite builder would remove the need
-for the patch entirely.
 
 ## Boundaries
 

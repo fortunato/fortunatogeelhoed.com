@@ -1,8 +1,8 @@
+import type { Meta, StoryObj } from '@analogjs/storybook-angular';
+import { applicationConfig } from '@analogjs/storybook-angular';
 import { inject, provideAppInitializer } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { formatTechQuery } from '@fg/shared';
-import type { Meta, StoryObj } from '@storybook/angular';
-import { applicationConfig } from '@storybook/angular';
 import { TechFilterService } from '../tech-filter.service';
 import { TimelineComponent } from './timeline.component';
 

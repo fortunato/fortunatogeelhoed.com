@@ -1,6 +1,6 @@
+import type { Meta, StoryObj } from '@analogjs/storybook-angular';
+import { moduleMetadata } from '@analogjs/storybook-angular';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import type { Meta, StoryObj } from '@storybook/angular';
-import { moduleMetadata } from '@storybook/angular';
 import { ButtonDirective } from './button.directive';
 
 // The action primitive, rendered in Angular's accent, as an attribute directive on a real <a>/

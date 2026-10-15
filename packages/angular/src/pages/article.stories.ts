@@ -1,6 +1,6 @@
+import type { Meta, StoryObj } from '@analogjs/storybook-angular';
+import { applicationConfig } from '@analogjs/storybook-angular';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
-import type { Meta, StoryObj } from '@storybook/angular';
-import { applicationConfig } from '@storybook/angular';
 import { ArticleComponent } from './article.component';
 
 // A single article, authored as an Angular standalone component. A cross-framework visual-parity

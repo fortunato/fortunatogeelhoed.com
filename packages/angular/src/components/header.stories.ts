@@ -1,6 +1,6 @@
+import type { Meta, StoryObj } from '@analogjs/storybook-angular';
+import { applicationConfig } from '@analogjs/storybook-angular';
 import { provideRouter } from '@angular/router';
-import type { Meta, StoryObj } from '@storybook/angular';
-import { applicationConfig } from '@storybook/angular';
 import { HeaderComponent } from './header.component';
 
 const meta: Meta<HeaderComponent> = {
