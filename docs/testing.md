@@ -15,7 +15,7 @@ Tests live where the behaviour lives. The guiding rule: **pure logic runs withou
 | accessibility | Chromium + axe | Every live route in every framework variant, at WCAG 2.1 AA | `scripts/a11y-scan.ts` (route list is automatic) |
 | end-to-end | Chromium | Whole-app behaviour: framework switch, theme persistence, reduced-motion transition | `tests/e2e/*.spec.ts` |
 | visual parity | Chromium | Cross-framework rendering equivalence of shared components | `tests/visual/parity.spec.ts` |
-| story checks | Chromium | Per-story accessibility + smoke for the showcase | `@storybook/test-runner` |
+| story checks | Chromium + axe | Every showcase story renders, its play function passes, and it has no WCAG 2 A/AA violation | the `storybook-*` Vitest projects (`@storybook/addon-vitest`) |
 
 ## Which test do I write?
 
@@ -38,19 +38,19 @@ bun run test:component   # the four real-browser component projects
 bun run test:a11y       # WCAG 2.1 AA scan over every route × framework (needs a prior `bun run build`)
 bun run test:e2e        # end-to-end against the production server (needs a prior `bun run build`)
 bun run test:visual     # cross-framework visual parity (needs a prior `bun run build-storybook`)
-bun run test:storybook  # per-story accessibility + smoke (needs a prior `bun run build-storybook`)
+bun run test:storybook  # every story in all four showcase sections: render, play function, axe
 ```
 
-`test:storybook` serves the assembled showcase and runs the runner once per technology
-section (React, Vue, Angular, web-components), since the catalogue is a composition and each
-section hosts its own stories.
+`test:storybook` runs one Vitest project per showcase section (`storybook-web-components`,
+`storybook-react`, `storybook-vue`, `storybook-angular`) through `@storybook/addon-vitest`. Each
+project builds its section with that section's own `.storybook` config, so every story renders
+exactly as it does in the published catalogue, runs its play function, and is checked by the a11y
+addon, which fails the test on any WCAG 2 A/AA violation (`a11y.test: 'error'` in
+`.storybook/preview-shared.ts`). No prior Storybook build is needed. The same projects drive the
+Storybook UI's test panel, so a story can be checked while working on it.
 
-It deliberately uses `@storybook/test-runner` (Playwright) rather than the newer
-`@storybook/addon-vitest`. The addon is a Vite plugin, and the Angular section is built with
-`@storybook/angular` (the Angular builder, not Vite), so the addon cannot run it. Migrating
-only the three Vite sections would leave two story-testing mechanisms to maintain, so the
-single test-runner that covers all four sections — Angular included — is the simpler choice.
-Revisit only if the Angular section ever moves to a Vite-based Storybook.
+All four sections can use the addon because they all build on Vite: the Angular section uses
+AnalogJS's Storybook framework, the same Angular compiler path as the live site.
 
 Scope to one tier while iterating:
 

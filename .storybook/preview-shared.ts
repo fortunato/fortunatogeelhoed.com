@@ -26,4 +26,9 @@ export const sharedParameters = {
 	options: {
 		storySort: { order: ['Web Components', 'React', 'Vue', 'Angular'] },
 	},
+	// The accessibility gate: under Vitest every story fails on a WCAG 2 A/AA axe violation.
+	a11y: {
+		test: 'error' as const,
+		options: { runOnly: ['wcag2a', 'wcag2aa'] },
+	},
 };

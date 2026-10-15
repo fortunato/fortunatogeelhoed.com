@@ -8,7 +8,7 @@ const root = process.cwd();
 
 const config: StorybookConfig = {
 	stories: ['../src/**/*.stories.@(tsx|ts|mdx)'],
-	addons: ['@storybook/addon-docs', '@storybook/addon-a11y'],
+	addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'],
 	framework: { name: '@storybook/react-vite', options: {} },
 	viteFinal: async (cfg) => {
 		cfg.resolve ??= {};

@@ -1,5 +1,6 @@
 import { resolve } from 'node:path';
 import angular from '@analogjs/vite-plugin-angular';
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import react from '@vitejs/plugin-react';
 import vue from '@vitejs/plugin-vue';
 import { playwright } from '@vitest/browser-playwright';
@@ -28,6 +29,13 @@ const browser = (instance: string) =>
 		headless: true,
 		instances: [{ browser: 'chromium', name: instance }],
 	}) as const;
+
+const STORYBOOK_SECTIONS = [
+	{ name: 'web-components', configDir: 'packages/shared/.storybook' },
+	{ name: 'react', configDir: 'packages/react/.storybook' },
+	{ name: 'vue', configDir: 'packages/vue/.storybook' },
+	{ name: 'angular', configDir: 'packages/angular/.storybook' },
+];
 
 export default defineConfig({
 	resolve: { alias },
@@ -99,6 +107,20 @@ export default defineConfig({
 					browser: browser('angular'),
 				},
 			},
+			// Showcase gate: every story of each Storybook section runs as a test in the browser,
+			// including its play function, and fails on a render error or an axe violation (the
+			// a11y addon runs with test: 'error', see .storybook/preview-shared.ts). The plugin
+			// builds each section with its own .storybook config, so stories render exactly as
+			// they do in the published catalogue.
+			...STORYBOOK_SECTIONS.map((section) => ({
+				plugins: [storybookTest({ configDir: resolve(root, section.configDir) })],
+				test: {
+					// The plugin roots each project at its .storybook parent but resolves story globs from
+					// the repo root; scanning from the repo root keeps the two in agreement.
+					dir: root,
+					browser: browser(`storybook-${section.name}`),
+				},
+			})),
 		],
 		coverage: {
 			provider: 'v8',

@@ -11,7 +11,7 @@ const root = process.cwd();
 
 const config: StorybookConfig = {
 	stories: ['../src/**/*.stories.@(ts|mdx)'],
-	addons: ['@storybook/addon-docs', '@storybook/addon-a11y'],
+	addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-vitest'],
 	framework: {
 		name: '@analogjs/storybook-angular',
 		options: {
