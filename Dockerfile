@@ -4,7 +4,7 @@
 # output. Secrets are read from the environment at runtime, so none are ever baked in.
 
 # ---- build: produce the prerendered site (dist/) with the full toolchain ----
-FROM oven/bun:1.3 AS build
+FROM oven/bun:1.4@sha256:ec06c3b6cea04192ae6770c434f668ca41d343ad19fa6472216c7b48be39c598 AS build
 WORKDIR /app
 COPY package.json bun.lock .bun-version ./
 COPY patches ./patches
@@ -29,7 +29,7 @@ FROM scratch AS sourcemaps
 COPY --from=build /app/maps /
 
 # ---- deps: production-only node_modules (no dev toolchain) ----
-FROM oven/bun:1.3 AS deps
+FROM oven/bun:1.4@sha256:ec06c3b6cea04192ae6770c434f668ca41d343ad19fa6472216c7b48be39c598 AS deps
 WORKDIR /app
 COPY package.json bun.lock .bun-version ./
 COPY patches ./patches
@@ -39,7 +39,7 @@ COPY scripts ./scripts
 RUN bun install --production --frozen-lockfile
 
 # ---- runtime: slim Bun with only production deps + the built site ----
-FROM oven/bun:1.3-slim AS runtime
+FROM oven/bun:1.4-slim@sha256:14a223fa35747ec728bce300ef85888bc5f7958164d15bbba6a54b22b52a3288 AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 
