@@ -49,7 +49,8 @@
 		"typecheck:shared": "nx run shared:typecheck",
 		"typecheck:api": "nx run api:typecheck",
 		"typecheck:content": "nx run content:typecheck",
-		"typecheck:tooling": "tsc --noEmit -p tsconfig.json"
+		"typecheck:tooling": "tsc --noEmit -p tsconfig.json",
+		"typecheck:infra": "cd infra && bun install --frozen-lockfile && ./node_modules/.bin/tsc --noEmit -p tsconfig.json"
 	},
 	"dependencies": {
 		"@angular/common": "^22.2.4",

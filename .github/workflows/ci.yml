@@ -27,6 +27,11 @@ jobs:
         run: bun run lint
       - name: Typecheck
         run: bun run typecheck
+      # The Pulumi program has its own lockfile and TypeScript, and only runs on a manual `pulumi up`,
+      # which type-checks it first. Checking it here means a broken infra program shows up in review
+      # instead of at provisioning time.
+      - name: Typecheck infra
+        run: bun run typecheck:infra
 
   # Pure logic tests. No browser, so this job skips the Playwright install entirely.
   unit:
