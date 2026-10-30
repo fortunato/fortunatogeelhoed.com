@@ -91,8 +91,8 @@ For the request lifecycle, the dev topology, and the rationale behind the Vite/N
 |-------|-----------|
 | Runtime | Bun 1.3+ |
 | Server | Hono |
-| React | React 19, React Router 7, custom prerender script |
-| Vue | Vue 3.5, Vue Router 4, vite-ssg |
+| React | React 19, React Router 8, custom prerender script |
+| Vue | Vue 3.5, Vue Router 5, vite-ssg |
 | Angular | Angular 21, AnalogJS (Vite-powered) |
 | Content | gray-matter + Markdown |
 | Build | Vite 8 (Rolldown), Nx (integrated monorepo) |
