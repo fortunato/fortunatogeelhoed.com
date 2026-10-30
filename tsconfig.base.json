@@ -21,8 +21,7 @@
 			"@fg/content": ["./packages/content/src/index.ts"],
 			"@fg/content/*": ["./packages/content/src/*"],
 			"@fg/content-data/*": ["./packages/content/*"]
-		},
-		"baseUrl": "."
+		}
 	},
 	"exclude": ["node_modules", "dist"]
 }
