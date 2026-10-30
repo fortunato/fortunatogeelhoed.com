@@ -1,4 +1,11 @@
-import { Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	inject,
+	input,
+	ViewEncapsulation,
+} from '@angular/core';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
 import type { ContentItem } from '@fg/shared';
 
@@ -13,6 +20,7 @@ import type { ContentItem } from '@fg/shared';
 	// emulated encapsulation would never reach it. Disable encapsulation: every prose rule is
 	// scoped under .prose, so the styles only ever apply to the injected body. Mirrors the article.
 	encapsulation: ViewEncapsulation.None,
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section>
 			<div class="container">

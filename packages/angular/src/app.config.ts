@@ -1,6 +1,6 @@
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import type { ApplicationConfig } from '@angular/core';
-import { provideClientHydration } from '@angular/platform-browser';
+import { provideClientHydration, withNoIncrementalHydration } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { routes } from './app.routes';
 
@@ -10,7 +10,7 @@ import { routes } from './app.routes';
 // pre-rendered DOM instead of re-rendering on bootstrap — without it the shell visibly reflowed.
 export const appConfig: ApplicationConfig = {
 	providers: [
-		provideClientHydration(),
+		provideClientHydration(withNoIncrementalHydration()),
 		// Fetch-based HttpClient backs the signal-native httpResource() used for live
 		// availability; withFetch keeps it consistent across server and browser.
 		provideHttpClient(withFetch()),

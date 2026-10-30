@@ -1,10 +1,11 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import type { HomeContent, ProofPoint } from '@fg/shared';
 
 @Component({
 	selector: 'app-proof-strip',
 	standalone: true,
 	styleUrl: '../../../../../styles/components/proof.module.css',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section data-band [attr.aria-label]="copy().label">
 			<div class="container proof-body">

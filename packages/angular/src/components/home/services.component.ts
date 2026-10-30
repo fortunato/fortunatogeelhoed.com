@@ -1,5 +1,6 @@
 import {
 	afterNextRender,
+	ChangeDetectionStrategy,
 	Component,
 	type ElementRef,
 	input,
@@ -16,6 +17,7 @@ import { LinkDirective } from '../ui/link.directive';
 	standalone: true,
 	imports: [RouterLink, LinkDirective],
 	styleUrl: '../../../../../styles/components/services.module.css',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section aria-labelledby="services-title">
 			<div class="container services-body">

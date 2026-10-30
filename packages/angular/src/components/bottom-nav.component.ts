@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NAV_ITEMS } from '@fg/shared';
 
@@ -11,6 +11,7 @@ import { NAV_ITEMS } from '@fg/shared';
 	// Allow the <jb-icon> custom element in this template.
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	styleUrl: '../../../../styles/components/bottom-nav.module.css',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<nav class="bottom-nav" aria-label="Mobile">
 			@for (item of navItems; track item.path) {

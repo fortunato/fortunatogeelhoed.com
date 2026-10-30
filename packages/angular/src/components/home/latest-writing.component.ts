@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { HomeContent, WritingTeaserItem } from '@fg/shared';
 
@@ -7,6 +7,7 @@ import type { HomeContent, WritingTeaserItem } from '@fg/shared';
 	standalone: true,
 	imports: [RouterLink],
 	styleUrl: '../../../../../styles/components/writing.module.css',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section aria-labelledby="writing-title">
 			<div class="container">

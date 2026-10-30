@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, Meta, type SafeHtml, Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import postsData from '@fg/content-data/posts.json';
@@ -29,6 +29,7 @@ function formatDate(iso: string | undefined): string {
 	// emulated encapsulation would never reach it. Disable encapsulation: every prose rule is
 	// scoped under .prose, so the styles only ever apply to the article body.
 	encapsulation: ViewEncapsulation.None,
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section>
 			<div class="container">

@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { consumeSwitchScroll, initNavMotion, replayEntrance, smoothScrollToTop } from '@fg/shared';
 import { filter } from 'rxjs';
@@ -13,6 +13,7 @@ import { HeaderComponent } from './components/header.component';
 	imports: [RouterOutlet, HeaderComponent, FooterComponent, BottomNavComponent],
 	// data-nav-enter is baked into the prerendered markup so the landing entrance plays from first
 	// paint with no flash; the shared interceptor re-toggles it on each in-app navigation.
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template:
 		'<a class="skip-link" href="#main">Skip to content</a><app-header /><main id="main" tabindex="-1" data-nav-enter><router-outlet /></main><app-footer /><app-bottom-nav />',
 })

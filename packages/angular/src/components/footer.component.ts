@@ -1,4 +1,9 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewEncapsulation } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	CUSTOM_ELEMENTS_SCHEMA,
+	ViewEncapsulation,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -14,6 +19,7 @@ import { RouterLink } from '@angular/router';
 	// size them fine because CSS Modules leave bare tag selectors global. Disable encapsulation so the
 	// footer rules apply as authored; the class names here are unique to this stylesheet.
 	encapsulation: ViewEncapsulation.None,
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<footer class="footer">
 			<div class="footer-inner container">

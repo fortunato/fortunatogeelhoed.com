@@ -1,10 +1,11 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import type { HomeContent, Principle } from '@fg/shared';
 
 @Component({
 	selector: 'app-approach',
 	standalone: true,
 	styleUrl: '../../../../../styles/components/approach.module.css',
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section data-band aria-labelledby="approach-title">
 			<div class="container approach-body">

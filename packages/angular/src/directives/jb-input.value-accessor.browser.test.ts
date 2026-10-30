@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ChangeDetectionStrategy, Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { registerElements } from '@fg/shared/elements';
 import { render } from '@testing-library/angular';
@@ -15,6 +15,7 @@ beforeAll(() => registerElements());
 	standalone: true,
 	imports: [ReactiveFormsModule, JbControlValueAccessor],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `<jb-input name="email" label="Email" [formControl]="control"></jb-input>`,
 })
 class HostComponent {

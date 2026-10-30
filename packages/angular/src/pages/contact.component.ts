@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { availabilityBadge, availabilityBookedLine } from '@fg/shared';
 import { AvailabilityService } from '../availability.service';
 import { ContactFormComponent } from '../components/contact-form.component';
@@ -12,6 +12,7 @@ import { ContentService } from '../content.service';
 	// availability and re-rendered client-side from the same seeded value, so skipping avoids
 	// a structural hydration mismatch while producing no visible change.
 	host: { ngSkipHydration: 'true' },
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section>
 			<div class="container">

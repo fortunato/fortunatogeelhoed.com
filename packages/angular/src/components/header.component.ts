@@ -1,4 +1,9 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewEncapsulation } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	CUSTOM_ELEMENTS_SCHEMA,
+	ViewEncapsulation,
+} from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { NAV_ITEMS } from '@fg/shared';
 
@@ -15,6 +20,7 @@ import { NAV_ITEMS } from '@fg/shared';
 	// fine because CSS Modules leave bare tag selectors global. Disable encapsulation so the header
 	// rules apply as authored; the class names here are unique to this stylesheet.
 	encapsulation: ViewEncapsulation.None,
+	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<header class="header">
 			<a routerLink="/" class="logo">
