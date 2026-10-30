@@ -77,6 +77,10 @@ export default defineConfig({
 					name: 'dom',
 					environment: 'happy-dom',
 					include: ['packages/shared/src/**/theme.test.ts'],
+					// Node 25+ defines its own localStorage global, which stays undefined without
+					// --localstorage-file. Vitest keeps globals that already exist, so happy-dom's
+					// storage would never be installed; switching Node's built-in off lets it through.
+					execArgv: ['--no-experimental-webstorage'],
 				},
 			},
 			{
