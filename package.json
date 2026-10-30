@@ -119,9 +119,9 @@
 		"@types/react-dom": "19.3.0",
 		"@vitejs/plugin-react": "6.1.2",
 		"@vitejs/plugin-vue": "6.0.10",
-		"@vitest/browser": "4.1.12",
-		"@vitest/browser-playwright": "4.1.12",
-		"@vitest/coverage-v8": "4.1.12",
+		"@vitest/browser": "5.0.5",
+		"@vitest/browser-playwright": "5.0.5",
+		"@vitest/coverage-v8": "5.0.5",
 		"axe-playwright": "2.2.2",
 		"custom-elements-manifest": "2.1.0",
 		"happy-dom": "21.0.4",
@@ -133,7 +133,7 @@
 		"typescript": "5.9.3",
 		"vite": "8.3.5",
 		"vite-ssg": "28.3.0",
-		"vitest": "4.1.12",
+		"vitest": "5.0.5",
 		"vue-tsc": "3.3.14"
 	},
 	"customElements": "packages/shared/custom-elements.json"
