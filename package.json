@@ -62,7 +62,7 @@
 		"@angular/ssr": "^21.2.26",
 		"@grafana/faro-web-sdk": "^2.12.1",
 		"@hono/standard-validator": "^0.4.0",
-		"@hookform/resolvers": "^5.9.1",
+		"@hookform/resolvers": "^6.0.0",
 		"@resvg/resvg-wasm": "^2.6.2",
 		"@scalar/hono-api-reference": "^0.12.0",
 		"@tanstack/react-query": "^5.104.2",
