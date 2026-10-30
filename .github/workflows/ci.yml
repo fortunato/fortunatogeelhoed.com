@@ -44,7 +44,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - uses: ./.github/actions/setup
         with:
-          playwright: 'true'
+          playwright: "true"
       - name: Component tests
         run: bun run test:component
 
@@ -57,7 +57,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - uses: ./.github/actions/setup
         with:
-          playwright: 'true'
+          playwright: "true"
       - name: Tests with coverage
         run: bun run test:coverage
       - name: Upload coverage to Codecov
@@ -75,7 +75,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - uses: ./.github/actions/setup
         with:
-          playwright: 'true'
+          playwright: "true"
       - name: Build the site
         run: bun run build
       - name: Accessibility scan (WCAG 2.1 AA)
@@ -91,7 +91,7 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
       - uses: ./.github/actions/setup
         with:
-          playwright: 'true'
+          playwright: "true"
       - name: Build the showcase
         run: bun run build-storybook
       - name: Cross-framework visual parity

@@ -4,7 +4,7 @@ description: Install Bun, Node, and dependencies (cached), and optionally the Pl
 inputs:
   playwright:
     description: Install the Playwright Chromium browser
-    default: 'false'
+    default: "false"
 
 runs:
   using: composite

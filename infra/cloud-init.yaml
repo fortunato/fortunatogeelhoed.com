@@ -15,7 +15,7 @@ write_files:
   # bogus client IP. Turning it off makes iptables forward the real source, which the dashboard's
   # remote_ip gate and the app's per-IP rate limiting both depend on.
   - path: /etc/docker/daemon.json
-    permissions: '0644'
+    permissions: "0644"
     content: |
       {
         "log-driver": "json-file",
@@ -24,7 +24,7 @@ write_files:
       }
 
   - path: /etc/fg/app.env
-    permissions: '0600'
+    permissions: "0600"
     owner: root:root
     content: |
       NODE_ENV=production
@@ -62,7 +62,7 @@ write_files:
   # Postgres for Umami. The only stateful piece: its data dir lives on a dedicated Hetzner Volume
   # (mounted below), and this database backs nothing else.
   - path: /etc/fg/postgres.env
-    permissions: '0600'
+    permissions: "0600"
     owner: root:root
     content: |
       POSTGRES_DB=umami
@@ -75,7 +75,7 @@ write_files:
   # Umami app. Stateless: it holds no data on disk, runs its migrations on startup, and keeps all
   # state in Postgres. APP_SECRET signs sessions and must stay stable across restarts.
   - path: /etc/fg/umami.env
-    permissions: '0600'
+    permissions: "0600"
     owner: root:root
     content: |
       DATABASE_TYPE=postgresql
@@ -87,7 +87,7 @@ write_files:
   # object storage. All values optional: with no repository configured the job logs that backups are
   # disabled and exits cleanly, the same opt-in pattern as the Loki/Faro pipelines.
   - path: /etc/fg/backup.env
-    permissions: '0600'
+    permissions: "0600"
     owner: root:root
     content: |
       # restic repository, e.g. s3:https://s3.us-west-002.backblazeb2.com/<bucket>/umami or
@@ -107,7 +107,7 @@ write_files:
       BACKUP_KEEP_WEEKLY=4
 
   - path: /etc/fg/Caddyfile
-    permissions: '0644'
+    permissions: "0644"
     content: |
       __DOMAIN__ {
         encode zstd gzip
@@ -154,7 +154,7 @@ write_files:
       }
 
   - path: /opt/fg/deploy.sh
-    permissions: '0755'
+    permissions: "0755"
     content: |
       #!/usr/bin/env bash
       # Forced-command deploy: the CI deploy key may run only this script. The requested image tag
@@ -189,7 +189,7 @@ write_files:
       exit 1
 
   - path: /opt/fg/mount-umami-volume.sh
-    permissions: '0755'
+    permissions: "0755"
     content: |
       #!/usr/bin/env bash
       # Prepare the dedicated Hetzner Volume for Postgres before the database container starts. The
@@ -241,7 +241,7 @@ write_files:
       echo "umami-volume: $MNT ready on $DEV"
 
   - path: /opt/fg/umami-backup.sh
-    permissions: '0755'
+    permissions: "0755"
     content: |
       #!/usr/bin/env bash
       # Daily off-site Postgres backup for Umami. Streams a logical pg_dump out of the running
@@ -289,7 +289,7 @@ write_files:
       finish failed "pg_dump or restic backup failed" 1
 
   - path: /etc/systemd/system/umami-backup.service
-    permissions: '0644'
+    permissions: "0644"
     content: |
       [Unit]
       Description=Off-site encrypted Postgres backup for Umami
@@ -301,7 +301,7 @@ write_files:
       ExecStart=/opt/fg/umami-backup.sh
 
   - path: /etc/systemd/system/umami-backup.timer
-    permissions: '0644'
+    permissions: "0644"
     content: |
       [Unit]
       Description=Run the Umami Postgres backup daily
@@ -315,8 +315,8 @@ write_files:
       WantedBy=timers.target
 
   - path: /root/.ssh/fg_deploy.pub
-    permissions: '0644'
-    content: '__DEPLOY_PUBKEY__'
+    permissions: "0644"
+    content: "__DEPLOY_PUBKEY__"
 
 runcmd:
   # Enable Docker and restart it so the log-rotation defaults in daemon.json take effect (the
