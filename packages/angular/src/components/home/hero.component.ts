@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import type { HomeContent } from '@fg/shared';
 
 @Component({
 	selector: 'app-hero',
 	standalone: true,
 	styleUrl: '../../../../../styles/components/hero.module.css',
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<!-- data-hero marks this as the page that owns the staggered entrance; the shared motion
 		     stylesheet suppresses the unified whole-main fade here and runs the [data-enter] stagger

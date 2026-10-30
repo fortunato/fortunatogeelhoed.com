@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import backend from '@fg/content-data/backend-frameworks.json';
 import frontend from '@fg/content-data/frontend-frameworks.json';
@@ -17,7 +17,6 @@ const bounds = spansBounds(frontendFrameworks, backendFrameworks);
 	standalone: true,
 	imports: [FrameworkRibbonComponent, RouterLink, LinkDirective],
 	styleUrls: ['../../../../../styles/components/framework-ribbon.module.css'],
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section aria-labelledby="frameworks-title">
 			<div class="container exposure-body">

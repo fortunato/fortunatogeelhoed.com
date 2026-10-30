@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import postsData from '@fg/content-data/posts.json';
 import { type Article, articlePath } from '@fg/shared';
@@ -29,7 +29,6 @@ interface WritingCard extends Article {
 	standalone: true,
 	imports: [RouterLink],
 	styleUrl: '../../../../styles/components/writing.module.css',
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section>
 			<div class="container">

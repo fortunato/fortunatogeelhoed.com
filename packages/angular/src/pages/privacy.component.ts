@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ContentPageComponent } from '../components/content-page.component';
 import { ContentService } from '../content.service';
 
@@ -6,7 +6,6 @@ import { ContentService } from '../content.service';
 	selector: 'app-privacy',
 	standalone: true,
 	imports: [ContentPageComponent],
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `<app-content-page label="Privacy" [content]="content" />`,
 })
 export class PrivacyComponent {

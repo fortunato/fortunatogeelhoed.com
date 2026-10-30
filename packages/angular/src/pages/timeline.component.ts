@@ -1,6 +1,5 @@
 import {
 	afterNextRender,
-	ChangeDetectionStrategy,
 	Component,
 	computed,
 	type ElementRef,
@@ -54,7 +53,6 @@ function buildRows(d: TimelineData): Row[] {
 	standalone: true,
 	imports: [TimelineEntryComponent, FilterBarComponent],
 	styleUrl: '../../../../styles/components/timeline.module.css',
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section class="page" #root>
 			<div hidden [innerHTML]="sprite"></div>

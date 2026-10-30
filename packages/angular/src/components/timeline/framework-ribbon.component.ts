@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import type { AxisTick, RibbonRow } from '@fg/shared';
 
 /** A single framework ribbon: a title, one labelled track per framework, and its own year
@@ -9,7 +9,6 @@ import type { AxisTick, RibbonRow } from '@fg/shared';
 	standalone: true,
 	styleUrls: ['../../../../../styles/components/framework-ribbon.module.css'],
 	styles: [':host { display: block; }'],
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<div class="ribbon">
 			<p class="ribbon-title">{{ title() }}</p>

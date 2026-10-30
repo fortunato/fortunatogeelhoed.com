@@ -1,11 +1,4 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	CUSTOM_ELEMENTS_SCHEMA,
-	computed,
-	inject,
-	input,
-} from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, computed, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { Lane, TimelineEntry } from '@fg/shared';
 import {
@@ -28,7 +21,6 @@ import { ButtonDirective } from '../ui/button.directive';
 	styleUrls: ['../../../../../styles/components/timeline.module.css'],
 	// display:contents so the <article> participates directly in the parent .timeline grid.
 	styles: [':host { display: contents; }'],
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<article
 			class="entry"

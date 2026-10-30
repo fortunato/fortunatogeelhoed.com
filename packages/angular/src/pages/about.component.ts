@@ -1,10 +1,4 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	CUSTOM_ELEMENTS_SCHEMA,
-	inject,
-	ViewEncapsulation,
-} from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { GITHUB_REPO_URL, LINKEDIN_URL } from '@fg/shared';
@@ -22,7 +16,6 @@ import { ContentService } from '../content.service';
 	// encapsulation would never reach it. Disable encapsulation: every rule is scoped under an
 	// .about* class, so the styles only ever apply to this page. Mirrors the content page.
 	encapsulation: ViewEncapsulation.None,
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section class="about">
 			<article class="about-inner container">

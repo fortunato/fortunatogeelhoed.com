@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { HomeContent } from '@fg/shared';
 import { ButtonDirective } from '../ui/button.directive';
@@ -8,7 +8,6 @@ import { ButtonDirective } from '../ui/button.directive';
 	standalone: true,
 	imports: [RouterLink, ButtonDirective],
 	styleUrl: '../../../../../styles/components/cta.module.css',
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section class="cta" aria-labelledby="cta-title">
 			<div class="container">

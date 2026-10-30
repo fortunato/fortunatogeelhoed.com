@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ContentService } from '../content.service';
 
 @Component({
 	selector: 'app-work',
 	standalone: true,
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<section>
 			<div class="container">

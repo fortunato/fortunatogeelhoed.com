@@ -1,10 +1,4 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	CUSTOM_ELEMENTS_SCHEMA,
-	input,
-	signal,
-} from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, input, signal } from '@angular/core';
 import {
 	disabled,
 	type FieldState,
@@ -27,7 +21,6 @@ import { JbControlValueAccessor } from '../directives/jb-input.value-accessor';
 	standalone: true,
 	imports: [FormField, JbControlValueAccessor],
 	schemas: [CUSTOM_ELEMENTS_SCHEMA],
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		@if (sent()) {
 			<output class="contact-success">Thanks, I'll be in touch shortly.</output>

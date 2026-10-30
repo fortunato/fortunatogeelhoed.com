@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { provideRouter, type Route } from '@angular/router';
 import { NAV_ITEMS } from '@fg/shared';
 import { registerElements } from '@fg/shared/elements';
@@ -10,7 +10,7 @@ import { BottomNavComponent } from './bottom-nav.component';
 // the same nav behaviour (destinations + active state) is proven across all three.
 beforeAll(() => registerElements());
 
-@Component({ standalone: true, changeDetection: ChangeDetectionStrategy.Eager, template: '' })
+@Component({ standalone: true, template: '' })
 class BlankComponent {}
 
 const ROUTES: Route[] = NAV_ITEMS.map((item) => ({

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import homeData from '@fg/content-data/home.json';
 import type { HomeContent } from '@fg/shared';
 import { ApproachComponent } from '../components/home/approach.component';
@@ -23,7 +23,6 @@ const home = homeData as HomeContent;
 		LatestWritingComponent,
 		CallToActionComponent,
 	],
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<app-hero [hero]="home.hero" />
 		<app-services [services]="home.services" [copy]="home.sections.services" />

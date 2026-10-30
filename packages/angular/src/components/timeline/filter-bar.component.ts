@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input } from '@angular/core';
 import { techVisual } from '@fg/shared';
 import { TechFilterService } from '../../tech-filter.service';
 
@@ -11,7 +11,6 @@ import { TechFilterService } from '../../tech-filter.service';
 	styleUrls: ['../../../../../styles/components/timeline.module.css'],
 	// display:contents so the bar participates directly in the parent .timeline flow.
 	styles: [':host { display: contents; }'],
-	changeDetection: ChangeDetectionStrategy.Eager,
 	template: `
 		<div class="filter-bar" [attr.data-active]="activeList().length ? 'true' : null">
 			@if (activeList().length) {
