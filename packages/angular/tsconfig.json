@@ -12,7 +12,6 @@
 		"useDefineForClassFields": false,
 		"declaration": false,
 		"sourceMap": true,
-		"baseUrl": ".",
 		"paths": {
 			"@fg/shared": ["../../packages/shared/src"],
 			"@fg/shared/*": ["../../packages/shared/src/*"],
