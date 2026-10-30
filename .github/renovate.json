@@ -25,6 +25,11 @@
 			"groupName": "framework majors"
 		},
 		{
+			"description": "TypeScript 7 drops the JavaScript compiler API that nx, the Vite plugins and the Angular compiler build on, and Angular 22 requires TypeScript 6.0. Raise the cap once the toolchain supports 7.",
+			"matchPackageNames": ["typescript"],
+			"allowedVersions": "<6.1"
+		},
+		{
 			"matchManagers": ["github-actions"],
 			"groupName": "github actions",
 			"addLabels": ["ci"],
