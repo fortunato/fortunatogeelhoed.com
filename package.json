@@ -6,7 +6,7 @@
 	"author": "Fortunato Geelhoed",
 	"engines": {
 		"node": ">=22",
-		"bun": ">=1.3"
+		"bun": ">=1.4"
 	},
 	"scripts": {
 		"dev:react": "nx run-many -t dev -p react api",

@@ -10,11 +10,11 @@
 <!-- Stack -->
 ![React 19](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![Vue 3.5](https://img.shields.io/badge/Vue-3.5-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white)
-![Angular 21](https://img.shields.io/badge/Angular-21-DD0031?style=for-the-badge&logo=angular&logoColor=white)
-![Bun](https://img.shields.io/badge/Bun-1.3-000000?style=for-the-badge&logo=bun&logoColor=white)
+![Angular 22](https://img.shields.io/badge/Angular-22-DD0031?style=for-the-badge&logo=angular&logoColor=white)
+![Bun](https://img.shields.io/badge/Bun-1.4-000000?style=for-the-badge&logo=bun&logoColor=white)
 ![Nx](https://img.shields.io/badge/Nx-monorepo-143055?style=for-the-badge&logo=nx&logoColor=white)
-![Hono](https://img.shields.io/badge/Hono-4.7-E36002?style=for-the-badge&logo=hono&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-6-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Hono](https://img.shields.io/badge/Hono-4-E36002?style=for-the-badge&logo=hono&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 
 <!-- Quality -->
 ![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
@@ -89,18 +89,18 @@ For the request lifecycle, the dev topology, and the rationale behind the Vite/N
 
 | Layer | Technology |
 |-------|-----------|
-| Runtime | Bun 1.3+ |
+| Runtime | Bun 1.4+ |
 | Server | Hono |
 | React | React 19, React Router 8, custom prerender script |
 | Vue | Vue 3.5, Vue Router 5, vite-ssg |
-| Angular | Angular 21, AnalogJS (Vite-powered) |
+| Angular | Angular 22, AnalogJS (Vite-powered) |
 | Content | gray-matter + Markdown |
 | Build | Vite 8 (Rolldown), Nx (integrated monorepo) |
 | Lint/Format | Biome (tabs, 4-space width, single quotes) |
 
 ## Getting Started
 
-> **Prerequisites:** Bun 1.3+ and **Node.js ≥ 22** (the repo pins 24.16.0 via `.nvmrc`). Bun runs the servers and scripts, but the Angular build relies on `@angular/build`, which requires `require()` of ES modules — unsupported before Node 22. Building on Node 20 fails with `ERR_REQUIRE_ESM`.
+> **Prerequisites:** Bun 1.4+ and **Node.js ≥ 22** (the repo pins 26.13.0 via `.nvmrc`). Bun runs the servers and scripts, but the Angular build relies on `@angular/build`, which requires `require()` of ES modules — unsupported before Node 22. Building on Node 20 fails with `ERR_REQUIRE_ESM`.
 
 ```bash
 # Install Bun (if needed)
