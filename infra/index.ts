@@ -120,23 +120,27 @@ const umamiVolume = new hcloud.Volume('umami-db', {
 // Render cloud-init with config and secrets templated in. The rendered document contains secrets
 // and lives only transiently inside Pulumi state — keep that state private; never commit it.
 const template = readFileSync(new URL('./cloud-init.yaml', import.meta.url), 'utf8');
+// pulumi.output() over an object keeps each value's own type. pulumi.all([...]) only has typed
+// overloads for up to eight inputs; past that every element widens to the union of all of them, so
+// the required secrets would type as possibly undefined. Naming the values also rules out pairing a
+// placeholder with the wrong secret by position.
 const userData = pulumi
-	.all([
-		ghcrToken,
-		tailscaleAuthKey,
-		ahasendApiKey,
-		ahasendAccountId,
-		ahasendToEmail,
-		lokiToken,
-		umamiAppSecret,
-		umamiDbPassword,
-		backupResticPassword,
-		backupS3AccessKeyId,
-		backupS3SecretAccessKey,
-		umamiVolume.id,
-	])
+	.output({
+		token: ghcrToken,
+		ts: tailscaleAuthKey,
+		apiKey: ahasendApiKey,
+		accountId: ahasendAccountId,
+		toEmail: ahasendToEmail,
+		lToken: lokiToken,
+		appSecret: umamiAppSecret,
+		dbPassword: umamiDbPassword,
+		resticPassword: backupResticPassword,
+		s3Key: backupS3AccessKeyId,
+		s3Secret: backupS3SecretAccessKey,
+		volumeId: umamiVolume.id,
+	})
 	.apply(
-		([
+		({
 			token,
 			ts,
 			apiKey,
@@ -149,7 +153,7 @@ const userData = pulumi
 			s3Key,
 			s3Secret,
 			volumeId,
-		]) =>
+		}) =>
 			template
 				.replaceAll('__GHCR_USER__', ghcrUser)
 				.replaceAll('__GHCR_TOKEN__', token ?? '')
