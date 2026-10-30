@@ -93,6 +93,7 @@
 		"@analogjs/storybook-angular": "2.9.2",
 		"@analogjs/vite-plugin-angular": "2.9.2",
 		"@analogjs/vitest-angular": "2.9.2",
+		"@angular/animations": "22.2.4",
 		"@angular/build": "22.2.5",
 		"@angular/cdk": "22.2.5",
 		"@angular/compiler-cli": "22.2.4",
