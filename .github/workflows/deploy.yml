@@ -19,8 +19,8 @@ permissions:
 # comes from Frontend Observability > Settings > Source Maps; the CLI auths as Bearer <stackId>:<key>.
 env:
   FARO_SOURCEMAP_ENDPOINT: https://faro-api-prod-eu-west-2.grafana.net/faro/api/v1
-  FARO_APP_ID: '6056'
-  FARO_STACK_ID: '1681452'
+  FARO_APP_ID: "6056"
+  FARO_STACK_ID: "1681452"
 
 jobs:
   image:
