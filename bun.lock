@@ -1380,7 +1380,7 @@
 
     "ejs": ["ejs@5.0.1", "", { "bin": { "ejs": "bin/cli.js" } }, "sha512-COqBPFMxuPTPspXl2DkVYaDS3HtrD1GpzOGkNTJ1IYkifq/r9h8SVEFrjA3D9/VJGOEoMQcrlhpntcSUrM8k6A=="],
 
-    "electron-to-chromium": ["electron-to-chromium@1.5.470", "", {}, "sha512-omO9daK1eC5K0AFhIYtCcKsxm1erRC/SNr9I1RtPZrgdcR5KdAkPT8jtaoPgNhMsUf/zcslmDev4T7KqiDEa9w=="],
+    "electron-to-chromium": ["electron-to-chromium@1.5.471", "", {}, "sha512-Lo7jyyneHRYUQYM3WZ2rBEei9FcUIwValFPLifTbr4NTpc6oyUB+nN2rrOtbn3CE5pgz930mYxRJeD+glR7d6Q=="],
 
     "emoji-regex": ["emoji-regex@8.0.0", "", {}, "sha512-MSjYzcWNOA0ewAHpz0MxpYFvwg6yjy1NG3xteoqz644VCo/RPgnr1/GGt+ic3iJTzQ8Eu3TdM14SawnVUmGE6A=="],
 
